@@ -1,0 +1,6 @@
+{
+  "parent": "pride:item/kamayarimodel",
+  "textures": {
+    "layer0": "pride:item/kamayari"
+  }
+}

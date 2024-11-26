@@ -1,0 +1,16 @@
+{
+  "pride:european_longsword": [
+    {
+      "attribute": "epicfight:weight",
+      "modify": 100,
+      "uuid": "a516026a-bee2-4014-bcb6-b6a5775553de",
+      "operation": "ADDITION"
+    },
+    {
+      "attribute": "epicfight:impact",
+      "modify": 10,
+      "uuid": "a516026a-bee2-4014-bcb6-b6a5775553de",
+      "operation": "ADDITION"
+    }
+  ]
+}

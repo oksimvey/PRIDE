@@ -1,0 +1,137 @@
+{
+  "model": "epicfight:entity/biped",
+  "armature": "epicfight:entity/biped",
+  "renderer": "zombie",
+  "isHumanoid": true,
+  "faction": "undead",
+  "boss_bar": true,
+  "custom_texture": "indestructible:textures/gui/boss_bar.png",
+  "custom_name": "Isshin, the Sword Saint    ",
+  "attributes": {
+    "impact": 2.5,
+    "armor_negation": 5.0,
+    "max_strikes": 3,
+    "chasing_speed": 0.90,
+    "scale": 1.25,
+    "max_stamina": 50,
+    "stamina_regan_multiply": 0.5,
+    "stamina_regan_delay": 2000,
+    "has_stun_reduction": true,
+    "max_stun_shield": 100,
+    "stun_shield_regan_multiply": 100,
+    "stun_shield_regan_delay": 30,
+    "stamina_lose_multiply": 0,
+    "guard_radius": 5,
+    "attack_radius": 1.5
+  },
+  "default_livingmotions": {
+    "idle": "epicfight:biped/living/idle",
+    "walk": "epicfight:biped/living/walk",
+    "chase": "epicfight:biped/living/walk",
+    "death": "epicfight:biped/living/death"
+  },
+  "humanoid_weapon_motions": [
+    {
+      "weapon_categories": ["axe", "hoe", "pickaxe", "shovel", "sword"],
+      "style":"common",
+      "livingmotions": {
+        "chase": "epicfight:biped/living/hold_longsword",
+        "walk": "epicfight:biped/living/walk"
+      }
+    },
+    {
+      "weapon_categories": ["longsword"],
+      "style":"common",
+      "livingmotions": {
+        "chase": "epicfight:biped/living/hold_longsword",
+        "walk": "epicfight:biped/living/hold_longsword"
+      }
+    }
+  ],
+  "custom_guard_motion": [
+    {
+      "weapon_categories": ["longsword","tachi","sword"],
+      "style":"common",
+      "guard": "indestructible:guard/guard_longsword",
+      "stamina_cost_multiply": 0,
+      "can_block_projectile" : false,
+      "parry_cost_multiply": 0,
+      "parry_animation":[]
+    }
+  ],
+  "stun_animations": {
+    "short": "epicfight:biped/combat/hit_short",
+    "long": "epicfight:biped/combat/hit_long",
+    "knockdown": "epicfight:biped/combat/knockdown",
+    "fall": "epicfight:biped/living/landing"
+  },
+  "combat_behavior": [
+    {
+      "weapon_categories": ["uchigatana","tachi", "sword"],
+      "style": "common",
+      "behavior_series": [
+        {
+          "weight": 1.5,
+          "canBeInterrupted": true,
+          "looping": false,
+          "behaviors": [
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "epicfight:biped/combat/tachi_auto1"
+
+            },
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "epicfight:biped/combat/tachi_auto2"
+
+            },
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "epicfight:biped/combat/tachi_auto3"
+
+            },
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "epicfight:biped/combat/tachi_dash",
+              "command_list": [
+                {"time":0, "command":"pride @s perilous PierceTwoHand 1500", "execute_at_target":false}
+              ]
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "canBeInterrupted": true,
+          "looping": false,
+          "behaviors": [
+            {
+              "conditions": [
+                {"predicate":"indestructible:attack_level", "min": 2, "max": 2}
+              ],
+              "guard": 5,
+              "parry": true,
+              "parry_time": 1,
+              "counter_chance": 0,
+              "stun_immunity_time": 30,
+              "specific_guard_motion":{
+                "guard": "indestructible:guard/guard_longsword",
+                "stamina_cost_multiply": 0,
+                "can_block_projectile" : true,
+                "parry_cost_multiply": 0,
+                "parry_animation":["epicfight:biped/skill/guard_longsword_hit_active1", "epicfight:biped/skill/guard_longsword_hit_active2"]
+              }
+            }
+          ]
+        }
+      ]
+    }
+      ]
+    }

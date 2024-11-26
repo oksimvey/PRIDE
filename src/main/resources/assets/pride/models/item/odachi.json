@@ -1,0 +1,6 @@
+{
+  "parent": "pride:item/odachimodel",
+  "textures": {
+    "layer0": "pride:item/odachi"
+  }
+}

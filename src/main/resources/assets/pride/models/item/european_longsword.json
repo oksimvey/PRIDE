@@ -1,0 +1,6 @@
+{
+  "parent": "epicfight:item/longsword",
+  "textures": {
+    "layer0": "pride:item/european_longsword"
+  }
+}

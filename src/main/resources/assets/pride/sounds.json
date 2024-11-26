@@ -1,0 +1,26 @@
+{
+  "execution": {
+    "sounds": [
+      {
+        "name": "pride:battle/execution",
+        "stream": false
+      }
+    ]
+  },
+  "perilous": {
+    "sounds": [
+      {
+        "name": "pride:battle/perilous",
+        "stream": false
+      }
+    ]
+  },
+  "shieldparry": {
+    "sounds": [
+      {
+        "name": "pride:battle/shield_parry",
+        "stream": false
+      }
+    ]
+  }
+}
