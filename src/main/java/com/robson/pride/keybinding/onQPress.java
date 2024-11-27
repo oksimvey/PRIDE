@@ -72,6 +72,7 @@ public class onQPress {
                     Entity target = TargetUtil.getTarget(player);
                     if (target != null){
                         if (Objects.equals(target.getPersistentData().getString("Perilous"), "PierceTwoHand") && Objects.equals(player.getPersistentData().getString("Mikiri"), "Dodge")){
+                            AnimUtils.playAnim(player, "pride:biped/skill/mikiri_step", 0);
                             TargetUtil.rotateToTarget(target);
                             TeleportUtils.teleportEntityRelativeToEntity(player, target, (0), target.getBbHeight() * 1.075);
                             TimerUtil.schedule(()->{

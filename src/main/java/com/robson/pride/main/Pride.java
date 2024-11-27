@@ -48,6 +48,7 @@ public class Pride {
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarting);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(KeyRegister::registerKeyMappings);
         ParticleRegister.PARTICLES.register(bus);
+        bus.addListener(AnimationsRegister::registerAnimations);
     }
 
     public static <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder, BiConsumer<T, Supplier<NetworkEvent.Context>> messageConsumer) {

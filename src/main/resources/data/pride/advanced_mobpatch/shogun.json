@@ -72,7 +72,7 @@
       "behavior_series": [
         {
           "weight": 1.5,
-          "canBeInterrupted": true,
+          "canBeInterrupted": false,
           "looping": false,
           "behaviors": [
             {
