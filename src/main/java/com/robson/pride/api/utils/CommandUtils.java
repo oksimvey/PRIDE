@@ -22,7 +22,7 @@ public class CommandUtils {
         if (ent != null) {
             Minecraft.getInstance().gui.getChat().clearMessages(true);
                 ClientCommandHandler.runCommand(command);
-
+            Minecraft.getInstance().gui.getChat().clearMessages(true);
         }
     }
 }

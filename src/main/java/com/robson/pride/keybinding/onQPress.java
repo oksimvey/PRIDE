@@ -62,6 +62,7 @@ public class onQPress {
                     String anim = "step_backward";
                     if (dodgetype == 1){
                         anim = "step_forward";
+                        MikiriCounter.setMikiri(player, "Dodge", 0, 350);
                     }
                     if (dodgetype == 2){
                         anim = "step_left";
@@ -80,6 +81,7 @@ public class onQPress {
                                 TargetUtil.rotateToTarget(target);
                             AnimUtils.playAnim(target, "pride:biped/skill/mikiri_two_hand", 0);
                             StaminaUtils.StaminaConsume(target, 9);
+                                PlaySoundUtils.playSound(player, "pride:shieldparry", 0.5f, 1f);
                                 TargetUtil.rotateToTarget(target);
                         }, 150, TimeUnit.MILLISECONDS);
                         }
