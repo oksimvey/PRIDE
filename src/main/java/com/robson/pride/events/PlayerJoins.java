@@ -13,7 +13,7 @@ public class PlayerJoins{
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() != null){
             Entity ent = event.getEntity();
-            StaminaUtils.StaminaAdd(ent, 100);
+            StaminaUtils.resetStamina(ent);
             ent.getPersistentData().putBoolean("isParrying", false);
         }
     }

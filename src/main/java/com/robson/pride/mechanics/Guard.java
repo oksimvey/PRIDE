@@ -69,25 +69,28 @@ public class Guard {
 
     public static void onOffHandShieldGuard(Entity ent, Entity ddmgent, LivingAttackEvent event){
         float weight = AttributeUtils.findAttributeModifierbyUUID((LivingEntity) ent, "88440558-2872-48a2-843c-9eda17a7aad0", "epicfight:weight");
-        onGuardStamina(ent, ddmgent, weight * 2);
+        onGuardStamina(ent, ddmgent,event.getEntity(), weight * 2);
     }
 
     public static void onMainHandWeaponGuard(Entity ent, Entity ddmgent, LivingAttackEvent event){
         float weight = AttributeUtils.findAttributeModifierbyUUID((LivingEntity) ent, "a516026a-bee2-4014-bcb6-b6a5775553de", "epicfight:weight");
-        onGuardStamina(ent, ddmgent, weight * 1.5f);
+        onGuardStamina(ent, ddmgent,event.getEntity(), weight * 1.5f);
     }
 
     public static void onMainHandShieldGuard(Entity ent, Entity ddmgent, LivingAttackEvent event){
         float weight = AttributeUtils.findAttributeModifierbyUUID((LivingEntity) ent, "a516026a-bee2-4014-bcb6-b6a5775553de", "epicfight:weight");
-        onGuardStamina(ent, ddmgent, weight * 2);
+        onGuardStamina(ent, ddmgent,event.getEntity(), weight * 2);
     }
 
-    public static void onGuardStamina(Entity ent, Entity ddmgent, float weight){
-        float impact = AttributeUtils.getAttributeValue((LivingEntity) ddmgent, "epicfight:impact");
+    public static void onGuardStamina(Entity ent, Entity ddmgent, LivingEntity dmgent, float weight){
+        float impact = 1;
+        if (dmgent != null) {
+            impact = AttributeUtils.getAttributeValue(dmgent, "epicfight:impact");
+        }
         if (weight > 100){
             weight = 100;
         }
         float amount = 0.5f + impact - (impact * weight / 100 );
-        StaminaUtils.StaminaConsume(ent, amount);
+        StaminaUtils.consumeStamina(ent, amount);
     }
 }

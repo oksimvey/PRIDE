@@ -14,8 +14,10 @@ public class onJump {
     public static void onJump(LivingEvent.LivingJumpEvent event){
         if (event.getEntity() != null){
             if (event.getEntity() instanceof Player player) {
-                StaminaUtils.StaminaConsume(player, 3);
-                MikiriCounter.setMikiri(player, "Jump", 0, 350);
+                if (StaminaUtils.getStamina(player) >= 3) {
+                    StaminaUtils.consumeStamina(player, 3);
+                    MikiriCounter.setMikiri(player, "Jump", 0, 350);
+                }
             }
         }
     }

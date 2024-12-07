@@ -49,10 +49,10 @@ public class onQPress {
     }
     }
     public static void onStep(ServerPlayer player, float equipLoad) {
-        if (StaminaUtils.StaminaCheckEqualOrMore(player, 3)) {
+        if (StaminaUtils.getStamina(player) >= 3) {
             player.getPersistentData().putBoolean("isDodging", true);
             TimerUtil.schedule(()->player.getPersistentData().putBoolean("isDodging", false), 200, TimeUnit.MILLISECONDS);
-            StaminaUtils.StaminaConsume(player, 3);
+            StaminaUtils.consumeStamina(player, 3);
             ShoulderSurfingImpl instance = (ShoulderSurfingImpl) ShoulderSurfing.getInstance();
             if (instance.getClientConfig().isCameraDecoupled()) {
                 instance.toggleCameraCoupling();
@@ -73,17 +73,7 @@ public class onQPress {
                     Entity target = TargetUtil.getTarget(player);
                     if (target != null){
                         if (Objects.equals(target.getPersistentData().getString("Perilous"), "PierceTwoHand") && Objects.equals(player.getPersistentData().getString("Mikiri"), "Dodge")){
-                            AnimUtils.playAnim(player, "pride:biped/skill/mikiri_step", 0);
-                            TargetUtil.rotateToTarget(target);
-                            TeleportUtils.teleportEntityRelativeToEntity(player, target, (0), target.getBbHeight() * 1.075);
-                            TimerUtil.schedule(()->{
-                                TargetUtil.rotateToTarget(target);
-                                TargetUtil.rotateToTarget(target);
-                            AnimUtils.playAnim(target, "pride:biped/skill/mikiri_two_hand", 0);
-                            StaminaUtils.StaminaConsume(target, 9);
-                                PlaySoundUtils.playSound(player, "pride:shieldparry", 0.5f, 1f);
-                                TargetUtil.rotateToTarget(target);
-                        }, 150, TimeUnit.MILLISECONDS);
+
                         }
                         else   AnimUtils.playAnim(player, "epicfight:biped/skill/" + anim, 0);
                     }
@@ -92,8 +82,8 @@ public class onQPress {
     }
 
     public static void onRoll(ServerPlayer player) {
-        if (StaminaUtils.StaminaCheckEqualOrMore(player, 4)) {
-            StaminaUtils.StaminaConsume(player, 4);
+        if (StaminaUtils.getStamina(player) >= 4) {
+            StaminaUtils.consumeStamina(player, 4);
             player.getPersistentData().putBoolean("isDodging", true);
             TimerUtil.schedule(()->player.getPersistentData().putBoolean("isDodging", false), 300, TimeUnit.MILLISECONDS);
             ShoulderSurfingImpl instance = (ShoulderSurfingImpl) ShoulderSurfing.getInstance();

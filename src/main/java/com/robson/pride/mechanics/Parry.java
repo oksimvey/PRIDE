@@ -23,7 +23,7 @@ public class Parry {
     }
 
     public static void onShieldParry(Entity ent, Entity ddmgent, String BlockType) {
-        StaminaUtils.StaminaConsume(ddmgent, 4);
+        StaminaUtils.consumeStamina(ddmgent, 4);
        PlaySoundUtils.playSound(ent, "pride:shieldparry", 0.5f, 1f);
         if (Objects.equals(BlockType, "mainhandshield")) {
             AnimUtils.playAnim(ent, "pride:biped/combat/shield_parry1", 0.05F);
@@ -34,9 +34,9 @@ public class Parry {
     }
 
     public static void onWeaponParry(Entity ent, Entity ddmgent) {
-        StaminaUtils.StaminaConsume(ddmgent, 3);
+        StaminaUtils.consumeStamina(ddmgent, 3);
         if (ent instanceof Player) {
-            StaminaUtils.StaminaAdd(ent, 0.1f * AttributeUtils.getAttributeValue((LivingEntity) ddmgent, "epicfight:impact"));
+            StaminaUtils.addStamina(ent, 0.1f * AttributeUtils.getAttributeValue((LivingEntity) ddmgent, "epicfight:impact"));
         }
     }
 
@@ -44,7 +44,7 @@ public class Parry {
         if (ent != null) {
             if (!(ent.getPersistentData().getBoolean("isParrying"))) {
                 ent.getPersistentData().putBoolean("isParrying", true);
-                TimerUtil.schedule(() -> ent.getPersistentData().putBoolean("isParrying", false), 325, TimeUnit.MILLISECONDS);
+                TimerUtil.schedule(() -> ent.getPersistentData().putBoolean("isParrying", false), 350, TimeUnit.MILLISECONDS);
             }
         }
     }

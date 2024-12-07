@@ -8,6 +8,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
+import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.network.server.SPPlayAnimation;
@@ -82,5 +83,18 @@ public class AnimUtils {
             return 3;
         }
         return 4;
+    }
+    public static boolean checkAttack(Entity ent){
+        LivingEntityPatch livingent = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+        if (livingent != null){
+            return livingent.getEntityState().attacking();
+        }
+        return false;
+    }
+    public static void cancelMotion(Entity ent){
+        LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+        if (livingEntityPatch != null){
+            livingEntityPatch.cancelAnyAction();
+        }
     }
 }

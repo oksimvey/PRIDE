@@ -6,6 +6,8 @@ import com.robson.pride.mechanics.GuardBreak;
 import com.robson.pride.mechanics.PerilousAttack;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,18 +23,18 @@ public class EntityAttacked {
         if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
             Entity ent = event.getEntity();
             Entity ddmgent = event.getSource().getDirectEntity();
-            if (Objects.equals(ddmgent.getPersistentData().getString("Perilous"), "") || Objects.equals(ddmgent.getPersistentData().getString("Perilous"), null)){
-                Guard.checkGuard(ent, ddmgent, event);
-        }
-            GuardBreak.checkForGuardBreak(ent, ddmgent);
-            if (ent.getPersistentData().getBoolean("isVulnerable")) {
-                GuardBreak.onVulnerableDamage(ent, event);
-            }
-            if (PerilousAttack.checkPerilous(ddmgent)) {
-                PerilousAttack.onPerilous(ent, ddmgent, event);
-            }
-            if (ddmgent instanceof ServerPlayer player && event.getAmount() > 0) {
-                ProgressionUtils.addXp(player, "Strength", (int) event.getAmount());
+                if (Objects.equals(ddmgent.getPersistentData().getString("Perilous"), "") || Objects.equals(ddmgent.getPersistentData().getString("Perilous"), null)) {
+                    Guard.checkGuard(ent, ddmgent, event);
+                }
+                GuardBreak.checkForGuardBreak(ent, ddmgent);
+                if (ent.getPersistentData().getBoolean("isVulnerable")) {
+                    GuardBreak.onVulnerableDamage(ent, event);
+                }
+                if (PerilousAttack.checkPerilous(ddmgent)) {
+                    PerilousAttack.onPerilous(ent, ddmgent, event);
+                }
+                if (ddmgent instanceof ServerPlayer player && event.getAmount() > 0) {
+                    ProgressionUtils.addXp(player, "Strength", (int) event.getAmount());
             }
         }
     }

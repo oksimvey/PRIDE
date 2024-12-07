@@ -33,9 +33,14 @@ public class PerilousAttack {
     public static void onPerilous(Entity ent, Entity ddmgent, LivingAttackEvent event){
         String Perilous = ddmgent.getPersistentData().getString("Perilous");
         String Mikiri = ent.getPersistentData().getString("Mikiri");
+        if (!(ent instanceof Player) && (Objects.equals(Perilous, "PierceTwoHand"))){
+            MikiriCounter.onPierceMikiri(ent, ddmgent);
+            event.setCanceled(true);
+        }
         if (Objects.equals(Perilous, "Total")) {
             PerilousSucess(ent, event);
         } else if (Objects.equals(Perilous, "PierceTwoHand") && Objects.equals(Mikiri, "Dodge")) {
+            MikiriCounter.onPierceMikiri(ent, ddmgent);
             event.setCanceled(true);
         } else if (Objects.equals(Perilous, "Kick") && Objects.equals(Mikiri, "Dodge")) {
             event.setResult(Event.Result.DENY);
