@@ -106,7 +106,7 @@
               ],
               "animation": "wom:biped/combat/solar_auto_3",
               "command_list": [
-                {"time":0, "command":"pride @s perilous Sweep 2500", "execute_at_target":false}
+                {"time":0, "command":"pride @s perilous sweep 2500", "execute_at_target":false}
               ]
             }
             ]

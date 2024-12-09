@@ -4,7 +4,7 @@ import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPat
 import com.robson.pride.api.utils.PlaySoundUtils;
 import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.api.utils.TimerUtil;
-import com.robson.pride.main.registries.ParticleRegister;
+import com.robson.pride.registries.ParticleRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.entity.Entity;
@@ -23,7 +23,7 @@ public class PerilousAttack {
         boolean isPerilous = false;
         if (ent != null) {
             String Perilous = ent.getPersistentData().getString("Perilous");
-            if (Objects.equals(Perilous, "PierceTwoHand") || Objects.equals(Perilous, "Sweep") || Objects.equals(Perilous, "Kick") || Objects.equals(Perilous, "Total")){
+            if (Objects.equals(Perilous, "pierce_two_hand")|| Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand") || Objects.equals(Perilous, "sweep") || Objects.equals(Perilous, "kick") || Objects.equals(Perilous, "total")){
                 isPerilous = true;
             }
         }
@@ -33,18 +33,14 @@ public class PerilousAttack {
     public static void onPerilous(Entity ent, Entity ddmgent, LivingAttackEvent event){
         String Perilous = ddmgent.getPersistentData().getString("Perilous");
         String Mikiri = ent.getPersistentData().getString("Mikiri");
-        if (!(ent instanceof Player) && (Objects.equals(Perilous, "PierceTwoHand"))){
-            MikiriCounter.onPierceMikiri(ent, ddmgent);
-            event.setCanceled(true);
-        }
-        if (Objects.equals(Perilous, "Total")) {
+        if (Objects.equals(Perilous, "total")) {
             PerilousSucess(ent, event);
-        } else if (Objects.equals(Perilous, "PierceTwoHand") && Objects.equals(Mikiri, "Dodge")) {
-            MikiriCounter.onPierceMikiri(ent, ddmgent);
+        } else if (Objects.equals(Perilous, "pierce_two_hand") && Objects.equals(Mikiri, "Dodge") || Objects.equals(Perilous, "pierce_dual_wield") && Objects.equals(Mikiri, "Dodge") || Objects.equals(Perilous, "pierce_one_hand") && Objects.equals(Mikiri, "Dodge")) {
+            MikiriCounter.onPierceMikiri(ent, ddmgent, Perilous);
             event.setCanceled(true);
-        } else if (Objects.equals(Perilous, "Kick") && Objects.equals(Mikiri, "Dodge")) {
+        } else if (Objects.equals(Perilous, "kick") && Objects.equals(Mikiri, "Dodge")) {
             event.setResult(Event.Result.DENY);
-        } else if (Objects.equals(Perilous, "Sweep") && Objects.equals(Mikiri, "Jump")) {
+        } else if (Objects.equals(Perilous, "sweep") && Objects.equals(Mikiri, "Jump")) {
             event.setCanceled(true);
         } else {
             PerilousSucess(ent, event);

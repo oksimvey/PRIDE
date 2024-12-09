@@ -35,9 +35,6 @@ public class Parry {
 
     public static void onWeaponParry(Entity ent, Entity ddmgent) {
         StaminaUtils.consumeStamina(ddmgent, 3);
-        if (ent instanceof Player) {
-            StaminaUtils.addStamina(ent, 0.1f * AttributeUtils.getAttributeValue((LivingEntity) ddmgent, "epicfight:impact"));
-        }
     }
 
     public static void ParryWindow(Entity ent) {

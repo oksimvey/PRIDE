@@ -1,4 +1,4 @@
-package com.robson.pride.main.registries;
+package com.robson.pride.registries;
 
 import com.robson.pride.client.renderer.japanese.boss.ShogunRenderer;
 import com.robson.pride.client.renderer.japanese.mob.RoninRenderer;

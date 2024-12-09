@@ -1,7 +1,7 @@
 package com.robson.pride.keybinding;
 
 import com.robson.pride.api.utils.*;
-import com.robson.pride.main.registries.KeyRegister;
+import com.robson.pride.registries.KeyRegister;
 import com.robson.pride.skills.SkillCore;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -18,16 +18,16 @@ public class OnLeftClick {
         }
         TimerUtil.schedule(()->{
             if (ControllEngine.isKeyDown(KeyRegister.keyActionSpecial)){
-                AnimUtils.cancelMotion(player);
+                AnimUtils.preventAttack(player, 3);
                 TimerUtil.schedule(()->{
                     if (ControllEngine.isKeyDown(KeyRegister.keyActionSpecial)){
-                        AnimUtils.cancelMotion(player);
+                        AnimUtils.preventAttack(player, 50);
                         TimerUtil.schedule(()->{
                             if (ControllEngine.isKeyDown(KeyRegister.keyActionSpecial)){
-                                AnimUtils.cancelMotion(player);
+                                AnimUtils.preventAttack(player, 50);
                                 TimerUtil.schedule(()->{
                                     if (ControllEngine.isKeyDown(KeyRegister.keyActionSpecial)){
-                                        AnimUtils.cancelMotion(player);
+                                        AnimUtils.preventAttack(player, 1000);
                                         TimerUtil.schedule(()->{
                                             if (ControllEngine.isKeyDown(KeyRegister.keyActionSpecial)){
                                                SkillCore.onSkillExecute(player);

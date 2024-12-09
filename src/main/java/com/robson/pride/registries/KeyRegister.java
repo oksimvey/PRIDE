@@ -1,4 +1,4 @@
-package com.robson.pride.main.registries;
+package com.robson.pride.registries;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.robson.pride.keybinding.KeyActionPacket;
@@ -13,23 +13,26 @@ public class KeyRegister {
     public static KeyMapping keyActionSecondary;
     public static KeyMapping keyActionTertiary;
     public static KeyMapping keyActionJump;
+    public static KeyMapping keyActionSwapHand;
 
     private static boolean wasPressedSpecial = false;
     private static boolean wasPressedSecondary = false;
     private static boolean wasPressedTertiary = false;
     private static boolean wasPressedJump = false;
+    private static boolean wasPressedSwapHand = false;
 
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         keyActionSpecial = new KeyMapping("key.pride.special", InputConstants.Type.MOUSE, 0, "key.categories.misc");
         keyActionSecondary = new KeyMapping("key.pride.menu", InputConstants.Type.KEYSYM, InputConstants.KEY_M, "key.categories.misc");
         keyActionTertiary = new KeyMapping("key.pride.dodge", InputConstants.Type.KEYSYM, InputConstants.KEY_Q, "key.categories.misc");
         keyActionJump = new KeyMapping("key.pride.jump", InputConstants.Type.KEYSYM, InputConstants.KEY_SPACE, "key.categories.misc");
-
+        keyActionSwapHand = new KeyMapping("key.pride.swaphand", InputConstants.Type.KEYSYM, InputConstants.KEY_F, "key.categories.misc");
 
         event.register(keyActionSpecial);
         event.register(keyActionSecondary);
         event.register(keyActionTertiary);
         event.register(keyActionJump);
+        event.register(keyActionSwapHand);
     }
 
     public static void setupClient(FMLClientSetupEvent event) {
@@ -43,6 +46,7 @@ public class KeyRegister {
         checkKeyAction(keyActionSecondary, wasPressedSecondary, "menu");
         checkKeyAction(keyActionTertiary, wasPressedTertiary, "dodge");
         checkKeyAction(keyActionJump, wasPressedJump, "jump");
+        checkKeyAction(keyActionSwapHand, wasPressedSwapHand, "swaphand");
     }
 
     private static void checkKeyAction(KeyMapping key, boolean wasPressed, String actionName) {
@@ -61,6 +65,8 @@ public class KeyRegister {
             wasPressedTertiary = isCurrentlyPressed;
         }else if (key == keyActionJump){
             wasPressedJump = isCurrentlyPressed;
+        }else if (key == keyActionSwapHand){
+            wasPressedSwapHand = isCurrentlyPressed;
         }
     }
 }

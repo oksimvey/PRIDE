@@ -55,6 +55,10 @@ public class KeyActionPacket {
             OnLeftClick.onLClick(player);
         }
 
+        if (packet.action.equals("swaphand")){
+            onFPress.swapHand(player);
+        }
+
         if (packet.action.equals("dodge")) {
             if (!(player.getPersistentData().getBoolean("isDodging")))
            onQPress.checkDodgeType(player);

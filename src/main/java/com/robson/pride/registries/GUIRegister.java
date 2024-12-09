@@ -1,4 +1,4 @@
-package com.robson.pride.main.registries;
+package com.robson.pride.registries;
 
 import com.robson.pride.main.Pride;
 import com.robson.pride.progression.ProgressionGUI;

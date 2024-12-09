@@ -1,6 +1,5 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.utils.ItemColiderUtil;
 import com.robson.pride.mechanics.Parry;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -14,7 +13,6 @@ public class onRClickItem {
         if (event.getEntity() != null) {
             Player ent = event.getEntity();
             Parry.ParryWindow(ent);
-            ItemColiderUtil.getWeaponColider(ent);
         }
     }
 }

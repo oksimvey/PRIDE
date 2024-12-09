@@ -1,6 +1,6 @@
 package com.robson.pride.progression;
 
-import com.robson.pride.main.registries.GUIRegister;
+import com.robson.pride.registries.GUIRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;

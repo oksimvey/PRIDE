@@ -11,7 +11,7 @@ public class LongSwordWeaponSkill {
         if (ent != null) {
             if (SkillCore.consumptionCore(ent, 3, 20)) {
                 AnimUtils.playAnim(ent, "epicfight:biped/combat/tachi_dash", 0);
-                PerilousAttack.setPerilous(ent, "PierceTwoHand", 1500);
+                PerilousAttack.setPerilous(ent, "pierce_two_hand", 1500);
             }
         }
     }

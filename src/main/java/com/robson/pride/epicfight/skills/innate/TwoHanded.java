@@ -1,10 +1,10 @@
-package com.robson.pride.epicfight.skills.passive;
+package com.robson.pride.epicfight.skills.innate;
 
 import java.util.List;
-import java.util.UUID;
 
 import com.google.common.collect.Lists;
 
+import jdk.jfr.EventType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -17,20 +17,18 @@ import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerP
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillContainer;
 import yesman.epicfight.skill.weaponinnate.WeaponInnateSkill;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
-import yesman.epicfight.world.entity.eventlistener.PlayerEventListener.EventType;
 
 public class TwoHanded extends WeaponInnateSkill {
-    private static final UUID EVENT_UUID = UUID.fromString("dc28f512-3551-4a73-96d7-08bec52de5f1");
     private long returnDuration;
     private final int maxDuration = 999999999;
 
     public TwoHanded(Builder<? extends Skill> builder) {
         super(builder);
     }
+
 
     @Override
     public void setParams(CompoundTag parameters) {
@@ -79,13 +77,7 @@ public class TwoHanded extends WeaponInnateSkill {
 
     @Override
     public boolean canExecute(PlayerPatch<?> executer) {
-        if (executer.isLogicalClient()) {
-            return super.canExecute(executer);
-        } else {
-            ItemStack itemstack = executer.getOriginal().getMainHandItem();
-
-            return EpicFightCapabilities.getItemStackCapability(itemstack).getInnateSkill(executer, itemstack) == this && executer.getOriginal().getVehicle() == null;
-        }
+        return true;
     }
 
     @Override

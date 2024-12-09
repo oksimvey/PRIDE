@@ -19,19 +19,6 @@ public class TargetUtil {
 
     public static void rotateToTarget(Entity ent) {
         Entity target = getTarget(ent);
-        if (ent instanceof Player player){
-            if (Minecraft.getInstance().player != null){
-                LocalPlayerPatch playerPatch = EpicFightCapabilities.getEntityPatch(Minecraft.getInstance().player, LocalPlayerPatch.class);
-                if (playerPatch != null){
-                    playerPatch.rotateTo(target, 1000, false);
-                }
-            }
-        }
-        else {
-            LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-            if (livingEntityPatch != null && target != null) {
-                livingEntityPatch.rotateTo(target, 1000, false);
-            }
-        }
+        AnimUtils.rotateToEntity(ent, target);
     }
 }

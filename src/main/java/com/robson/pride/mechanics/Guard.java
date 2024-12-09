@@ -82,10 +82,10 @@ public class Guard {
         onGuardStamina(ent, ddmgent,event.getEntity(), weight * 2);
     }
 
-    public static void onGuardStamina(Entity ent, Entity ddmgent, LivingEntity dmgent, float weight){
+    public static void onGuardStamina(Entity ent, Entity ddmgent, Entity dmgent, float weight){
         float impact = 1;
-        if (dmgent != null) {
-            impact = AttributeUtils.getAttributeValue(dmgent, "epicfight:impact");
+        if (dmgent instanceof LivingEntity) {
+            impact = AttributeUtils.getAttributeValue((LivingEntity) dmgent, "epicfight:impact");
         }
         if (weight > 100){
             weight = 100;

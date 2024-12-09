@@ -1,19 +1,23 @@
 package com.robson.pride.api.utils;
 
+import com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.network.server.SPPlayAnimation;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 import java.util.concurrent.TimeUnit;
 
@@ -84,6 +88,14 @@ public class AnimUtils {
         }
         return 4;
     }
+
+    public static void preventAttack(Entity ent, int duration){
+        LivingEntityPatch livingent = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+        if (livingent != null){
+            livingent.getEntityState().setState(EntityState.CAN_SKILL_EXECUTION, false);
+            TimerUtil.schedule(()->  livingent.getEntityState().setState(EntityState.CAN_SKILL_EXECUTION, true), duration, TimeUnit.MILLISECONDS);
+        }
+    }
     public static boolean checkAttack(Entity ent){
         LivingEntityPatch livingent = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
         if (livingent != null){
@@ -91,6 +103,15 @@ public class AnimUtils {
         }
         return false;
     }
+
+    public static void rotateToEntity(Entity ent1, Entity ent2) {
+            LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent1, LivingEntityPatch.class);
+            if (livingEntityPatch != null && ent2 != null) {
+                livingEntityPatch.rotateTo(ent2, 1000, false);
+                livingEntityPatch.correctRotation();
+        }
+    }
+
     public static void cancelMotion(Entity ent){
         LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
         if (livingEntityPatch != null){

@@ -1,4 +1,4 @@
-package com.robson.pride.main.registries;
+package com.robson.pride.registries;
 
 import com.robson.pride.entities.pre_hardmode.japanese.boss.Shogun;
 import com.robson.pride.entities.pre_hardmode.japanese.mob.Ronin;

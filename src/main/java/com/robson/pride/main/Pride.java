@@ -2,15 +2,13 @@ package com.robson.pride.main;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.robson.pride.command.PerilousCommand;
-import com.robson.pride.main.registries.*;
+import com.robson.pride.registries.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;

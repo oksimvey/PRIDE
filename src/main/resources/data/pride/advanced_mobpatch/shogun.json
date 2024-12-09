@@ -102,7 +102,7 @@
               ],
               "animation": "epicfight:biped/combat/tachi_dash",
               "command_list": [
-                {"time":0, "command":"pride @s perilous PierceTwoHand 1500", "execute_at_target":false}
+                {"time":0, "command":"pride @s perilous pierce_two_hand 1500", "execute_at_target":false}
               ]
             }
           ]
