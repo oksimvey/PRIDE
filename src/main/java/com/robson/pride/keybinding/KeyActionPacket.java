@@ -1,5 +1,6 @@
 package com.robson.pride.keybinding;
 
+import com.robson.pride.mechanics.Aura;
 import com.robson.pride.progression.ProgressionGUI;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
@@ -65,8 +66,11 @@ public class KeyActionPacket {
         }
 
         if (packet.action.equals("jump")) {
-            if (!(player.getPersistentData().getBoolean("isJumping")))
                 onSpacePress.onPress(player);
+        }
+
+        if (packet.action.equals("recharge")) {
+            Aura.recharge(player, 50);
         }
 
         if (packet.action.equals("menu")) {

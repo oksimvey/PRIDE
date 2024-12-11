@@ -2,7 +2,6 @@ package com.robson.pride.api.utils;
 
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 
 public class ManaUtils {
 

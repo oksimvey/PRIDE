@@ -1,10 +1,7 @@
 package com.robson.pride.mechanics;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
-import com.robson.pride.api.utils.AttributeUtils;
-import com.robson.pride.api.utils.ProgressionUtils;
-import com.robson.pride.api.utils.StaminaUtils;
-import com.robson.pride.api.utils.TagCheckUtils;
+import com.robson.pride.api.utils.*;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -55,7 +52,7 @@ public class Guard {
     }
 
     public static void onGuard(Entity ent, Entity ddmgent, LivingAttackEvent event){
-        String BlockType = TagCheckUtils.checkBlockType((LivingEntity) ent);
+        String BlockType = ItemStackUtils.checkBlockType(ent);
         if (Objects.equals(BlockType, "weapon")){
             onMainHandWeaponGuard(ent, ddmgent, event);
         }

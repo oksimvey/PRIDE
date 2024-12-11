@@ -75,9 +75,9 @@ public class onQPress {
                         if (Objects.equals(target.getPersistentData().getString("Perilous"), "PierceTwoHand") && Objects.equals(player.getPersistentData().getString("Mikiri"), "Dodge")){
 
                         }
-                        else   AnimUtils.playAnim(player, "epicfight:biped/skill/" + anim, 0);
+                        else   AnimUtils.playAnimByString(player, "epicfight:biped/skill/" + anim, 0);
                     }
-                    else   AnimUtils.playAnim(player, "epicfight:biped/skill/" + anim, 0);
+                    else   AnimUtils.playAnimByString(player, "epicfight:biped/skill/" + anim, 0);
         }
     }
 
@@ -102,7 +102,7 @@ public class onQPress {
                 if (dodgetype == 3) {
                     anim = "wom:biped/skill/roll_right";
                 }
-                AnimUtils.playAnim(player,   anim, 0);
+                AnimUtils.playAnimByString(player,   anim, 0);
         }
     }
 }

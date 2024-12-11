@@ -9,14 +9,13 @@ import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 public class onFPress {
 
     public static void swapHand(Player player){
-        PlayerPatch playerPatch = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
-        if (playerPatch != null){
-            if(playerPatch.getSkill(SkillSlots.WEAPON_INNATE).isActivated()){
-                playerPatch.getSkill(SkillSlots.WEAPON_INNATE).deactivate();
-            }
-            else  {playerPatch.getSkill(SkillSlots.WEAPON_INNATE).activate();}
-            playerPatch.updateHeldItem(playerPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND), playerPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND), player.getMainHandItem(),player.getMainHandItem(), InteractionHand.MAIN_HAND );
-
-        }
+       if (player != null){
+           if (player.getMainHandItem().getTag() != null){
+               if (!player.getMainHandItem().getTag().getBoolean("two_handed")){
+                   player.getMainHandItem().getTag().putBoolean("two_handed", true);
+               }
+               else  player.getMainHandItem().getTag().putBoolean("two_handed", false);
+           }
+       }
     }
 }

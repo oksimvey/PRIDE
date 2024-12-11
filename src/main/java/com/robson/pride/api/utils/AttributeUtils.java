@@ -61,12 +61,10 @@ public class AttributeUtils {
         }
     }
 
-    public static void addModifiertoAnim(Entity ent, String attributename, float amount, int duration, AttributeModifier.Operation operation){
-        addModifier((LivingEntity) ent, attributename, "dc35bbaf-6bcd-4eb6-8836-d3d09812ea84", -1000, AttributeModifier.Operation.ADDITION);
-        TimerUtil.schedule(()-> addModifier((LivingEntity) ent, attributename, "63104183-c72f-4f0b-9c98-b06743e886de", amount, operation), 10, TimeUnit.MILLISECONDS);
+    public static void addModifierWithDuration(Entity ent, String attributename, float amount, int duration, AttributeModifier.Operation operation){
+       addModifier((LivingEntity) ent, attributename, "63104183-c72f-4f0b-9c98-b06743e886de", amount, operation);
         TimerUtil.schedule(()->{
             removeModifier((LivingEntity) ent, attributename, "63104183-c72f-4f0b-9c98-b06743e886de" );
-            removeModifier((LivingEntity) ent, attributename, "dc35bbaf-6bcd-4eb6-8836-d3d09812ea84" );
         }, duration, TimeUnit.MILLISECONDS);
     }
 }

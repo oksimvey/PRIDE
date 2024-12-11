@@ -49,7 +49,7 @@ public class OnLeftClick {
         TimerUtil.schedule(() -> {
             if (target.getPersistentData().getBoolean("isVulnerable")) {
                 CutsceneUtils.executionCutscene(ent);
-                AnimUtils.playAnim(ent, "epicfight:biped/combat/tachi_dash", 0);
+                AnimUtils.playAnimByString(ent, "epicfight:biped/combat/tachi_dash", 0);
             }
         }, 5, TimeUnit.MILLISECONDS);
     }

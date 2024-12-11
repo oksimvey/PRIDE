@@ -3,7 +3,8 @@ package com.robson.pride.mechanics;
 import com.robson.pride.api.utils.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -12,7 +13,7 @@ public class Parry {
 
     public static void onParry(Entity ent, Entity ddmgent) {
         if (ent != null) {
-            String BlockType = TagCheckUtils.checkBlockType((LivingEntity) ent);
+            String BlockType = ItemStackUtils.checkBlockType(ent);
             if (Objects.equals(BlockType, "mainhandshield")||Objects.equals(BlockType, "offhandshield")){
                 onShieldParry(ent, ddmgent, BlockType);
             }
@@ -26,15 +27,20 @@ public class Parry {
         StaminaUtils.consumeStamina(ddmgent, 4);
        PlaySoundUtils.playSound(ent, "pride:shieldparry", 0.5f, 1f);
         if (Objects.equals(BlockType, "mainhandshield")) {
-            AnimUtils.playAnim(ent, "pride:biped/combat/shield_parry1", 0.05F);
+            AnimUtils.playAnimByString(ent, "pride:biped/combat/shield_parry1", 0.05F);
         }
         if (Objects.equals(BlockType, "offhandshield")) {
-            AnimUtils.playAnim(ent, "pride:biped/combat/shield_parry2", 0.05F);
+            AnimUtils.playAnimByString(ent, "pride:biped/combat/shield_parry2", 0.05F);
         }
     }
 
     public static void onWeaponParry(Entity ent, Entity ddmgent) {
+        float amount = 1f;
         StaminaUtils.consumeStamina(ddmgent, 3);
+        if (ddmgent instanceof LivingEntity livingEntity){
+            amount = AttributeUtils.getAttributeValue(livingEntity, "epicfight:impact");
+        }
+        StaminaUtils.addStamina(ent, 0.1f * amount);
     }
 
     public static void ParryWindow(Entity ent) {

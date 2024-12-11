@@ -1,20 +1,20 @@
 package com.robson.pride.api.utils;
 
-import com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.api.animation.types.StaticAnimation;
-import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
 import yesman.epicfight.gameasset.Animations;
+import yesman.epicfight.gameasset.EpicFightSkills;
 import yesman.epicfight.network.server.SPPlayAnimation;
+import yesman.epicfight.skill.guard.GuardSkill;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
@@ -23,11 +23,10 @@ import java.util.concurrent.TimeUnit;
 
 public class AnimUtils {
 
-    public static void playAnim(Entity ent, String anim, float convert) {
+    public static void playAnim(Entity ent, StaticAnimation animation, float convert) {
         TimerUtil.schedule(() -> {
             LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (livingEntityPatch != null) {
-                StaticAnimation animation = AnimationManager.getInstance().byKeyOrThrow(anim);
                 if (animation != null) {
                     if (livingEntityPatch instanceof AdvancedCustomHumanoidMobPatch<?> AHPatch) {
                         AHPatch.setBlocking(false);
@@ -39,6 +38,11 @@ public class AnimUtils {
                 }
             }
         }, 10, TimeUnit.MILLISECONDS);
+    }
+
+    public static void playAnimByString(Entity ent, String anim, float convert) {
+        StaticAnimation animation = AnimationManager.getInstance().byKeyOrThrow(anim);
+        playAnim(ent, animation, convert);
     }
 
     public static void playAnimchangingBox(Entity ent, String anim, float convert, float width, float height, int duration){

@@ -14,8 +14,8 @@ public class FlameSlashSkill {
     public static void onExecution(LivingEntity ent) {
         if (ent != null) {
             if (SkillCore.consumptionCore(ent, 6, 50)) {
-                AnimUtils.playAnim(ent,  "wom:biped/combat/solar_obscuridad_auto_1", 0);
-                TimerUtil.schedule(()->SpellUtils.castSpell(ent, SpellRegistry.FLAMING_STRIKE_SPELL.get(), 3, 0), 350,  TimeUnit.MILLISECONDS);
+                AnimUtils.playAnimByString(ent,  "wom:biped/combat/solar_obscuridad_auto_1", 0);
+                TimerUtil.schedule(()->SpellUtils.castSpell(ent, SpellRegistry.FLAMING_STRIKE_SPELL.get(), 3, 0), 400,  TimeUnit.MILLISECONDS);
                 PerilousAttack.setPerilous(ent, "total", 1500);
             }
         }

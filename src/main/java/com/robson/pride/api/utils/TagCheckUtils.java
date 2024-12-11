@@ -16,20 +16,4 @@ public class TagCheckUtils {
     public static boolean entityTagCheck(Entity ent, String tagname) {
         return ent.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("pride:" + tagname)));
     }
-
-    public static String checkBlockType(LivingEntity ent) {
-        String BlockType = null;
-        if (itemsTagCheck(ent.getMainHandItem(), "shields")) {
-            BlockType = "mainhandshield";
-        } else {
-            if (itemsTagCheck(ent.getOffhandItem(), "shields")) {
-                BlockType = "offhandshield";
-            } else {
-                if (itemsTagCheck(ent.getMainHandItem(), "weapons")) {
-                    BlockType = "weapon";
-                }
-            }
-        }
-        return BlockType;
-    }
 }

@@ -2,12 +2,16 @@ package com.robson.pride.main;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.robson.pride.command.PerilousCommand;
+import com.robson.pride.epicfight.styles.PrideStyles;
+import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
+import com.robson.pride.epicfight.weapontypes.WeaponGuardMotions;
 import com.robson.pride.registries.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -19,10 +23,24 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.registries.RegisterEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.api.client.forgeevent.WeaponCategoryIconRegisterEvent;
+import yesman.epicfight.gameasset.Animations;
+import yesman.epicfight.gameasset.EpicFightSkills;
+import yesman.epicfight.skill.guard.GuardSkill;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
+import yesman.epicfight.world.capabilities.item.CapabilityItem;
+import yesman.epicfight.world.capabilities.item.Style;
+import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -49,6 +67,10 @@ public class Pride {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(KeyRegister::registerKeyMappings);
         ParticleRegister.PARTICLES.register(bus);
         bus.addListener(AnimationsRegister::registerAnimations);
+        WeaponCategory.ENUM_MANAGER.registerEnumCls(MOD_ID, WeaponCategoriesEnum.class);
+        Style.ENUM_MANAGER.registerEnumCls(Pride.MODID, PrideStyles.class);
+        bus.addListener(com.robson.pride.epicfight.weapontypes.WeaponGuardMotions::buildSkillEvent);
+        bus.addListener(com.robson.pride.epicfight.weapontypes.WeaponGuardMotions::regIcon);
     }
 
     public static <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder, BiConsumer<T, Supplier<NetworkEvent.Context>> messageConsumer) {
@@ -64,6 +86,8 @@ public class Pride {
                                 .then(PerilousCommand.register())));
 
     }
+
+
     private void setupCommon(FMLCommonSetupEvent event) {
         PacketRegister.register();
     }
