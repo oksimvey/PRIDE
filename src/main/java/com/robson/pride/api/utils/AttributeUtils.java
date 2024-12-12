@@ -14,9 +14,12 @@ import java.util.concurrent.TimeUnit;
 import static java.util.Objects.requireNonNull;
 
 public class AttributeUtils {
-    public static float getAttributeValue(LivingEntity ent, String attribute) {
-        if (ent.getAttribute(requireNonNull(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute)))) != null) {
-            return (float) ent.getAttributeValue(requireNonNull(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute))));
+
+    public static float getAttributeValue(Entity ent, String attribute) {
+        if (ent instanceof LivingEntity livingEntity) {
+            if (livingEntity.getAttribute(requireNonNull(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute)))) != null) {
+                return (float) livingEntity.getAttributeValue(requireNonNull(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute))));
+            }
         }
         return 0f;
     }
@@ -40,6 +43,7 @@ public class AttributeUtils {
     }
 
     public static void addModifier(LivingEntity ent, String attributename, String uuid, double amount, AttributeModifier.Operation operation) {
+        if (ent != null){
         Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attributename));
         if (attribute != null) {
             AttributeInstance attributeInstance = ent.getAttribute(attribute);
@@ -47,6 +51,7 @@ public class AttributeUtils {
                 removeModifier(ent, attributename, uuid);
                 attributeInstance.addPermanentModifier(((new AttributeModifier(UUID.fromString(uuid), "modifier", amount, operation))));
             }
+        }
         }
     }
     public static void removeModifier(LivingEntity ent, String attributename, String uuid) {
@@ -61,10 +66,12 @@ public class AttributeUtils {
         }
     }
 
-    public static void addModifierWithDuration(Entity ent, String attributename, float amount, int duration, AttributeModifier.Operation operation){
-       addModifier((LivingEntity) ent, attributename, "63104183-c72f-4f0b-9c98-b06743e886de", amount, operation);
-        TimerUtil.schedule(()->{
-            removeModifier((LivingEntity) ent, attributename, "63104183-c72f-4f0b-9c98-b06743e886de" );
-        }, duration, TimeUnit.MILLISECONDS);
+    public static void addModifierWithDuration(Entity ent, String attributename, float amount, int duration, AttributeModifier.Operation operation) {
+        if (ent != null) {
+            addModifier((LivingEntity) ent, attributename, "63104183-c72f-4f0b-9c98-b06743e886de", amount, operation);
+            TimerUtil.schedule(() -> {
+                removeModifier((LivingEntity) ent, attributename, "63104183-c72f-4f0b-9c98-b06743e886de");
+            }, duration, TimeUnit.MILLISECONDS);
+        }
     }
 }

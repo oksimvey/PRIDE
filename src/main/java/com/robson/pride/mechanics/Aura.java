@@ -1,64 +1,89 @@
 package com.robson.pride.mechanics;
 
-import com.robson.pride.api.utils.AnimUtils;
-import com.robson.pride.api.utils.AttributeUtils;
-import com.robson.pride.api.utils.PlaySoundUtils;
-import com.robson.pride.api.utils.TimerUtil;
+import com.robson.pride.api.utils.*;
+import com.robson.pride.progression.ElementalUtils;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.KeyRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import yesman.epicfight.client.events.engine.ControllEngine;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class Aura {
 
-    public static void recharge(Entity ent, int duration){
-        if (ent != null){
+    public static void playerRecharge(Entity ent, int duration) {
+        if (ent != null) {
             AttributeUtils.addModifierWithDuration(ent, "irons_spellbooks:mana_regen", 5, duration, AttributeModifier.Operation.ADDITION);
-            rechargeAura(ent, "sla", 3, 1, false);
+            recharge(ent, ElementalUtils.getElement(ent), 10, 50, 1, true);
             rechargeAuraLooper(ent, 10, duration);
         }
     }
 
-    public static void rechargeAura(Entity ent, String element, int power, int duration, boolean canhurt){
+    public static void recharge(Entity ent, String element, float radius, int power, int duration, boolean canhurt) {
         if (ent != null) {
-            double minx = ent.getX() - power;
-            double maxx = ent.getX() + power;
-            double miny = ent.getY() - power * 0.5;
-            double maxy = ent.getY() + power * 1.5;
-            double minz = ent.getZ() - power;
-            double maxz = ent.getZ() + power;
-            if (Minecraft.getInstance().level != null) {
-                Minecraft.getInstance().level.addParticle(ParticleRegistry.ELECTRICITY_PARTICLE.get(), minx + Math.random() * (maxx - minx), miny + Math.random() * (maxy - miny), minz + Math.random() * (maxz - minz), 0D, 0D, 0D);
-                Minecraft.getInstance().level.addParticle(ParticleRegistry.ELECTRICITY_PARTICLE.get(), minx + Math.random() * (maxx - minx), miny + Math.random() * (maxy - miny), minz + Math.random() * (maxz - minz), 0D, 0D, 0D);
-
+            for (int i = 0; i < radius; i++) {
+                ParticleUtils.spawnParticleRelativeToEntity(ParticleRegistry.DRAGON_FIRE_PARTICLE.get(), ent, -radius + Math.random() * (radius + radius), (-radius * 0.5) + Math.random() * ((radius * 1.5) - (-radius * 0.5)), -radius + Math.random() * (radius + radius), 1, 0, 0, 0, 0.1);
+           }
+            if (!ent.getPersistentData().getBoolean("chargeanim")) {
+                AnimUtils.playAnim(ent, AnimationsRegister.RECHARGE, 0.1f);
+                ent.getPersistentData().putBoolean("chargeanim", true);
+                TimerUtil.schedule(() -> ent.getPersistentData().putBoolean("chargeanim", false), 600, TimeUnit.MILLISECONDS);
+            }
+            if (canhurt) {
+                auraDamage(ent, element, radius, power);
             }
         }
     }
 
-    public static void rechargeAuraLooper(Entity ent, int speed, int duration){
-        if (ControllEngine.isKeyDown(KeyRegister.keyActionRecharge)) {
-            TimerUtil.schedule(() -> recharge(ent, duration), speed, TimeUnit.MILLISECONDS);
-            if (!ent.getPersistentData().getBoolean("chargeanim")) {
-                AnimUtils.playAnim(ent, AnimationsRegister.RECHARGE, 0.1f);
-                ent.getPersistentData().putBoolean("chargeanim", true);
-                TimerUtil.schedule(()->ent.getPersistentData().putBoolean("chargeanim", false), 600, TimeUnit.MILLISECONDS);
-                PlaySoundUtils.playSound(ent, "irons_spellbooks:loop.electrocute", 1f, 1f);
-            }
-            AABB minMax = new AABB(ent.getX()-2, ent.getY() - 2, ent.getZ()-2, ent.getX() + 2, ent.getY()+2, ent.getZ() + 2);
-            if (ent.level()!= null) {
-                List<Entity> listent = ent.level().getEntities(ent, minMax);
-                for (Entity entko : listent) {
-                    entko.setSecondsOnFire(2);
+    public static void auraDamage(Entity ent, String element, float radius, int power) {
+        AABB minMax = new AABB(ent.getX() - radius, ent.getY() - (radius * 0.5), ent.getZ() - radius, ent.getX() + radius, ent.getY() + (radius * 1.5), ent.getZ() + radius);
+        if (ent.level() != null) {
+            List<Entity> listent = ent.level().getEntities(ent, minMax);
+            for (Entity entko : listent) {
+                if (Objects.equals(element, "Darkness")) {
+                    ElementalPassives.darknessDebuff(entko, ent, power);
                 }
-
+                if (Objects.equals(element, "Light")) {
+                    ElementalPassives.lightDebuff(entko, ent, power);
+                }
+                if (Objects.equals(element, "Lightning")) {
+                    ElementalPassives.lightningDebuff(entko, ent, power);
+                }
+                if (Objects.equals(element, "Sun")) {
+                    ElementalPassives.sunDebuff(entko, ent, power);
+                }
+                if (Objects.equals(element, "Moon")) {
+                    ElementalPassives.moonDebuff(entko, ent, power);
+                }
+                if (Objects.equals(element, "Blood")) {
+                    ElementalPassives.bloodDebuff(entko, ent, power);
+                }
+                if (Objects.equals(element, "Wind")) {
+                    ElementalPassives.windDebuff(entko, ent, power);
+                }
+                if (Objects.equals(element, "Nature")) {
+                    ElementalPassives.natureDebuff(entko, ent, power);
+                }
+                if (Objects.equals(element, "Ice")) {
+                    ElementalPassives.iceDebuff(entko, ent, power);
+                }
+                if (Objects.equals(element, "Water")) {
+                    ElementalPassives.waterDebuff(entko, ent, power);
+                }
             }
-        }}
+        }
     }
+
+    public static void rechargeAuraLooper(Entity ent, int speed, int duration) {
+        if (ControllEngine.isKeyDown(KeyRegister.keyActionRecharge)) {
+            TimerUtil.schedule(() -> playerRecharge(ent, duration), speed, TimeUnit.MILLISECONDS);
+        }
+    }
+}
 

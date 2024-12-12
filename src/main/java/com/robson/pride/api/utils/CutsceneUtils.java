@@ -1,6 +1,5 @@
 package com.robson.pride.api.utils;
 
-import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
@@ -16,23 +15,13 @@ public class CutsceneUtils {
             CommandUtils.executeonClient(ent, "cam mode " + mode);
                 LocalPlayerPatch player = EpicFightCapabilities.getEntityPatch(Minecraft.getInstance().player, LocalPlayerPatch.class);
                 if (player != null) {
-                    unlockCamera(player, duration);
+                    CameraUtils.unlockCamera(player, duration);
             }
             if (!(Minecraft.getInstance().options.getCameraType().isFirstPerson())) {
-                putonFirstPerson(ent, duration);
+                CameraUtils.putonFirstPerson(ent, duration);
             }
             TimerUtil.schedule(()-> CommandUtils.executeonClient(ent, "cam start " + duration + "s"), 10, TimeUnit.MILLISECONDS);
         }
-    }
-
-    public static void unlockCamera(LocalPlayerPatch ent, byte duration){
-        ent.setLockOn(false);
-        TimerUtil.schedule(()-> ent.setLockOn(true), duration+1, TimeUnit.SECONDS);
-    }
-
-    public static void putonFirstPerson(Entity ent, byte duration){
-        Minecraft.getInstance().options.setCameraType(CameraType.FIRST_PERSON);
-        TimerUtil.schedule(()->   Minecraft.getInstance().options.setCameraType(CameraType.THIRD_PERSON_BACK), duration+1, TimeUnit.SECONDS);
     }
 
     public static void addPoint(Entity ent, String pointpos){

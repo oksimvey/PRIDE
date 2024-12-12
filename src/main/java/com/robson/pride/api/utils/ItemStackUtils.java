@@ -31,6 +31,29 @@ public class ItemStackUtils {
         return null;
     }
 
+    public static InteractionHand getWeaponSpeed(Entity ent, InteractionHand hand){
+        if (ent != null){
+            LivingEntityPatch livingEntityPatch  = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (livingEntityPatch != null ){
+               if (livingEntityPatch.getHoldingItemCapability(hand) != null){
+                }
+            }
+        }
+        return InteractionHand.MAIN_HAND;
+    }
+
+    public static InteractionHand checkAttackingHand(Entity ent){
+        if (ent != null){
+            LivingEntityPatch livingEntityPatch  = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (livingEntityPatch != null ){
+                if (livingEntityPatch.getAttackingHand() != null){
+                    return livingEntityPatch.getAttackingHand();
+                }
+            }
+        }
+        return InteractionHand.MAIN_HAND;
+    }
+
     public static boolean checkWeapon(Entity ent, InteractionHand hand){
         if (ent != null){
             WeaponCategory category = getWeaponCategory(ent, hand);

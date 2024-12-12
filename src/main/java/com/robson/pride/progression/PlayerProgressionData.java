@@ -76,6 +76,7 @@ public class PlayerProgressionData {
             clone.VigorMaxXp = original.VigorMaxXp;
             clone.EnduranceMaxXp = original.EnduranceMaxXp;
             clone.MindMaxXp = original.MindMaxXp;
+            clone.Element = original.Element;
             if (!event.isWasDeath()) {
             }
         }
@@ -127,6 +128,7 @@ public class PlayerProgressionData {
         private int VigorMaxXp = 100;
         private int EnduranceMaxXp = 100;
         private int MindMaxXp = 100;
+        private String Element = "";
 
         public int[] addXp(int lvl, int xp, int maxxp, int amount) {
             xp = xp + amount;
@@ -227,6 +229,14 @@ public class PlayerProgressionData {
                 Pride.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PlayerVariablesSyncMessage(this));
         }
 
+        public String getElement(){
+            return Element;
+        }
+
+        public void setElement(String element){
+            Element =  element;
+        }
+
         public Tag writeNBT() {
             CompoundTag nbt = new CompoundTag();
             nbt.putInt("StrengthLvl", StrengthLvl);
@@ -244,6 +254,7 @@ public class PlayerProgressionData {
             nbt.putInt("VigorMaxXp", VigorMaxXp);
             nbt.putInt("EnduranceMaxXp", EnduranceMaxXp);
             nbt.putInt("MindMaxXp", MindMaxXp);
+            nbt.putString("Element", Element);
             return nbt;
         }
 
@@ -264,6 +275,7 @@ public class PlayerProgressionData {
             VigorMaxXp = nbt.getInt("VigorMaxXp");
             EnduranceMaxXp = nbt.getInt("EnduranceMaxXp");
             MindMaxXp = nbt.getInt("MindMaxXp");
+            Element = nbt.getString("Element");
         }
     }
 
@@ -303,6 +315,7 @@ public class PlayerProgressionData {
                     variables.VigorMaxXp = message.data.VigorMaxXp;
                     variables.EnduranceMaxXp = message.data.EnduranceMaxXp;
                     variables.MindMaxXp = message.data.MindMaxXp;
+                    variables.Element = message.data.Element;
                 }
             });
             context.setPacketHandled(true);

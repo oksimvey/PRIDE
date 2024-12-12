@@ -2,6 +2,7 @@ package com.robson.pride.main;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.robson.pride.command.PerilousCommand;
+import com.robson.pride.command.SetElementCommand;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import com.robson.pride.epicfight.weapontypes.WeaponGuardMotions;
@@ -39,6 +40,7 @@ import yesman.epicfight.world.capabilities.item.WeaponCategory;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -83,7 +85,8 @@ public class Pride {
                 LiteralArgumentBuilder.<CommandSourceStack>literal(Pride.MOD_ID)
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.argument("living_entity", EntityArgument.entity())
-                                .then(PerilousCommand.register())));
+                                .then(PerilousCommand.register())
+                                .then(SetElementCommand.register())));
 
     }
 

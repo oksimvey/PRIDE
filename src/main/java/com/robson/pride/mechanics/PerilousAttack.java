@@ -2,6 +2,7 @@ package com.robson.pride.mechanics;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.utils.PlaySoundUtils;
+import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.registries.ParticleRegister;
@@ -35,9 +36,21 @@ public class PerilousAttack {
         String Mikiri = ent.getPersistentData().getString("Mikiri");
         if (Objects.equals(Perilous, "total")) {
             PerilousSucess(ent, event);
-        } else if (Objects.equals(Perilous, "pierce_two_hand") && Objects.equals(Mikiri, "Dodge") || Objects.equals(Perilous, "pierce_dual_wield") && Objects.equals(Mikiri, "Dodge") || Objects.equals(Perilous, "pierce_one_hand") && Objects.equals(Mikiri, "Dodge")) {
-            MikiriCounter.onPierceMikiri(ent, ddmgent, Perilous);
-            event.setCanceled(true);
+        } else if (Objects.equals(Perilous, "pierce_two_hand") || Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand")) {
+            if (ent instanceof Player){
+                if (Mikiri.equals("Dodge")) {
+                    MikiriCounter.onPierceMikiri(ent, ddmgent, Perilous);
+                    event.setCanceled(true);
+                }
+                else PerilousSucess(ent, event);
+            }
+           else {
+               if (StaminaUtils.getMaxStamina(ent) > event.getAmount()){
+                   MikiriCounter.onPierceMikiri(ent, ddmgent, Perilous);
+                   event.setCanceled(true);
+               }
+               else PerilousSucess(ent, event);
+            }
         } else if (Objects.equals(Perilous, "kick") && Objects.equals(Mikiri, "Dodge")) {
             event.setResult(Event.Result.DENY);
         } else if (Objects.equals(Perilous, "sweep") && Objects.equals(Mikiri, "Jump")) {

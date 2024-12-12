@@ -1,7 +1,7 @@
-package com.robson.pride.entities.pre_hardmode.japanese.mob;
+package com.robson.pride.entities.pre_hardmode.japanese.mob.ronin;
 
 import com.robson.pride.api.utils.EquipUtils;
-import com.robson.pride.entities.pre_hardmode.knight.mob.EliteKnight;
+import com.robson.pride.entities.pre_hardmode.knight.mob.eliteknight.EliteKnight;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;

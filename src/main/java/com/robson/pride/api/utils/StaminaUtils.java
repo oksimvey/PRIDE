@@ -25,6 +25,23 @@ public class StaminaUtils {
         return 1;
     }
 
+    public static float getMaxStamina(Entity ent) {
+        if (ent != null) {
+            if (ent instanceof Player) {
+                PlayerPatch playerPatch = EpicFightCapabilities.getEntityPatch(ent, PlayerPatch.class);
+                if (playerPatch != null) {
+                    return playerPatch.getMaxStamina();
+                }
+            } else {
+                AdvancedCustomHumanoidMobPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
+                if (mobPatch != null) {
+                    return mobPatch.getMaxStamina();
+                }
+            }
+        }
+        return 1;
+    }
+
     public static void setStamina(Entity ent, float amount){
         if (ent != null) {
             if (ent instanceof Player) {
@@ -50,6 +67,6 @@ public class StaminaUtils {
     }
 
     public static void resetStamina(Entity ent){
-        setStamina(ent, (getStamina(ent) + 999999));
+        setStamina(ent, getMaxStamina(ent));
     }
 }

@@ -1,6 +1,5 @@
-package com.robson.pride.client.renderer.knight.mob;
+package com.robson.pride.entities.pre_hardmode.knight.mob.eliteknight;
 
-import com.robson.pride.entities.pre_hardmode.knight.mob.EliteKnight;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

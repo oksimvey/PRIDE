@@ -70,7 +70,7 @@ public class KeyActionPacket {
         }
 
         if (packet.action.equals("recharge")) {
-            Aura.recharge(player, 50);
+            Aura.playerRecharge(player, 50);
         }
 
         if (packet.action.equals("menu")) {

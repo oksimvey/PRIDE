@@ -1,6 +1,5 @@
-package com.robson.pride.client.renderer.japanese.boss;
+package com.robson.pride.entities.pre_hardmode.japanese.boss.shogun;
 
-import com.robson.pride.entities.pre_hardmode.japanese.boss.Shogun;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

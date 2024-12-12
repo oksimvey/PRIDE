@@ -1,8 +1,8 @@
 package com.robson.pride.registries;
 
-import com.robson.pride.client.renderer.japanese.boss.ShogunRenderer;
-import com.robson.pride.client.renderer.japanese.mob.RoninRenderer;
-import com.robson.pride.client.renderer.knight.mob.EliteKnightRenderer;
+import com.robson.pride.entities.pre_hardmode.japanese.boss.shogun.ShogunRenderer;
+import com.robson.pride.entities.pre_hardmode.japanese.mob.ronin.RoninRenderer;
+import com.robson.pride.entities.pre_hardmode.knight.mob.eliteknight.EliteKnightRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
