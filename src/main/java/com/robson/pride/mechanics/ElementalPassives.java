@@ -12,7 +12,7 @@ public class ElementalPassives {
 
     }
 
-    public static void lightningDebuff(Entity ent, Entity dmgent,  float power){
+    public static void thunderDebuff(Entity ent, Entity dmgent,  float power){
 
     }
 

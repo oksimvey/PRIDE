@@ -20,7 +20,7 @@ public class Aura {
     public static void playerRecharge(Entity ent, int duration) {
         if (ent != null) {
             AttributeUtils.addModifierWithDuration(ent, "irons_spellbooks:mana_regen", 5, duration, AttributeModifier.Operation.ADDITION);
-            recharge(ent, ElementalUtils.getElement(ent), 10, 50, 1, true);
+            recharge(ent, ElementalUtils.getElement(ent), 5, 50, 1, true);
             rechargeAuraLooper(ent, 10, duration);
         }
     }
@@ -52,8 +52,8 @@ public class Aura {
                 if (Objects.equals(element, "Light")) {
                     ElementalPassives.lightDebuff(entko, ent, power);
                 }
-                if (Objects.equals(element, "Lightning")) {
-                    ElementalPassives.lightningDebuff(entko, ent, power);
+                if (Objects.equals(element, "Thunder")) {
+                    ElementalPassives.thunderDebuff(entko, ent, power);
                 }
                 if (Objects.equals(element, "Sun")) {
                     ElementalPassives.sunDebuff(entko, ent, power);

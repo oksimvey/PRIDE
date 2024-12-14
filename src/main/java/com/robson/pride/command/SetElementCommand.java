@@ -19,7 +19,7 @@ public class SetElementCommand implements Command<CommandSourceStack> {
                 .then(Commands.argument("set", StringArgumentType.word()).suggests(((commandContext, suggestionsBuilder) -> {
                             suggestionsBuilder.suggest("Darkness");
                             suggestionsBuilder.suggest("Light");
-                            suggestionsBuilder.suggest("Lightning");
+                            suggestionsBuilder.suggest("Thunder");
                             suggestionsBuilder.suggest("Sun");
                             suggestionsBuilder.suggest("Moon");
                             suggestionsBuilder.suggest("Blood");
