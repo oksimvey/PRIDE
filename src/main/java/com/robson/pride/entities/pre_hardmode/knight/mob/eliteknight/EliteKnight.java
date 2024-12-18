@@ -69,8 +69,8 @@ import javax.annotation.Nullable;
         @Override
         public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
             SpawnGroupData data = super.finalizeSpawn(accessor, difficulty, reason, spawnDataIn, dataTag);
-            EquipUtils.equipMainHand(this, "epicfight:iron_longsword");
-            EquipUtils.equipOffHand(this, "minecraft:shield");
+            EquipUtils.equipMainHandByString(this, "epicfight:iron_longsword");
+            EquipUtils.equipOffHandByString(this, "minecraft:shield");
 
             return data;
         }

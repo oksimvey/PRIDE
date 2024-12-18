@@ -15,16 +15,37 @@ public class EquipUtils {
         itemstack.setCount(1);
         return itemstack;
     }
-    public static void equipMainHand(LivingEntity ent, String item){
-        ent.setItemInHand(InteractionHand.MAIN_HAND, locateItem(item));
+
+    public static void equipMainHand(LivingEntity ent, ItemStack item) {
+        if (ent != null) {
+            ent.setItemInHand(InteractionHand.MAIN_HAND, item);
+        }
     }
-    public static void equipOffHand(LivingEntity ent, String item){
-        ent.setItemInHand(InteractionHand.OFF_HAND, locateItem(item));
+
+    public static void equipMainHandByString(LivingEntity ent, String item){
+       equipMainHand(ent, locateItem(item));
     }
-    public static void equipArmorSet(LivingEntity ent, String head, String chest, String legs, String feet) {
-        ent.setItemSlot(EquipmentSlot.HEAD, locateItem(head));
-        ent.setItemSlot(EquipmentSlot.CHEST, locateItem(chest));
-        ent.setItemSlot(EquipmentSlot.LEGS, locateItem(legs));
-        ent.setItemSlot(EquipmentSlot.FEET, locateItem(feet));
+
+    public static void equipOffHand(LivingEntity ent, ItemStack item){
+        if (ent != null){
+            ent.setItemInHand(InteractionHand.OFF_HAND, item);
+        }
+    }
+
+    public static void equipOffHandByString(LivingEntity ent, String item){
+        equipOffHand(ent, locateItem(item));
+    }
+
+    public static void equipArmorSet(LivingEntity ent, ItemStack head, ItemStack chest, ItemStack legs, ItemStack feet) {
+        if (ent != null) {
+            ent.setItemSlot(EquipmentSlot.HEAD, head);
+            ent.setItemSlot(EquipmentSlot.CHEST, chest);
+            ent.setItemSlot(EquipmentSlot.LEGS, legs);
+            ent.setItemSlot(EquipmentSlot.FEET, feet);
+        }
+    }
+
+    public static void equipArmorSetByString(LivingEntity ent, String head, String chest, String legs, String feet) {
+       equipArmorSet(ent, locateItem(head), locateItem(chest), locateItem(legs), locateItem(feet));
     }
 }

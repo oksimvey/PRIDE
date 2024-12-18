@@ -19,7 +19,7 @@ public class Aura {
 
     public static void playerRecharge(Entity ent, int duration) {
         if (ent != null) {
-            AttributeUtils.addModifierWithDuration(ent, "irons_spellbooks:mana_regen", 5, duration, AttributeModifier.Operation.ADDITION);
+            AttributeUtils.addModifierWithDuration(ent, "irons_spellbooks:mana_regen", 10, duration, AttributeModifier.Operation.ADDITION);
             recharge(ent, ElementalUtils.getElement(ent), 5, 50, 1, true);
             rechargeAuraLooper(ent, 10, duration);
         }
@@ -47,34 +47,34 @@ public class Aura {
             List<Entity> listent = ent.level().getEntities(ent, minMax);
             for (Entity entko : listent) {
                 if (Objects.equals(element, "Darkness")) {
-                    ElementalPassives.darknessDebuff(entko, ent, power);
+                    ElementalPassives.darknessPassive(entko, ent, power);
                 }
                 if (Objects.equals(element, "Light")) {
-                    ElementalPassives.lightDebuff(entko, ent, power);
+                    ElementalPassives.lightPassive(entko, ent, power);
                 }
                 if (Objects.equals(element, "Thunder")) {
-                    ElementalPassives.thunderDebuff(entko, ent, power);
+                    ElementalPassives.thunderPassive(entko, ent, power);
                 }
                 if (Objects.equals(element, "Sun")) {
-                    ElementalPassives.sunDebuff(entko, ent, power);
+                    ElementalPassives.sunPassive(entko, ent, power);
                 }
                 if (Objects.equals(element, "Moon")) {
-                    ElementalPassives.moonDebuff(entko, ent, power);
+                    ElementalPassives.moonPassive(entko, ent, power);
                 }
                 if (Objects.equals(element, "Blood")) {
-                    ElementalPassives.bloodDebuff(entko, ent, power);
+                    ElementalPassives.bloodPassive(entko, ent, power);
                 }
                 if (Objects.equals(element, "Wind")) {
-                    ElementalPassives.windDebuff(entko, ent, power);
+                    ElementalPassives.windPassive(entko, ent, power);
                 }
                 if (Objects.equals(element, "Nature")) {
-                    ElementalPassives.natureDebuff(entko, ent, power);
+                    ElementalPassives.naturePassive(entko, ent, power);
                 }
                 if (Objects.equals(element, "Ice")) {
-                    ElementalPassives.iceDebuff(entko, ent, power);
+                    ElementalPassives.icePassive(entko, ent, power);
                 }
                 if (Objects.equals(element, "Water")) {
-                    ElementalPassives.waterDebuff(entko, ent, power);
+                    ElementalPassives.waterPassive(entko, ent, power);
                 }
             }
         }

@@ -74,7 +74,7 @@ public class PerilousAttack {
     public static void playPerilous(Entity ent) {
         LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
         if (livingEntityPatch != null) {
-            PlaySoundUtils.playSound(livingEntityPatch.getTarget(), "pride:perilous", 3, 1);
+            PlaySoundUtils.playSoundByString(livingEntityPatch.getTarget(), "pride:perilous", 3, 1);
         }
     }
 

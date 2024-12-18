@@ -9,7 +9,8 @@ import java.util.function.Function;
 public enum WeaponCategoriesEnum implements WeaponCategory, Function<Item, CapabilityItem.Builder> {
     PRIDE_LONGSWORD,
     PRIDE_GREATSWORD,
-    PRIDE_COLOSSALSWORD;
+    PRIDE_COLOSSALSWORD,
+    PRIDE_GUN;
 
     final int id;
 

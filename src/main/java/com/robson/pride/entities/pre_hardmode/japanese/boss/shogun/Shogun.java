@@ -68,7 +68,7 @@ public class Shogun extends Monster {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(accessor, difficulty, reason, spawnDataIn, dataTag);
-        EquipUtils.equipMainHand(this, "epicfight:netherite_tachi");
+        EquipUtils.equipMainHandByString(this, "epicfight:netherite_tachi");
 
         return data;
     }

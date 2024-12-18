@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
@@ -18,6 +19,7 @@ import yesman.epicfight.skill.guard.GuardSkill;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
+import yesman.epicfight.world.damagesource.StunType;
 
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +41,15 @@ public class AnimUtils {
             }
         }, 10, TimeUnit.MILLISECONDS);
     }
+
+    public static InteractionHand getAttackingHand(Entity ent){
+        LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+        if (livingEntityPatch != null) {
+            return livingEntityPatch.getAttackingHand();
+        }
+        return null;
+    }
+
 
     public static void playAnimByString(Entity ent, String anim, float convert) {
         StaticAnimation animation = AnimationManager.getInstance().byKeyOrThrow(anim);
@@ -100,6 +111,15 @@ public class AnimUtils {
             TimerUtil.schedule(()->  livingent.getEntityState().setState(EntityState.CAN_SKILL_EXECUTION, true), duration, TimeUnit.MILLISECONDS);
         }
     }
+
+    public static void applyStun(Entity ent, StunType stuntype , float duration){
+        LivingEntityPatch livingent = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+        if (livingent != null) {
+            livingent.applyStun(stuntype, duration);
+        }
+    }
+
+
     public static boolean checkAttack(Entity ent){
         LivingEntityPatch livingent = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
         if (livingent != null){

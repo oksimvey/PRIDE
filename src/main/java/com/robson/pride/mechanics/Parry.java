@@ -3,8 +3,6 @@ package com.robson.pride.mechanics;
 import com.robson.pride.api.utils.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +23,7 @@ public class Parry {
 
     public static void onShieldParry(Entity ent, Entity ddmgent, String BlockType) {
         StaminaUtils.consumeStamina(ddmgent, 4);
-       PlaySoundUtils.playSound(ent, "pride:shieldparry", 0.5f, 1f);
+       PlaySoundUtils.playSoundByString(ent, "pride:shieldparry", 0.5f, 1f);
         if (Objects.equals(BlockType, "mainhandshield")) {
             AnimUtils.playAnimByString(ent, "pride:biped/combat/shield_parry1", 0.05F);
         }

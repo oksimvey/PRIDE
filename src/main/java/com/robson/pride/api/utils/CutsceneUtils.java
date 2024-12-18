@@ -2,8 +2,6 @@ package com.robson.pride.api.utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
-import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,10 +11,7 @@ public class CutsceneUtils {
         if (ent != null) {
             CommandUtils.executeonClient(ent, "cam clear");
             CommandUtils.executeonClient(ent, "cam mode " + mode);
-                LocalPlayerPatch player = EpicFightCapabilities.getEntityPatch(Minecraft.getInstance().player, LocalPlayerPatch.class);
-                if (player != null) {
-                    CameraUtils.unlockCamera(player, duration);
-            }
+             CameraUtils.unlockCamera(Minecraft.getInstance().player, duration);
             if (!(Minecraft.getInstance().options.getCameraType().isFirstPerson())) {
                 CameraUtils.putonFirstPerson(ent, duration);
             }

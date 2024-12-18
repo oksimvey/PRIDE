@@ -17,6 +17,8 @@ import com.robson.pride.main.Pride;
 import reascer.wom.gameasset.WOMAnimations;
 import yesman.epicfight.api.forgeevent.WeaponCapabilityPresetRegistryEvent;
 import yesman.epicfight.api.animation.LivingMotions;
+import yesman.epicfight.client.events.engine.ControllEngine;
+import yesman.epicfight.client.input.EpicFightKeyMappings;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.gameasset.EpicFightSounds;
@@ -37,6 +39,9 @@ public class WeaponPresets {    public static final Function<Item, CapabilityIte
                 }
                 if (playerpatch.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_LONGSWORD) {
                     return PrideStyles.DUAL_WIELD;
+                }
+                if (playerpatch.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_GUN  && ControllEngine.isKeyDown(EpicFightKeyMappings.GUARD) && ControllEngine.isKeyDown(EpicFightKeyMappings.ATTACK)) {
+                    return Styles.RANGED;
                 }
                 else if (playerpatch instanceof PlayerPatch<?> tplayerpatch && tplayerpatch.getOriginal().getMainHandItem().getTag() != null) {
                     return tplayerpatch.getOriginal().getMainHandItem().getTag().getBoolean("two_handed") && tplayerpatch.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == CapabilityItem.WeaponCategories.FIST ? Styles.TWO_HAND : Styles.ONE_HAND;

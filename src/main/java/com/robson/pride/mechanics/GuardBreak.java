@@ -23,7 +23,7 @@ public class GuardBreak {
 
     public static void onGuardBreak(Entity ent) {
         TimerUtil.schedule(()-> ent.getPersistentData().putBoolean("isVulnerable", true), 200, TimeUnit.MILLISECONDS);
-        PlaySoundUtils.playSound(ent, "epicfight:sfx.neutralize_bosses", 2f, 1f);
+        PlaySoundUtils.playSoundByString(ent, "epicfight:sfx.neutralize_bosses", 2f, 1f);
         StaminaUtils.resetStamina(ent);
 
         if (TagCheckUtils.entityTagCheck(ent, "biped")) {
@@ -35,7 +35,7 @@ public class GuardBreak {
     public static void onVulnerableDamage(Entity ent, LivingAttackEvent event){
         AttributeUtils.addModifier((LivingEntity) ent, "minecraft:generic.armor", "e0183cbd-f6b9-44b6-8a19-dc729cdef481", -1000, AttributeModifier.Operation.ADDITION);
         ent.getPersistentData().putBoolean("isVulnerable", false);
-        PlaySoundUtils.playSound(ent, "pride:execution", 1, 1);
+        PlaySoundUtils.playSoundByString(ent, "pride:execution", 1, 1);
         AnimUtils.playAnimByString(ent, "epicfight:biped/combat/hit_short", 1);
         HealthUtils.hurtEntity((LivingEntity) ent, event.getAmount(), event.getSource());
         TimerUtil.schedule(()-> AttributeUtils.removeModifier((LivingEntity) ent, "minecraft:generic.armor", "e0183cbd-f6b9-44b6-8a19-dc729cdef481"), 500, TimeUnit.MILLISECONDS);

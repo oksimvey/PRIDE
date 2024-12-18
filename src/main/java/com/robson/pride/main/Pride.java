@@ -58,6 +58,7 @@ public class Pride {
         Style.ENUM_MANAGER.registerEnumCls(Pride.MODID, PrideStyles.class);
         bus.addListener(com.robson.pride.epicfight.weapontypes.WeaponGuardMotions::buildSkillEvent);
         bus.addListener(com.robson.pride.epicfight.weapontypes.WeaponGuardMotions::regIcon);
+        EffectRegister.MOB_EFFECTS.register(bus);
     }
 
     public static <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder, BiConsumer<T, Supplier<NetworkEvent.Context>> messageConsumer) {
