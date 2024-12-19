@@ -1,3 +1,10 @@
 {
+  "attributes":
+  {
+    "common":
+    {
+      "max_strikes": 9
+    }
+  },
   "type": "pride:pride_longsword"
 }

@@ -21,7 +21,7 @@ public class AttributeUtils {
                 return (float) livingEntity.getAttributeValue(requireNonNull(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute))));
             }
         }
-        return 0f;
+        return 1f;
     }
 
     public static float getAttributeBaseValue(LivingEntity ent, String attribute) {

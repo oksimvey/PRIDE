@@ -2,6 +2,7 @@ package com.robson.pride.api.utils;
 
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -34,15 +35,18 @@ public class ParticleUtils {
                     float interpolation = 0.0F;
                     OpenMatrix4f transformMatrix;
                     int amount = 1;
-                    if (entitypatch.getEntityState().attacking()){
+                    if (particle == ParticleTypes.SMOKE){
                         amount = 5;
+                    }
+                    if (entitypatch.getEntityState().attacking()){
+                        amount = amount  * 5;
                     }
                     if (entitypatch != null) {
                         for (int i = 0; i < amount; i++) {
                             transformMatrix = entitypatch.getArmature().getBindedTransformFor(entitypatch.getAnimator().getPose(interpolation), joint);
                             transformMatrix.translate(AABB);
-                            OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) Math.toRadians((double) (((LivingEntity) entitypatch.getOriginal()).yBodyRotO + 180.0F))), new Vec3f(0.0F, 1.0F, 0.0F)), transformMatrix, transformMatrix);
-                            renderer.level().addParticle(particle, (double) transformMatrix.m30 + (entitypatch.getOriginal()).getX(), (double) transformMatrix.m31 + ((entitypatch.getOriginal()).getY() + (ent.getBbHeight()/1.8) - 1), (double) transformMatrix.m32 + (entitypatch.getOriginal()).getZ(), (double) (((new Random()).nextFloat() - 0.5F) * 0.02F), (double) (((new Random()).nextFloat() - 0.5F) * 0.02F), (double) (((new Random()).nextFloat() - 0.5F) * 0.02F));
+                            OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) Math.toRadians(((LivingEntity) entitypatch.getOriginal()).yBodyRotO + 180.0F)), new Vec3f(0.0F, 1.0F, 0.0F)), transformMatrix, transformMatrix);
+                            renderer.level().addParticle(particle, (double) transformMatrix.m30 + (entitypatch.getOriginal()).getX(), (double) transformMatrix.m31 + ((entitypatch.getOriginal()).getY() + (ent.getBbHeight()/1.8) - 1), (double) transformMatrix.m32 + (entitypatch.getOriginal()).getZ(), ((new Random()).nextFloat() - 0.5F) * 0.02F, (double) (((new Random()).nextFloat() - 0.5F) * 0.02F), ((new Random()).nextFloat() - 0.5F) * 0.02F);
                         }
                     }
                 }

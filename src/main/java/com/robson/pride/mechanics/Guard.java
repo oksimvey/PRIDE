@@ -3,7 +3,9 @@ package com.robson.pride.mechanics;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.utils.*;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
@@ -65,29 +67,29 @@ public class Guard {
     }
 
     public static void onOffHandShieldGuard(Entity ent, Entity ddmgent, LivingAttackEvent event){
-        float weight = AttributeUtils.findAttributeModifierbyUUID((LivingEntity) ent, "88440558-2872-48a2-843c-9eda17a7aad0", "epicfight:weight");
+        float weight = ItemStackUtils.getWeaponWeight(ent, InteractionHand.OFF_HAND, EquipmentSlot.OFFHAND);
         onGuardStamina(ent, ddmgent,event.getEntity(), weight * 2);
     }
 
     public static void onMainHandWeaponGuard(Entity ent, Entity ddmgent, LivingAttackEvent event){
-        float weight = AttributeUtils.findAttributeModifierbyUUID((LivingEntity) ent, "a516026a-bee2-4014-bcb6-b6a5775553de", "epicfight:weight");
+        float weight = ItemStackUtils.getWeaponWeight(ent, InteractionHand.MAIN_HAND, EquipmentSlot.MAINHAND);
         onGuardStamina(ent, ddmgent,event.getEntity(), weight * 1.5f);
     }
 
     public static void onMainHandShieldGuard(Entity ent, Entity ddmgent, LivingAttackEvent event){
-        float weight = AttributeUtils.findAttributeModifierbyUUID((LivingEntity) ent, "a516026a-bee2-4014-bcb6-b6a5775553de", "epicfight:weight");
+        float weight = ItemStackUtils.getWeaponWeight(ent, InteractionHand.MAIN_HAND, EquipmentSlot.MAINHAND);
         onGuardStamina(ent, ddmgent,event.getEntity(), weight * 2);
     }
 
     public static void onGuardStamina(Entity ent, Entity ddmgent, Entity dmgent, float weight){
         float impact = 1;
-        if (dmgent instanceof LivingEntity) {
-            impact = AttributeUtils.getAttributeValue((LivingEntity) dmgent, "epicfight:impact");
+        if (ddmgent instanceof LivingEntity) {
+            impact = AttributeUtils.getAttributeValue(ddmgent, "epicfight:impact");
         }
         if (weight > 100){
             weight = 100;
         }
-        float amount = 0.5f + impact - (impact * weight / 100 );
+        float amount = 0.5f + MathUtils.getValueWithPercentageDecrease(impact, weight);
         StaminaUtils.consumeStamina(ent, amount);
     }
 }

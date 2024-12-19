@@ -4,19 +4,15 @@ import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.ParticleUtils;
 import com.robson.pride.api.utils.TagCheckUtils;
-import com.robson.pride.registries.EffectRegister;
+import com.robson.pride.registries.ParticleRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.utils.math.Vec3f;
@@ -94,7 +90,11 @@ public class ParticleTracking {
         if (item != null && Minecraft.getInstance().player != null) {
             String element = item.getTag().getString("passive_element");
             if (Objects.equals(element, "Darkness") || TagCheckUtils.itemsTagCheck(item, "passives/darkness")) {
-                return ParticleTypes.SMOKE;
+                Random random = new Random();
+                if (random.nextInt(20) == 1){
+                    return ParticleRegister.RED_LIGHTNING.get();
+                }
+                else return ParticleTypes.SMOKE;
             }
             if (Objects.equals(element, "Light") || TagCheckUtils.itemsTagCheck(item, "passives/light")) {
                 return ParticleRegistry.WISP_PARTICLE.get();
@@ -121,8 +121,7 @@ public class ParticleTracking {
                 return ParticleRegistry.SNOWFLAKE_PARTICLE.get();
             }
             if (Objects.equals(element, "Water") || TagCheckUtils.itemsTagCheck(item, "passives/water")) {
-                DustParticleOptions dustOptions = new DustParticleOptions(new Vec3(0.3f, 0.5f, 1).normalize().toVector3f(), 1.1f);
-                return dustOptions;
+                return new DustParticleOptions(new Vec3(0.3f, 0.5f, 1).normalize().toVector3f(), 1f);
             }
         }
         return null;

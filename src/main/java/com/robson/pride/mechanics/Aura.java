@@ -7,7 +7,6 @@ import com.robson.pride.registries.KeyRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import yesman.epicfight.client.events.engine.ControllEngine;
 

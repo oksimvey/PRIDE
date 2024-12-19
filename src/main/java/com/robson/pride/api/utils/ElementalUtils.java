@@ -12,7 +12,7 @@ public class ElementalUtils {
 
     public static boolean isNotInWater(Entity ent, Vec3 vec3) {
         if (ent instanceof LivingEntity living && vec3 != null) {
-            BlockPos pos = new BlockPos((int) vec3.x, (int) vec3.y, (int) vec3.z); // Ou new BlockPos(vec3i)
+            BlockPos pos = new BlockPos((int) vec3.x, (int) vec3.y, (int) vec3.z);
             BlockState blockState = ent.level().getBlockState(pos);
             return !blockState.is(Blocks.WATER) && !ent.level().isRaining() && !living.hasEffect(EffectRegister.WET.get());
         }

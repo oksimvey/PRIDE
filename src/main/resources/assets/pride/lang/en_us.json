@@ -1,3 +1,18 @@
 {
+  "item.pride.european_longsword": "European Longsword",
+  "item.pride.darkness_gem": "Darkness Gem",
+  "item.pride.light_gem": "Light Gem",
+  "item.pride.thunder_gem": "Thunder Gem",
+  "item.pride.sun_gem": "Sun Gem",
+  "item.pride.moon_gem": "Moon Gem",
+  "item.pride.blood_gem": "Blood Gem",
+  "item.pride.wind_gem": "Wind Gem",
+  "item.pride.nature_gem": "Nature Gem",
+  "item.pride.ice_gem": "Ice Gem",
+  "item.pride.water_gem": "Water Gem",
 
+  "entity.pride.shogun": "Shogun",
+  "entity.pride.elite_knight": "Elite Knight",
+  "entity.pride.ronin": "Ronin",
+  "entity.pride.clone_entity": "Clone"
 }

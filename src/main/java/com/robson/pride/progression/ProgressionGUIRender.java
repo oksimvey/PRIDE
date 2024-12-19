@@ -106,7 +106,7 @@ public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI
                 ("XP:" + playerData.getMindXp()), 63, 135, -1, false);
         guiGraphics.drawString(this.font,
 
-                (Math.round((AttributeUtils.getAttributeValue(player, "epicfight:weight")) - 40) + "/" + Math.round(AttributeUtils.getAttributeValue(player, "pride:max_weight"))), 188, 161, -1, false);
+                (Math.round((AttributeUtils.getAttributeValue(player, "epicfight:weight")) - 39) + "/" + Math.round(AttributeUtils.getAttributeValue(player, "pride:max_weight"))), 188, 161, -1, false);
         guiGraphics.drawString(this.font,
 
                 (ProgressionUtils.getLoadPercentage(player) + "%"),188, 173, -1, false);

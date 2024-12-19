@@ -1,17 +1,17 @@
 package com.robson.pride.skills.magic;
 
-import com.robson.pride.api.utils.EquipUtils;
-import com.robson.pride.api.utils.ParticleUtils;
-import com.robson.pride.api.utils.TargetUtil;
+import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.EntityRegister;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
+
+import java.util.concurrent.TimeUnit;
 
 public class CloneSkill {
 
-    public static void summonPassiveClone(Entity owner) {
+    public static void summonPassiveClone(Entity owner,  Entity target) {
         if (owner != null) {
             EntityType entityType;
             if (owner instanceof Player) {
@@ -20,26 +20,46 @@ public class CloneSkill {
             Entity clone = entityType.create(owner.level());
             if (clone != null) {
                 clone.setYRot(owner.getYRot());
-                clone.setPos(owner.getX(), owner.getY(), owner.getZ());
+                clone.setPos(owner.getX(), owner.getY(), owner.getZ() );
                 owner.level().addFreshEntity(clone);
-                Entity target = TargetUtil.getTarget(owner);
                 equipClone(owner, clone);
                 clone.setInvulnerable(true);
                 clone.getPersistentData().putBoolean("passive_clone", true);
-                if (target != null && clone instanceof Mob mob && target instanceof LivingEntity targetl){
-                   mob.setTarget(targetl);
-                }
+                TargetUtil.setTarget(clone, target);
+                setTargetToOwnerAgain(target, clone, owner);
+                TimerUtil.schedule(()->{if(clone.isAlive()){despawnClone(clone);}}, 2, TimeUnit.SECONDS);
             }
         }
     }
 
     public static void despawnClone(Entity clone){
         if (clone != null){
-            for  (int i = 0; i < 20; i++){
+            for  (int i = 0; i < clone.getBbHeight() * 10; i++){
                 ParticleUtils.spawnParticleRelativeToEntity(ParticleTypes.DRAGON_BREATH, clone, 0, clone.getBbHeight() / 2, 0, 3, 0.1, 0.1, 0.1, 0.1f);
             }
+            PlaySoundUtils.playSound(clone, SoundEvents.ENDERMAN_TELEPORT, 1, 1);
             clone.remove(Entity.RemovalReason.DISCARDED);
         }
+    }
+
+    public static void setTargetToOwnerAgain(Entity ent, Entity target, Entity owner){
+        if (target != null && owner != null && ent != null) {
+            if (!target.isAlive()){
+                TargetUtil.setTarget(ent, owner);
+            }
+            else {
+                setTargetToOwnerAgainLooper(ent, target, owner);
+                TargetUtil.setTarget(ent, target);
+            }
+        }
+    }
+
+    public static void setTargetToOwnerAgainLooper(Entity ent, Entity target, Entity owner){
+        TimerUtil.schedule(()-> {
+            if (target != null && owner != null && ent != null) {
+                setTargetToOwnerAgain(ent, target, owner);
+            }
+        }, 1, TimeUnit.SECONDS);
     }
 
     public static void equipClone(Entity owner, Entity clone) {

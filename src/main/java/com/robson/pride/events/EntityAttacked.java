@@ -1,23 +1,25 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.utils.AnimUtils;
-import com.robson.pride.api.utils.CommandUtils;
-import com.robson.pride.api.utils.ElementalUtils;
-import com.robson.pride.api.utils.ProgressionUtils;
+import com.robson.pride.api.utils.*;
 import com.robson.pride.mechanics.*;
+import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.skills.magic.CloneSkill;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingSwapItemsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Mod.EventBusSubscriber
 public class EntityAttacked {
@@ -42,7 +44,9 @@ public class EntityAttacked {
                 ProgressionUtils.addXp(player, "Strength", (int) event.getAmount());
             }
             if (ddmgent.getPersistentData().getBoolean("passive_clone")){
-                CloneSkill.despawnClone(ddmgent);
+                event.setCanceled(true);
+            }
+            if (ent.getPersistentData().getBoolean("passive_clone")){
             }
         }
     }
@@ -51,6 +55,16 @@ public class EntityAttacked {
     public static void OnFinalAttack(LivingAttackEvent event) {
         if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
             Entity ent = event.getEntity();
+            Entity ddmgent = event.getSource().getEntity();
+            if (ddmgent instanceof LivingEntity liv){
+                if (liv.hasEffect(EffectRegister.HYPNOTIZED.get())){
+                    event.setCanceled(true);
+                    CloneSkill.summonPassiveClone(ent, ddmgent);
+                    TimerUtil.schedule(()->TeleportUtils.teleportEntityRelativeToEntity(ent, ddmgent, 0, -ddmgent.getBbHeight()   * 1.5), 100, TimeUnit.MILLISECONDS);
+                    PlaySoundUtils.playSound(ent, SoundEvents.ENDERMAN_TELEPORT, 1, 1);
+                    liv.removeEffect(EffectRegister.HYPNOTIZED.get());
+                }
+            }
             if (event.getSource().getDirectEntity() instanceof LivingEntity living) {
                 InteractionHand hand = AnimUtils.getAttackingHand(living);
                 if (hand != null) {
