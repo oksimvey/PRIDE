@@ -8,7 +8,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 
 public class TargetWithEffectGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
     private final Mob mob;
-    private final MobEffect effect; // O efeito específico que queremos verificar
+    private final MobEffect effect;
 
     public TargetWithEffectGoal(Mob mob, Class<T> targetClass, boolean mustSee, MobEffect effect) {
         super(mob, targetClass, mustSee);

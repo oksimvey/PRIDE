@@ -1,8 +1,11 @@
 package com.robson.pride.mechanics;
 
 import com.robson.pride.api.utils.*;
+import com.robson.pride.registries.AnimationsRegister;
+import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
@@ -14,8 +17,22 @@ import java.util.concurrent.TimeUnit;
 public class MikiriCounter {
 
     public static void setMikiri(Entity ent, String MikiriType,int delay, int window){
-        TimerUtil.schedule(()->  ent.getPersistentData().putString("Mikiri", MikiriType), delay, TimeUnit.MILLISECONDS);
-        TimerUtil.schedule(()-> ent.getPersistentData().putString("Mikiri", ""), window, TimeUnit.MILLISECONDS);
+        TimerUtil.schedule(()->{
+            if(MikiriType.equals("Dodge")){
+                ent.getPersistentData().putBoolean("mikiri_dodge", true);
+            }
+            if(MikiriType.equals("Jump")){
+                ent.getPersistentData().putBoolean("mikiri_sweep", true);
+            }
+        }, delay, TimeUnit.MILLISECONDS);
+        TimerUtil.schedule(()->{
+            if(MikiriType.equals("Dodge")){
+                ent.getPersistentData().putBoolean("mikiri_dodge", false);
+            }
+            if(MikiriType.equals("Jump")){
+                ent.getPersistentData().putBoolean("mikiri_sweep", false);
+            }
+        }, window, TimeUnit.MILLISECONDS);
     }
 
     public static void onPierceMikiri(Entity ent, Entity ddmgent, String pierce_type) {
@@ -38,10 +55,6 @@ public class MikiriCounter {
         }, 150, TimeUnit.MILLISECONDS);
     }
 
-    public static void onKickMikiri(Entity ent, Entity ddmgent, LivingAttackEvent event){
-
-    }
-
     public static void onSweepMikiri(Entity ent, Entity ddmgent){
         ent.setInvulnerable(true);
         AnimUtils.playAnimByString(ent, "pride:biped/skill/mikiri_jump", 0f);
@@ -54,7 +67,12 @@ public class MikiriCounter {
         ProjectileUtil.shootProjectileFromEnt(projectile, ent, 3);
     }
 
-    public static void onSpellMikiri(Entity ent, Entity ddmgent, LivingAttackEvent event){
-
+    public static void onSpellMikiri(SpellDamageEvent event){
+       if (event != null && event.getSpellDamageSource().spell() != null && event.getEntity() != null){
+           event.getSpellDamageSource().getDirectEntity().remove(Entity.RemovalReason.DISCARDED);
+           AnimUtils.playAnim(event.getEntity(), AnimationsRegister.PROJECTILE_COUNTER, 0);
+          TimerUtil.schedule(()-> SpellUtils.castSpell(event.getEntity(), event.getSpellDamageSource().spell(), 3, 0), 500,TimeUnit.MILLISECONDS);
+           event.setCanceled(true);
+       }
     }
 }

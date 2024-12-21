@@ -7,7 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class HypnotizedEffect extends MobEffect {
 
     public HypnotizedEffect() {
-        super(MobEffectCategory.HARMFUL, 0x57CDFD);
+        super(MobEffectCategory.NEUTRAL, 0x57CDFD);
        }
 
     @Override

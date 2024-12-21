@@ -4,9 +4,8 @@
   "renderer": "zombie",
   "isHumanoid": true,
   "faction": "undead",
-  "boss_bar": true,
+  "boss_bar": false,
   "custom_texture": "indestructible:textures/gui/boss_bar.png",
-  "custom_name": "Isshin, the Sword Saint    ",
   "attributes": {
     "impact": 2.5,
     "armor_negation": 5.0,
@@ -27,7 +26,7 @@
   "default_livingmotions": {
     "idle": "epicfight:biped/living/idle",
     "walk": "epicfight:biped/living/walk",
-    "chase": "epicfight:biped/living/walk",
+    "chase": "epicfight:biped/living/run",
     "death": "epicfight:biped/living/death"
   },
   "humanoid_weapon_motions": [

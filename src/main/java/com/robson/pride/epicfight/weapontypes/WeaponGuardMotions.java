@@ -3,8 +3,6 @@ package com.robson.pride.epicfight.weapontypes;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.registries.ItemsRegister;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegisterEvent;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.client.forgeevent.WeaponCategoryIconRegisterEvent;

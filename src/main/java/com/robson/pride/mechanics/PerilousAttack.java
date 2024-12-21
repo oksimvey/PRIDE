@@ -33,12 +33,11 @@ public class PerilousAttack {
 
     public static void onPerilous(Entity ent, Entity ddmgent, LivingAttackEvent event){
         String Perilous = ddmgent.getPersistentData().getString("Perilous");
-        String Mikiri = ent.getPersistentData().getString("Mikiri");
         if (Objects.equals(Perilous, "total")) {
             PerilousSucess(ent, event);
         } else if (Objects.equals(Perilous, "pierce_two_hand") || Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand")) {
             if (ent instanceof Player){
-                if (Mikiri.equals("Dodge")) {
+                if (ent.getPersistentData().getBoolean("mikiri_dodge")) {
                     MikiriCounter.onPierceMikiri(ent, ddmgent, Perilous);
                     event.setCanceled(true);
                 }
@@ -51,9 +50,9 @@ public class PerilousAttack {
                }
                else PerilousSucess(ent, event);
             }
-        } else if (Objects.equals(Perilous, "kick") && Objects.equals(Mikiri, "Dodge")) {
+        } else if (Objects.equals(Perilous, "kick") && ent.getPersistentData().getBoolean("mikiri_dodge")) {
             event.setResult(Event.Result.DENY);
-        } else if (Objects.equals(Perilous, "sweep") && Objects.equals(Mikiri, "Jump")) {
+        } else if (Objects.equals(Perilous, "sweep") && ent.getPersistentData().getBoolean("mikiri_sweep")) {
             event.setCanceled(true);
         } else {
             PerilousSucess(ent, event);

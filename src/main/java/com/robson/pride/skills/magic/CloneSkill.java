@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CloneSkill {
 
-    public static void summonPassiveClone(Entity owner,  Entity target) {
+    public static void summonPassiveClone(Entity owner,  Entity target, boolean ispassive) {
         if (owner != null) {
             EntityType entityType;
             if (owner instanceof Player) {
@@ -23,11 +23,13 @@ public class CloneSkill {
                 clone.setPos(owner.getX(), owner.getY(), owner.getZ() );
                 owner.level().addFreshEntity(clone);
                 equipClone(owner, clone);
-                clone.setInvulnerable(true);
-                clone.getPersistentData().putBoolean("passive_clone", true);
                 TargetUtil.setTarget(clone, target);
                 setTargetToOwnerAgain(target, clone, owner);
-                TimerUtil.schedule(()->{if(clone.isAlive()){despawnClone(clone);}}, 2, TimeUnit.SECONDS);
+                if (ispassive) {
+                    clone.setInvulnerable(true);
+                    clone.getPersistentData().putBoolean("passive_clone", true);
+                    TimerUtil.schedule(()->{if(clone.isAlive()){despawnClone(clone);}}, 2, TimeUnit.SECONDS);
+                }
             }
         }
     }

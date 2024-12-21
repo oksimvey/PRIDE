@@ -81,28 +81,39 @@
           "behaviors": [
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "epicfight:biped/combat/tachi_auto1"
 
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {
+                  "predicate": "within_eye_height"
+                },
+                {
+                  "predicate": "within_distance",
+                  "min": 0.0,
+                  "max": 50.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
               ],
               "animation": "epicfight:biped/combat/tachi_auto2"
-
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "epicfight:biped/combat/tachi_auto3"
 
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "wom:biped/combat/solar_auto_3",
               "command_list": [

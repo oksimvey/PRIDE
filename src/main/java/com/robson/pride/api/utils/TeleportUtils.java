@@ -12,14 +12,14 @@ public class TeleportUtils {
          double NewX = vec.x ;
          double NewY = entity2.getY();
          double NewZ = vec.z;
-         entity1.setPos(NewX, NewY, NewZ);
+         entity1.teleportTo(NewX, NewY, NewZ);
     }
 
     public static void teleportEntityToEntityJoint(Entity entity1, Entity entity2, Joint joint, double offsetx, double offsety, double offsetz){
         if (entity1 != null && entity2 != null){
             Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, entity2, joint);
             if (vec3 != null){
-                entity1.setPos(vec3.x + (offsetx), vec3.y + (offsety), vec3.z + (offsetz));
+                entity1.teleportTo(vec3.x + (offsetx), entity2.getY() + (offsety), vec3.z + (offsetz));
             }
         }
     }

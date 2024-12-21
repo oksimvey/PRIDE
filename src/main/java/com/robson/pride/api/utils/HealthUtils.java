@@ -1,6 +1,7 @@
 package com.robson.pride.api.utils;
 
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.LevelAccessor;
 
@@ -14,11 +15,10 @@ public class HealthUtils {
         }
     }
 
-    public static void hurtEntity(LivingEntity ent, float amount, DamageSource dmg){
+    public static void hurtEntity(Entity ent, float amount, DamageSource dmg){
         TimerUtil.schedule(()  -> {
             if (ent != null){
-                LevelAccessor level = ent.level();
-                ent.hurt(dmg, amount);
+                    ent.hurt(dmg, amount);
             }
         }, 10, TimeUnit.MILLISECONDS);
     }

@@ -37,7 +37,7 @@ public class GuardBreak {
         ent.getPersistentData().putBoolean("isVulnerable", false);
         PlaySoundUtils.playSoundByString(ent, "pride:execution", 1, 1);
         AnimUtils.playAnimByString(ent, "epicfight:biped/combat/hit_short", 1);
-        HealthUtils.hurtEntity((LivingEntity) ent, event.getAmount(), event.getSource());
+        HealthUtils.hurtEntity(ent, event.getAmount(), event.getSource());
         TimerUtil.schedule(()-> AttributeUtils.removeModifier((LivingEntity) ent, "minecraft:generic.armor", "e0183cbd-f6b9-44b6-8a19-dc729cdef481"), 500, TimeUnit.MILLISECONDS);
     }
 }

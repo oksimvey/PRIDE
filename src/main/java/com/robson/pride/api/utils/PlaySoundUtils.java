@@ -8,14 +8,16 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Objects;
-
 public class PlaySoundUtils {
 
     public static void playSound(Entity ent, SoundEvent sound, float volume, float pitch){
         if (ent != null) {
-            ServerLevel world = (ServerLevel) ent.level();
-            world.playSound(null, BlockPos.containing(ent.getX(), ent.getY(), ent.getZ()), sound, SoundSource.NEUTRAL, volume, pitch);
+            if (!ent.level().isClientSide()) {
+                ServerLevel world = (ServerLevel) ent.level();
+                if (world != null) {
+                    world.playSound(null, BlockPos.containing(ent.getX(), ent.getY(), ent.getZ()), sound, SoundSource.NEUTRAL, volume, pitch);
+                }
+            }
         }
     }
 

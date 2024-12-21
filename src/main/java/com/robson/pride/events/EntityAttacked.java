@@ -46,8 +46,6 @@ public class EntityAttacked {
             if (ddmgent.getPersistentData().getBoolean("passive_clone")){
                 event.setCanceled(true);
             }
-            if (ent.getPersistentData().getBoolean("passive_clone")){
-            }
         }
     }
 
@@ -59,14 +57,14 @@ public class EntityAttacked {
             if (ddmgent instanceof LivingEntity liv){
                 if (liv.hasEffect(EffectRegister.HYPNOTIZED.get())){
                     event.setCanceled(true);
-                    CloneSkill.summonPassiveClone(ent, ddmgent);
+                    CloneSkill.summonPassiveClone(ent, ddmgent, true);
                     TimerUtil.schedule(()->TeleportUtils.teleportEntityRelativeToEntity(ent, ddmgent, 0, -ddmgent.getBbHeight()   * 1.5), 100, TimeUnit.MILLISECONDS);
                     PlaySoundUtils.playSound(ent, SoundEvents.ENDERMAN_TELEPORT, 1, 1);
                     liv.removeEffect(EffectRegister.HYPNOTIZED.get());
                 }
             }
             if (event.getSource().getDirectEntity() instanceof LivingEntity living) {
-                InteractionHand hand = AnimUtils.getAttackingHand(living);
+                InteractionHand hand = ItemStackUtils.checkAttackingHand(living);
                 if (hand != null) {
                     if (hand == InteractionHand.MAIN_HAND) {
                         if (ParticleTracking.shouldRenderParticle(living.getMainHandItem(), living)) {

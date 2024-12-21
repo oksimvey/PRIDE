@@ -1,5 +1,6 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -16,6 +17,7 @@ import yesman.epicfight.world.capabilities.item.WeaponCategory;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 
 import java.util.List;
+import java.util.Random;
 
 public class ItemStackUtils {
 
@@ -78,11 +80,12 @@ public class ItemStackUtils {
 
     public static InteractionHand checkAttackingHand(Entity ent){
         if (ent != null){
-            LivingEntityPatch livingEntityPatch  = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-            if (livingEntityPatch != null ){
-                if (livingEntityPatch.getAttackingHand() != null){
-                    return livingEntityPatch.getAttackingHand();
+            if (getStyle(ent) == PrideStyles.DUAL_WIELD){
+                Random random  = new Random();
+                if (random.nextBoolean()){
+                    return InteractionHand.MAIN_HAND;
                 }
+                else return InteractionHand.OFF_HAND;
             }
         }
         return InteractionHand.MAIN_HAND;

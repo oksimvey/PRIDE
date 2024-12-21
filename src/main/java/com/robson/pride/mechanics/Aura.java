@@ -1,7 +1,6 @@
 package com.robson.pride.mechanics;
 
 import com.robson.pride.api.utils.*;
-import com.robson.pride.progression.ElementalUtils;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.KeyRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
