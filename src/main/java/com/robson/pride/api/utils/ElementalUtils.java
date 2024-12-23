@@ -115,7 +115,7 @@ public class ElementalUtils {
         if  (ent != null){
             String element = getElement(ent);
             float multiplier  =  1;
-            if (element.equals("Water") || element.equals("Wind")){
+            if (element.equals("Water") || element.equals("Nature")){
                 multiplier = 0.5f;
             }
             else if (element.equals("Ice")|| element.equals("Moon")){
@@ -145,10 +145,10 @@ public class ElementalUtils {
         if  (ent != null){
             String element = getElement(ent);
             float multiplier  =  1;
-            if (element.equals("Light") || element.equals("Sun")){
+            if (element.equals("Light") || element.equals("Water")){
                 multiplier = 0.5f;
             }
-            else if (element.equals("Nature") || element.equals("Moon")){
+            else if (element.equals("Nature") || element.equals("Thunder")){
                 multiplier = 1.5f;
             }
             return multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent,  "pride:blood_resist"));
@@ -208,7 +208,7 @@ public class ElementalUtils {
             if (element.equals("Thunder") || element.equals("Nature")){
                 multiplier = 0.5f;
             }
-            else if (element.equals("Sun")){
+            else if (element.equals("Sun") || element.equals("Blood")){
                 multiplier = 1.5f;
             }
             return multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent,  "pride:water_resist"));

@@ -63,6 +63,13 @@ public class onQPress {
                     if (dodgetype == 1){
                         anim = "step_forward";
                         MikiriCounter.setMikiri(player, "Dodge", 0, 350);
+                        Entity target = TargetUtil.getTarget(player);
+                        if (target != null){
+                            String Perilous = target.getPersistentData().getString("Perilous");
+                            if (Objects.equals(Perilous, "pierce_two_hand") || Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand")) {
+                                return;
+                            }
+                            }
                     }
                     if (dodgetype == 2){
                         anim = "step_left";
@@ -70,14 +77,8 @@ public class onQPress {
                     if (dodgetype == 3){
                         anim = "step_right";
                     }
-                    Entity target = TargetUtil.getTarget(player);
-                    if (target != null){
-                        if (Objects.equals(target.getPersistentData().getString("Perilous"), "PierceTwoHand") && Objects.equals(player.getPersistentData().getString("Mikiri"), "Dodge")){
 
-                        }
-                        else   AnimUtils.playAnimByString(player, "epicfight:biped/skill/" + anim, 0);
-                    }
-                    else   AnimUtils.playAnimByString(player, "epicfight:biped/skill/" + anim, 0);
+                    AnimUtils.playAnimByString(player, "epicfight:biped/skill/" + anim, 0);
         }
     }
 

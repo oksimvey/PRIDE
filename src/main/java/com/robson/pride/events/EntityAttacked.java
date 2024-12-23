@@ -29,6 +29,14 @@ public class EntityAttacked {
         if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
             Entity ent = event.getEntity();
             Entity ddmgent = event.getSource().getDirectEntity();
+            if (ddmgent != null){
+                if (ddmgent.getPersistentData().getBoolean("canrobmainhand")){
+                    Eating.robTargetItem(ddmgent, ent, InteractionHand.MAIN_HAND);
+                }
+                if (ddmgent.getPersistentData().getBoolean("canroboffhand")){
+                    Eating.robTargetItem(ddmgent, ent, InteractionHand.OFF_HAND);
+                }
+            }
             if (Objects.equals(ddmgent.getPersistentData().getString("Perilous"), "") || Objects.equals(ddmgent.getPersistentData().getString("Perilous"), null)) {
                 Guard.checkGuard(ent, ddmgent, event);
             }

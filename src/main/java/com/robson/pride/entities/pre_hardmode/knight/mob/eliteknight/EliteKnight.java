@@ -69,8 +69,9 @@ import javax.annotation.Nullable;
         @Override
         public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
             SpawnGroupData data = super.finalizeSpawn(accessor, difficulty, reason, spawnDataIn, dataTag);
-            EquipUtils.equipMainHandByString(this, "epicfight:iron_longsword");
+            EquipUtils.equipMainHandByString(this, "pride:european_longsword");
             EquipUtils.equipOffHandByString(this, "minecraft:shield");
+            EquipUtils.equipArmorSetByString(this, "jet_and_elias_armors:elite_sentinel_set_helmet", "jet_and_elias_armors:elite_sentinel_set_chestplate", "jet_and_elias_armors:sentinel_set_leggings", "jet_and_elias_armors:sentinel_set_boots");
 
             return data;
         }

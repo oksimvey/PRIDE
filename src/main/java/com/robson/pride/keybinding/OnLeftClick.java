@@ -13,7 +13,7 @@ public class OnLeftClick {
 
     public static void onLClick(Player player) {
         Entity target = TargetUtil.getTarget(player);
-        if (target != null && !AnimUtils.checkAttack(player)) {
+        if (target != null ) {
             onTarget(player, target);
         }
         TimerUtil.schedule(()->{
@@ -44,7 +44,7 @@ public class OnLeftClick {
     }
 
     public static void onTarget(Entity ent, Entity target) {
-        if (TargetUtil.getTarget(target) == null) {
+        if (target != null) {
         }
         TimerUtil.schedule(() -> {
             if (target.getPersistentData().getBoolean("isVulnerable")) {

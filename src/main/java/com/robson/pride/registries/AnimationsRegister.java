@@ -2,8 +2,10 @@ package com.robson.pride.registries;
 
 import com.robson.pride.main.Pride;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.*;
 import yesman.epicfight.api.collider.Collider;
@@ -37,6 +39,7 @@ public class AnimationsRegister {
         public static StaticAnimation KATANA_IDLE;
         public static StaticAnimation RECHARGE;
         public static StaticAnimation PROJECTILE_COUNTER;
+        public static StaticAnimation MOB_EAT_MAINHAND;
 
 
         @SubscribeEvent
@@ -53,7 +56,8 @@ public class AnimationsRegister {
             PROJECTILE_COUNTER = (new LongHitAnimation(0f, "pride:biped/skill/projectile_counter", biped));
             MIKIRI_STEP = (new LongHitAnimation(0.05F, "pride:biped/skill/mikiri_step",biped));
             KATANA_IDLE = (new StaticAnimation(true, "pride:biped/combat/katana/hold_bokken", biped));
-            MOB_PERILOUS_TWO_HAND = (new LongHitAnimation(0.25F, "pride:biped/skill/mob_perilous_pierce_two_hand",biped));
+            MOB_EAT_MAINHAND = new LongHitAnimation(0, "pride:biped/skill/mob_eat_mainhand", biped).addEvents(AnimationEvent.TimeStampedEvent.create(0.25F, Animations.ReusableSources.PLAY_SOUND, AnimationEvent.Side.SERVER).params(SoundEvents.GENERIC_EAT)).addEvents(AnimationEvent.TimeStampedEvent.create(0.5F, Animations.ReusableSources.PLAY_SOUND, AnimationEvent.Side.SERVER).params(SoundEvents.GENERIC_EAT)).addEvents(AnimationEvent.TimeStampedEvent.create(0.75F, Animations.ReusableSources.PLAY_SOUND, AnimationEvent.Side.SERVER).params(SoundEvents.GENERIC_EAT)).addEvents(AnimationEvent.TimeStampedEvent.create(1, Animations.ReusableSources.PLAY_SOUND, AnimationEvent.Side.SERVER).params(SoundEvents.GENERIC_EAT));
+                MOB_PERILOUS_TWO_HAND = (new LongHitAnimation(0.25F, "pride:biped/skill/mob_perilous_pierce_two_hand",biped));
             MOB_PERILOUS_DUAL_WIELD = (new LongHitAnimation(0.25F, "pride:biped/skill/mob_perilous_pierce_dual_wield",biped));
             MOB_PERILOUS_ONE_HAND = (new LongHitAnimation(0.25F, "pride:biped/skill/mob_perilous_pierce_one_hand",biped));
             PERILOUS_ONE_HAND = (new LongHitAnimation(0.25F, "pride:biped/skill/perilous_pierce_one_hand",biped)).addState(EntityState.TURNING_LOCKED, false)

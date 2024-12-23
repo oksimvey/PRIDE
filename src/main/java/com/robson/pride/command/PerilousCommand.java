@@ -23,7 +23,6 @@ public class PerilousCommand implements Command<CommandSourceStack> {
                     suggestionsBuilder.suggest("pierce_two_hand");
                             suggestionsBuilder.suggest("pierce_dual_wield");
                             suggestionsBuilder.suggest("total");
-                            suggestionsBuilder.suggest("kick");
                             return suggestionsBuilder.buildFuture();
                 }))
                         .then(Commands.argument("window", IntegerArgumentType.integer())

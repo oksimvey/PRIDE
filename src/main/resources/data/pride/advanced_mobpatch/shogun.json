@@ -9,7 +9,7 @@
   "custom_name": "Isshin, the Sword Saint    ",
   "attributes": {
     "impact": 2.5,
-    "armor_negation": 5.0,
+    "armor_negation": 1.0,
     "max_strikes": 3,
     "chasing_speed": 0.90,
     "scale": 1.25,

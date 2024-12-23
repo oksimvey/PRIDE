@@ -1,6 +1,7 @@
 package com.robson.pride.main;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.robson.pride.command.MobEatCommand;
 import com.robson.pride.command.PerilousCommand;
 import com.robson.pride.command.SetElementCommand;
 import com.robson.pride.epicfight.styles.PrideStyles;
@@ -72,6 +73,7 @@ public class Pride {
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.argument("living_entity", EntityArgument.entity())
                                 .then(PerilousCommand.register())
+                                .then(MobEatCommand.register())
                                 .then(SetElementCommand.register())));
     }
 

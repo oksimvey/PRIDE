@@ -8,10 +8,10 @@
   "custom_texture": "indestructible:textures/gui/boss_bar.png",
   "custom_name": "",
   "attributes": {
-    "impact": 2.5,
-    "armor_negation": 5.0,
+    "impact": 1.0,
+    "armor_negation": 0,
     "max_strikes": 3,
-    "chasing_speed": 0.90,
+    "chasing_speed": 1,
     "scale": 1.2,
     "max_stamina": 20,
     "stamina_regan_multiply": 0.75,
@@ -67,34 +67,279 @@
   },
   "combat_behavior": [
     {
-      "weapon_categories": ["longsword","sword"],
-      "style": "common",
+      "weapon_categories": ["pride_longsword"],
+      "style": "shield_offhand",
       "behavior_series": [
         {
           "weight": 1.5,
-          "canBeInterrupted": true,
+          "canBeInterrupted": false,
           "looping": false,
           "behaviors": [
             {
               "conditions": [
                 {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
-              "animation": "epicfight:biped/combat/longsword_auto1"
+              "animation": "epicfight:biped/combat/longsword_auto1",
+              "play_speed": 1.2
 
             },
             {
               "conditions": [
                 {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
-              "animation": "epicfight:biped/combat/longsword_auto2"
+              "animation": "epicfight:biped/combat/longsword_auto2",
+              "play_speed": 1.2
 
             },
             {
               "conditions": [
                 {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
-              "animation": "epicfight:biped/combat/longsword_auto3"
+              "animation": "epicfight:biped/combat/longsword_auto3",
+              "play_speed": 1.2
 
+            },
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"},{"predicate": "random_chance", "chance": 0.75}, {"predicate":"within_distance", "min": 0.0, "max": 10.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "epicfight:biped/combat/longsword_dash",
+              "command_list": [
+                {
+                  "time": 0,
+                  "command": "pride @s perilous pierce_one_hand 1000",
+                  "execute_at_target": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "weight": 1,
+          "canBeInterrupted": false,
+          "looping": false,
+          "behaviors": [
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "epicfight:biped/combat/longsword_auto1",
+              "play_speed": 1.2
+
+            },
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "epicfight:biped/combat/longsword_auto3",
+              "play_speed": 1.2
+            },
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "epicfight:biped/combat/longsword_auto1",
+              "play_speed": 1.2
+            },
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "epicfight:biped/combat/longsword_auto3",
+              "play_speed": 1.2
+            }
+          ]
+        },
+        {
+          "weight": 1.5,
+          "canBeInterrupted": false,
+          "looping": false,
+          "behaviors": [
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "epicfight:biped/combat/sword_auto1",
+              "play_speed": 0.8
+            },
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "wom:biped/combat/herrscher_auto_1",
+              "play_speed": 0.7
+            },
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "wom:biped/combat/herrscher_auto_3",
+              "convert_time": 0.25, "command_list": [
+              {
+                "time": 0,
+                "command": "pride @s perilous sweep 1500",
+                "execute_at_target": false
+              }
+            ]
+            }
+          ]
+        },
+        {
+          "weight": 100,
+          "canBeInterrupted": false,
+          "looping": false,
+          "behaviors": [
+            {
+              "conditions": [
+                {"predicate":"indestructible:using_item", "edible": true}	, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "epicfight:biped/combat/sword_auto3",
+              "convert_time": 0.25, "command_list": [
+              {
+                "time": 0,
+                "command": "pride @s mob_eat equip mainhand target_hand",
+                "execute_at_target": false
+              }
+            ]
+            },
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "epicfight:biped/skill/roll_backward"
+            },
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "pride:biped/skill/mob_eat_mainhand",
+              "convert_time": 0.25, "command_list": [
+              {
+                "time": 0,
+                "command": "pride @s mob_eat eat mainhand null",
+                "execute_at_target": false
+              }
+            ]
+            }
+          ]
+        },
+        {
+          "weight": 1,
+          "canBeInterrupted": false,
+          "looping": false,
+          "behaviors": [
+            {
+              "conditions": [
+                {
+                  "predicate": "within_eye_height"
+                },
+                {"predicate": "health", "health": 0.9, "comparator": "greater_ratio"},
+                {
+                  "predicate": "within_distance",
+                  "min": 5.0,
+                  "max": 8.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
+              ],
+              "animation": "wom:biped/skill/gezets_auto_1",
+              "play_speed": 0.75
+            },
+            {
+              "conditions": [
+                {
+                  "predicate": "within_eye_height"
+                },
+                {
+                  "predicate": "within_distance",
+                  "min": 0.0,
+                  "max": 5.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
+              ],
+              "animation": "epicfight:biped/combat/mob_onehand1"
+            }
+          ]
+        },
+        {
+          "weight": 2.5,
+          "canBeInterrupted": false,
+          "looping": false,
+          "behaviors": [
+            {
+              "conditions": [
+                {
+                  "predicate": "health",
+                  "health": 0.9,
+                  "comparator": "less_ratio"
+                },
+                {
+                  "predicate": "within_distance",
+                  "min": 7.5,
+                  "max": 50.0
+                }
+              ],
+              "animation": "pride:biped/skill/mob_eat_mainhand",
+              "command_list": [
+                {
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "weight": 1.5,
+          "canBeInterrupted": false,
+          "looping": false,
+          "cooldown": 10,
+          "behaviors": [
+            {
+              "conditions": [
+                {
+                  "predicate": "within_eye_height"
+                },
+                {"predicate": "health", "health": 0.9, "comparator": "greater_ratio"},
+                {
+                  "predicate": "within_distance",
+                  "min": 5.0,
+                  "max": 9.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
+              ],
+              "animation": "wom:biped/skill/bull_charge",
+              "command_list": [
+                {
+                  "time": 0,
+                  "command": "pride @s perilous total 1500",
+                  "execute_at_target": false
+                }
+                ]
+            },
+            {
+              "conditions": [
+                {
+                  "predicate": "within_distance",
+                  "min": 0.0,
+                  "max": 5.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
+              ],
+              "animation": "wom:biped/combat/herrscher_ausrottung"
             }
           ]
         },
@@ -107,16 +352,36 @@
               "conditions": [
                 {"predicate":"indestructible:attack_level", "min": 1, "max": 1}
               ],
-              "guard": 5,
-              "parry": true,
-              "parry_time": 1,
+              "guard": 10,
+              "parry": false,
               "counter_chance": 0,
               "stun_immunity_time": 30,
               "specific_guard_motion":{
                 "guard": "indestructible:guard/guard_shield",
-                "stamina_cost_multiply": 1.0,
+                "stamina_cost_multiply": 0.0,
+                "can_block_projectile" : true
+              }
+            }
+          ]
+        },
+        {
+          "weight": 50,
+          "canBeInterrupted": true,
+          "looping": false,
+          "behaviors": [
+            {
+              "conditions": [
+                {"predicate":"indestructible:attack_level", "min": 1, "max": 1}
+              ],
+              "guard": 5,
+              "parry": true,
+              "counter_chance": 0,
+              "stun_immunity_time": 30,
+              "specific_guard_motion":{
+                "guard": "indestructible:guard/guard_shield",
+                "stamina_cost_multiply": 0.0,
                 "can_block_projectile" : true,
-                "parry_cost_multiply": 0.6,
+                "parry_cost_multiply": 0.0,
                 "parry_animation":["pride:biped/combat/shield_parry2"]
               }
             }
