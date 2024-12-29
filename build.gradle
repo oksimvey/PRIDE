@@ -128,6 +128,7 @@ dependencies {
     implementation fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:5838009")
     implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5857226")
     implementation fg.deobf("curse.maven:weapons-of-miracles-epicfight-918614:5889471")
+    implementation fg.deobf("curse.maven:falling-leaves-forge-463155:4695661")
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
