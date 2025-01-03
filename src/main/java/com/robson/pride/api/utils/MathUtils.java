@@ -1,5 +1,10 @@
 package com.robson.pride.api.utils;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
+
 public class MathUtils {
 
     public static float getValueWithPercentageIncrease(double number, double percentage){
@@ -12,5 +17,17 @@ public class MathUtils {
 
     public static double getTotalSpeed(double deltax, double deltay, double deltaz){
         return Math.sqrt(Math.pow(deltax, 2) + Math.pow(deltay, 2) + Math.pow(deltaz, 2));
+    }
+
+    public static AABB createAABBForCulling(double radius){
+        Vector3f lookAngle = Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector();
+        Vec3 camerapos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+        double length = radius * 2;
+        return new AABB(camerapos.x + lookAngle.x * radius - (radius * 1.5),
+                camerapos.y - (radius * 0.5),
+                camerapos.z + lookAngle.z * radius - (radius * 2),
+                camerapos.x + lookAngle.x * length + (radius * 1.5),
+                camerapos.y + (radius * 1.5),
+                camerapos.z + lookAngle.z * length + (radius * 2));
     }
 }

@@ -43,6 +43,7 @@ public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
+
         guiGraphics.blit(new ResourceLocation("pride:textures/screens/progression_gui.png"), this.leftPos + -4, this.topPos + -14, 0, 0, 264, 195, 264, 195);
 
         guiGraphics.blit(new ResourceLocation("pride:textures/screens/tile033.png"), this.leftPos + 18, this.topPos + 13, 0, 0, 16, 16, 16, 16);

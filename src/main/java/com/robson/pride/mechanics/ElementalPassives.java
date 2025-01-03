@@ -5,7 +5,6 @@ import com.robson.pride.registries.EffectRegister;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.spells.nature.RootSpell;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.effect.HealthBoostMobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,7 +15,6 @@ import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.world.damagesource.StunType;
 
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class ElementalPassives {
 

@@ -1,9 +1,6 @@
 package com.robson.pride.mechanics;
 
-import com.robson.pride.api.utils.ArmatureUtils;
-import com.robson.pride.api.utils.ElementalUtils;
-import com.robson.pride.api.utils.ParticleUtils;
-import com.robson.pride.api.utils.TagCheckUtils;
+import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.ParticleRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.client.Minecraft;
@@ -35,7 +32,7 @@ public class ParticleTracking {
                     ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolL, ParticleTracking.getParticle(Minecraft.getInstance().player.getOffhandItem()),getAABBForImbuement(Minecraft.getInstance().player.getOffhandItem(), Minecraft.getInstance().player));
                 }
             }
-            AABB minMax = new AABB(ent.getX() - 25, ent.getY() - 25, ent.getZ() - 25, ent.getX() + 25, ent.getY() + 25, ent.getZ() + 25);
+            AABB minMax = MathUtils.createAABBForCulling(10);
             if (ent.level() != null) {
                 List<Entity> listent = ent.level().getEntities(ent, minMax);
                 for (Entity entko : listent) {

@@ -4,6 +4,7 @@ import com.robson.pride.entities.pre_hardmode.japanese.boss.shogun.Shogun;
 import com.robson.pride.entities.pre_hardmode.japanese.mob.ronin.Ronin;
 import com.robson.pride.entities.pre_hardmode.knight.mob.eliteknight.EliteKnight;
 import com.robson.pride.entities.special.CloneEntity;
+import com.robson.pride.entities.special.LeafEntity;
 import com.robson.pride.main.Pride;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -29,6 +30,7 @@ public class EntityRegister {
     public static final RegistryObject<EntityType<Shogun>> SHOGUN = make(new ResourceLocation("shogun"), Shogun::new, MobCategory.MONSTER, 1, 2.5F, 0xcdcdcd, 0x29486e);
     public static final RegistryObject<EntityType<EliteKnight>> ELITE_KNIGHT = make(new ResourceLocation("elite_knight"), EliteKnight::new, MobCategory.MONSTER, 0.9F, 2.25f, 0x239391, 0x9a9a9a);
     public static final RegistryObject<EntityType<CloneEntity>> CLONE_ENTITY = make(new ResourceLocation("clone_entity"),  CloneEntity::new, MobCategory.MONSTER, 0.8f, 1.8f, 0xd3e7bc, 0x1f3fff);
+    public static final RegistryObject<EntityType<LeafEntity>> LEAF_ENTITY = make(new ResourceLocation("leaf"), LeafEntity::new, MobCategory.CREATURE, 0.2f, 0.2f,0xd9e7bc, 0x1f35ff );
 
     private static <E extends Entity> RegistryObject<EntityType<E>> make(ResourceLocation id, EntityType.EntityFactory<E> factory, MobCategory classification, float width, float height, int primary, int secondary) {
         return make(id, factory, classification, width, height, false, primary, secondary);
@@ -71,5 +73,6 @@ public class EntityRegister {
         event.put(SHOGUN.get(), Shogun.registerAttributes().build());
         event.put(ELITE_KNIGHT.get(), EliteKnight.registerAttributes().build());
         event.put(CLONE_ENTITY.get(), CloneEntity.registerAttributes().build());
+        event.put(LEAF_ENTITY.get(), LeafEntity.registerAttributes().build());
     }
 }

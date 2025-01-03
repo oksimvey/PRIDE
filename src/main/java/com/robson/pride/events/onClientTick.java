@@ -13,7 +13,6 @@ public class onClientTick {
     @SubscribeEvent
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (Minecraft.getInstance().player != null) {
-            LeavesPhysics.spawnLeaves(Minecraft.getInstance().player);
             ParticleTracking.auraImbuementTrackingCore();
         }
     }
