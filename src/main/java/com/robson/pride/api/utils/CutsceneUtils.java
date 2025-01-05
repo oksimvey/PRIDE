@@ -23,9 +23,10 @@ public class CutsceneUtils {
         CommandUtils.executeonClient(ent, "cam add " + pointpos);
     }
 
-    public static void executionCutscene(Entity ent){
+    public static void executionCutscene(Entity ent, Entity target){
         cutsceneStart(ent, (byte) 1, "outside");
-        TimerUtil.schedule(()->   addPoint(ent, "^-3 ^0.25 ^-2.5 ~-45 ~-25"), 1, TimeUnit.MILLISECONDS);
-        TimerUtil.schedule(()->   addPoint(ent, "^-3.5 ^1 ^ ~-70 ~-25"), 2, TimeUnit.MILLISECONDS);
+        double offset = -target.getBbHeight();
+        TimerUtil.schedule(()->   addPoint(ent, "^" + offset * 1.5 + " ^0.25 ^" + offset * 1.5 + " ~-45 ~-25"), 1, TimeUnit.MILLISECONDS);
+        TimerUtil.schedule(()->   addPoint(ent, "^" + offset * 2 + " ^0.5 ^" + offset + " ~-70 ~-25"), 2, TimeUnit.MILLISECONDS);
     }
 }

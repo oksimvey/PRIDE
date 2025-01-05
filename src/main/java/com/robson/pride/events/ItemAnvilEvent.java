@@ -1,10 +1,8 @@
 package com.robson.pride.events;
 
-import com.google.common.eventbus.Subscribe;
-import com.robson.pride.mechanics.ParticleTracking;
+import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.registries.ItemsRegister;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

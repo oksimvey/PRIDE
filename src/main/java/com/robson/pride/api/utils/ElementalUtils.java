@@ -2,6 +2,7 @@ package com.robson.pride.api.utils;
 
 import com.robson.pride.progression.PlayerProgressionData;
 import com.robson.pride.registries.EffectRegister;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,6 +21,10 @@ public class ElementalUtils {
                 capability.setElement(element);
             });
         }
+    }
+
+    public static Particle getParticleByElement(String element, boolean isaura){
+return null;
     }
 
     public static String getElement(Entity ent) {

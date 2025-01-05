@@ -1,4 +1,4 @@
-package com.robson.pride.mechanics;
+package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.ParticleRegister;
@@ -7,6 +7,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -20,6 +22,8 @@ import java.util.Objects;
 import java.util.Random;
 
 public class ParticleTracking {
+
+    private static boolean fireEnabled = false;
 
     public static void auraImbuementTrackingCore(){
         if (Minecraft.getInstance().player != null) {
@@ -56,7 +60,14 @@ public class ParticleTracking {
                 if (Objects.equals(element, "Sun") || TagCheckUtils.itemsTagCheck(item, "passives/sun")){
                     Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR);
                     if (vec3 != null) {
-                        return ElementalUtils.isNotInWater(ent, vec3);
+                        if (ElementalUtils.isNotInWater(ent, vec3)){
+                            fireEnabled = true;
+                            return true;
+                        }
+                        else if (fireEnabled){
+                            Minecraft.getInstance().level.playSound(Minecraft.getInstance().player, ent, SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1, 1);
+                            fireEnabled = false;
+                        }
                     }
                 }
                 else return

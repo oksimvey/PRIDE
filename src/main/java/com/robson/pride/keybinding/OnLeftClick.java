@@ -1,17 +1,13 @@
 package com.robson.pride.keybinding;
 
 import com.robson.pride.api.utils.*;
+import com.robson.pride.api.mechanics.Stealth;
+import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.KeyRegister;
 import com.robson.pride.skills.SkillCore;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
-import yesman.epicfight.api.animation.Joint;
 import yesman.epicfight.client.events.engine.ControllEngine;
-import yesman.epicfight.gameasset.Armatures;
 
 import java.util.concurrent.TimeUnit;
 
@@ -51,11 +47,14 @@ public class OnLeftClick {
 
     public static void onTarget(Entity ent, Entity target) {
         if (target != null) {
+            if (Stealth.canBackStab(ent, target)){
+                target.getPersistentData().putBoolean("isVulnerable", true);
+            }
         }
         TimerUtil.schedule(() -> {
             if (target.getPersistentData().getBoolean("isVulnerable")) {
-                CutsceneUtils.executionCutscene(ent);
-                AnimUtils.playAnimByString(ent, "epicfight:biped/combat/tachi_dash", 0);
+                CutsceneUtils.executionCutscene(ent, target);
+                AnimUtils.playAnim(ent, AnimationsRegister.EXECUTE, 0);
             }
         }, 5, TimeUnit.MILLISECONDS);
     }

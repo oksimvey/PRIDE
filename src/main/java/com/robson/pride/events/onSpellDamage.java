@@ -2,7 +2,7 @@ package com.robson.pride.events;
 
 import com.robson.pride.api.utils.ProgressionUtils;
 import com.robson.pride.api.utils.TagCheckUtils;
-import com.robson.pride.mechanics.MikiriCounter;
+import com.robson.pride.api.mechanics.MikiriCounter;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;

@@ -1,4 +1,4 @@
-package com.robson.pride.mechanics;
+package com.robson.pride.api.mechanics;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;

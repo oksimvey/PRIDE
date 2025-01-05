@@ -1,7 +1,7 @@
 package com.robson.pride.skills.weaponskills;
 
 import com.robson.pride.api.utils.AnimUtils;
-import com.robson.pride.mechanics.PerilousAttack;
+import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.skills.SkillCore;
 import net.minecraft.world.entity.LivingEntity;
 

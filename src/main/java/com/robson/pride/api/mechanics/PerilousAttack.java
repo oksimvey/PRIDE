@@ -1,4 +1,4 @@
-package com.robson.pride.mechanics;
+package com.robson.pride.api.mechanics;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.utils.PlaySoundUtils;
@@ -21,14 +21,11 @@ import java.util.concurrent.TimeUnit;
 public class PerilousAttack {
 
     public static boolean checkPerilous(Entity ent) {
-        boolean isPerilous = false;
         if (ent != null) {
             String Perilous = ent.getPersistentData().getString("Perilous");
-            if (Objects.equals(Perilous, "pierce_two_hand")|| Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand") || Objects.equals(Perilous, "sweep") || Objects.equals(Perilous, "kick") || Objects.equals(Perilous, "total")){
-                isPerilous = true;
-            }
+            return Objects.equals(Perilous, "pierce_two_hand") || Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand") || Objects.equals(Perilous, "sweep")  || Objects.equals(Perilous, "total");
         }
-        return isPerilous;
+        return false;
     }
 
     public static void onPerilous(Entity ent, Entity ddmgent, LivingAttackEvent event){
@@ -36,23 +33,13 @@ public class PerilousAttack {
         if (Objects.equals(Perilous, "total")) {
             PerilousSucess(ent, event);
         } else if (Objects.equals(Perilous, "pierce_two_hand") || Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand")) {
-            if (ent instanceof Player){
                 if (ent.getPersistentData().getBoolean("mikiri_dodge")) {
                     MikiriCounter.onPierceMikiri(ent, ddmgent, Perilous);
                     event.setCanceled(true);
                 }
                 else PerilousSucess(ent, event);
-            }
-           else {
-               if (StaminaUtils.getMaxStamina(ent) > event.getAmount()){
-                   MikiriCounter.onPierceMikiri(ent, ddmgent, Perilous);
-                   event.setCanceled(true);
-               }
-               else PerilousSucess(ent, event);
-            }
-        } else if (Objects.equals(Perilous, "kick") && ent.getPersistentData().getBoolean("mikiri_dodge")) {
-            event.setResult(Event.Result.DENY);
-        } else if (Objects.equals(Perilous, "sweep") && ent.getPersistentData().getBoolean("mikiri_sweep")) {
+        }
+         else if (Objects.equals(Perilous, "sweep") && ent.getPersistentData().getBoolean("mikiri_sweep")) {
             event.setCanceled(true);
         } else {
             PerilousSucess(ent, event);

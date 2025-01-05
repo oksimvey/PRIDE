@@ -6,35 +6,32 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.robson.pride.api.mechanics.PerilousAttack;
+import com.robson.pride.api.mechanics.MikiriCounter;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.world.entity.Entity;
 
-public class PerilousCommand implements Command<CommandSourceStack> {
-    private static final PerilousCommand COMMAND = new PerilousCommand();
+public class MikiriCommand implements Command<CommandSourceStack> {
+    private static final MikiriCommand COMMAND = new MikiriCommand();
 
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
-        return Commands.literal("perilous")
-                .then(Commands.argument("periloustype", StringArgumentType.word()).suggests(((commandContext, suggestionsBuilder) -> {
-                    suggestionsBuilder.suggest("sweep");
-                    suggestionsBuilder.suggest("pierce_one_hand");
-                    suggestionsBuilder.suggest("pierce_two_hand");
-                            suggestionsBuilder.suggest("pierce_dual_wield");
-                            suggestionsBuilder.suggest("total");
+        return Commands.literal("mikiri")
+                .then(Commands.argument("mikiritype", StringArgumentType.word()).suggests(((commandContext, suggestionsBuilder) -> {
+                            suggestionsBuilder.suggest("Dodge");
+                            suggestionsBuilder.suggest("Jump");
                             return suggestionsBuilder.buildFuture();
-                }))
+                        }))
                         .then(Commands.argument("window", IntegerArgumentType.integer())
-                                        .executes(COMMAND)));
+                                .executes(COMMAND)));
     }
 
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         Entity ent = EntityArgument.getEntity(context, "living_entity");
-        String periloustype =  StringArgumentType.getString(context, "periloustype");
+        String mikiritype =  StringArgumentType.getString(context, "mikiritype");
         int window = IntegerArgumentType.getInteger(context, "window");
-        PerilousAttack.setPerilous(ent, periloustype, window);
+        MikiriCounter.setMikiri(ent, mikiritype, 0, window);
         return 1;
     }
 }

@@ -1,6 +1,5 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.mechanics.ParticleTracking;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,8 +13,6 @@ import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
-
-import java.util.Random;
 
 public class ArmatureUtils {
 

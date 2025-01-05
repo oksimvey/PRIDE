@@ -1,7 +1,7 @@
 package com.robson.pride.keybinding;
 
 import com.robson.pride.api.utils.*;
-import com.robson.pride.mechanics.MikiriCounter;
+import com.robson.pride.api.mechanics.MikiriCounter;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 

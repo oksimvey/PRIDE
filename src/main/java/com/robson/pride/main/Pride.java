@@ -1,6 +1,9 @@
 package com.robson.pride.main;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.nameless.indestructible.network.SPDatapackSync;
+import com.robson.pride.api.ai.DataConditions;
+import com.robson.pride.command.MikiriCommand;
 import com.robson.pride.command.MobEatCommand;
 import com.robson.pride.command.PerilousCommand;
 import com.robson.pride.command.SetElementCommand;
@@ -10,9 +13,13 @@ import com.robson.pride.registries.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,12 +32,15 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import yesman.epicfight.network.EpicFightNetworkManager;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 @Mod("pride")
 public class Pride {
@@ -60,6 +70,7 @@ public class Pride {
         bus.addListener(com.robson.pride.epicfight.weapontypes.WeaponGuardMotions::buildSkillEvent);
         bus.addListener(com.robson.pride.epicfight.weapontypes.WeaponGuardMotions::regIcon);
         EffectRegister.MOB_EFFECTS.register(bus);
+        DataConditions.CONDITIONS.register(bus);
     }
 
     public static <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder, BiConsumer<T, Supplier<NetworkEvent.Context>> messageConsumer) {
@@ -74,6 +85,7 @@ public class Pride {
                         .then(Commands.argument("living_entity", EntityArgument.entity())
                                 .then(PerilousCommand.register())
                                 .then(MobEatCommand.register())
+                                .then(MikiriCommand.register())
                                 .then(SetElementCommand.register())));
     }
 

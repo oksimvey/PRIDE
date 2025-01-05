@@ -1,22 +1,18 @@
 package com.robson.pride.events;
 
+import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
-import com.robson.pride.mechanics.*;
 import com.robson.pride.registries.EffectRegister;
-import com.robson.pride.skills.magic.CloneSkill;
+import com.robson.pride.skills.special.CloneSkill;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingSwapItemsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;

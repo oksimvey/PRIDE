@@ -1,6 +1,6 @@
 package com.robson.pride.keybinding;
 
-import com.robson.pride.mechanics.Aura;
+import com.robson.pride.api.mechanics.Aura;
 import com.robson.pride.progression.ProgressionGUI;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;

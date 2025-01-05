@@ -1,4 +1,4 @@
-package com.robson.pride.skills.magic;
+package com.robson.pride.skills.special;
 
 import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.EntityRegister;

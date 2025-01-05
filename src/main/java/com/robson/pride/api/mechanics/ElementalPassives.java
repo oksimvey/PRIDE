@@ -1,4 +1,4 @@
-package com.robson.pride.mechanics;
+package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.EffectRegister;

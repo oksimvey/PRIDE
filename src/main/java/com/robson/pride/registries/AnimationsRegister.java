@@ -7,6 +7,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
+import yesman.epicfight.api.animation.property.MoveCoordFunctions;
 import yesman.epicfight.api.animation.types.*;
 import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.api.forgeevent.AnimationRegistryEvent;
@@ -18,7 +19,10 @@ import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.model.armature.HumanoidArmature;
 import yesman.epicfight.particle.EpicFightParticles;
+import yesman.epicfight.world.damagesource.ExtraDamageInstance;
 import yesman.epicfight.world.damagesource.StunType;
+
+import java.util.Set;
 
 public class AnimationsRegister {
 
@@ -40,6 +44,7 @@ public class AnimationsRegister {
         public static StaticAnimation RECHARGE;
         public static StaticAnimation PROJECTILE_COUNTER;
         public static StaticAnimation MOB_EAT_MAINHAND;
+        public static StaticAnimation EXECUTE;
 
 
         @SubscribeEvent
@@ -87,5 +92,7 @@ public class AnimationsRegister {
             DUAL_TACHI_AUTO4 = (new BasicAttackAnimation(0.1F, "biped/combat/dual_tachi/dual_tachi_auto4", biped, new AttackAnimation.Phase[]{new AttackAnimation.Phase(0.0F, 0.633F, 0.69F, 0.8F, 1.167F, 1.65F, InteractionHand.MAIN_HAND, new AttackAnimation.JointColliderPair[]{AttackAnimation.JointColliderPair.of(biped.toolR, (Collider)null), AttackAnimation.JointColliderPair.of(biped.toolL, (Collider)null)})})).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.2F).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.LONG);
             DUAL_TACHI_SKILL1 = (new BasicAttackAnimation(0.05F, 0.9F, 1.05F, 1.5F, (Collider)null, biped.toolR, "biped/combat/dual_tachi/uchigatana_heavy1", biped)).addProperty(AnimationProperty.AttackAnimationProperty.ATTACK_SPEED_FACTOR, 0.9F).addProperty(AnimationProperty.AttackPhaseProperty.ARMOR_NEGATION_MODIFIER, ValueModifier.setter(25.0F)).addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, Animations.ReusableSources.CONSTANT_ONE).addState(EntityState.MOVEMENT_LOCKED, true);
             DUAL_TACHI_SKILL2 = (new BasicAttackAnimation(0.05F, 1.2F, 1.35F, 1.5F, (Collider)null, biped.toolR, "biped/combat/dual_tachi/uchigatana_heavy2", biped)).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.FALL).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.setter(3.0F)).addProperty(AnimationProperty.AttackPhaseProperty.ARMOR_NEGATION_MODIFIER, ValueModifier.setter(25.0F)).addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, Animations.ReusableSources.CONSTANT_ONE).addState(EntityState.MOVEMENT_LOCKED, true);
+            EXECUTE = (new BasicAttackAnimation(0.1F, "biped/skill/execute", biped, new AttackAnimation.Phase(0.0F, 0.4F, 0.8F, 0.9F, 3.5F, InteractionHand.MAIN_HAND, biped.toolR, null), new AttackAnimation.Phase(0.9F, 2.5f, 3, 3.1f, 3.5F, biped.toolR, null).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.EVISCERATE))).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 0.5f).addState(EntityState.MOVEMENT_LOCKED, true);
+
         }
 }

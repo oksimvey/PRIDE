@@ -1,4 +1,4 @@
-package com.robson.pride.mechanics;
+package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.AnimationsRegister;
@@ -15,10 +15,12 @@ import java.util.concurrent.TimeUnit;
 
 public class Aura {
 
+    private static int tickcount;
+
     public static void playerRecharge(Entity ent, int duration) {
         if (ent != null) {
             AttributeUtils.addModifierWithDuration(ent, "irons_spellbooks:mana_regen", 10, duration, AttributeModifier.Operation.ADDITION);
-            recharge(ent, ElementalUtils.getElement(ent), 5, 50, 1, true);
+            recharge(ent, ElementalUtils.getElement(ent), 5, 5, 1, true);
             rechargeAuraLooper(ent, 10, duration);
         }
     }
@@ -44,35 +46,39 @@ public class Aura {
         if (ent.level() != null) {
             List<Entity> listent = ent.level().getEntities(ent, minMax);
             for (Entity entko : listent) {
-                if (Objects.equals(element, "Darkness")) {
-                    ElementalPassives.darknessPassive(entko, ent, power);
-                }
-                if (Objects.equals(element, "Light")) {
-                    ElementalPassives.lightPassive(entko, ent, power);
-                }
-                if (Objects.equals(element, "Thunder")) {
-                    ElementalPassives.thunderPassive(entko, ent, power);
-                }
-                if (Objects.equals(element, "Sun")) {
-                    ElementalPassives.sunPassive(entko, ent, power);
-                }
-                if (Objects.equals(element, "Moon")) {
-                    ElementalPassives.moonPassive(entko, ent, power);
-                }
-                if (Objects.equals(element, "Blood")) {
-                    ElementalPassives.bloodPassive(entko, ent, power);
-                }
-                if (Objects.equals(element, "Wind")) {
-                    ElementalPassives.windPassive(entko, ent, power);
-                }
-                if (Objects.equals(element, "Nature")) {
-                    ElementalPassives.naturePassive(entko, ent, power);
-                }
-                if (Objects.equals(element, "Ice")) {
-                    ElementalPassives.icePassive(entko, ent, power);
-                }
-                if (Objects.equals(element, "Water")) {
-                    ElementalPassives.waterPassive(entko, ent, power);
+                tickcount++;
+                if (tickcount > 25) {
+                    tickcount = 0;
+                    if (Objects.equals(element, "Darkness")) {
+                        ElementalPassives.darknessPassive(entko, ent, power);
+                    }
+                    if (Objects.equals(element, "Light")) {
+                        ElementalPassives.lightPassive(entko, ent, power);
+                    }
+                    if (Objects.equals(element, "Thunder")) {
+                        ElementalPassives.thunderPassive(entko, ent, power);
+                    }
+                    if (Objects.equals(element, "Sun")) {
+                        ElementalPassives.sunPassive(entko, ent, power);
+                    }
+                    if (Objects.equals(element, "Moon")) {
+                        ElementalPassives.moonPassive(entko, ent, power);
+                    }
+                    if (Objects.equals(element, "Blood")) {
+                        ElementalPassives.bloodPassive(entko, ent, power);
+                    }
+                    if (Objects.equals(element, "Wind")) {
+                        ElementalPassives.windPassive(entko, ent, power);
+                    }
+                    if (Objects.equals(element, "Nature")) {
+                        ElementalPassives.naturePassive(entko, ent, power);
+                    }
+                    if (Objects.equals(element, "Ice")) {
+                        ElementalPassives.icePassive(entko, ent, power);
+                    }
+                    if (Objects.equals(element, "Water")) {
+                        ElementalPassives.waterPassive(entko, ent, power);
+                    }
                 }
             }
         }

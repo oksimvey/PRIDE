@@ -1,10 +1,7 @@
 package com.robson.pride.events;
 
-import com.robson.pride.mechanics.MikiriCounter;
-import net.minecraft.world.entity.Entity;
+import com.robson.pride.api.mechanics.MikiriCounter;
 import net.minecraft.world.entity.projectile.Arrow;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

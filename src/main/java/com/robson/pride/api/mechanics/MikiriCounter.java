@@ -1,15 +1,13 @@
-package com.robson.pride.mechanics;
+package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.AnimationsRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import yesman.epicfight.gameasset.Armatures;
 
 import java.util.concurrent.TimeUnit;
@@ -37,7 +35,9 @@ public class MikiriCounter {
 
     public static void onPierceMikiri(Entity ent, Entity ddmgent, String pierce_type) {
         String animation;
-        CameraUtils.lockCamera(Minecraft.getInstance().player);
+        if (ent instanceof Player) {
+            CameraUtils.lockCamera(Minecraft.getInstance().player);
+        }
         if (ddmgent instanceof Player){
             animation = "pride:biped/skill/perilous_";
         }

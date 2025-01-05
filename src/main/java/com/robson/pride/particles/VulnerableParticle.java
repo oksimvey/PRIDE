@@ -1,26 +1,14 @@
 package com.robson.pride.particles;
 
-import com.robson.pride.api.utils.ArmatureUtils;
-import com.robson.pride.api.utils.TimerUtil;
-import io.redspace.ironsspellbooks.registries.ParticleRegistry;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import yesman.epicfight.api.animation.Joint;
 import yesman.epicfight.client.particle.HitParticle;
-import yesman.epicfight.gameasset.Armatures;
-
-import java.util.concurrent.TimeUnit;
 
 @OnlyIn(Dist.CLIENT)
 public class VulnerableParticle extends HitParticle {
@@ -46,7 +34,7 @@ public class VulnerableParticle extends HitParticle {
         this.gCol = 1.0F;
         this.bCol = 1.0F;
         this.quadSize = 0.25f;
-        this.lifetime = 100;
+        this.lifetime = 1;
     }
 
     @Override

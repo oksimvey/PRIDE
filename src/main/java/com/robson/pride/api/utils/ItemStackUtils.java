@@ -95,7 +95,8 @@ public class ItemStackUtils {
         if (ent != null){
             WeaponCategory category = getWeaponCategory(ent, hand);
                 if (category != null){
-                    return category == WeaponCategoriesEnum.PRIDE_LONGSWORD;
+                    return category == WeaponCategoriesEnum.PRIDE_LONGSWORD
+                    || category == CapabilityItem.WeaponCategories.TACHI;
             }
         }
         return false;

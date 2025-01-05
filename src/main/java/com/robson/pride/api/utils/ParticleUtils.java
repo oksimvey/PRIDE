@@ -23,7 +23,9 @@ public class ParticleUtils {
 
     public static void spawnParticleRelativeToEntity(ParticleOptions particle, Entity ent, double xoffset, double yoffset, double zoffset, int count, double deltax, double deltay, double deltaz, double speed) {
         if (ent != null) {
-            spawnParticleOnServer(particle, (ServerLevel) ent.level(), ent.getX() + (xoffset), ent.getY() + (yoffset), ent.getZ() + (zoffset), count, deltax, deltay, deltaz, speed);
+            if (!ent.level().isClientSide) {
+                spawnParticleOnServer(particle, (ServerLevel) ent.level(), ent.getX() + (xoffset), ent.getY() + (yoffset), ent.getZ() + (zoffset), count, deltax, deltay, deltaz, speed);
+            }
         }
     }
 

@@ -1,7 +1,6 @@
 package com.robson.pride.events;
 
-import com.robson.pride.mechanics.LeavesPhysics;
-import com.robson.pride.mechanics.ParticleTracking;
+import com.robson.pride.api.mechanics.ParticleTracking;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -14,6 +13,7 @@ public class onClientTick {
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (Minecraft.getInstance().player != null) {
             ParticleTracking.auraImbuementTrackingCore();
+            }
         }
     }
-}
+
