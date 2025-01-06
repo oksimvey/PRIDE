@@ -4,7 +4,7 @@ import com.robson.pride.api.utils.*;
 import com.robson.pride.api.mechanics.Stealth;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.KeyRegister;
-import com.robson.pride.skills.SkillCore;
+import com.robson.pride.api.skillcore.SkillCore;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.client.events.engine.ControllEngine;

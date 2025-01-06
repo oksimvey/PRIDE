@@ -71,6 +71,7 @@ public class Pride {
         bus.addListener(com.robson.pride.epicfight.weapontypes.WeaponGuardMotions::regIcon);
         EffectRegister.MOB_EFFECTS.register(bus);
         DataConditions.CONDITIONS.register(bus);
+        PrideTabRegister.register(bus);
     }
 
     public static <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder, BiConsumer<T, Supplier<NetworkEvent.Context>> messageConsumer) {

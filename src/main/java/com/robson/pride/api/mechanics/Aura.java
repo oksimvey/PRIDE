@@ -56,7 +56,7 @@ public class Aura {
                         ElementalPassives.lightPassive(entko, ent, power);
                     }
                     if (Objects.equals(element, "Thunder")) {
-                        ElementalPassives.thunderPassive(entko, ent, power);
+                        ElementalPassives.thunderPassive(entko, ent, power, MathUtils.getRandomInt(999999999));
                     }
                     if (Objects.equals(element, "Sun")) {
                         ElementalPassives.sunPassive(entko, ent, power);

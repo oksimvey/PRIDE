@@ -4,7 +4,6 @@ import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.registries.ParticleRegister;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Mob;
 
 public class Stealth {
 
@@ -19,7 +18,7 @@ public class Stealth {
     public static boolean canBackStab(Entity ent, Entity target){
         if (ent != null && target != null) {
             if (TargetUtil.getTarget(target) == null) {
-                return target instanceof Mob;
+                return false;
             }
         }
         return false;

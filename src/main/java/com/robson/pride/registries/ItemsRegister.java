@@ -1,9 +1,11 @@
 package com.robson.pride.registries;
 
+import com.robson.pride.api.skillcore.WeaponArtItem;
 import com.robson.pride.item.materials.gems.*;
-import com.robson.pride.item.weaponarts.FlameSlashWeaponArt;
+import com.robson.pride.item.spawnegg.SpawnEggBase;
 import com.robson.pride.main.Pride;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -14,8 +16,6 @@ public class ItemsRegister {
     public static final RegistryObject<Item> EuropeanLongsword = REGISTRY.register("european_longsword", com.robson.pride.item.weapons.EuropeanLongsword::new);
     public static final RegistryObject<Item> Kamayari = REGISTRY.register("kamayari", com.robson.pride.item.weapons.Kamayari::new);
     public static final RegistryObject<Item> Odachi = REGISTRY.register("odachi", com.robson.pride.item.weapons.Odachi::new);
-    public static final RegistryObject<Item> FLAME_SLASH_WEAPON_ART = REGISTRY.register("flame_slash_weapon_art",
-            () -> new FlameSlashWeaponArt(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> DARKNESS_GEM = REGISTRY.register("darkness_gem",
             () -> new DarknessGem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> LIGHT_GEM = REGISTRY.register("light_gem",
@@ -36,4 +36,8 @@ public class ItemsRegister {
             () -> new IceGem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> WATER_GEM = REGISTRY.register("water_gem",
             () -> new WaterGem(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> WEAPON_ART = REGISTRY.register("weapon_art",
+            () -> new WeaponArtItem(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> SPAWN_EGG = REGISTRY.register("spawn_egg",
+            () -> new SpawnEggBase(new Item.Properties().stacksTo(64)));
 }

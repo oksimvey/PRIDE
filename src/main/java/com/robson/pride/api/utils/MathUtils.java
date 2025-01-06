@@ -5,7 +5,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import java.util.Random;
+
 public class MathUtils {
+
+    private static Random random = new Random();
 
     public static float getValueWithPercentageIncrease(double number, double percentage){
         return (float) (number + (number * percentage / 100));
@@ -15,7 +19,11 @@ public class MathUtils {
         return (float) (number - (number * percentage / 100));
     }
 
-    public static double getTotalSpeed(double deltax, double deltay, double deltaz){
+    public static int getRandomInt(int bound){
+        return random.nextInt(bound);
+    }
+
+    public static double getTotalDistance(double deltax, double deltay, double deltaz){
         return Math.sqrt(Math.pow(deltax, 2) + Math.pow(deltay, 2) + Math.pow(deltaz, 2));
     }
 
@@ -30,4 +38,6 @@ public class MathUtils {
                 camerapos.y + (radius * 1.5),
                 camerapos.z + lookAngle.z * length + (radius * 2));
     }
+
+
 }

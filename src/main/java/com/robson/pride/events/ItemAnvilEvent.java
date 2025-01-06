@@ -13,16 +13,12 @@ public class ItemAnvilEvent {
     @SubscribeEvent
     public static void anvilEvent(AnvilUpdateEvent event){
         if (event !=  null){
-            if (event.getRight().getItem() == ItemsRegister.FLAME_SLASH_WEAPON_ART.get()){
+            if (event.getRight().getItem() == ItemsRegister.WEAPON_ART.get()){
                 ItemStack output = event.getLeft().copy();
-
-                output.getOrCreateTag().putString("WeaponArt", "flame_slash");
-                output.getOrCreateTag().putBoolean("hasWeaponArt", true);
-
+                output.getOrCreateTag().putString("weapon_art", event.getRight().getTag().getString("weapon_art"));
+                output.getOrCreateTag().putBoolean("hasweaponart", true);
                 event.setOutput(output);
-
                 event.setCost(5);
-
                 event.setMaterialCost(1);
             }
             if (!ParticleTracking.shouldRenderParticle(event.getLeft(), event.getPlayer())){

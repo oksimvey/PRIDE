@@ -1,7 +1,5 @@
-package com.robson.pride.skills;
+package com.robson.pride.api.skillcore;
 
-import com.robson.pride.api.utils.ManaUtils;
-import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.api.utils.TagCheckUtils;
 import com.robson.pride.skills.weaponarts.FlameSlashSkill;
 import com.robson.pride.skills.weaponskills.LongSwordWeaponSkill;
@@ -14,8 +12,8 @@ public class SkillCore {
 
     public static void onSkillExecute(LivingEntity ent) {
         if (ent != null) {
-            if (ent.getMainHandItem().getTag().getBoolean("hasWeaponArt")){
-                weaponArtCore(ent,  ent.getMainHandItem().getTag().getString("WeaponArt"));
+            if (ent.getMainHandItem().getTag().getBoolean("hasweaponart")){
+                weaponArtCore(ent,  ent.getMainHandItem().getTag().getString("weapon_art"));
             }
             else defaultSkillCore(ent, ent.getMainHandItem());
         }
@@ -28,17 +26,8 @@ public class SkillCore {
     }
 
     public static void weaponArtCore(LivingEntity ent, String weaponart){
-        if (Objects.equals(weaponart, "flame_slash")){
+        if (Objects.equals(weaponart, "Flame Slash")){
             FlameSlashSkill.onExecution(ent);
         }
-    }
-
-    public static boolean consumptionCore(LivingEntity ent, float staminaconsumption, float manaconsumption){
-        if (ManaUtils.getMana(ent) >= manaconsumption && StaminaUtils.getStamina(ent) >= staminaconsumption){
-            ManaUtils.consumeMana(ent, manaconsumption);
-            StaminaUtils.consumeStamina(ent, staminaconsumption);
-            return true;
-        }
-        return false;
     }
 }
