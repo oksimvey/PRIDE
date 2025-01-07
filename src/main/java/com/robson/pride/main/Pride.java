@@ -3,10 +3,7 @@ package com.robson.pride.main;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.nameless.indestructible.network.SPDatapackSync;
 import com.robson.pride.api.ai.DataConditions;
-import com.robson.pride.command.MikiriCommand;
-import com.robson.pride.command.MobEatCommand;
-import com.robson.pride.command.PerilousCommand;
-import com.robson.pride.command.SetElementCommand;
+import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import com.robson.pride.registries.*;
@@ -67,8 +64,6 @@ public class Pride {
         bus.addListener(AnimationsRegister::registerAnimations);
         WeaponCategory.ENUM_MANAGER.registerEnumCls(MOD_ID, WeaponCategoriesEnum.class);
         Style.ENUM_MANAGER.registerEnumCls(Pride.MODID, PrideStyles.class);
-        bus.addListener(com.robson.pride.epicfight.weapontypes.WeaponGuardMotions::buildSkillEvent);
-        bus.addListener(com.robson.pride.epicfight.weapontypes.WeaponGuardMotions::regIcon);
         EffectRegister.MOB_EFFECTS.register(bus);
         DataConditions.CONDITIONS.register(bus);
         PrideTabRegister.register(bus);
@@ -87,6 +82,7 @@ public class Pride {
                                 .then(PerilousCommand.register())
                                 .then(MobEatCommand.register())
                                 .then(MikiriCommand.register())
+                                .then(SkillExecuteCommand.register())
                                 .then(SetElementCommand.register())));
     }
 

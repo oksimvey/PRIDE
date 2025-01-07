@@ -27,16 +27,18 @@ public class MathUtils {
         return Math.sqrt(Math.pow(deltax, 2) + Math.pow(deltay, 2) + Math.pow(deltaz, 2));
     }
 
-    public static AABB createAABBForCulling(double radius){
-        Vector3f lookAngle = Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector();
-        Vec3 camerapos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+    public static AABB createAABBByLookingAngle(Vec3 pos, Vector3f lookangle, double radius){
         double length = radius * 2;
-        return new AABB(camerapos.x + lookAngle.x * radius - (radius * 1.5),
-                camerapos.y - (radius * 0.5),
-                camerapos.z + lookAngle.z * radius - (radius * 2),
-                camerapos.x + lookAngle.x * length + (radius * 1.5),
-                camerapos.y + (radius * 1.5),
-                camerapos.z + lookAngle.z * length + (radius * 2));
+        return new AABB(pos.x + lookangle.x * radius - (radius * 1.5),
+                pos.y - (radius * 0.5),
+                pos.z + lookangle.z * radius - (radius * 2),
+                pos.x + lookangle.x * length + (radius * 1.5),
+                pos.y + (radius * 1.5),
+                pos.z + lookangle.z * length + (radius * 2));
+    }
+
+    public static AABB createAABBForCulling(double radius){
+       return  createAABBByLookingAngle(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition(), Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector(), radius);
     }
 
 

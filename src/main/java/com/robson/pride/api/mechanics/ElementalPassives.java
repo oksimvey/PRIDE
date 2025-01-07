@@ -9,6 +9,9 @@ import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.spells.nature.RootSpell;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -18,10 +21,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import reascer.wom.particle.WOMParticles;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.world.damagesource.StunType;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class ElementalPassives {
 
@@ -65,13 +70,21 @@ public class ElementalPassives {
 
     public static void darknessPassive(Entity ent, Entity dmgent, float power){
         if (ent != null && dmgent != null) {
-            PlaySoundUtils.playSound(ent, SoundEvents.WITHER_AMBIENT, 0.5f, 1);
+            for (int i = 0; i < ent.getBbHeight() * 25; i++) {
+                Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.LARGE_SMOKE, ent.getX(), ent.getY() + ent.getBbHeight() / 2, ent.getZ(), 0.15, 0.15, 0.15);
+                if (particle != null) {
+                    particle.setLifetime(100);
+                    ent.hurt(dmgent.damageSources().magic(), power * 2);
+                    PlaySoundUtils.playSound(ent, SoundEvents.WITHER_AMBIENT, 0.25f, 0.5f);
+                }
+            }
         }
     }
 
     public static void lightPassive(Entity ent, Entity dmgent, float power){
         if (ent != null && dmgent != null) {
             PlaySoundUtils.playSound(ent, EpicFightSounds.LASER_BLAST.get(), 1, 100);
+
         }
     }
 

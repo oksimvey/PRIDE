@@ -18,7 +18,6 @@ public class FlameSlashSkill {
                 AnimUtils.playAnimByString(ent,  "wom:biped/combat/solar_obscuridad_auto_1", 0);
                 TimerUtil.schedule(()->SpellUtils.castSpell(ent, SpellRegistry.FLAMING_STRIKE_SPELL.get(), 3, 0), 400,  TimeUnit.MILLISECONDS);
                 PerilousAttack.setPerilous(ent, "total", 1500);
-                spawnParticle(ent);
             }
         }
     }

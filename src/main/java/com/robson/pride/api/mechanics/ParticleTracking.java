@@ -95,42 +95,8 @@ public class ParticleTracking {
     }
 
     public static ParticleOptions getParticle(ItemStack item) {
-        if (item != null && Minecraft.getInstance().player != null) {
-            String element = item.getTag().getString("passive_element");
-            if (Objects.equals(element, "Darkness") || TagCheckUtils.itemsTagCheck(item, "passives/darkness")) {
-                Random random = new Random();
-                if (random.nextInt(20) == 1){
-                    return ParticleRegister.RED_LIGHTNING.get();
-                }
-                else return ParticleTypes.SMOKE;
-            }
-            if (Objects.equals(element, "Light") || TagCheckUtils.itemsTagCheck(item, "passives/light")) {
-                return ParticleRegistry.WISP_PARTICLE.get();
-            }
-            if (Objects.equals(element, "Thunder") || TagCheckUtils.itemsTagCheck(item, "passives/thunder")) {
-                return ParticleRegistry.ELECTRICITY_PARTICLE.get();
-            }
-            if (Objects.equals(element, "Sun") || TagCheckUtils.itemsTagCheck(item, "passives/sun")) {
-                return ParticleRegistry.FIRE_PARTICLE.get();
-            }
-            if (Objects.equals(element, "Moon") || TagCheckUtils.itemsTagCheck(item, "passives/moon")) {
-                return ParticleTypes.DRAGON_BREATH;
-            }
-            if (Objects.equals(element, "Blood") || TagCheckUtils.itemsTagCheck(item, "passives/blood")) {
-                return ParticleRegistry.BLOOD_PARTICLE.get();
-            }
-            if (Objects.equals(element, "Wind") || TagCheckUtils.itemsTagCheck(item, "passives/wind")) {
-                return ParticleTypes.CLOUD;
-            }
-            if (Objects.equals(element, "Nature") || TagCheckUtils.itemsTagCheck(item, "passives/nature")) {
-                return ParticleTypes.COMPOSTER;
-            }
-            if (Objects.equals(element, "Ice") || TagCheckUtils.itemsTagCheck(item, "passives/ice")) {
-                return ParticleRegistry.SNOWFLAKE_PARTICLE.get();
-            }
-            if (Objects.equals(element, "Water") || TagCheckUtils.itemsTagCheck(item, "passives/water")) {
-                return new DustParticleOptions(new Vec3(0.3f, 0.5f, 1).normalize().toVector3f(), 1f);
-            }
+        if (item != null) {
+            return ElementalUtils.getParticleByElement(item.getTag().getString("passive_element"));
         }
         return null;
     }

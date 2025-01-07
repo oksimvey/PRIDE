@@ -2,8 +2,13 @@ package com.robson.pride.api.utils;
 
 import com.robson.pride.progression.PlayerProgressionData;
 import com.robson.pride.registries.EffectRegister;
+import com.robson.pride.registries.ParticleRegister;
+import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -11,6 +16,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ElementalUtils {
@@ -23,8 +29,43 @@ public class ElementalUtils {
         }
     }
 
-    public static Particle getParticleByElement(String element, boolean isaura){
-return null;
+    public static ParticleOptions getParticleByElement(String element) {
+        switch (element) {
+            case "Darkness" -> {
+                Random random = new Random();
+                if (random.nextInt(20) == 1) {
+                    return ParticleRegister.RED_LIGHTNING.get();
+                } else return ParticleTypes.SMOKE;
+            }
+            case "Light" -> {
+                return ParticleRegistry.WISP_PARTICLE.get();
+            }
+            case "Thunder" -> {
+                return ParticleRegistry.ELECTRICITY_PARTICLE.get();
+            }
+            case "Sun" -> {
+                return ParticleRegistry.FIRE_PARTICLE.get();
+            }
+            case "Moon" -> {
+                return ParticleTypes.DRAGON_BREATH;
+            }
+            case "Blood" -> {
+                return ParticleRegistry.BLOOD_PARTICLE.get();
+            }
+            case "Wind" -> {
+                return ParticleTypes.CLOUD;
+            }
+            case "Nature" -> {
+                return ParticleTypes.COMPOSTER;
+            }
+            case "Ice" -> {
+                return ParticleRegistry.SNOWFLAKE_PARTICLE.get();
+            }
+            case "Water" -> {
+                return new DustParticleOptions(new Vec3(0.3f, 0.5f, 1).normalize().toVector3f(), 1f);
+            }
+        }
+        return null;
     }
 
     public static String getElement(Entity ent) {
@@ -37,34 +78,34 @@ return null;
             }
             else {
                 if (TagCheckUtils.entityTagCheck(ent, "elements/darkness")){
-                    element.set("Darkness");
+                    return "Darkness";
                 }
-                if (TagCheckUtils.entityTagCheck(ent, "elements/light")){
-                    element.set("Light");
+                else if (TagCheckUtils.entityTagCheck(ent, "elements/light")){
+                    return "Light";
                 }
-                if (TagCheckUtils.entityTagCheck(ent, "elements/thunder")){
-                    element.set("Thunder");
+                else if (TagCheckUtils.entityTagCheck(ent, "elements/thunder")){
+                    return "Thunder";
                 }
-                if (TagCheckUtils.entityTagCheck(ent, "elements/sun")){
-                    element.set("Sun");
+                else if (TagCheckUtils.entityTagCheck(ent, "elements/sun")){
+                    return "Sun";
                 }
-                if (TagCheckUtils.entityTagCheck(ent, "elements/moon")){
-                    element.set("Moon");
+                else if (TagCheckUtils.entityTagCheck(ent, "elements/moon")){
+                    return "Moon";
                 }
-                if (TagCheckUtils.entityTagCheck(ent, "elements/blood")){
-                    element.set("Blood");
+               else if (TagCheckUtils.entityTagCheck(ent, "elements/blood")){
+                    return "Blood";
                 }
-                if (TagCheckUtils.entityTagCheck(ent, "elements/wind")){
-                    element.set("Wind");
+                else if (TagCheckUtils.entityTagCheck(ent, "elements/wind")){
+                    return "Wind";
                 }
-                if (TagCheckUtils.entityTagCheck(ent, "elements/nature")){
-                    element.set("Nature");
+                else if (TagCheckUtils.entityTagCheck(ent, "elements/nature")){
+                    return "Nature";
                 }
-                if (TagCheckUtils.entityTagCheck(ent, "elements/ice")){
-                    element.set("Ice");
+                else if (TagCheckUtils.entityTagCheck(ent, "elements/ice")){
+                    return "Ice";
                 }
-                if (TagCheckUtils.entityTagCheck(ent, "elements/water")){
-                    element.set("Water");
+                else if (TagCheckUtils.entityTagCheck(ent, "elements/water")){
+                    return "Water";
                 }
             }
         }

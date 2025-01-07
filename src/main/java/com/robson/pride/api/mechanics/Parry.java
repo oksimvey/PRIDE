@@ -2,7 +2,6 @@ package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.utils.*;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -33,12 +32,7 @@ public class Parry {
     }
 
     public static void onWeaponParry(Entity ent, Entity ddmgent) {
-        float amount = 1f;
         StaminaUtils.consumeStamina(ddmgent, 3);
-        if (ddmgent instanceof LivingEntity livingEntity){
-            amount = AttributeUtils.getAttributeValue(livingEntity, "epicfight:impact");
-        }
-        StaminaUtils.addStamina(ent, 0.1f * amount);
     }
 
     public static void ParryWindow(Entity ent) {

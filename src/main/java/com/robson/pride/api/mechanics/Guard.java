@@ -2,25 +2,39 @@ package com.robson.pride.api.mechanics;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.utils.*;
+import com.robson.pride.epicfight.styles.PrideStyles;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import yesman.epicfight.api.animation.Joint;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.api.animation.types.StaticAnimation;
-import yesman.epicfight.client.events.engine.ControllEngine;
-import yesman.epicfight.client.input.EpicFightKeyMappings;
+import yesman.epicfight.api.client.animation.ClientAnimator;
+import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Animations;
+import yesman.epicfight.gameasset.Armatures;
+import yesman.epicfight.gameasset.EpicFightSounds;
+import yesman.epicfight.particle.EpicFightParticles;
+import yesman.epicfight.particle.HitParticleType;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
+import yesman.epicfight.world.capabilities.item.CapabilityItem;
+import yesman.epicfight.world.capabilities.item.Style;
 
 import java.util.Objects;
 
 public class Guard {
+
+    private static boolean toggle = false;
+
     public static void checkGuard(Entity ent, Entity ddmgent, LivingAttackEvent event){
         if (ent instanceof ServerPlayer player){
             if (player.isUsingItem()){
@@ -43,10 +57,12 @@ public class Guard {
         if (ent instanceof ServerPlayer player){
             if (ent.getPersistentData().getBoolean("isParrying")){
                 Parry.onParry(ent, ddmgent);
+                onAnyBlock(player, event, true);
                 ProgressionUtils.addXp(player, "Endurance", (int) event.getAmount() *  2);
             }
             else {
                 onGuard(ent, ddmgent, event);
+                onAnyBlock(player, event, false);
                 ProgressionUtils.addXp(player, "Endurance", (int) event.getAmount());
             }
         }
@@ -71,6 +87,79 @@ public class Guard {
         }
         if (Objects.equals(BlockType, "offhandshield")){
             onOffHandShieldGuard(ent, ddmgent, event);
+        }
+    }
+
+    public static StaticAnimation getGuardHitMotion(Player player){
+        if (player != null){
+            if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)){
+                if (EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class).getAnimator() instanceof ClientAnimator) {
+                    StaticAnimation anim = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class).getClientAnimator().getCompositeLivingMotion(LivingMotions.BLOCK);
+                    if (anim == Animations.SWORD_DUAL_GUARD) {
+                        return Animations.SWORD_DUAL_GUARD_HIT;
+                    } else if (anim == Animations.LONGSWORD_GUARD) {
+                        return Animations.LONGSWORD_GUARD_HIT;
+                    } else if (anim == Animations.GREATSWORD_GUARD) {
+                        return Animations.GREATSWORD_GUARD_HIT;
+                    } else if (anim == Animations.UCHIGATANA_GUARD) {
+                        return Animations.UCHIGATANA_GUARD_HIT;
+                    } else if (anim == Animations.SPEAR_GUARD) {
+                        return Animations.SPEAR_GUARD;
+                    }
+
+                }
+            }
+        }
+        return Animations.SWORD_GUARD_HIT;
+    }
+
+    public static StaticAnimation getParryMotion(Player player){
+        if (player != null){
+            Style style = ItemStackUtils.getStyle(player);
+            if (style == PrideStyles.DUAL_WIELD){
+                toggle = !toggle;
+                return toggle ? Animations.SWORD_GUARD_ACTIVE_HIT2 : Animations.SWORD_GUARD_ACTIVE_HIT3;
+            }
+            else if (style == CapabilityItem.Styles.TWO_HAND){
+                toggle = !toggle;
+                return toggle ? Animations.LONGSWORD_GUARD_ACTIVE_HIT1 : Animations.LONGSWORD_GUARD_ACTIVE_HIT2;
+            }
+        }
+        toggle = !toggle;
+        return toggle ? Animations.SWORD_GUARD_ACTIVE_HIT1 : Animations.SWORD_GUARD_ACTIVE_HIT2;
+    }
+
+    public static void onAnyBlock(ServerPlayer serveerPlayer, LivingAttackEvent event, boolean isparry){
+        if (serveerPlayer != null){
+            float scale = 1.5f;
+            StaticAnimation motion = getGuardHitMotion(serveerPlayer);
+            if (isparry){
+                motion = getParryMotion(serveerPlayer);
+                scale = 2;
+            }
+            Joint joint = Armatures.BIPED.toolR;
+            if (motion == Animations.SWORD_GUARD_ACTIVE_HIT3){
+                joint = Armatures.BIPED.toolL;
+            }
+            AnimUtils.playAnim(serveerPlayer, motion, 0);
+            PlaySoundUtils.playSound(serveerPlayer, EpicFightSounds.CLASH.get(), scale * 3 - 1, 1);
+            spawnBlockParticle(serveerPlayer, scale * 0.75f, joint );
+             event.setCanceled(true);
+        }
+    }
+
+    public static void spawnBlockParticle(Player player, float scale, Joint joint){
+        if (player != null){
+            ItemStack itemStack = player.getMainHandItem();
+            if (joint == Armatures.BIPED.toolL){
+                itemStack = player.getOffhandItem();
+            }
+            Vec3f vec3f = ParticleTracking.getAABBForImbuement(itemStack, player);
+            Vec3 vec3 = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, player, new Vec3f(0, 0, vec3f.z), joint);
+           Particle particle = Minecraft.getInstance().particleEngine.createParticle(EpicFightParticles.HIT_BLUNT.get(),vec3.x, vec3.y, vec3.z, 0, 0, 0);
+           if (particle != null) {
+               particle.scale(scale);
+           }
         }
     }
 
