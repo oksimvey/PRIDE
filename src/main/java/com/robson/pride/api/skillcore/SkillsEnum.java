@@ -1,11 +1,12 @@
 package com.robson.pride.api.skillcore;
 
 import com.robson.pride.skills.weaponarts.DarknessCut;
+import com.robson.pride.skills.weaponarts.FlameSlashSkill;
 
 public enum SkillsEnum implements SkillCore.WeaponSkill {
 
     Darkness_Cut(new DarknessCut()),
-    Flame_Slash(new DarknessCut());
+    Flame_Slash(new FlameSlashSkill());
 
     final WeaponSkillBase skillBase;
     final int id;
@@ -22,6 +23,6 @@ public enum SkillsEnum implements SkillCore.WeaponSkill {
 
     @Override
     public int universalOrdinal() {
-        return 0;
+        return this.id;
     }
 }

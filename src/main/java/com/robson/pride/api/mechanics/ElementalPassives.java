@@ -1,11 +1,10 @@
 package com.robson.pride.api.mechanics;
 
-import com.robson.pride.api.skillcore.SkillBases;
+import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.EffectRegister;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
-import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.spells.nature.RootSpell;
@@ -13,7 +12,6 @@ import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -22,12 +20,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import reascer.wom.particle.WOMParticles;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.world.damagesource.StunType;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class ElementalPassives {
 
@@ -108,7 +104,7 @@ public class ElementalPassives {
             List<Entity> listent = ent.level().getEntities(ent, aabb);
             for (Entity entko : listent) {
                 if (entko != null) {
-                    if (!ElementalUtils.isNotInWater(entko, new Vec3(entko.getX(), entko.getY(), entko.getZ())) && SkillBases.canHit(dmgent, entko, "zap_id", id) ) {
+                    if (!ElementalUtils.isNotInWater(entko, new Vec3(entko.getX(), entko.getY(), entko.getZ())) && SkillCore.canHit(dmgent, entko, "zap_id", id) ) {
                         double x1 = ent.getX();
                         double y1 = ent.getY() + ent.getBbHeight() / 2;
                         double z1 = ent.getZ();

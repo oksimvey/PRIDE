@@ -2,7 +2,7 @@ package com.robson.pride.skills.weaponarts;
 
 import com.robson.pride.api.mechanics.ElementalPassives;
 import com.robson.pride.api.mechanics.PerilousAttack;
-import com.robson.pride.api.skillcore.SkillBases;
+import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.*;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
@@ -16,12 +16,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.Armatures;
-import yesman.epicfight.gameasset.EpicFightSounds;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -33,8 +31,8 @@ public class DarknessCut extends WeaponSkillBase {
     }
 
     @Override
-    public void twohandExecute(Entity ent) {
-                DarknessSlash((LivingEntity) ent);
+    public void twohandExecute(LivingEntity ent) {
+                DarknessSlash(ent);
     }
 
     public static void DarknessSlash(LivingEntity ent){
@@ -71,7 +69,7 @@ public class DarknessCut extends WeaponSkillBase {
 
     public static void checkHit(Entity dmgent, Entity entko, Particle particle, String skill, int id){
         if (particle != null && entko != null && dmgent != null) {
-            if (SkillBases.canHit(dmgent, entko, skill, id)) {
+            if (SkillCore.canHit(dmgent, entko, skill, id)) {
                 double distance = MathUtils.getTotalDistance(entko.getX() - particle.getPos().x, entko.getY() - particle.getPos().y, entko.getZ() - particle.getPos().z);
                 if (distance < 0.5) {
                     entko.getPersistentData().putInt(skill, id);

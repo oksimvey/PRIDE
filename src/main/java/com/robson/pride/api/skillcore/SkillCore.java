@@ -1,11 +1,14 @@
 package com.robson.pride.api.skillcore;
 
-import com.robson.pride.api.utils.TagCheckUtils;
-import com.robson.pride.skills.weaponskills.LongSwordWeaponSkill;
+import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
+import io.redspace.ironsspellbooks.damage.DamageSources;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import yesman.epicfight.api.utils.ExtendableEnum;
 import yesman.epicfight.api.utils.ExtendableEnumManager;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 public class SkillCore {
 
@@ -19,8 +22,11 @@ public class SkillCore {
     }
 
     public static void defaultSkillCore(LivingEntity ent, ItemStack weapon){
-        if (TagCheckUtils.itemsTagCheck(weapon, "skills/longswordskill")){
-            LongSwordWeaponSkill.onExecution(ent);
+        CapabilityItem itemcap = EpicFightCapabilities.getItemStackCapability(weapon);
+        if (itemcap != null){
+            if (itemcap.getWeaponCategory() instanceof WeaponCategoriesEnum categoriesEnum){
+                categoriesEnum.skill().tryToExecute(ent);
+            }
         }
     }
 
@@ -31,5 +37,12 @@ public class SkillCore {
     public interface WeaponSkill extends ExtendableEnum {
         ExtendableEnumManager<WeaponSkill> ENUM_MANAGER = new ExtendableEnumManager<>("weapon_skill");
         WeaponSkillBase skill();
+    }
+
+    public static boolean canHit(Entity dmgent, Entity target, String skillname, int skillid){
+        if (dmgent != null && target != null){
+            return target instanceof LivingEntity && !DamageSources.isFriendlyFireBetween(target, dmgent) && target != dmgent && target.getPersistentData().getInt(skillname) != skillid;
+        }
+        return false;
     }
 }

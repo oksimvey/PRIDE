@@ -51,7 +51,7 @@ public class PrideTabRegister {
             .title(Component.literal("Pride Weapon Arts"))
             .icon(() -> new ItemStack(ItemsRegister.WEAPON_ART.get()))
             .displayItems((parameters, output) -> {
-                for (SkillsEnum skillsEnum: SkillsEnum.values()){
+                for (SkillsEnum skillsEnum : SkillsEnum.values()){
                     ItemStack item = new ItemStack(ItemsRegister.WEAPON_ART.get());
                     item.getOrCreateTag().putString("weapon_art", skillsEnum.name());
                     item.getOrCreateTag().putString("rarity",  skillsEnum.skill().getSkillRarity());

@@ -3,7 +3,6 @@ package com.robson.pride.api.skillcore;
 import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.api.utils.ManaUtils;
 import com.robson.pride.api.utils.StaminaUtils;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
@@ -35,7 +34,7 @@ public abstract class WeaponSkillBase{
         }
     }
 
-    public void onExecution(Entity ent){
+    public void onExecution(LivingEntity ent){
         if (ent != null){
             if (ItemStackUtils.getStyle(ent) == CapabilityItem.Styles.TWO_HAND){
                 twohandExecute(ent);
@@ -44,8 +43,8 @@ public abstract class WeaponSkillBase{
         }
     }
 
-    public void twohandExecute(Entity ent){
+    public void twohandExecute(LivingEntity ent){
     }
-    public void onehandExecute(Entity ent){
+    public void onehandExecute(LivingEntity ent){
     }
 }
