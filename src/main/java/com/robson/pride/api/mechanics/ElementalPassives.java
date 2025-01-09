@@ -2,6 +2,7 @@ package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.skillcore.SkillBases;
 import com.robson.pride.api.utils.*;
+import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.EffectRegister;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.damage.DamageSources;
@@ -31,8 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class ElementalPassives {
 
 
-
-    public static void onElementalDamage(Entity ent, Entity dmgent, ItemStack item, LivingAttackEvent event){
+    public static void onElementalDamage(Entity ent, Entity dmgent, ItemStack item, LivingAttackEvent event) {
         if (ent != null && dmgent != null && item != null) {
             String element = item.getTag().getString("passive_element");
             if (Objects.equals(element, "Darkness") || TagCheckUtils.itemsTagCheck(item, "passives/darkness")) {
@@ -63,42 +63,41 @@ public class ElementalPassives {
                 icePassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:ice_power")));
             }
             if (Objects.equals(element, "Water") || TagCheckUtils.itemsTagCheck(item, "passives/water")) {
-               waterPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:water_power")));
+                waterPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:water_power")));
             }
         }
     }
 
-    public static void darknessPassive(Entity ent, Entity dmgent, float power){
+    public static void darknessPassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent != null) {
             for (int i = 0; i < ent.getBbHeight() * 25; i++) {
                 Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.LARGE_SMOKE, ent.getX(), ent.getY() + ent.getBbHeight() / 2, ent.getZ(), 0.15, 0.15, 0.15);
                 if (particle != null) {
                     particle.setLifetime(100);
-                    ent.hurt(dmgent.damageSources().magic(), power * 2);
-                    PlaySoundUtils.playSound(ent, SoundEvents.WITHER_AMBIENT, 0.25f, 0.5f);
+                    ent.hurt(dmgent.damageSources().wither(), power * 2);
                 }
             }
         }
     }
 
-    public static void lightPassive(Entity ent, Entity dmgent, float power){
+    public static void lightPassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent != null) {
             PlaySoundUtils.playSound(ent, EpicFightSounds.LASER_BLAST.get(), 1, 100);
 
         }
     }
 
-    public static void thunderPassive(Entity ent, Entity dmgent,  float power, int id){
+    public static void thunderPassive(Entity ent, Entity dmgent, float power, int id) {
         if (ent != null && dmgent != null) {
-                if (!dmgent.level().isClientSide) {
-                    MagicManager.spawnParticles(dmgent.level(), ParticleHelper.ELECTRICITY, ent.getX(), ent.getY() + ent.getBbHeight() / 2, ent.getZ(), 10, ent.getBbWidth() / 3, ent.getBbHeight() / 3, ent.getBbWidth() / 3, 0.1, false);
-                }
-                PlaySoundUtils.playSound(ent, SoundRegistry.LIGHTNING_CAST.get(), 1, 1);
-                HealthUtils.hurtEntity(ent, ElementalUtils.getFinalValueForThunderDMG(ent, power / 2), dmgent.damageSources().lightningBolt());
-                AnimUtils.applyStun(ent, StunType.SHORT, ElementalUtils.getFinalValueForThunderDMG(ent, 2));
-                ent.getPersistentData().putInt("zap_id", id);
-                if (!ElementalUtils.isNotInWater(ent, new Vec3(ent.getX(), ent.getY(), ent.getZ()))) {
-                    chainThunder(ent, dmgent, power, id);
+            if (!dmgent.level().isClientSide) {
+                MagicManager.spawnParticles(dmgent.level(), ParticleHelper.ELECTRICITY, ent.getX(), ent.getY() + ent.getBbHeight() / 2, ent.getZ(), 10, ent.getBbWidth() / 3, ent.getBbHeight() / 3, ent.getBbWidth() / 3, 0.1, false);
+            }
+            PlaySoundUtils.playSound(ent, SoundRegistry.LIGHTNING_CAST.get(), 1, 1);
+            HealthUtils.hurtEntity(ent, ElementalUtils.getFinalValueForThunderDMG(ent, power / 2), dmgent.damageSources().lightningBolt());
+            AnimUtils.playAnim(ent, AnimationsRegister.ELECTROCUTATE, 0);
+            ent.getPersistentData().putInt("zap_id", id);
+            if (!ElementalUtils.isNotInWater(ent, new Vec3(ent.getX(), ent.getY(), ent.getZ()))) {
+                chainThunder(ent, dmgent, power, id);
             }
         }
     }

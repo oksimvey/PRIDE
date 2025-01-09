@@ -1,5 +1,6 @@
 package com.robson.pride.registries;
 
+import com.robson.pride.api.skillcore.SkillsEnum;
 import com.robson.pride.main.Pride;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -7,6 +8,8 @@ import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+
+import static com.robson.pride.registries.EntityRegister.ENTITIES;
 
 
 public class PrideTabRegister {
@@ -48,8 +51,12 @@ public class PrideTabRegister {
             .title(Component.literal("Pride Weapon Arts"))
             .icon(() -> new ItemStack(ItemsRegister.WEAPON_ART.get()))
             .displayItems((parameters, output) -> {
-                        output.accept(getWeaponArt("Flame Slash"));
-                        output.accept(getWeaponArt("Darkness Cut"));
+                for (SkillsEnum skillsEnum: SkillsEnum.values()){
+                    ItemStack item = new ItemStack(ItemsRegister.WEAPON_ART.get());
+                    item.getOrCreateTag().putString("weapon_art", skillsEnum.name());
+                    item.getOrCreateTag().putString("rarity",  skillsEnum.skill().getSkillRarity());
+                    output.accept(item);
+                }
                     })
             .withTabsBefore(MATERIALS_TAB.getKey())
             .build());
@@ -58,22 +65,15 @@ public class PrideTabRegister {
             .title(Component.literal("Pride Entities"))
             .icon(() -> new ItemStack(ItemsRegister.SPAWN_EGG.get()))
             .displayItems((enabledFeatures, entries) -> {
-               entries.accept(getSpawnEgg("Ronin"));
-                entries.accept(getSpawnEgg("Shogun"));
-                entries.accept(getSpawnEgg("Elite Knight"));
+                ENTITIES.getEntries().forEach(entry -> {
+                    ItemStack item = new ItemStack(ItemsRegister.SPAWN_EGG.get());
+                    assert entry.getKey() != null;
+                    String entity = entry.getId().toString();
+                    item.getOrCreateTag().putString("spawn_egg", entity);
+                    entries.accept(item);
+                });
+
             })
             .withTabsBefore(SCROLLS_TAB.getKey())
             .build());
-
-    private static ItemStack getWeaponArt(String weaponart) {
-        ItemStack item = new ItemStack(ItemsRegister.WEAPON_ART.get());
-        item.getOrCreateTag().putString("weapon_art", weaponart);
-        return item;
-    }
-
-    private static ItemStack getSpawnEgg(String entity) {
-        ItemStack item = new ItemStack(ItemsRegister.SPAWN_EGG.get());
-        item.getOrCreateTag().putString("spawn_egg", entity);
-        return item;
-    }
 }

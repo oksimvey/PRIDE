@@ -3,6 +3,8 @@ package com.robson.pride.main;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.nameless.indestructible.network.SPDatapackSync;
 import com.robson.pride.api.ai.DataConditions;
+import com.robson.pride.api.skillcore.SkillCore;
+import com.robson.pride.api.skillcore.SkillsEnum;
 import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
@@ -67,6 +69,7 @@ public class Pride {
         EffectRegister.MOB_EFFECTS.register(bus);
         DataConditions.CONDITIONS.register(bus);
         PrideTabRegister.register(bus);
+        SkillCore.WeaponSkill.ENUM_MANAGER.registerEnumCls(MODID, SkillsEnum.class);
     }
 
     public static <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder, BiConsumer<T, Supplier<NetworkEvent.Context>> messageConsumer) {

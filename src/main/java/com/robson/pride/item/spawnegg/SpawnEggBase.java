@@ -41,7 +41,7 @@ public class SpawnEggBase extends Item {
 
 
     private static EntityType<?> getEntity(String spawneggname) {
-        return EntityType.byString("pride:" + spawneggname.replace(" ", "_").toLowerCase()).orElse(null);
+        return EntityType.byString(spawneggname).orElse(null);
     }
 
 
@@ -50,7 +50,7 @@ public class SpawnEggBase extends Item {
         Component defaultName = super.getName(stack);
         if (stack.hasTag() && stack.getTag().contains("spawn_egg")) {
             String spellName = stack.getTag().getString("spawn_egg");
-            return Component.literal(spellName + " " + defaultName.getString());
+            return Component.literal( Component.translatable("entity.pride." + spellName.replace("pride:", "")).getString() +  " " + defaultName.getString());
         }
 
         return defaultName;

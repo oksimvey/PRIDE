@@ -27,7 +27,4 @@ public enum WeaponCategoriesEnum implements WeaponCategory, Function<Item, Capab
     public CapabilityItem.Builder apply(Item item) {
         return null;
     }
-
-    public static class Builder {
-    }
 }

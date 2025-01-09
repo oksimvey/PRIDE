@@ -1,11 +1,11 @@
 package com.robson.pride.api.skillcore;
 
 import com.robson.pride.api.utils.TagCheckUtils;
-import com.robson.pride.skills.weaponarts.DarknessCut;
-import com.robson.pride.skills.weaponarts.FlameSlashSkill;
 import com.robson.pride.skills.weaponskills.LongSwordWeaponSkill;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import yesman.epicfight.api.utils.ExtendableEnum;
+import yesman.epicfight.api.utils.ExtendableEnumManager;
 
 public class SkillCore {
 
@@ -25,9 +25,11 @@ public class SkillCore {
     }
 
     public static void weaponArtCore(LivingEntity ent, String weaponart){
-        switch (weaponart){
-            case "Flame Slash" -> FlameSlashSkill.onExecution(ent);
-            case "Darkness Cut" -> DarknessCut.onExecution(ent);
-        }
+       SkillsEnum.valueOf(weaponart).skill().tryToExecute(ent);
+    }
+
+    public interface WeaponSkill extends ExtendableEnum {
+        ExtendableEnumManager<WeaponSkill> ENUM_MANAGER = new ExtendableEnumManager<>("weapon_skill");
+        WeaponSkillBase skill();
     }
 }

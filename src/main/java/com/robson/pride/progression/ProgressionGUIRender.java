@@ -43,14 +43,13 @@ public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
-
         guiGraphics.blit(new ResourceLocation("pride:textures/screens/progression_gui.png"), this.leftPos + -4, this.topPos + -14, 0, 0, 264, 195, 264, 195);
 
-        guiGraphics.blit(new ResourceLocation("pride:textures/screens/tile033.png"), this.leftPos + 18, this.topPos + 13, 0, 0, 16, 16, 16, 16);
+        guiGraphics.blit(new ResourceLocation("minecraft:textures/mob_effect/strength.png"), this.leftPos + 18, this.topPos + 13, 0, 0, 16, 16, 16, 16);
 
-        guiGraphics.blit(new ResourceLocation("pride:textures/screens/tile033.png"), this.leftPos + 18, this.topPos + 40, 0, 0, 16, 16, 16, 16);
+        guiGraphics.blit(new ResourceLocation("minecraft:textures/mob_effect/resistance.png"), this.leftPos + 18, this.topPos + 40, 0, 0, 16, 16, 16, 16);
 
-        guiGraphics.blit(new ResourceLocation("pride:textures/screens/tile033.png"), this.leftPos + 18, this.topPos + 65, 0, 0, 16, 16, 16, 16);
+        guiGraphics.blit(new ResourceLocation("minecraft:textures/mob_effect/health_boost.png"), this.leftPos + 18, this.topPos + 65, 0, 0, 16, 16, 16, 16);
 
         guiGraphics.blit(new ResourceLocation("pride:textures/screens/tile033.png"), this.leftPos + 18, this.topPos + 92, 0, 0, 16, 16, 16, 16);
 
@@ -73,7 +72,6 @@ public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI
         if (player != null) {
             player.getCapability(PlayerProgressionData.PLAYER_VARIABLES_CAPABILITY).ifPresent(playerData -> {
         guiGraphics.drawString(this.font,
-
                 ("Strength Level:" + playerData.getStrengthLvl()), 118, 14, -1, false);
         guiGraphics.drawString(this.font,
 

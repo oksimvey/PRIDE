@@ -12,9 +12,8 @@ import net.minecraftforge.fml.common.Mod;
 public class onRClickItem {
 
     @SubscribeEvent
-    public static void onRClick(PlayerInteractEvent.RightClickItem event) {
-        if (event.getEntity() != null) {
-            Player player = event.getEntity();
+    public static void onRClick(PlayerInteractEvent.RightClickItem event) {        if (event.getEntity() != null) {
+        Player player = event.getEntity();
             if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)) {
                 player.startUsingItem(InteractionHand.MAIN_HAND);
                 Parry.ParryWindow(player);
