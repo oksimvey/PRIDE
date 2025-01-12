@@ -22,5 +22,12 @@
         "stream": false
       }
     ]
+  },
+  "shogun": {
+    "sounds": [
+      {
+        "name": "pride:musics/shogun"
+      }
+    ]
   }
 }

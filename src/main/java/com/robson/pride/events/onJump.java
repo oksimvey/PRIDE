@@ -1,7 +1,7 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.api.mechanics.MikiriCounter;
+import com.robson.pride.api.utils.StaminaUtils;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

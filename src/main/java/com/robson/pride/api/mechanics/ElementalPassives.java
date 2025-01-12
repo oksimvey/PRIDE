@@ -23,7 +23,8 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.world.damagesource.StunType;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 public class ElementalPassives {
 

@@ -20,9 +20,11 @@ public class EuropeanLongsword extends SwordItem {
                 return 10f;
             }
 
+            @Override
             public int getLevel() {
                 return 0;
             }
+
 
             public int getEnchantmentValue() {
                 return 2;

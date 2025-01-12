@@ -1,8 +1,8 @@
 package com.robson.pride.skills.weaponskills;
 
+import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.AnimUtils;
-import com.robson.pride.api.mechanics.PerilousAttack;
 import net.minecraft.world.entity.LivingEntity;
 
 public class LongSwordWeaponSkill extends WeaponSkillBase {

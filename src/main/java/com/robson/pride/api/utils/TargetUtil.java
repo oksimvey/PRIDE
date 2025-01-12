@@ -10,9 +10,10 @@ import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 public class TargetUtil {
 
     public static Entity getTarget(Entity ent) {
-        LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-        if (livingEntityPatch != null) {
-            return livingEntityPatch.getTarget();
+                LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+                if (livingEntityPatch != null) {
+                    return livingEntityPatch.getTarget();
+
         }
         return null;
     }

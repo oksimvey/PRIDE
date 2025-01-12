@@ -1,10 +1,10 @@
 package com.robson.pride.main;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.nameless.indestructible.network.SPDatapackSync;
 import com.robson.pride.api.ai.DataConditions;
 import com.robson.pride.api.skillcore.SkillCore;
-import com.robson.pride.api.skillcore.SkillsEnum;
+import com.robson.pride.api.skillcore.WeaponArtRegister;
+import com.robson.pride.api.utils.CustomTick;
 import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
@@ -12,13 +12,9 @@ import com.robson.pride.registries.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -31,15 +27,12 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import yesman.epicfight.network.EpicFightNetworkManager;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
-import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 @Mod("pride")
 public class Pride {
@@ -69,7 +62,7 @@ public class Pride {
         EffectRegister.MOB_EFFECTS.register(bus);
         DataConditions.CONDITIONS.register(bus);
         PrideTabRegister.register(bus);
-        SkillCore.WeaponSkill.ENUM_MANAGER.registerEnumCls(MODID, SkillsEnum.class);
+        SkillCore.WeaponSkill.ENUM_MANAGER.registerEnumCls(MODID, WeaponArtRegister.class);
     }
 
     public static <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder, BiConsumer<T, Supplier<NetworkEvent.Context>> messageConsumer) {

@@ -1,24 +1,49 @@
 package com.robson.pride.registries;
 
 import com.robson.pride.main.Pride;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import reascer.wom.animation.attacks.BasicMultipleAttackAnimation;
+import reascer.wom.animation.attacks.SpecialAttackAnimation;
+import yesman.epicfight.api.animation.Joint;
+import yesman.epicfight.api.animation.Keyframe;
+import yesman.epicfight.api.animation.TransformSheet;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.*;
 import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.api.forgeevent.AnimationRegistryEvent;
 import yesman.epicfight.api.utils.TimePairList;
+import yesman.epicfight.api.utils.math.OpenMatrix4f;
 import yesman.epicfight.api.utils.math.ValueModifier;
+import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.model.armature.HumanoidArmature;
 import yesman.epicfight.particle.EpicFightParticles;
+import yesman.epicfight.skill.BasicAttack;
+import yesman.epicfight.skill.SkillSlots;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
+import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 import yesman.epicfight.world.damagesource.StunType;
+import yesman.epicfight.world.entity.eventlistener.ComboCounterHandleEvent;
+
+import java.util.List;
 
 public class AnimationsRegister {
 
@@ -42,6 +67,24 @@ public class AnimationsRegister {
         public static StaticAnimation MOB_EAT_MAINHAND;
         public static StaticAnimation EXECUTE;
         public static StaticAnimation ELECTROCUTATE;
+    public static StaticAnimation INFERNAL_AUTO_1;
+    public static StaticAnimation INFERNAL_AUTO_2;
+    public static StaticAnimation INFERNAL_AUTO_3_A;
+    public static StaticAnimation INFERNAL_AUTO_4_A;
+    public static StaticAnimation INFERNAL_AUTO_3_B;
+    public static StaticAnimation INFERNAL_AUTO_3_B_CONTINUE_1;
+    public static StaticAnimation INFERNAL_AUTO_3_B_CONTINUE_2;
+    public static StaticAnimation INFERNAL_AUTO_3_B_CONTINUE_3;
+    public static StaticAnimation INFERNAL_AUTO_3_B_CONTINUE_4;
+    public static StaticAnimation INFERNAL_AUTO_4_B;
+    public static StaticAnimation INFERNAL_KCIK13;
+    public static StaticAnimation INFERNAL_FULLHOUSE;
+    public static StaticAnimation INFERNAL_SHORYUKEN;
+    public static StaticAnimation INFERNAL_IDLE;
+    public static StaticAnimation INFERNAL_GUARD;
+    public static StaticAnimation INFERNAL_GUARD_HIT;
+    public static StaticAnimation INFERNAL_GUARD_PARRY;
+    public static StaticAnimation INFERNAL_STRAIGHT_FLUSH;
 
 
         @SubscribeEvent
@@ -52,6 +95,87 @@ public class AnimationsRegister {
         private static void build() {
 
         HumanoidArmature biped = Armatures.BIPED;
+
+            INFERNAL_AUTO_1 = (new BasicAttackAnimation(0.1F, 0.3F, 0.4F, 0.5F, null, biped.toolL, "biped/combat/infernal_auto_1", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.0F)).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.4F);
+            INFERNAL_AUTO_2 = (new BasicAttackAnimation(0.2F, 0.1F, 0.2F, 0.25F, null, biped.toolR, "biped/combat/infernal_auto_2", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.0F)).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(1.5F)).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.4F).addEvents(new AnimationEvent.TimeStampedEvent[]{AnimationEvent.TimeStampedEvent.create(0.45F, (entitypatch, self, params) -> {
+                if (entitypatch instanceof ServerPlayerPatch) {
+                   ((ServerPlayerPatch)entitypatch).modifyLivingMotionByCurrentItem(true);
+                }
+
+            }, AnimationEvent.Side.SERVER)});
+            INFERNAL_AUTO_3_A = (new BasicAttackAnimation(0.05F, 0.35F, 0.45F, 0.5F, null, biped.legL, "biped/combat/infernal_auto_3", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.0F)).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.4F);
+            INFERNAL_AUTO_4_A = (new BasicAttackAnimation(0.25F, 0.3F, 0.4F, 0.75F, null, biped.legR, "biped/combat/infernal_auto_4", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.0F)).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.LONG).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.4F);
+            INFERNAL_AUTO_3_B = (new BasicAttackAnimation(0.05F, "biped/combat/infernal_auto_3_b", biped, new AttackAnimation.Phase[]{new AttackAnimation.Phase(0.0F, 0.4F, 0.45F, 0.49F, 0.49F, biped.legL, null), new AttackAnimation.Phase(0.49F, 0.5F, 0.55F, 0.59F, 0.59F, biped.legL, null), new AttackAnimation.Phase(0.59F, 0.6F, 0.65F, 0.69F, 0.69F, biped.legL, null), new AttackAnimation.Phase(0.69F, 0.7F, 0.75F, 0.79F, 0.79F, biped.legL, null), new AttackAnimation.Phase(0.79F, 0.8F, 0.85F, 0.85F, Float.MAX_VALUE, biped.legL, null)})).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F), 1).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F), 2).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F), 3).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F), 4).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 1).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 2).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 3).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 4).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get()).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 1).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 2).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 3).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 4).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.8F).addEvents(new AnimationEvent.TimeStampedEvent[]{AnimationEvent.TimeStampedEvent.create(0.4F, (entitypatch, self, params) -> {
+                if (entitypatch instanceof ServerPlayerPatch) {
+                   ((ServerPlayerPatch)entitypatch).modifyLivingMotionByCurrentItem(true);
+                 }
+
+            }, AnimationEvent.Side.SERVER), AnimationEvent.TimeStampedEvent.create(1.0F, (entitypatch, self, params) -> {
+                if (entitypatch instanceof ServerPlayerPatch serverPlayerPatch) {
+                    serverPlayerPatch.playAnimationSynchronized(INFERNAL_AUTO_4_B, 0.0F);
+                }
+
+            }, AnimationEvent.Side.SERVER)});
+            INFERNAL_AUTO_3_B_CONTINUE_1 = (new BasicAttackAnimation(0.05F, "biped/combat/infernal_auto_3_b_continue", biped, new AttackAnimation.Phase[]{new AttackAnimation.Phase(0.0F, 0.0F, 0.05F, 0.09F, 0.09F, biped.legL, null), new AttackAnimation.Phase(0.09F, 0.1F, 0.15F, 0.19F, 0.19F, biped.legL, null), new AttackAnimation.Phase(0.19F, 0.2F, 0.25F, 0.25F, Float.MAX_VALUE, biped.legL, null)})).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F), 1).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F), 2).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 1).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 2).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get()).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 1).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 2).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.8F).addEvents(new AnimationEvent.TimeStampedEvent[]{AnimationEvent.TimeStampedEvent.create(0.0F, (entitypatch, self, params) -> {
+                if (entitypatch instanceof ServerPlayerPatch) {
+                    ((ServerPlayerPatch)entitypatch).modifyLivingMotionByCurrentItem(true);
+                }
+
+            }, AnimationEvent.Side.SERVER), AnimationEvent.TimeStampedEvent.create(0.4F, (entitypatch, self, params) -> {
+                if (entitypatch instanceof ServerPlayerPatch serverPlayerPatch) {
+                    serverPlayerPatch.playAnimationSynchronized(INFERNAL_AUTO_4_B, 0.0F);
+                }
+
+            }, AnimationEvent.Side.SERVER)});
+            INFERNAL_AUTO_3_B_CONTINUE_2 = (new BasicAttackAnimation(0.05F, "biped/combat/infernal_auto_3_b_continue", biped, new AttackAnimation.Phase[]{new AttackAnimation.Phase(0.0F, 0.0F, 0.05F, 0.09F, 0.09F, biped.legL, null), new AttackAnimation.Phase(0.09F, 0.1F, 0.15F, 0.19F, 0.19F, biped.legL, null), new AttackAnimation.Phase(0.19F, 0.2F, 0.25F, 0.25F, Float.MAX_VALUE, biped.legL, null)})).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F), 1).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F), 2).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 1).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 2).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get()).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 1).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 2).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.8F).addEvents(new AnimationEvent.TimeStampedEvent[]{AnimationEvent.TimeStampedEvent.create(0.0F, (entitypatch, self, params) -> {
+                if (entitypatch instanceof ServerPlayerPatch) {
+                    ((ServerPlayerPatch)entitypatch).modifyLivingMotionByCurrentItem(true);
+                }
+
+            }, AnimationEvent.Side.SERVER), AnimationEvent.TimeStampedEvent.create(0.4F, (entitypatch, self, params) -> {
+                if (entitypatch instanceof ServerPlayerPatch serverPlayerPatch) {
+                    serverPlayerPatch.playAnimationSynchronized(INFERNAL_AUTO_4_B, 0.0F);
+                }
+
+            }, AnimationEvent.Side.SERVER)});
+            INFERNAL_AUTO_3_B_CONTINUE_3 = (new BasicAttackAnimation(0.05F, "biped/combat/infernal_auto_3_b_continue", biped, new AttackAnimation.Phase[]{new AttackAnimation.Phase(0.0F, 0.0F, 0.05F, 0.09F, 0.09F, biped.legL, null), new AttackAnimation.Phase(0.09F, 0.1F, 0.15F, 0.19F, 0.19F, biped.legL, null), new AttackAnimation.Phase(0.19F, 0.2F, 0.25F, 0.25F, Float.MAX_VALUE, biped.legL, null)})).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F), 1).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F), 2).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 1).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 2).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get()).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 1).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 2).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.8F).addEvents(new AnimationEvent.TimeStampedEvent[]{AnimationEvent.TimeStampedEvent.create(0.0F, (entitypatch, self, params) -> {
+                if (entitypatch instanceof ServerPlayerPatch) {
+                    ((ServerPlayerPatch)entitypatch).modifyLivingMotionByCurrentItem(true);
+                }
+
+            }, AnimationEvent.Side.SERVER), AnimationEvent.TimeStampedEvent.create(0.4F, (entitypatch, self, params) -> {
+                if (entitypatch instanceof ServerPlayerPatch serverPlayerPatch) {
+                    serverPlayerPatch.playAnimationSynchronized(INFERNAL_AUTO_4_B, 0.0F);
+                }
+
+            }, AnimationEvent.Side.SERVER)});
+            INFERNAL_AUTO_3_B_CONTINUE_4 = (new BasicAttackAnimation(0.05F, "biped/combat/infernal_auto_3_b_continue", biped, new AttackAnimation.Phase[]{new AttackAnimation.Phase(0.0F, 0.0F, 0.05F, 0.09F, 0.09F, biped.legL, null), new AttackAnimation.Phase(0.09F, 0.1F, 0.15F, 0.19F, 0.19F, biped.legL, null), new AttackAnimation.Phase(0.19F, 0.2F, 0.25F, 0.29F, 0.69F, biped.legL, null), new AttackAnimation.Phase(0.29F, 0.3F, 0.35F, 0.39F, 0.39F, biped.legL, null), new AttackAnimation.Phase(0.39F, 0.4F, 0.45F, 0.45F, Float.MAX_VALUE, biped.legL, null)})).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F), 1).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F), 2).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F), 3).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.3F), 4).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 1).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 2).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 3).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 4).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get()).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 1).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 2).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 3).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 4).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.8F).addEvents(new AnimationEvent.TimeStampedEvent[]{AnimationEvent.TimeStampedEvent.create(0.0F, (entitypatch, self, params) -> {
+                if (entitypatch instanceof ServerPlayerPatch) {
+                    ((ServerPlayerPatch)entitypatch).modifyLivingMotionByCurrentItem(true);
+                }
+
+            }, AnimationEvent.Side.SERVER), AnimationEvent.TimeStampedEvent.create(0.45F, (entitypatch, self, params) -> {
+                if (entitypatch instanceof ServerPlayerPatch serverPlayerPatch) {
+                    serverPlayerPatch.playAnimationSynchronized(INFERNAL_AUTO_4_B, 0.0F);
+                }
+
+            }, AnimationEvent.Side.SERVER)});
+            INFERNAL_AUTO_4_B = (new BasicAttackAnimation(0.05F, "biped/combat/infernal_auto_4_b", biped, new AttackAnimation.Phase[]{new AttackAnimation.Phase(0.0F, 0.1F, 0.25F, 0.29F, 0.29F, biped.legL, null), new AttackAnimation.Phase(0.29F, 0.3F, 0.45F, 0.95F, Float.MAX_VALUE, biped.legR, null)})).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.LONG, 1).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(2.5F)).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(1.5F), 1).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get()).addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, (SoundEvent)EpicFightSounds.WHOOSH.get(), 1).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.8F).addEvents(new AnimationEvent.TimeStampedEvent[]{AnimationEvent.TimeStampedEvent.create(0.05F, (entitypatch, self, params) -> {
+                if (entitypatch instanceof ServerPlayerPatch) {
+                     ((ServerPlayerPatch)entitypatch).modifyLivingMotionByCurrentItem(true);
+                   }
+
+            }, AnimationEvent.Side.SERVER)});
+            INFERNAL_KCIK13 = (new BasicAttackAnimation(0.05F, "biped/combat/infernal_kick13", biped, new AttackAnimation.Phase[]{new AttackAnimation.Phase(0.0F, 0.15F, 0.25F, 0.3F, 0.3F, biped.legL, null), new AttackAnimation.Phase(0.3F, 0.35F, 0.45F, 0.5F, 0.5F, biped.legR, null), new AttackAnimation.Phase(0.5F, 0.55F, 0.65F, 0.7F, 0.7F, biped.legL, null), new AttackAnimation.Phase(0.7F, 0.75F, 0.85F, 0.9F, 0.9F, biped.legR, null), new AttackAnimation.Phase(0.9F, 1.05F, 1.15F, 1.8F, Float.MAX_VALUE, biped.legR, null)})).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.25F)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.25F), 1).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.25F), 2).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.25F), 3).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.5F), 4).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(0.8F), 4).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 1).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 2).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD, 3).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.LONG, 4).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.6F);
+
+            INFERNAL_FULLHOUSE = (new BasicAttackAnimation(0.05F, 0.3F, 0.5F, 0.65F, null, biped.legR, "biped/combat/infernal_full_house", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.65F)).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(2.2F)).addProperty(AnimationProperty.AttackPhaseProperty.MAX_STRIKES_MODIFIER, ValueModifier.multiplier(4.0F)).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackPhaseProperty.HIT_SOUND, (SoundEvent)EpicFightSounds.BLUNT_HIT.get()).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackAnimationProperty.EXTRA_COLLIDERS, 20).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 2.0F).addProperty(AnimationProperty.AttackAnimationProperty.ATTACK_SPEED_FACTOR, 1.0F).addProperty(AnimationProperty.AttackAnimationProperty.FIXED_MOVE_DISTANCE, true).addProperty(AnimationProperty.ActionAnimationProperty.MOVE_VERTICAL, true).addProperty(AnimationProperty.ActionAnimationProperty.STOP_MOVEMENT, false).addProperty(AnimationProperty.ActionAnimationProperty.CANCELABLE_MOVE, false).addProperty(AnimationProperty.ActionAnimationProperty.NO_GRAVITY_TIME, TimePairList.create(new float[]{0.0F, 0.3F}));
+
+             INFERNAL_SHORYUKEN = (new SpecialAttackAnimation(0.1F, 0.3F, 0.65F, 0.95F, null, biped.toolR, "biped/skill/infernal_shoryuken", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(2.0F)).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(1.25F)).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.FALL).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.7F);
+            INFERNAL_IDLE = new StaticAnimation(0.5F, true, "biped/living/infernal_idle", biped);
+            INFERNAL_GUARD = new StaticAnimation(0.05F, true, "biped/skill/infernal_guard", biped);
+            INFERNAL_GUARD_HIT = new GuardAnimation(0.05F, 0.2F, "biped/skill/infernal_guard_hit", biped);
+            INFERNAL_GUARD_PARRY = new GuardAnimation(0.05F, 0.0F, "biped/skill/infernal_guard_parry", biped);
+            INFERNAL_STRAIGHT_FLUSH = (new BasicAttackAnimation(0.05F, 0.05F, 0.15F, 0.25F, null, biped.toolR, "biped/skill/infernal_straight_flush", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(2.0F)).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(6.0F)).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.KNOCKDOWN).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.4F);
 
             MIKIRI_JUMP = (new BasicAttackAnimation(0.05F, "biped/skill/mikiri_jump", biped, new AttackAnimation.Phase[]{new AttackAnimation.Phase(0.0F, 0.15F, 0.2F, 0.45F, 0.45F, biped.legL, ColliderPreset.FIST), new AttackAnimation.Phase(0.45F, 0.45F, 0.75F, 1.0F, Float.MAX_VALUE, biped.legL, ColliderPreset.FIST)})).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.4F)).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackPhaseProperty.HIT_SOUND, (SoundEvent) EpicFightSounds.BLUNT_HIT.get()).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(0F)).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.LONG).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.6F), 1).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(1.0F), 1).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.NONE, 1).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT, 1).addProperty(AnimationProperty.AttackPhaseProperty.HIT_SOUND, (SoundEvent)EpicFightSounds.BLUNT_HIT_HARD.get(), 1).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 2.0F).addProperty(AnimationProperty.AttackAnimationProperty.ATTACK_SPEED_FACTOR, 0.5F).addProperty(AnimationProperty.ActionAnimationProperty.CANCELABLE_MOVE, false).addProperty(AnimationProperty.ActionAnimationProperty.MOVE_VERTICAL, true).addProperty(AnimationProperty.ActionAnimationProperty.NO_GRAVITY_TIME, TimePairList.create(new float[]{0.05F, 0.75F}));
             RECHARGE = (new LongHitAnimation(0f, "pride:biped/skill/recharge", biped));
@@ -93,4 +217,25 @@ public class AnimationsRegister {
             EXECUTE = (new BasicAttackAnimation(0.1F, "biped/skill/execute", biped, new AttackAnimation.Phase(0.0F, 0.4F, 0.8F, 0.9F, 3.5F, InteractionHand.MAIN_HAND, biped.toolR, null), new AttackAnimation.Phase(0.9F, 2.5f, 3, 3.1f, 3.5F, biped.toolR, null).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.EVISCERATE))).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 0.5f).addState(EntityState.MOVEMENT_LOCKED, true);
 
         }
+
+    public static Vec3 getfloor(LivingEntityPatch<?> entitypatch, StaticAnimation self, Vec3f WeaponOffset, Joint joint) {
+        float dpx = WeaponOffset.x + (float)((LivingEntity)entitypatch.getOriginal()).getX();
+        float dpy = WeaponOffset.y + (float)((LivingEntity)entitypatch.getOriginal()).getY();
+        float dpz = WeaponOffset.z + (float)((LivingEntity)entitypatch.getOriginal()).getZ();
+        if (joint != null) {
+            OpenMatrix4f transformMatrix = entitypatch.getArmature().getBindedTransformFor(entitypatch.getAnimator().getPose(1.0F), joint);
+            transformMatrix.translate(WeaponOffset);
+            OpenMatrix4f CORRECTION = (new OpenMatrix4f()).rotate(-((float)Math.toRadians((double)(((LivingEntity)entitypatch.getOriginal()).yRotO + 180.0F))), new Vec3f(0.0F, 1.0F, 0.0F));
+            OpenMatrix4f.mul(CORRECTION, transformMatrix, transformMatrix);
+            dpx = transformMatrix.m30 + (float)((LivingEntity)entitypatch.getOriginal()).getX();
+            dpy = transformMatrix.m31 + (float)((LivingEntity)entitypatch.getOriginal()).getY();
+            dpz = transformMatrix.m32 + (float)((LivingEntity)entitypatch.getOriginal()).getZ();
+        }
+
+        for(BlockState block = ((LivingEntity)entitypatch.getOriginal()).level().getBlockState(new BlockPos.MutableBlockPos((double)dpx, (double)dpy, (double)dpz)); (block.getBlock() instanceof BushBlock || block.isAir()) && !block.is(Blocks.VOID_AIR) && dpy > -64.0F; block = ((LivingEntity)entitypatch.getOriginal()).level().getBlockState(new BlockPos.MutableBlockPos((double)dpx, (double)dpy, (double)dpz))) {
+            --dpy;
+        }
+
+        return new Vec3((double)dpx, (double)dpy, (double)dpz);
+    }
 }

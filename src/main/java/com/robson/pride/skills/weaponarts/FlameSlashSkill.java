@@ -1,10 +1,10 @@
 package com.robson.pride.skills.weaponarts;
 
+import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.SpellUtils;
 import com.robson.pride.api.utils.TimerUtil;
-import com.robson.pride.api.mechanics.PerilousAttack;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import net.minecraft.world.entity.LivingEntity;
 import reascer.wom.gameasset.WOMAnimations;

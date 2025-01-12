@@ -1,17 +1,20 @@
 package com.robson.pride.api.skillcore;
 
-import com.robson.pride.skills.weaponarts.DarknessCut;
-import com.robson.pride.skills.weaponarts.FlameSlashSkill;
+import com.robson.pride.skills.weaponarts.*;
 
-public enum SkillsEnum implements SkillCore.WeaponSkill {
+public enum WeaponArtRegister implements SkillCore.WeaponSkill {
 
     Darkness_Cut(new DarknessCut()),
-    Flame_Slash(new FlameSlashSkill());
+    Heaven_Strike(new HeavensStrike()),
+    Flame_Slash(new FlameSlashSkill()),
+    Tornado(new Tornado()),
+    Ground_Stomp(new GroundStomp()),
+    Kick(new Kick());
 
     final WeaponSkillBase skillBase;
     final int id;
 
-    SkillsEnum(WeaponSkillBase skillBase) {
+    WeaponArtRegister(WeaponSkillBase skillBase) {
         this.skillBase = skillBase;
         this.id = SkillCore.WeaponSkill.ENUM_MANAGER.assign(this);
     }

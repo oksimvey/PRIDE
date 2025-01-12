@@ -2,7 +2,6 @@ package com.robson.pride.api.mechanics;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.utils.PlaySoundUtils;
-import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.registries.ParticleRegister;
@@ -11,7 +10,6 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.eventbus.api.Event;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 

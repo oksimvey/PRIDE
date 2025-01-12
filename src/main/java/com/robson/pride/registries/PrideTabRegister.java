@@ -1,10 +1,12 @@
 package com.robson.pride.registries;
 
-import com.robson.pride.api.skillcore.SkillsEnum;
+import com.robson.pride.api.skillcore.WeaponArtRegister;
 import com.robson.pride.main.Pride;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -51,7 +53,7 @@ public class PrideTabRegister {
             .title(Component.literal("Pride Weapon Arts"))
             .icon(() -> new ItemStack(ItemsRegister.WEAPON_ART.get()))
             .displayItems((parameters, output) -> {
-                for (SkillsEnum skillsEnum : SkillsEnum.values()){
+                for (WeaponArtRegister skillsEnum : WeaponArtRegister.values()){
                     ItemStack item = new ItemStack(ItemsRegister.WEAPON_ART.get());
                     item.getOrCreateTag().putString("weapon_art", skillsEnum.name());
                     item.getOrCreateTag().putString("rarity",  skillsEnum.skill().getSkillRarity());

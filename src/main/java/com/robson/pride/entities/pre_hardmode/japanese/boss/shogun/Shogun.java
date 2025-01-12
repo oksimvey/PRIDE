@@ -18,6 +18,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import javax.annotation.Nullable;
 
 public class Shogun extends Monster {
+    public Entity target = this.getTarget();
 
     public Shogun(EntityType<? extends Shogun> type, Level world) {
         super(type, world);

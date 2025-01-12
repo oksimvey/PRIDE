@@ -77,8 +77,6 @@ public class PlayerProgressionData {
             clone.EnduranceMaxXp = original.EnduranceMaxXp;
             clone.MindMaxXp = original.MindMaxXp;
             clone.Element = original.Element;
-            if (!event.isWasDeath()) {
-            }
         }
     }
 

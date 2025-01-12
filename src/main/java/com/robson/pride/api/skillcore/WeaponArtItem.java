@@ -1,6 +1,5 @@
 package com.robson.pride.api.skillcore;
 
-import com.robson.pride.api.utils.MathUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -25,7 +24,7 @@ public class WeaponArtItem extends Item {
     public ChatFormatting color(String rarity){
         switch (rarity){
             case "Mythical"->{
-                return ChatFormatting.RED;
+                return ChatFormatting.DARK_RED;
             }
             case "Legendary" -> {
                 return ChatFormatting.GOLD;
@@ -36,7 +35,7 @@ public class WeaponArtItem extends Item {
             case "Rare" ->  {
                 return ChatFormatting.BLUE;
             }
-            case "Uncommum"-> {
+            case "Uncommon"-> {
                 return ChatFormatting.GREEN;
             }
             case "Common"->{

@@ -1,6 +1,5 @@
 package com.robson.pride.api.ai.conditions;
 
-import com.robson.pride.api.utils.CommandUtils;
 import io.netty.util.internal.StringUtil;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;

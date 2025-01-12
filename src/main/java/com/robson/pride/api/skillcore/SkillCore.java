@@ -31,7 +31,7 @@ public class SkillCore {
     }
 
     public static void weaponArtCore(LivingEntity ent, String weaponart){
-       SkillsEnum.valueOf(weaponart).skill().tryToExecute(ent);
+        WeaponArtRegister.valueOf(weaponart).skill().tryToExecute(ent);
     }
 
     public interface WeaponSkill extends ExtendableEnum {

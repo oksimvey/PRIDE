@@ -1,10 +1,13 @@
 package com.robson.pride.keybinding;
 
-import com.robson.pride.api.utils.*;
 import com.robson.pride.api.mechanics.Stealth;
+import com.robson.pride.api.skillcore.SkillCore;
+import com.robson.pride.api.utils.AnimUtils;
+import com.robson.pride.api.utils.TargetUtil;
+import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.KeyRegister;
-import com.robson.pride.api.skillcore.SkillCore;
+import com.robson.pride.skills.special.AirSlamSkill;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.client.events.engine.ControllEngine;
@@ -32,7 +35,11 @@ public class OnLeftClick {
                                         AnimUtils.preventAttack(player, 1000);
                                         TimerUtil.schedule(()->{
                                             if (ControllEngine.isKeyDown(KeyRegister.keyActionSpecial)){
-                                               SkillCore.onSkillExecute(player);
+                                                if (player.getPersistentData().getBoolean("mikiri_sweep")){
+                                                    AirSlamSkill as = new AirSlamSkill();
+                                                    as.tryToExecute(player);
+                                                }
+                                               else SkillCore.onSkillExecute(player);
                                             }
                                         }, 50, TimeUnit.MILLISECONDS);
                                     }
@@ -53,7 +60,6 @@ public class OnLeftClick {
         }
         TimerUtil.schedule(() -> {
             if (target.getPersistentData().getBoolean("isVulnerable")) {
-                CutsceneUtils.executionCutscene(ent, target);
                 AnimUtils.playAnim(ent, AnimationsRegister.EXECUTE, 0);
             }
         }, 5, TimeUnit.MILLISECONDS);

@@ -1,12 +1,12 @@
 package com.robson.pride.registries;
 
 import com.robson.pride.effect.HypnotizedEffect;
+import com.robson.pride.effect.WetEffect;
 import com.robson.pride.main.Pride;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import com.robson.pride.effect.WetEffect;
 
 public class EffectRegister {
 

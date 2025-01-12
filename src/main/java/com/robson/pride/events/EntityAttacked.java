@@ -3,6 +3,7 @@ package com.robson.pride.events;
 import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.EffectRegister;
+import com.robson.pride.skills.special.AirSlamSkill;
 import com.robson.pride.skills.special.CloneSkill;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -57,7 +58,12 @@ public class EntityAttacked {
     public static void OnFinalAttack(LivingAttackEvent event) {
         if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
             Entity ent = event.getEntity();
-            Entity ddmgent = event.getSource().getEntity();
+            Entity ddmgent = event.getSource().getDirectEntity();
+            if (ddmgent.getPersistentData().getBoolean("Airslam")){
+                AirSlamSkill.onAirSlamDMG(ddmgent, ent);
+            }
+            ddmgent.setDeltaMovement(ddmgent.getDeltaMovement().x, 0, ddmgent.getDeltaMovement().z);
+            ent.setDeltaMovement(ent.getDeltaMovement().x, 0, ent.getDeltaMovement().z);
             if (ddmgent instanceof LivingEntity liv){
                 if (liv.hasEffect(EffectRegister.HYPNOTIZED.get())){
                     event.setCanceled(true);

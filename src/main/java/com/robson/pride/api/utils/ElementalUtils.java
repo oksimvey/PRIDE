@@ -4,7 +4,6 @@ import com.robson.pride.progression.PlayerProgressionData;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.ParticleRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
@@ -12,9 +11,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
@@ -67,6 +64,42 @@ public class ElementalUtils {
             }
         }
         return null;
+    }
+
+    public static void rollElement(Entity ent){
+        if (ent != null){
+            short chance = (short) MathUtils.getRandomInt(1000);
+            if (chance == 0){
+                setElement(ent, "Darkness");
+            }
+            else if (chance >= 1 && chance <= 10){
+                setElement(ent, "Light");
+            }
+            else if (chance >= 11 && chance <= 40){
+                setElement(ent, "Thunder");
+            }
+            else if(chance >=41 && chance <= 90){
+                setElement(ent, "Sun");
+            }
+            else if(chance >= 91 && chance <= 140){
+                setElement(ent, "Moon");
+            }
+            else if(chance >= 141 && chance <= 240){
+                setElement(ent, "Blood");
+            }
+            else if(chance >= 241 && chance <= 340){
+                setElement(ent, "Wind");
+            }
+            else if(chance >= 341 && chance <= 560){
+                setElement(ent, "Nature");
+            }
+            else if(chance >= 561 && chance <= 780){
+                setElement(ent, "Ice");
+            }
+            else if (chance >= 781){
+                setElement(ent, "Water");
+            }
+        }
     }
 
     public static String getElement(Entity ent) {

@@ -1,0 +1,10 @@
+{
+  "attributes":
+  {
+    "common":
+    {
+      "speed_bonus": 1
+    }
+  },
+  "type": "pride:kickbox"
+}

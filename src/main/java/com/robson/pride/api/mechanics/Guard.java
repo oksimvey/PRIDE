@@ -3,6 +3,8 @@ package com.robson.pride.api.mechanics;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
+import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
+import com.robson.pride.registries.AnimationsRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,7 +29,6 @@ import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
@@ -109,6 +110,9 @@ public class Guard {
                     } else if (anim == Animations.SPEAR_GUARD) {
                         return Animations.SPEAR_GUARD;
                     }
+                    else if(anim == AnimationsRegister.INFERNAL_GUARD){
+                        return AnimationsRegister.INFERNAL_GUARD_HIT;
+                    }
 
                 }
             }
@@ -119,7 +123,10 @@ public class Guard {
     public static StaticAnimation getParryMotion(Player player){
         if (player != null){
             Style style = ItemStackUtils.getStyle(player);
-            if (style == PrideStyles.DUAL_WIELD){
+            if (ItemStackUtils.getWeaponCategory(player, InteractionHand.MAIN_HAND) == WeaponCategoriesEnum.PRIDE_FIGHTNING_STYLE){
+                return AnimationsRegister.INFERNAL_GUARD_PARRY;
+            }
+            else if (style == PrideStyles.DUAL_WIELD){
                 toggle = !toggle;
                 return toggle ? Animations.SWORD_GUARD_ACTIVE_HIT2 : Animations.SWORD_GUARD_ACTIVE_HIT3;
             }

@@ -44,7 +44,7 @@ public class MathUtils {
 
     public static float getAngleDifferencee(Entity ent1, Entity ent2){
         if (ent1 != null && ent2 != null){
-            return ent1.getYRot() - ent2.getYRot();
+            return (float) Math.sqrt(Math.pow(ent1.getYRot(), 2) + Math.pow(ent2.getYRot(), 2));
         }
         return 0;
     }

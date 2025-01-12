@@ -7,7 +7,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
@@ -96,7 +95,8 @@ public class ItemStackUtils {
             WeaponCategory category = getWeaponCategory(ent, hand);
                 if (category != null){
                     return category == WeaponCategoriesEnum.PRIDE_LONGSWORD
-                    || category == CapabilityItem.WeaponCategories.TACHI;
+                    || category == CapabilityItem.WeaponCategories.TACHI
+                    || category == WeaponCategoriesEnum.PRIDE_FIGHTNING_STYLE;
             }
         }
         return false;

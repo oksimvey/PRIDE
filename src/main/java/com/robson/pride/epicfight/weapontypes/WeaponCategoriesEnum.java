@@ -12,7 +12,8 @@ public enum WeaponCategoriesEnum implements WeaponCategory, Function<Item, Capab
     PRIDE_LONGSWORD(new LongSwordWeaponSkill()),
     PRIDE_GREATSWORD(new LongSwordWeaponSkill()),
     PRIDE_COLOSSALSWORD(new LongSwordWeaponSkill()),
-    PRIDE_GUN(new LongSwordWeaponSkill());
+    PRIDE_GUN(new LongSwordWeaponSkill()),
+    PRIDE_FIGHTNING_STYLE(new LongSwordWeaponSkill());
     final WeaponSkillBase skillBase;
     final int id;
 

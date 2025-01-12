@@ -1,10 +1,8 @@
 package com.robson.pride.epicfight.weapontypes;
 
-import java.util.Map;
-import java.util.function.Function;
-
 import com.google.common.collect.Maps;
 import com.robson.pride.epicfight.styles.PrideStyles;
+import com.robson.pride.main.Pride;
 import com.robson.pride.registries.AnimationsRegister;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -12,11 +10,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import com.robson.pride.main.Pride;
-
 import reascer.wom.gameasset.WOMAnimations;
-import yesman.epicfight.api.forgeevent.WeaponCapabilityPresetRegistryEvent;
 import yesman.epicfight.api.animation.LivingMotions;
+import yesman.epicfight.api.forgeevent.WeaponCapabilityPresetRegistryEvent;
 import yesman.epicfight.client.events.engine.ControllEngine;
 import yesman.epicfight.client.input.EpicFightKeyMappings;
 import yesman.epicfight.gameasset.Animations;
@@ -30,8 +26,27 @@ import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.CapabilityItem.Styles;
 import yesman.epicfight.world.capabilities.item.WeaponCapability;
 
+import java.util.Map;
+import java.util.function.Function;
+
 @Mod.EventBusSubscriber(modid = Pride.MOD_ID , bus = Mod.EventBusSubscriber.Bus.MOD)
-public class WeaponPresets {    public static final Function<Item, CapabilityItem.Builder> PRIDE_LONGSWORD = (item) -> {
+public class WeaponPresets {
+
+    public static final Function<Item, CapabilityItem.Builder> PRIDE_FIGHTNING_STYLE = (item -> {
+        CapabilityItem.Builder builder = WeaponCapability.builder().category(WeaponCategoriesEnum.PRIDE_FIGHTNING_STYLE)
+                .styleProvider((playerpatch)-> PrideStyles.DUAL_WIELD)
+                .collider(ColliderPreset.FIST)
+                .hitSound(EpicFightSounds.BLUNT_HIT.get())
+                .hitParticle(EpicFightParticles.HIT_BLUNT.get())
+                .newStyleCombo(PrideStyles.DUAL_WIELD, AnimationsRegister.INFERNAL_AUTO_1, AnimationsRegister.INFERNAL_AUTO_2, AnimationsRegister.INFERNAL_AUTO_3_A, WOMAnimations.ENDERBLASTER_ONEHAND_AUTO_1, AnimationsRegister.INFERNAL_FULLHOUSE)
+                .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.IDLE, AnimationsRegister.INFERNAL_IDLE)
+                .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.WALK, AnimationsRegister.INFERNAL_IDLE)
+                .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.BLOCK, AnimationsRegister.INFERNAL_GUARD)
+                ;
+        return builder;
+    });
+
+    public static final Function<Item, CapabilityItem.Builder> PRIDE_LONGSWORD = (item) -> {
     WeaponCapability.Builder builder = WeaponCapability.builder().category(WeaponCategoriesEnum.PRIDE_LONGSWORD)
             .styleProvider((playerpatch) -> {
                 if (playerpatch.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == CapabilityItem.WeaponCategories.SHIELD) {
@@ -85,6 +100,7 @@ public class WeaponPresets {    public static final Function<Item, CapabilityIte
     @SubscribeEvent
     public static void register(WeaponCapabilityPresetRegistryEvent event) {
         event.getTypeEntry().put(new ResourceLocation(Pride.MOD_ID,"pride_longsword"), PRIDE_LONGSWORD);
+        event.getTypeEntry().put(new ResourceLocation(Pride.MODID, "kickbox"), PRIDE_FIGHTNING_STYLE);
     }
 }
 
