@@ -3,11 +3,18 @@ package com.robson.pride.keybinding;
 import com.github.exopandora.shouldersurfing.api.client.ShoulderSurfing;
 import com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl;
 import com.robson.pride.api.mechanics.MikiriCounter;
+import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.KeyRegister;
+import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
+import io.redspace.ironsspellbooks.entity.spells.blood_needle.BloodNeedle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.phys.AABB;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -61,15 +68,11 @@ public class onQPress {
             byte dodgetype = AnimUtils.getDodgeType(player);
                     String anim = "step_backward";
                     if (dodgetype == 1){
-                        anim = "step_forward";
                         MikiriCounter.setMikiri(player, "Dodge", 0, 350);
-                        Entity target = TargetUtil.getTarget(player);
-                        if (target != null){
-                            String Perilous = target.getPersistentData().getString("Perilous");
-                            if (Objects.equals(Perilous, "pierce_two_hand") || Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand")) {
-                                return;
-                            }
-                            }
+                        if (!cantDodgeForward(player)) {
+                            anim = "step_forward";
+                        }
+                        else anim = "";
                     }
                     if (dodgetype == 2){
                         anim = "step_left";
@@ -77,7 +80,6 @@ public class onQPress {
                     if (dodgetype == 3){
                         anim = "step_right";
                     }
-
                     AnimUtils.playAnimByString(player, "epicfight:biped/skill/" + anim, 0);
         }
     }
@@ -105,5 +107,22 @@ public class onQPress {
                 }
                 AnimUtils.playAnimByString(player,   anim, 0);
         }
+    }
+
+    public static boolean cantDodgeForward(Player player){
+        for(Entity ent : player.level().getEntities(player, MathUtils.createAABBAroundEnt(player, 5))){
+            if (ent != null){
+                if(PerilousAttack.checkPerilous(ent)){
+                    return true;
+                }
+                else if (ent instanceof Projectile arrow){
+                    return arrow.getOwner() != player;
+                }
+                else if (MikiriCounter.isDodgeCounterableSpell(ent)){
+                   return true;
+                }
+            }
+        }
+        return false;
     }
 }

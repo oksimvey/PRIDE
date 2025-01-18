@@ -1,6 +1,5 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.progression.PlayerProgressionData;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.ParticleRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
@@ -21,9 +20,7 @@ public class ElementalUtils {
 
     public static void setElement(Entity ent, String element) {
         if (ent instanceof Player player) {
-            player.getCapability(PlayerProgressionData.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-                capability.setElement(element);
-            });
+            player.getPersistentData().putString("Element", element);
         }
     }
 
@@ -103,12 +100,9 @@ public class ElementalUtils {
     }
 
     public static String getElement(Entity ent) {
-        AtomicReference<String> element = new AtomicReference<>("");
         if (ent != null) {
             if (ent instanceof Player player) {
-                player.getCapability(PlayerProgressionData.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-                    element.set(capability.getElement());
-                });
+                return player.getPersistentData().getString("Element");
             }
             else {
                 if (TagCheckUtils.entityTagCheck(ent, "elements/darkness")){
@@ -143,7 +137,7 @@ public class ElementalUtils {
                 }
             }
         }
-        return element.get();
+        return "";
     }
 
     public static float getFinalValueForDarknessDMG(Entity ent, float amount){

@@ -5,7 +5,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import org.antlr.runtime.misc.IntArray;
 
+import java.lang.reflect.Array;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class GuardBreak {
@@ -25,10 +28,7 @@ public class GuardBreak {
         TimerUtil.schedule(()-> ent.getPersistentData().putBoolean("isVulnerable", true), 200, TimeUnit.MILLISECONDS);
         PlaySoundUtils.playSoundByString(ent, "epicfight:sfx.neutralize_bosses", 2f, 1f);
         StaminaUtils.resetStamina(ent);
-
-        if (TagCheckUtils.entityTagCheck(ent, "biped")) {
             AnimUtils.playAnimByString(ent, "epicfight:biped/skill/guard_break1", 0);
-        }
         TimerUtil.schedule(() ->  ent.getPersistentData().putBoolean("isVulnerable", false), 2, TimeUnit.SECONDS);
     }
 

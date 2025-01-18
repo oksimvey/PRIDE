@@ -16,6 +16,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -207,7 +208,6 @@ public class Guard {
                return !damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)
                        && !damageSource.is(EpicFightDamageType.PARTIAL_DAMAGE)
                        && !damageSource.is(DamageTypeTags.BYPASSES_ARMOR)
-                       && !damageSource.is(DamageTypeTags.IS_PROJECTILE)
                        && !damageSource.is(DamageTypeTags.IS_EXPLOSION)
                        && !damageSource.is(DamageTypes.MAGIC)
                        && !damageSource.is(DamageTypeTags.IS_FIRE);

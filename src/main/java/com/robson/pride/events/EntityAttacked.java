@@ -10,6 +10,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,6 +28,11 @@ public class EntityAttacked {
         if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
             Entity ent = event.getEntity();
             Entity ddmgent = event.getSource().getDirectEntity();
+            if (ddmgent instanceof Projectile){
+                if (ddmgent instanceof AbstractArrow arrow && ent.getPersistentData().getBoolean("mikiri_dodge")){
+                  MikiriCounter.onArrowMikiri(ent, arrow, event);
+                }
+            }
             if (ddmgent != null){
                 if (ddmgent.getPersistentData().getBoolean("canrobmainhand")){
                     Eating.robTargetItem(ddmgent, ent, InteractionHand.MAIN_HAND);

@@ -19,7 +19,7 @@ public class onRClickItem {
                 player.startUsingItem(InteractionHand.MAIN_HAND);
                 Parry.ParryWindow(player);
             }
+            }
         }
     }
 
-}

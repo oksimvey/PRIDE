@@ -16,13 +16,12 @@ public class MusicCore {
             Music music = getBattleMusicToPlay(player);
             if (music != null) {
                 if (!Minecraft.getInstance().getMusicManager().isPlayingMusic(music)) {
-                    Minecraft.getInstance().getMusicManager().stopPlaying();
-                    Minecraft.getInstance().getMusicManager().startPlaying(music);
+                Minecraft.getInstance().getMusicManager().stopPlaying();
+                Minecraft.getInstance().getMusicManager().startPlaying(music);
                 }
             }
         }
     }
-
     public static Music getBattleMusicToPlay(Player player){
         if (player != null){
             if (!player.level().isClientSide) {

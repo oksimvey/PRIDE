@@ -2,24 +2,17 @@ package com.robson.pride.registries;
 
 import com.robson.pride.main.Pride;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import reascer.wom.animation.attacks.BasicMultipleAttackAnimation;
 import reascer.wom.animation.attacks.SpecialAttackAnimation;
 import yesman.epicfight.api.animation.Joint;
-import yesman.epicfight.api.animation.Keyframe;
-import yesman.epicfight.api.animation.TransformSheet;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.*;
@@ -35,15 +28,9 @@ import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.model.armature.HumanoidArmature;
 import yesman.epicfight.particle.EpicFightParticles;
-import yesman.epicfight.skill.BasicAttack;
-import yesman.epicfight.skill.SkillSlots;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
-import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 import yesman.epicfight.world.damagesource.StunType;
-import yesman.epicfight.world.entity.eventlistener.ComboCounterHandleEvent;
-
-import java.util.List;
 
 public class AnimationsRegister {
 
@@ -85,6 +72,8 @@ public class AnimationsRegister {
     public static StaticAnimation INFERNAL_GUARD_HIT;
     public static StaticAnimation INFERNAL_GUARD_PARRY;
     public static StaticAnimation INFERNAL_STRAIGHT_FLUSH;
+    public static StaticAnimation MOB_AIM;
+    public static StaticAnimation MOB_SHOOT;
 
 
         @SubscribeEvent
@@ -96,6 +85,8 @@ public class AnimationsRegister {
 
         HumanoidArmature biped = Armatures.BIPED;
 
+        MOB_AIM = (new LongHitAnimation(0.25f, "biped/combat/mob_aim", biped));
+        MOB_SHOOT = (new LongHitAnimation(0, "biped/combat/mob_shoot", biped));
             INFERNAL_AUTO_1 = (new BasicAttackAnimation(0.1F, 0.3F, 0.4F, 0.5F, null, biped.toolL, "biped/combat/infernal_auto_1", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.0F)).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.4F);
             INFERNAL_AUTO_2 = (new BasicAttackAnimation(0.2F, 0.1F, 0.2F, 0.25F, null, biped.toolR, "biped/combat/infernal_auto_2", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.0F)).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(1.5F)).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.4F).addEvents(new AnimationEvent.TimeStampedEvent[]{AnimationEvent.TimeStampedEvent.create(0.45F, (entitypatch, self, params) -> {
                 if (entitypatch instanceof ServerPlayerPatch) {

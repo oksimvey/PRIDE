@@ -38,6 +38,7 @@ public class DarknessCut extends WeaponSkillBase {
     public static void DarknessSlash(LivingEntity ent){
         if (ent != null){
             StaticAnimation animation = Animations.TACHI_AUTO3;
+            Minecraft minecraft = Minecraft.getInstance();
                AnimUtils.playAnim(ent, animation, 0);
             PerilousAttack.setPerilous(ent, "total", 1500);
             TimerUtil.schedule(()->{

@@ -28,6 +28,10 @@ public class MathUtils {
         return Math.sqrt(Math.pow(deltax, 2) + Math.pow(deltay, 2) + Math.pow(deltaz, 2));
     }
 
+    public static AABB createAABBAroundEnt(Entity ent, float size){
+            return new AABB(ent.getX() + size, ent.getY() + size * 1.5, ent.getZ() + size, ent.getX() - size, ent.getY() - size, ent.getZ() - size);
+    }
+
     public static AABB createAABBByLookingAngle(Vec3 pos, Vector3f lookangle, double radius){
         double length = radius * 2;
         return new AABB(pos.x + lookangle.x * radius - (radius * 1.5),

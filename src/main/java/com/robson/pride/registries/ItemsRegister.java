@@ -3,6 +3,7 @@ package com.robson.pride.registries;
 import com.robson.pride.api.skillcore.WeaponArtItem;
 import com.robson.pride.item.materials.gems.*;
 import com.robson.pride.item.spawnegg.SpawnEggBase;
+import com.robson.pride.item.weapons.MobBow;
 import com.robson.pride.main.Pride;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
@@ -40,4 +41,6 @@ public class ItemsRegister {
             () -> new WeaponArtItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> SPAWN_EGG = REGISTRY.register("spawn_egg",
             () -> new SpawnEggBase(new Item.Properties().stacksTo(64)));
+    public static final RegistryObject<Item> MOB_BOW = REGISTRY.register("mob_bow",
+            () -> new MobBow(new Item.Properties().stacksTo(1)));
 }

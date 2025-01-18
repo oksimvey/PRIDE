@@ -36,13 +36,11 @@ public class RingBase extends Item {
 
     protected String tooltip;
     public final Supplier<Boolean> isEnabled;
-    public final GlintRenderTypes glintType;
 
-    public RingBase(Properties properties, String tooltip, Supplier<Boolean> enabled, GlintRenderTypes glintType) {
+    public RingBase(Properties properties, String tooltip, Supplier<Boolean> enabled) {
         super(properties.stacksTo(1));
         this.tooltip = tooltip;
         this.isEnabled = enabled;
-        this.glintType = glintType;
 
     }
 
@@ -187,33 +185,6 @@ public class RingBase extends Item {
         mutable.getSiblings().replaceAll(component1 -> changeColors(component1, from, to));
 
         return mutable;
-    }
-
-    public enum GlintRenderTypes {
-
-        WHITE("white"),
-        ORANGE("orange"),
-        MAGENTA("magenta"),
-        LIGHT_BLUE("light_blue"),
-        YELLOW("yellow"),
-        LIME("lime"),
-        PINK("pink"),
-        GRAY("gray"),
-        LIGHT_GRAY("light_gray"),
-        CYAN("cyan"),
-        PURPLE("purple"),
-        BLUE("blue"),
-        BROWN("brown"),
-        GREEN("green"),
-        RED("red"),
-        BLACK("black");
-
-        public final String name;
-
-        GlintRenderTypes(String name) {
-            this.name = name;
-        }
-
     }
 
 }

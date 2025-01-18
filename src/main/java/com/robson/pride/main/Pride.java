@@ -53,7 +53,6 @@ public class Pride {
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupCommon);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
-        MinecraftForge.EVENT_BUS.addListener(this::onServerStarting);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(KeyRegister::registerKeyMappings);
         ParticleRegister.PARTICLES.register(bus);
         bus.addListener(AnimationsRegister::registerAnimations);
@@ -65,11 +64,6 @@ public class Pride {
         SkillCore.WeaponSkill.ENUM_MANAGER.registerEnumCls(MODID, WeaponArtRegister.class);
     }
 
-    public static <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder, BiConsumer<T, Supplier<NetworkEvent.Context>> messageConsumer) {
-        PACKET_HANDLER.registerMessage(messageID, messageType, encoder, decoder, messageConsumer);
-        messageID++;
-    }
-
     private void registerCommands(final RegisterCommandsEvent event){
         event.getDispatcher().register(
                 LiteralArgumentBuilder.<CommandSourceStack>literal(Pride.MOD_ID)
@@ -78,6 +72,7 @@ public class Pride {
                                 .then(PerilousCommand.register())
                                 .then(MobEatCommand.register())
                                 .then(MikiriCommand.register())
+                                .then(ShootProjectileCommand.register())
                                 .then(SkillExecuteCommand.register())
                                 .then(SetElementCommand.register())));
     }
@@ -89,9 +84,5 @@ public class Pride {
 
     private void setupClient(FMLClientSetupEvent event) {
         KeyRegister.setupClient(event);
-    }
-
-    private void onServerStarting(ServerStartingEvent event) {
-        System.out.println("Server starting for" + MODID);
     }
 }

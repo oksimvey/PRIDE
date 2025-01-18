@@ -44,7 +44,6 @@ public class SpawnEggBase extends Item {
         return EntityType.byString(spawneggname).orElse(null);
     }
 
-
     @Override
     public Component getName(ItemStack stack) {
         Component defaultName = super.getName(stack);
