@@ -9,7 +9,7 @@ import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 import java.util.List;
 
-public class CheckParamsForNormalAttack  extends Condition.EntityPatchCondition {
+public class CheckParamsForNormalAttack extends Condition.EntityPatchCondition {
     @Override
     public CheckParamsForNormalAttack read(CompoundTag tag) {
         return this;

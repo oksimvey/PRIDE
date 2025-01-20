@@ -18,21 +18,21 @@ public class PerilousCommand implements Command<CommandSourceStack> {
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
         return Commands.literal("perilous")
                 .then(Commands.argument("periloustype", StringArgumentType.word()).suggests(((commandContext, suggestionsBuilder) -> {
-                    suggestionsBuilder.suggest("sweep");
-                    suggestionsBuilder.suggest("pierce_one_hand");
-                    suggestionsBuilder.suggest("pierce_two_hand");
+                            suggestionsBuilder.suggest("sweep");
+                            suggestionsBuilder.suggest("pierce_one_hand");
+                            suggestionsBuilder.suggest("pierce_two_hand");
                             suggestionsBuilder.suggest("pierce_dual_wield");
                             suggestionsBuilder.suggest("total");
                             return suggestionsBuilder.buildFuture();
-                }))
+                        }))
                         .then(Commands.argument("window", IntegerArgumentType.integer())
-                                        .executes(COMMAND)));
+                                .executes(COMMAND)));
     }
 
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         Entity ent = EntityArgument.getEntity(context, "living_entity");
-        String periloustype =  StringArgumentType.getString(context, "periloustype");
+        String periloustype = StringArgumentType.getString(context, "periloustype");
         int window = IntegerArgumentType.getInteger(context, "window");
         PerilousAttack.setPerilous(ent, periloustype, window);
         return 1;

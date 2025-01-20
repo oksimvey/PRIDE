@@ -43,17 +43,18 @@ public class AttributeUtils {
     }
 
     public static void addModifier(LivingEntity ent, String attributename, String uuid, double amount, AttributeModifier.Operation operation) {
-        if (ent != null){
-        Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attributename));
-        if (attribute != null) {
-            AttributeInstance attributeInstance = ent.getAttribute(attribute);
-            if (attributeInstance != null) {
-                removeModifier(ent, attributename, uuid);
-                attributeInstance.addPermanentModifier(((new AttributeModifier(UUID.fromString(uuid), "modifier", amount, operation))));
+        if (ent != null) {
+            Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attributename));
+            if (attribute != null) {
+                AttributeInstance attributeInstance = ent.getAttribute(attribute);
+                if (attributeInstance != null) {
+                    removeModifier(ent, attributename, uuid);
+                    attributeInstance.addPermanentModifier(((new AttributeModifier(UUID.fromString(uuid), "modifier", amount, operation))));
+                }
             }
         }
-        }
     }
+
     public static void removeModifier(LivingEntity ent, String attributename, String uuid) {
         if (ent != null) {
             Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attributename));

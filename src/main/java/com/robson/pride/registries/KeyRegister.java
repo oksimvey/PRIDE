@@ -68,12 +68,11 @@ public class KeyRegister {
             wasPressedSecondary = isCurrentlyPressed;
         } else if (key == keyActionTertiary) {
             wasPressedTertiary = isCurrentlyPressed;
-        }else if (key == keyActionJump){
+        } else if (key == keyActionJump) {
             wasPressedJump = isCurrentlyPressed;
-        }else if (key == keyActionSwapHand){
+        } else if (key == keyActionSwapHand) {
             wasPressedSwapHand = isCurrentlyPressed;
-        }
-        else if (key == keyActionRecharge){
+        } else if (key == keyActionRecharge) {
             wasPressedRecharge = isCurrentlyPressed;
         }
     }

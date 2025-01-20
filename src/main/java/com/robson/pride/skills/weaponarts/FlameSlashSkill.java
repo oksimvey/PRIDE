@@ -18,7 +18,7 @@ public class FlameSlashSkill extends WeaponSkillBase {
     }
 
     @Override
-    public void onehandExecute(LivingEntity ent){
+    public void onehandExecute(LivingEntity ent) {
         if (ent != null) {
             AnimUtils.playAnim(ent, WOMAnimations.SOLAR_OBSCURIDAD_AUTO_1, 0);
             TimerUtil.schedule(() -> SpellUtils.castSpell(ent, SpellRegistry.FLAMING_STRIKE_SPELL.get(), 3, 0), 400, TimeUnit.MILLISECONDS);

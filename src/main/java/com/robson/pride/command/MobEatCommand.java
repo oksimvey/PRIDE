@@ -27,22 +27,22 @@ public class MobEatCommand implements Command<CommandSourceStack> {
                             suggestionsBuilder.suggest("equip");
                             return suggestionsBuilder.buildFuture();
                         }))
-                .then(Commands.argument("hand", StringArgumentType.word()).suggests(((commandContext, suggestionsBuilder) -> {
-                            suggestionsBuilder.suggest("mainhand");
-                            suggestionsBuilder.suggest("offhand");
-                            return suggestionsBuilder.buildFuture();
-                        }))
-                        .then(Commands.argument("item", StringArgumentType.word()).suggests(((commandContext, suggestionsBuilder) -> {
-                                    suggestionsBuilder.suggest("target_hand");
+                        .then(Commands.argument("hand", StringArgumentType.word()).suggests(((commandContext, suggestionsBuilder) -> {
+                                    suggestionsBuilder.suggest("mainhand");
+                                    suggestionsBuilder.suggest("offhand");
                                     return suggestionsBuilder.buildFuture();
                                 }))
-                                .executes(COMMAND))));
+                                .then(Commands.argument("item", StringArgumentType.word()).suggests(((commandContext, suggestionsBuilder) -> {
+                                            suggestionsBuilder.suggest("target_hand");
+                                            return suggestionsBuilder.buildFuture();
+                                        }))
+                                        .executes(COMMAND))));
     }
 
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         Entity ent = EntityArgument.getEntity(context, "living_entity");
-        String hand =  StringArgumentType.getString(context, "hand");
+        String hand = StringArgumentType.getString(context, "hand");
         String item = StringArgumentType.getString(context, "item");
         String type = StringArgumentType.getString(context, "type");
         if (ent instanceof LivingEntity living) {
@@ -50,34 +50,34 @@ public class MobEatCommand implements Command<CommandSourceStack> {
                 if (item.equals("target_hand")) {
                     if (hand.equals("mainhand")) {
                         living.getPersistentData().putBoolean("canrobmainhand", true);
-                        TimerUtil.schedule(()->{
-                            if (ent != null){
+                        TimerUtil.schedule(() -> {
+                            if (ent != null) {
                                 living.getPersistentData().putBoolean("canrobmainhand", false);
                             }
                         }, 1000, TimeUnit.MILLISECONDS);
                     }
                     if (hand.equals("offhand")) {
                         living.getPersistentData().putBoolean("canroboffhand", true);
-                        TimerUtil.schedule(()->{
-                            if (ent != null){
+                        TimerUtil.schedule(() -> {
+                            if (ent != null) {
                                 living.getPersistentData().putBoolean("canroboffhand", false);
                             }
                         }, 1000, TimeUnit.MILLISECONDS);
                     }
-                }
-                else ent.getPersistentData().putString("itemtoequip", item);
+                } else ent.getPersistentData().putString("itemtoequip", item);
                 if (hand.equals("mainhand")) {
                     living.getPersistentData().putString("previous_item", String.valueOf(BuiltInRegistries.ITEM.getKey(living.getMainHandItem().getItem())));
                 }
                 if (hand.equals("offhand")) {
-                    living.getPersistentData().putString("previous_item", String.valueOf(BuiltInRegistries.ITEM.getKey(living.getOffhandItem().getItem())));;
+                    living.getPersistentData().putString("previous_item", String.valueOf(BuiltInRegistries.ITEM.getKey(living.getOffhandItem().getItem())));
+                    ;
                 }
             }
-            if (type.equals("eat")){
-                if (hand.equals("mainhand")){
+            if (type.equals("eat")) {
+                if (hand.equals("mainhand")) {
                     Eating.mobEat(ent, InteractionHand.MAIN_HAND, 10);
                 }
-                if (hand.equals("offhand")){
+                if (hand.equals("offhand")) {
                     Eating.mobEat(ent, InteractionHand.OFF_HAND, 5);
                 }
             }

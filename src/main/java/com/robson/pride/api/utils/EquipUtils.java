@@ -10,7 +10,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.Objects;
 
 public class EquipUtils {
-    public static ItemStack locateItem(String item){
+    public static ItemStack locateItem(String item) {
         ItemStack itemstack = new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(new ResourceLocation(item)))).copy();
         itemstack.setCount(1);
         return itemstack;
@@ -22,17 +22,17 @@ public class EquipUtils {
         }
     }
 
-    public static void equipMainHandByString(LivingEntity ent, String item){
-       equipMainHand(ent, locateItem(item));
+    public static void equipMainHandByString(LivingEntity ent, String item) {
+        equipMainHand(ent, locateItem(item));
     }
 
-    public static void equipOffHand(LivingEntity ent, ItemStack item){
-        if (ent != null){
+    public static void equipOffHand(LivingEntity ent, ItemStack item) {
+        if (ent != null) {
             ent.setItemInHand(InteractionHand.OFF_HAND, item);
         }
     }
 
-    public static void equipOffHandByString(LivingEntity ent, String item){
+    public static void equipOffHandByString(LivingEntity ent, String item) {
         equipOffHand(ent, locateItem(item));
     }
 
@@ -46,6 +46,6 @@ public class EquipUtils {
     }
 
     public static void equipArmorSetByString(LivingEntity ent, String head, String chest, String legs, String feet) {
-       equipArmorSet(ent, locateItem(head), locateItem(chest), locateItem(legs), locateItem(feet));
+        equipArmorSet(ent, locateItem(head), locateItem(chest), locateItem(legs), locateItem(feet));
     }
 }

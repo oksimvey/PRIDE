@@ -6,22 +6,22 @@ import net.minecraft.world.entity.player.Player;
 
 public class ProgressionUtils {
 
-    public static int getLoadPercentage(LivingEntity ent){
+    public static int getLoadPercentage(LivingEntity ent) {
         int load = 0;
-        if (ent != null){
+        if (ent != null) {
             load = Math.round(((AttributeUtils.getAttributeValue(ent, "epicfight:weight") - 40) / (AttributeUtils.getAttributeValue(ent, "pride:max_weight"))) * 100);
         }
         return load;
     }
 
-    public static int getTotalLevel(CompoundTag tag){
+    public static int getTotalLevel(CompoundTag tag) {
         return (tag.getInt("StrengthLvl") + tag.getInt("DexterityLvl") + tag.getInt("VigorLvl") + tag.getInt("EnduranceLvl") + tag.getInt("MindLvl")) / 5;
     }
 
     public static void addXp(Player player, String stat, int amount) {
         if (player != null) {
             CompoundTag variables = player.getPersistentData();
-            int [] newvariables;
+            int[] newvariables;
             switch (stat) {
                 case "Strength" -> {
                     newvariables = addXpBase(variables.getInt("StrengthLvl"), variables.getInt("StrengthXp"), variables.getInt("StrengthMaxXp"), amount);
@@ -56,6 +56,7 @@ public class ProgressionUtils {
             }
         }
     }
+
     public static int[] addXpBase(int lvl, int xp, int maxxp, int amount) {
         xp = xp + amount;
         if (xp >= maxxp) {
@@ -71,7 +72,7 @@ public class ProgressionUtils {
         return new int[]{lvl, xp, maxxp};
     }
 
-    public static int setMaxXp(int lvl){
+    public static int setMaxXp(int lvl) {
         return (int) Math.round(100 * Math.pow(1.05, (lvl - 1)));
     }
 }

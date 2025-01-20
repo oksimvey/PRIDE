@@ -14,9 +14,9 @@ public class ManaUtils {
         return 0;
     }
 
-    public static void setMana(LivingEntity ent, float amount){
-        if (ent != null){
-            if (MagicData.getPlayerMagicData(ent) != null){
+    public static void setMana(LivingEntity ent, float amount) {
+        if (ent != null) {
+            if (MagicData.getPlayerMagicData(ent) != null) {
                 MagicData.getPlayerMagicData(ent).setMana(amount);
             }
         }

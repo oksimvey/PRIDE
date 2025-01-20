@@ -21,15 +21,15 @@ public class CameraUtils implements ITargetCameraOffsetCallback {
         }
     }
 
-    public static void lockCamera(LocalPlayer ent){
+    public static void lockCamera(LocalPlayer ent) {
         LocalPlayerPatch player = EpicFightCapabilities.getEntityPatch(ent, LocalPlayerPatch.class);
         if (player != null) {
             player.setLockOn(true);
         }
     }
 
-    public static void putonFirstPerson(Entity ent, byte duration){
+    public static void putonFirstPerson(Entity ent, byte duration) {
         Minecraft.getInstance().options.setCameraType(CameraType.FIRST_PERSON);
-        TimerUtil.schedule(()->   Minecraft.getInstance().options.setCameraType(CameraType.THIRD_PERSON_BACK), duration+1, TimeUnit.SECONDS);
+        TimerUtil.schedule(() -> Minecraft.getInstance().options.setCameraType(CameraType.THIRD_PERSON_BACK), duration + 1, TimeUnit.SECONDS);
     }
 }

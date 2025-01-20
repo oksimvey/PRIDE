@@ -56,17 +56,17 @@ public class KeyActionPacket {
             OnLeftClick.onLClick(player);
         }
 
-        if (packet.action.equals("swaphand")){
+        if (packet.action.equals("swaphand")) {
             onFPress.swapHand(player);
         }
 
         if (packet.action.equals("dodge")) {
             if (!(player.getPersistentData().getBoolean("isDodging")))
-           onQPress.checkDodgeType(player);
+                onQPress.checkDodgeType(player);
         }
 
         if (packet.action.equals("jump")) {
-                onSpacePress.onPress(player);
+            onSpacePress.onPress(player);
         }
 
         if (packet.action.equals("recharge")) {

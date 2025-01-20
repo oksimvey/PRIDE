@@ -14,8 +14,8 @@ public class LongSwordWeaponSkill extends WeaponSkillBase {
     @Override
     public void twohandExecute(LivingEntity ent) {
         if (ent != null) {
-                AnimUtils.playAnimByString(ent, "epicfight:biped/combat/tachi_dash", 0);
-                PerilousAttack.setPerilous(ent, "pierce_two_hand", 1500);
+            AnimUtils.playAnimByString(ent, "epicfight:biped/combat/tachi_dash", 0);
+            PerilousAttack.setPerilous(ent, "pierce_two_hand", 1500);
         }
     }
 }

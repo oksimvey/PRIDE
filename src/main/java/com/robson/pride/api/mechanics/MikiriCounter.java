@@ -1,8 +1,10 @@
 package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.utils.*;
+import com.robson.pride.entities.special.Shooter;
 import com.robson.pride.registries.AnimationsRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
+import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.entity.spells.ExtendedWitherSkull;
 import io.redspace.ironsspellbooks.entity.spells.acid_orb.AcidOrb;
@@ -22,7 +24,6 @@ import io.redspace.ironsspellbooks.entity.spells.wisp.WispEntity;
 import io.redspace.ironsspellbooks.spells.fire.HeatSurgeSpell;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
@@ -33,20 +34,20 @@ import java.util.concurrent.TimeUnit;
 
 public class MikiriCounter {
 
-    public static void setMikiri(Entity ent, String MikiriType,int delay, int window){
-        TimerUtil.schedule(()->{
-            if(MikiriType.equals("Dodge")){
+    public static void setMikiri(Entity ent, String MikiriType, int delay, int window) {
+        TimerUtil.schedule(() -> {
+            if (MikiriType.equals("Dodge")) {
                 ent.getPersistentData().putBoolean("mikiri_dodge", true);
             }
-            if(MikiriType.equals("Jump")){
+            if (MikiriType.equals("Jump")) {
                 ent.getPersistentData().putBoolean("mikiri_sweep", true);
             }
         }, delay, TimeUnit.MILLISECONDS);
-        TimerUtil.schedule(()->{
-            if(MikiriType.equals("Dodge")){
+        TimerUtil.schedule(() -> {
+            if (MikiriType.equals("Dodge")) {
                 ent.getPersistentData().putBoolean("mikiri_dodge", false);
             }
-            if(MikiriType.equals("Jump")){
+            if (MikiriType.equals("Jump")) {
                 ent.getPersistentData().putBoolean("mikiri_sweep", false);
             }
         }, window, TimeUnit.MILLISECONDS);
@@ -57,16 +58,15 @@ public class MikiriCounter {
         if (ent instanceof Player) {
             CameraUtils.lockCamera(Minecraft.getInstance().player);
         }
-        if (ddmgent instanceof Player){
+        if (ddmgent instanceof Player) {
             animation = "pride:biped/skill/perilous_";
-        }
-        else animation = "pride:biped/skill/mob_perilous_";
+        } else animation = "pride:biped/skill/mob_perilous_";
         AnimUtils.cancelMotion(ddmgent);
         AnimUtils.rotateToEntity(ddmgent, ent);
         TimerUtil.schedule(() -> AnimUtils.rotateToEntity(ddmgent, ent), 125, TimeUnit.MILLISECONDS);
         TeleportUtils.teleportEntityToEntityJoint(ent, ddmgent, Armatures.BIPED.toolR, 0, 0, ddmgent.getBbHeight() * 0.25);
         AnimUtils.playAnimByString(ent, "pride:biped/skill/mikiri_step", 0);
-        TimerUtil.schedule(()->ent.setPos(ent.getX(), ddmgent.getY(), ent.getZ()), 15, TimeUnit.MILLISECONDS);
+        TimerUtil.schedule(() -> ent.setPos(ent.getX(), ddmgent.getY(), ent.getZ()), 15, TimeUnit.MILLISECONDS);
         TimerUtil.schedule(() -> AnimUtils.playAnimByString(ddmgent, animation + pierce_type, 0), 50, TimeUnit.MILLISECONDS);
         TimerUtil.schedule(() -> {
             StaminaUtils.consumeStamina(ddmgent, 9);
@@ -74,49 +74,46 @@ public class MikiriCounter {
         }, 150, TimeUnit.MILLISECONDS);
     }
 
-    public static void onSweepMikiri(Entity ent, Entity ddmgent){
+    public static void onSweepMikiri(Entity ent, Entity ddmgent) {
         ent.setInvulnerable(true);
         AnimUtils.playAnimByString(ent, "pride:biped/skill/mikiri_jump", 0f);
-        TimerUtil.schedule(()-> StaminaUtils.consumeStamina(ddmgent, 6), 500, TimeUnit.MILLISECONDS);
-        TimerUtil.schedule(()->ent.setInvulnerable(false), 1000, TimeUnit.MILLISECONDS);
+        TimerUtil.schedule(() -> StaminaUtils.consumeStamina(ddmgent, 6), 500, TimeUnit.MILLISECONDS);
+        TimerUtil.schedule(() -> ent.setInvulnerable(false), 1000, TimeUnit.MILLISECONDS);
     }
 
-    public static void onArrowMikiri(Entity ent, Projectile projectile, LivingAttackEvent event){
-    event.setCanceled(true);
-    projectile.remove(Entity.RemovalReason.DISCARDED);
-    AnimUtils.playAnim(ent, AnimationsRegister.PROJECTILE_COUNTER, 0);
-    Entity projectile1 = projectile.getType().create(ent.level());
-        ent.level().addFreshEntity(projectile1);
-        projectile1.setPos(ent.getLookAngle().add(0, ent.getBbHeight(), 0).add(ent.position()));
-        projectile1.noPhysics = true;
-        projectile1.verticalCollisionBelow = false;
-        teleportProjectileToEntityHand(ent, projectile1);
-        TimerUtil.schedule(()-> {
-            projectile1.remove(Entity.RemovalReason.DISCARDED);
-    ProjectileUtil.shootProjectileFromEnt((Projectile) projectile.getType().create(ent.level()),ent, (float) MathUtils.getTotalDistance(projectile.getDeltaMovement().x, projectile.getDeltaMovement().y, projectile.getDeltaMovement().z));
-    }, 1000, TimeUnit.MILLISECONDS);
+    public static void onArrowMikiri(Entity ent, Projectile projectile, LivingAttackEvent event) {
+        event.setCanceled(true);
+        projectile.teleportTo(0, 999999999, 0);
+        Entity target = TargetUtil.getTarget(ent);
+        if (target != null) {
+            Shooter shooter = Shooter.summonShooter(ent, target, false);
+            TimerUtil.schedule(() -> ProjectileUtil.shootProjectileFromShooter(shooter, projectile, ent, 3, false), 450, TimeUnit.MILLISECONDS);
+        } else
+            TimerUtil.schedule(() -> ProjectileUtil.shootProjectileFromEnt(projectile, ent, 3), 450, TimeUnit.MILLISECONDS);
+        AnimUtils.playAnim(ent, AnimationsRegister.PROJECTILE_COUNTER, 0);
     }
 
-    public static void onSpellMikiri(SpellDamageEvent event){
-       if (event != null && event.getSpellDamageSource().spell() != null && event.getEntity() != null){
-           event.getSpellDamageSource().getDirectEntity().remove(Entity.RemovalReason.DISCARDED);
-           AnimUtils.playAnim(event.getEntity(), AnimationsRegister.PROJECTILE_COUNTER, 0);
-          TimerUtil.schedule(()-> SpellUtils.castSpell(event.getEntity(), event.getSpellDamageSource().spell(), 3, 0), 500,TimeUnit.MILLISECONDS);
-           event.setCanceled(true);
-       }
+    public static void onSpellMikiri(SpellDamageEvent event) {
+        if (event != null && event.getSpellDamageSource().spell() != null && event.getEntity() != null) {
+            AbstractSpell spell = event.getSpellDamageSource().spell();
+
+            AnimUtils.playAnim(event.getEntity(), AnimationsRegister.PROJECTILE_COUNTER, 0);
+            TimerUtil.schedule(() -> SpellUtils.castSpell(event.getEntity(), SpellRegistry.getSpell(spell.getSpellId()), 3, 0), 450, TimeUnit.MILLISECONDS);
+            event.setCanceled(true);
+        }
     }
 
-    public static void teleportProjectileToEntityHand(Entity owner, Entity projectile){
-        if (owner != null && projectile != null){
-            Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, owner, Armatures.BIPED.toolL);
-            if (vec3 != null){
-                projectile.teleportTo(vec3.x, vec3.y, vec3.z);
-                TimerUtil.schedule(()->teleportProjectileToEntityHand(owner, projectile), 50, TimeUnit.MILLISECONDS);
+    public static void teleportProjectileToEntityHand(Entity owner, Entity projectile) {
+        if (owner != null && projectile != null) {
+            Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, owner, Armatures.BIPED.handL);
+            if (vec3 != null) {
+                projectile.setPos(vec3.x, vec3.y, vec3.z);
+                TimerUtil.schedule(() -> teleportProjectileToEntityHand(owner, projectile), 50, TimeUnit.MILLISECONDS);
             }
         }
     }
 
-    public static boolean isDodgeCounterableSpell(Entity spell){
+    public static boolean isDodgeCounterableSpell(Entity spell) {
         return spell instanceof ExtendedWitherSkull ||
                 spell instanceof MagicArrowProjectile ||
                 spell instanceof MagicMissileProjectile ||
@@ -134,7 +131,7 @@ public class MikiriCounter {
                 spell instanceof PoisonArrow;
     }
 
-    public static boolean isJumpCounterableSpell(AbstractSpell spell){
+    public static boolean isJumpCounterableSpell(AbstractSpell spell) {
         return spell instanceof HeatSurgeSpell;
     }
 }

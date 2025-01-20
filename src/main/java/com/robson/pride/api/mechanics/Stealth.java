@@ -9,13 +9,13 @@ public class Stealth {
 
     public static void renderCriticalParticle(LocalPlayer player, Entity target) {
         if (player != null && target != null) {
-            if (canBackStab(player, target) || target.getPersistentData().getBoolean("isVulnerable")){
+            if (canBackStab(player, target) || target.getPersistentData().getBoolean("isVulnerable")) {
                 player.level().addParticle(ParticleRegister.VULNERABLE.get(), target.getX(), target.getY() + target.getBbHeight() * 1.25, target.getZ(), 0, 0, 0);
             }
         }
     }
 
-    public static boolean canBackStab(Entity ent, Entity target){
+    public static boolean canBackStab(Entity ent, Entity target) {
         if (ent != null && target != null) {
             if (TargetUtil.getTarget(target) == null) {
                 return false;

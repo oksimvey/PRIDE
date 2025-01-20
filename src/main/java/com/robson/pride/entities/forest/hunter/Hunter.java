@@ -18,7 +18,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 
 import javax.annotation.Nullable;
 
-public class Hunter  extends Monster {
+public class Hunter extends Monster {
 
     public Hunter(EntityType<? extends Hunter> type, Level world) {
         super(type, world);

@@ -1,4 +1,5 @@
 package com.robson.pride.entities.special;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -18,7 +19,7 @@ public class CloneEntityRenderer extends HumanoidMobRenderer<CloneEntity, Humano
 
     @Override
     public ResourceLocation getTextureLocation(CloneEntity entity) {
-            AbstractClientPlayer player = Minecraft.getInstance().player;
-                return player.getSkinTextureLocation();
+        AbstractClientPlayer player = Minecraft.getInstance().player;
+        return player.getSkinTextureLocation();
     }
 }

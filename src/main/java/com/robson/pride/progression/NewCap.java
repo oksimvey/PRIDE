@@ -6,7 +6,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class NewCap {
 
-    public static void setupVariables(CompoundTag oldtag, CompoundTag newtag){
+    public static void setupVariables(CompoundTag oldtag, CompoundTag newtag) {
         newtag.putInt("StrengthLvl", oldtag.getInt("StrengthLvl"));
         newtag.putInt("DexterityLvl", oldtag.getInt("DexterityLvl"));
         newtag.putInt("VigorLvl", oldtag.getInt("VigorLvl"));
@@ -24,7 +24,8 @@ public class NewCap {
         newtag.putInt("MindMaxXp", oldtag.getInt("MindMaxXp"));
         newtag.putString("Element", oldtag.getString("Element"));
     }
-    public static void startVariables(Player player, CompoundTag newtag){
+
+    public static void startVariables(Player player, CompoundTag newtag) {
         newtag.putInt("StrengthLvl", 1);
         newtag.putInt("DexterityLvl", 1);
         newtag.putInt("VigorLvl", 1);
@@ -43,21 +44,21 @@ public class NewCap {
         ElementalUtils.rollElement(player);
     }
 
-    public static boolean haveVariables(CompoundTag tag){
+    public static boolean haveVariables(CompoundTag tag) {
         return tag.getInt("StrengthLvl") != 0 &&
-                tag.getInt("DexterityLvl")!= 0  &&
+                tag.getInt("DexterityLvl") != 0 &&
                 tag.getInt("VigorLvl") != 0 &&
                 tag.getInt("EnduranceLvl") != 0 &&
                 tag.getInt("MindLvl") != 0 &&
                 tag.getInt("StrengthMaxXp") != 0 &&
-                tag.getInt("DexterityMaxXp")!= 0  &&
-                tag.getInt("VigorMaxXp")!= 0  &&
-                tag.getInt("EnduranceMaxXp")!= 0  &&
+                tag.getInt("DexterityMaxXp") != 0 &&
+                tag.getInt("VigorMaxXp") != 0 &&
+                tag.getInt("EnduranceMaxXp") != 0 &&
                 tag.getInt("MindMaxXp") != 0 &&
                 hasElement(tag.getString("Element"));
     }
 
-    public static boolean hasElement(String element){
+    public static boolean hasElement(String element) {
         return element.equals("Darkness") ||
                 element.equals("Light") ||
                 element.equals("Thunder") ||

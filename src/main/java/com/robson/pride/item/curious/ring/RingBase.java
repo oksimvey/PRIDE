@@ -49,9 +49,10 @@ public class RingBase extends Item {
         return super.getName(stack).copy().withStyle(ChatFormatting.LIGHT_PURPLE);
     }
 
-    public void tickCurio(String identifier, int index, LivingEntity livingEntity){}
+    public void tickCurio(String identifier, int index, LivingEntity livingEntity) {
+    }
 
-    public Multimap<Attribute, AttributeModifier> curioModifiers(ItemStack stack, String identifier){
+    public Multimap<Attribute, AttributeModifier> curioModifiers(ItemStack stack, String identifier) {
         return HashMultimap.create();
     }
 
@@ -70,15 +71,17 @@ public class RingBase extends Item {
         return false;
     }
 
-    public void onEquippedCurio(String identifier, LivingEntity livingEntity){}
+    public void onEquippedCurio(String identifier, LivingEntity livingEntity) {
+    }
 
-    public void onUnequippedCurio(String identifier, LivingEntity livingEntity){}
+    public void onUnequippedCurio(String identifier, LivingEntity livingEntity) {
+    }
 
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new ICapabilityProvider() {
-            private final LazyOptional<ICurio> lazyCurio = LazyOptional.of(()-> new ICurio() {
+            private final LazyOptional<ICurio> lazyCurio = LazyOptional.of(() -> new ICurio() {
 
                 @Override
                 public ItemStack getStack() {
@@ -87,7 +90,7 @@ public class RingBase extends Item {
 
                 @Override
                 public void curioTick(SlotContext slotContext) {
-                    if(!slotContext.cosmetic())
+                    if (!slotContext.cosmetic())
                         tickCurio(slotContext.identifier(), slotContext.index(), slotContext.entity());
                 }
 
@@ -99,7 +102,7 @@ public class RingBase extends Item {
 
                 @Override
                 public void onEquip(SlotContext slotContext, ItemStack prevStack) {
-                    if(!slotContext.cosmetic())
+                    if (!slotContext.cosmetic())
                         onEquippedCurio(slotContext.identifier(), slotContext.entity());
                 }
 
@@ -111,7 +114,7 @@ public class RingBase extends Item {
 
                 @Override
                 public void onUnequip(SlotContext slotContext, ItemStack newStack) {
-                    if(!slotContext.cosmetic())
+                    if (!slotContext.cosmetic())
                         onUnequippedCurio(slotContext.identifier(), slotContext.entity());
                 }
 
@@ -162,7 +165,7 @@ public class RingBase extends Item {
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        if(this.tooltip == null) return;
+        if (this.tooltip == null) return;
 
         tooltip.add(Component.literal(""));
         tooltip.add(Component.literal(ChatFormatting.GRAY + Component.translatable("tooltip.ringsofascension.worn").getString()));
@@ -179,7 +182,7 @@ public class RingBase extends Item {
     private static Component changeColors(Component component, TextColor from, TextColor to) {
         MutableComponent mutable = component.copy();
 
-        if(Objects.equals(mutable.getStyle().getColor(), from))
+        if (Objects.equals(mutable.getStyle().getColor(), from))
             mutable.setStyle(mutable.getStyle().withColor(to));
 
         mutable.getSiblings().replaceAll(component1 -> changeColors(component1, from, to));

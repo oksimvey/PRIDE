@@ -7,12 +7,17 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.robson.pride.api.utils.ProjectileUtil;
+import com.robson.pride.api.utils.TargetUtil;
+import com.robson.pride.api.utils.TimerUtil;
+import com.robson.pride.entities.special.Shooter;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.Projectile;
+
+import java.util.concurrent.TimeUnit;
 
 public class ShootProjectileCommand implements Command<CommandSourceStack> {
     private static final ShootProjectileCommand COMMAND = new ShootProjectileCommand();
@@ -26,7 +31,7 @@ public class ShootProjectileCommand implements Command<CommandSourceStack> {
                             return suggestionsBuilder.buildFuture();
                         }))
                         .then(Commands.argument("speed", FloatArgumentType.floatArg())
-                        .executes(COMMAND)));
+                                .executes(COMMAND)));
     }
 
     @Override
@@ -34,22 +39,24 @@ public class ShootProjectileCommand implements Command<CommandSourceStack> {
         Entity ent = EntityArgument.getEntity(context, "living_entity");
         String projectile = StringArgumentType.getString(context, "projectile");
         float speed = FloatArgumentType.getFloat(context, "speed");
-        Projectile projectile1 = null;
-        switch (projectile){
-            case "arrow" -> projectile1 = EntityType.ARROW.create(ent.level());
-            case "cannon" -> {
-                EntityType<?> entitytype = EntityType.byString("smallships:cannon_ball").orElse(null);
-                if (entitytype != null){
-                    if (entitytype.create(ent.level()) instanceof Projectile pos){
-                        projectile1 = pos;
-                    }
-                }
-            }
-        }
-        if (projectile1 != null) {
-            ProjectileUtil.shootProjectileFromEnt(projectile1, ent, speed);
+        if (projectile.equals("arrow")) {
+            shoot(ent, EntityType.ARROW.create(ent.level()), speed);
+        } else if (projectile.equals("cannon")) {
+            shoot(ent, (Projectile) EntityType.byString("smallships:cannon_ball").orElse(null).create(ent.level()), speed);
+
         }
         return 1;
+    }
+
+    public void shoot(Entity ent, Projectile projectile, float speed) {
+        if (ent != null && projectile != null) {
+            Entity entity = TargetUtil.getTarget(ent);
+            if (entity != null && ent.getVehicle() != null) {
+                Shooter shooter = Shooter.summonShooter(ent, entity, false);
+                TimerUtil.schedule(() -> ProjectileUtil.shootProjectileFromShooter(shooter, projectile, ent, speed, true), 75, TimeUnit.MILLISECONDS);
+            }
+            ProjectileUtil.shootProjectileFromEnt(projectile, ent, speed);
+        }
     }
 }
 

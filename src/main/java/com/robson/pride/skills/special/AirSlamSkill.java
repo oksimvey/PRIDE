@@ -36,22 +36,22 @@ public class AirSlamSkill extends WeaponSkillBase {
     }
 
     @Override
-    public void onehandExecute(LivingEntity ent){
-        if (ent != null){
+    public void onehandExecute(LivingEntity ent) {
+        if (ent != null) {
             ent.getPersistentData().putBoolean("Airslam", true);
-            TimerUtil.schedule(()-> ent.getPersistentData().putBoolean("Airslam", false), 1000, TimeUnit.MILLISECONDS);
+            TimerUtil.schedule(() -> ent.getPersistentData().putBoolean("Airslam", false), 1000, TimeUnit.MILLISECONDS);
             AnimUtils.playAnim(ent, Animations.VINDICATOR_SWING_AXE3, 0);
         }
     }
 
-    public static void onAirSlamDMG(Entity dmgent, Entity target){
-        if (dmgent != null && target != null){
+    public static void onAirSlamDMG(Entity dmgent, Entity target) {
+        if (dmgent != null && target != null) {
             AnimUtils.playAnim(target, Animations.BIPED_KNOCKDOWN, 0);
-            TimerUtil.schedule(()->breakGround(dmgent), 300, TimeUnit.MILLISECONDS);
+            TimerUtil.schedule(() -> breakGround(dmgent), 300, TimeUnit.MILLISECONDS);
         }
     }
 
-    public static void breakGround(Entity ent){
+    public static void breakGround(Entity ent) {
         LivingEntityPatch entitypatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
         if (entitypatch != null) {
             Vec3 position = ((LivingEntity) entitypatch.getOriginal()).position();

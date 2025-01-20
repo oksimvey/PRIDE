@@ -16,13 +16,13 @@ public class WetEffect extends MobEffect {
     public WetEffect() {
         super(MobEffectCategory.HARMFUL, 0x56CBFD);
         this.addAttributeModifier(Attributes.MOVEMENT_SPEED, WetEffect.MOVEMENT_SPEED_MODIFIER_UUID.toString(), -0.10, AttributeModifier.Operation.MULTIPLY_TOTAL);
-   }
+    }
 
     @Override
     public void applyEffectTick(LivingEntity living, int amplifier) {
-             double radius = living.getBbWidth() / 4;
-             ParticleUtils.spawnParticleRelativeToEntity(ParticleTypes.FALLING_WATER, living, -radius + Math.random() * (radius + radius), (-living.getBbHeight() * 0.5) + Math.random() * ((living.getBbHeight())), -radius + Math.random() * (radius + radius), 1, 0, -0.5, 0, 0.25);
-             living.clearFire();
+        double radius = living.getBbWidth() / 4;
+        ParticleUtils.spawnParticleRelativeToEntity(ParticleTypes.FALLING_WATER, living, -radius + Math.random() * (radius + radius), (-living.getBbHeight() * 0.5) + Math.random() * ((living.getBbHeight())), -radius + Math.random() * (radius + radius), 1, 0, -0.5, 0, 0.25);
+        living.clearFire();
     }
 
     @Override

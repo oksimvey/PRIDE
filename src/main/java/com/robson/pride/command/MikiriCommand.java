@@ -29,7 +29,7 @@ public class MikiriCommand implements Command<CommandSourceStack> {
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         Entity ent = EntityArgument.getEntity(context, "living_entity");
-        String mikiritype =  StringArgumentType.getString(context, "mikiritype");
+        String mikiritype = StringArgumentType.getString(context, "mikiritype");
         int window = IntegerArgumentType.getInteger(context, "window");
         MikiriCounter.setMikiri(ent, mikiritype, 0, window);
         return 1;

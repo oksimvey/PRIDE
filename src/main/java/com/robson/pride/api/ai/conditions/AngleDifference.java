@@ -77,8 +77,8 @@ public class AngleDifference extends Condition.EntityPatchCondition {
 
     @OnlyIn(Dist.CLIENT)
     public List<ParameterEditor> getAcceptingParameters(Screen screen) {
-        ResizableEditBox editbox = new ResizableEditBox(screen.getMinecraft().font, 0, 0, 0, 0, Component.literal("Don't use this"), (ResizableComponent.HorizontalSizing)null, (ResizableComponent.VerticalSizing)null);
-        AbstractWidget comboBox = new ComboBox(screen, screen.getMinecraft().font, 0, 0, 0, 0, (ResizableComponent.HorizontalSizing)null, (ResizableComponent.VerticalSizing)null, 4, Component.literal("in here"), List.of(HealthPoint.Comparator.values()), ParseUtil::snakeToSpacedCamel, (Consumer)null);
+        ResizableEditBox editbox = new ResizableEditBox(screen.getMinecraft().font, 0, 0, 0, 0, Component.literal("Don't use this"), (ResizableComponent.HorizontalSizing) null, (ResizableComponent.VerticalSizing) null);
+        AbstractWidget comboBox = new ComboBox(screen, screen.getMinecraft().font, 0, 0, 0, 0, (ResizableComponent.HorizontalSizing) null, (ResizableComponent.VerticalSizing) null, 4, Component.literal("in here"), List.of(HealthPoint.Comparator.values()), ParseUtil::snakeToSpacedCamel, (Consumer) null);
         editbox.setFilter((context) -> {
             return StringUtil.isNullOrEmpty(context) || ParseUtil.isParsable(context, Float::parseFloat);
         });

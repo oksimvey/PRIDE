@@ -15,8 +15,8 @@ import net.minecraftforge.fml.common.Mod;
 public class AttributeModification {
 
     @SubscribeEvent
-    public static void onAttributeModification(LivingEquipmentChangeEvent event){
-        if (event.getEntity() != null){
+    public static void onAttributeModification(LivingEquipmentChangeEvent event) {
+        if (event.getEntity() != null) {
             LivingEntity ent = event.getEntity();
             AttributeUtils.addModifier(ent, "epicfight:weight", "6a2101e2-db3a-4667-a13a-e392f422d2e9", ItemStackUtils.getWeaponWeight(ent, InteractionHand.MAIN_HAND, EquipmentSlot.MAINHAND), AttributeModifier.Operation.ADDITION);
             AttributeUtils.addModifier(ent, "epicfight:weight", "b4c793f6-b421-43cb-81e8-754fdfe278e4", ItemStackUtils.getWeaponWeight(ent, InteractionHand.OFF_HAND, EquipmentSlot.OFFHAND), AttributeModifier.Operation.ADDITION);

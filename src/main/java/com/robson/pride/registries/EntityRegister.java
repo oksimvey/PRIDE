@@ -1,10 +1,12 @@
 package com.robson.pride.registries;
 
 import com.robson.pride.entities.forest.hunter.Hunter;
+import com.robson.pride.entities.forest.magmamonster.MagmaMonster;
 import com.robson.pride.entities.pre_hardmode.japanese.boss.shogun.Shogun;
 import com.robson.pride.entities.pre_hardmode.japanese.mob.ronin.Ronin;
 import com.robson.pride.entities.pre_hardmode.knight.mob.eliteknight.EliteKnight;
 import com.robson.pride.entities.special.CloneEntity;
+import com.robson.pride.entities.special.Shooter;
 import com.robson.pride.main.Pride;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -25,8 +27,10 @@ public class EntityRegister {
     public static final RegistryObject<EntityType<Ronin>> RONIN = make(new ResourceLocation("ronin"), Ronin::new, MobCategory.MONSTER, 0.8F, 2.25F);
     public static final RegistryObject<EntityType<Shogun>> SHOGUN = make(new ResourceLocation("shogun"), Shogun::new, MobCategory.MONSTER, 1, 2.5F);
     public static final RegistryObject<EntityType<EliteKnight>> ELITE_KNIGHT = make(new ResourceLocation("elite_knight"), EliteKnight::new, MobCategory.MONSTER, 0.9F, 2.25f);
-    public static final RegistryObject<EntityType<CloneEntity>> CLONE_ENTITY = make(new ResourceLocation("clone_entity"),  CloneEntity::new, MobCategory.MONSTER, 0.8f, 1.8f);
+    public static final RegistryObject<EntityType<CloneEntity>> CLONE_ENTITY = make(new ResourceLocation("clone_entity"), CloneEntity::new, MobCategory.MONSTER, 0.8f, 1.8f);
     public static final RegistryObject<EntityType<Hunter>> HUNTER = make(new ResourceLocation("hunter"), Hunter::new, MobCategory.MONSTER, 0.8f, 1.8f);
+    public static final RegistryObject<EntityType<Shooter>> SHOOTER = make(new ResourceLocation("shooter"), Shooter::new, MobCategory.MONSTER, 0.25f, 0.25f);
+    public static final RegistryObject<EntityType<MagmaMonster>> MAGMA_MONSTER = make(new ResourceLocation("magma_monster"), MagmaMonster::new, MobCategory.MONSTER, 1, 2.5f);
 
     private static <E extends Entity> RegistryObject<EntityType<E>> make(ResourceLocation id, EntityType.EntityFactory<E> factory, MobCategory classification, float width, float height) {
         return make(id, factory, classification, width, height, false);
@@ -58,5 +62,7 @@ public class EntityRegister {
         event.put(ELITE_KNIGHT.get(), EliteKnight.registerAttributes().build());
         event.put(CLONE_ENTITY.get(), CloneEntity.registerAttributes().build());
         event.put(HUNTER.get(), Hunter.registerAttributes().build());
-      }
+        event.put(MAGMA_MONSTER.get(), MagmaMonster.registerAttributes().build());
+        event.put(SHOOTER.get(), Shooter.registerAttributes().build());
+    }
 }

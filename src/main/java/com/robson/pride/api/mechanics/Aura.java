@@ -1,6 +1,5 @@
 package com.robson.pride.api.mechanics;
 
-import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.KeyRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
@@ -29,7 +28,7 @@ public class Aura {
         if (ent != null) {
             for (int i = 0; i < radius; i++) {
                 ParticleUtils.spawnParticleRelativeToEntity(ParticleRegistry.DRAGON_FIRE_PARTICLE.get(), ent, -radius + Math.random() * (radius + radius), (-radius * 0.5) + Math.random() * ((radius * 1.5) - (-radius * 0.5)), -radius + Math.random() * (radius + radius), 1, 0, 0, 0, 0.1);
-           }
+            }
             if (!ent.getPersistentData().getBoolean("chargeanim")) {
                 AnimUtils.playAnim(ent, AnimationsRegister.RECHARGE, 0.1f);
                 ent.getPersistentData().putBoolean("chargeanim", true);

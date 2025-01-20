@@ -14,33 +14,33 @@ public class SkillCore {
 
     public static void onSkillExecute(LivingEntity ent) {
         if (ent != null) {
-            if (ent.getMainHandItem().getTag().getBoolean("hasweaponart")){
-                weaponArtCore(ent,  ent.getMainHandItem().getTag().getString("weapon_art"));
-            }
-            else defaultSkillCore(ent, ent.getMainHandItem());
+            if (ent.getMainHandItem().getTag().getBoolean("hasweaponart")) {
+                weaponArtCore(ent, ent.getMainHandItem().getTag().getString("weapon_art"));
+            } else defaultSkillCore(ent, ent.getMainHandItem());
         }
     }
 
-    public static void defaultSkillCore(LivingEntity ent, ItemStack weapon){
+    public static void defaultSkillCore(LivingEntity ent, ItemStack weapon) {
         CapabilityItem itemcap = EpicFightCapabilities.getItemStackCapability(weapon);
-        if (itemcap != null){
-            if (itemcap.getWeaponCategory() instanceof WeaponCategoriesEnum categoriesEnum){
+        if (itemcap != null) {
+            if (itemcap.getWeaponCategory() instanceof WeaponCategoriesEnum categoriesEnum) {
                 categoriesEnum.skill().tryToExecute(ent);
             }
         }
     }
 
-    public static void weaponArtCore(LivingEntity ent, String weaponart){
+    public static void weaponArtCore(LivingEntity ent, String weaponart) {
         WeaponArtRegister.valueOf(weaponart).skill().tryToExecute(ent);
     }
 
     public interface WeaponSkill extends ExtendableEnum {
         ExtendableEnumManager<WeaponSkill> ENUM_MANAGER = new ExtendableEnumManager<>("weapon_skill");
+
         WeaponSkillBase skill();
     }
 
-    public static boolean canHit(Entity dmgent, Entity target, String skillname, int skillid){
-        if (dmgent != null && target != null){
+    public static boolean canHit(Entity dmgent, Entity target, String skillname, int skillid) {
+        if (dmgent != null && target != null) {
             return target instanceof LivingEntity && !DamageSources.isFriendlyFireBetween(target, dmgent) && target != dmgent && target.getPersistentData().getInt(skillname) != skillid;
         }
         return false;

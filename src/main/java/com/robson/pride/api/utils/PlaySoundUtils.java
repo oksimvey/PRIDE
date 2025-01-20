@@ -10,7 +10,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class PlaySoundUtils {
 
-    public static void playSound(Entity ent, SoundEvent sound, float volume, float pitch){
+    public static void playSound(Entity ent, SoundEvent sound, float volume, float pitch) {
         if (ent != null) {
             if (!ent.level().isClientSide()) {
                 ServerLevel world = (ServerLevel) ent.level();
@@ -21,8 +21,8 @@ public class PlaySoundUtils {
         }
     }
 
-    public static void playSoundByString(Entity ent, String soundid, float volume, float pitch){
-        if (ent != null){
+    public static void playSoundByString(Entity ent, String soundid, float volume, float pitch) {
+        if (ent != null) {
             playSound(ent, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(soundid)), volume, pitch);
         }
     }

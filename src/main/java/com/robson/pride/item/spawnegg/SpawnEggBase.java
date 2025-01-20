@@ -31,10 +31,10 @@ public class SpawnEggBase extends Item {
             BlockState blockState = worldIn.getBlockState(pos);
             BlockPos spawnPos = blockState.getCollisionShape(worldIn, pos).isEmpty() ? pos : pos.relative(facing);
             EntityType<?> entity = getEntity(itemStack.getTag().getString("spawn_egg"));
-            if (entity != null){
+            if (entity != null) {
                 entity.create(worldIn);
                 entity.spawn((ServerLevel) worldIn, spawnPos, MobSpawnType.BUCKET);
-                 }
+            }
         }
         return InteractionResult.CONSUME;
     }
@@ -49,7 +49,7 @@ public class SpawnEggBase extends Item {
         Component defaultName = super.getName(stack);
         if (stack.hasTag() && stack.getTag().contains("spawn_egg")) {
             String spellName = stack.getTag().getString("spawn_egg");
-            return Component.literal( Component.translatable("entity.pride." + spellName.replace("pride:", "")).getString() +  " " + defaultName.getString());
+            return Component.literal(Component.translatable("entity.pride." + spellName.replace("pride:", "")).getString() + " " + defaultName.getString());
         }
 
         return defaultName;

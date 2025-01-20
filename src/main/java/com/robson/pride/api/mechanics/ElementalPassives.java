@@ -1,7 +1,6 @@
 package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.skillcore.SkillCore;
-import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.EffectRegister;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
@@ -99,13 +98,13 @@ public class ElementalPassives {
         }
     }
 
-    public static void chainThunder(Entity ent, Entity dmgent, float power, int id){
+    public static void chainThunder(Entity ent, Entity dmgent, float power, int id) {
         if (ent != null && dmgent != null) {
             AABB aabb = new AABB(ent.getX() - power, ent.getY() - power, ent.getZ() - power, ent.getX() + power, ent.getY() + power, ent.getZ() + power);
             List<Entity> listent = ent.level().getEntities(ent, aabb);
             for (Entity entko : listent) {
                 if (entko != null) {
-                    if (!ElementalUtils.isNotInWater(entko, new Vec3(entko.getX(), entko.getY(), entko.getZ())) && SkillCore.canHit(dmgent, entko, "zap_id", id) ) {
+                    if (!ElementalUtils.isNotInWater(entko, new Vec3(entko.getX(), entko.getY(), entko.getZ())) && SkillCore.canHit(dmgent, entko, "zap_id", id)) {
                         double x1 = ent.getX();
                         double y1 = ent.getY() + ent.getBbHeight() / 2;
                         double z1 = ent.getZ();
@@ -134,7 +133,7 @@ public class ElementalPassives {
         }
     }
 
-    public static void sunPassive(Entity ent, Entity dmgent, float power){
+    public static void sunPassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent != null) {
             PlaySoundUtils.playSound(ent, SoundRegistry.FIRE_CAST.get(), 1, 1);
             HealthUtils.hurtEntity(ent, ElementalUtils.getFinalValueForSunDMG(ent, power), dmgent.damageSources().inFire());
@@ -142,7 +141,7 @@ public class ElementalPassives {
         }
     }
 
-    public static void moonPassive(Entity ent, Entity dmgent, float power){
+    public static void moonPassive(Entity ent, Entity dmgent, float power) {
         if (ent instanceof LivingEntity living && dmgent != null) {
             PlaySoundUtils.playSound(ent, SoundRegistry.TELEKINESIS_LOOP.get(), 1, 1);
             int effectticks = (int) ElementalUtils.getFinalValueForMoonDMG(ent, power) * 20;
@@ -150,23 +149,23 @@ public class ElementalPassives {
         }
     }
 
-    public static void bloodPassive(Entity ent, Entity dmgent, float power){
+    public static void bloodPassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent != null) {
             PlaySoundUtils.playSound(ent, SoundRegistry.BLOOD_EXPLOSION.get(), 1, 1);
             if (stackablePassiveBase(ent, ElementalUtils.getFinalValueForBloodDMG(ent, power), "bleed_stacks")) {
-                HealthUtils.hurtEntity(ent, AttributeUtils.getAttributeValue(ent, "minecraft:generic.max_health")/10, dmgent.damageSources().generic());
+                HealthUtils.hurtEntity(ent, AttributeUtils.getAttributeValue(ent, "minecraft:generic.max_health") / 10, dmgent.damageSources().generic());
             }
         }
     }
 
-    public static void windPassive(Entity ent, Entity dmgent, float power){
+    public static void windPassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent != null) {
             PlaySoundUtils.playSound(ent, SoundRegistry.GUST_CAST.get(), 1, 1);
         }
     }
 
-    public static void naturePassive(Entity ent, Entity dmgent, float power){
-        if (ent != null && dmgent instanceof LivingEntity  living) {
+    public static void naturePassive(Entity ent, Entity dmgent, float power) {
+        if (ent != null && dmgent instanceof LivingEntity living) {
             PlaySoundUtils.playSound(ent, SoundRegistry.NATURE_CAST.get(), 1, 1);
             if (stackablePassiveBase(ent, ElementalUtils.getFinalValueForNatureDMG(ent, power), "root_stacks")) {
                 SpellUtils.castSpell(living, new RootSpell(), 10, 0);
@@ -195,15 +194,15 @@ public class ElementalPassives {
         }
     }
 
-    public static boolean stackablePassiveBase(Entity ent, float amounttoadd, String tag){
-        if (ent != null){
-                ent.getPersistentData().putByte(tag, (byte) (ent.getPersistentData().getByte(tag) + amounttoadd));
-                if (ent.getPersistentData().getByte(tag) >= 100) {
-                    ent.getPersistentData().putByte(tag, (byte) 0);
-                    ent.getPersistentData().putBoolean(tag, true);
-                    return true;
-                }
+    public static boolean stackablePassiveBase(Entity ent, float amounttoadd, String tag) {
+        if (ent != null) {
+            ent.getPersistentData().putByte(tag, (byte) (ent.getPersistentData().getByte(tag) + amounttoadd));
+            if (ent.getPersistentData().getByte(tag) >= 100) {
+                ent.getPersistentData().putByte(tag, (byte) 0);
+                ent.getPersistentData().putBoolean(tag, true);
+                return true;
             }
+        }
         return false;
     }
 }

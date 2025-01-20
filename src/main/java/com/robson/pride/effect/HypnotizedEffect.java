@@ -8,7 +8,7 @@ public class HypnotizedEffect extends MobEffect {
 
     public HypnotizedEffect() {
         super(MobEffectCategory.NEUTRAL, 0x57CDFD);
-       }
+    }
 
     @Override
     public void applyEffectTick(LivingEntity living, int amplifier) {

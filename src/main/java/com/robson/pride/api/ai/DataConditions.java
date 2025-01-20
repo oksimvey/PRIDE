@@ -20,14 +20,14 @@ public class DataConditions {
     }
 
     static {
-         TargetTargetEqualsSelf = CONDITIONS.register((new ResourceLocation("pride", "targetistargetingself")).getPath(), () -> {
+        TargetTargetEqualsSelf = CONDITIONS.register((new ResourceLocation("pride", "targetistargetingself")).getPath(), () -> {
             return IsTargetTargetSelf::new;
         });
-         AngleDiff = CONDITIONS.register((new ResourceLocation("pride", "angle_difference")).getPath(), () -> {
-             return AngleDifference::new;
-         });
-         TargetTryingPerilous = CONDITIONS.register((new ResourceLocation("pride", "targettryingperilous")).getPath(), () -> {
-             return TargetIsTryingPerilousAttack::new;
-         });
+        AngleDiff = CONDITIONS.register((new ResourceLocation("pride", "angle_difference")).getPath(), () -> {
+            return AngleDifference::new;
+        });
+        TargetTryingPerilous = CONDITIONS.register((new ResourceLocation("pride", "targettryingperilous")).getPath(), () -> {
+            return TargetIsTryingPerilousAttack::new;
+        });
     }
 }

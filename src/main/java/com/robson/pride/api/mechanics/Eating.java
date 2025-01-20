@@ -28,24 +28,25 @@ public class Eating {
             }
             if (itemStack != null) {
                 if (living instanceof Player player) {
-                } else ent.getPersistentData().putString("itemtoequip", String.valueOf(BuiltInRegistries.ITEM.getKey(itemStack.getItem())));
-                }
+                } else
+                    ent.getPersistentData().putString("itemtoequip", String.valueOf(BuiltInRegistries.ITEM.getKey(itemStack.getItem())));
             }
         }
+    }
 
 
     public static void mobEat(Entity ent, InteractionHand hand, float amount) {
         if (ent instanceof LivingEntity living) {
             if (hand == InteractionHand.MAIN_HAND) {
                 EquipUtils.equipMainHandByString(living, living.getPersistentData().getString("itemtoequip"));
-                TimerUtil.schedule(()->{
+                TimerUtil.schedule(() -> {
                     if (living != null) {
                         FoodProperties foodProperties = living.getMainHandItem().getItem().getFoodProperties();
                         if (foodProperties != null) {
                             living.heal(foodProperties.getNutrition());
                             for (var effectPair : foodProperties.getEffects()) {
                                 MobEffectInstance effectInstance = effectPair.getFirst();
-                               living.addEffect(new MobEffectInstance(
+                                living.addEffect(new MobEffectInstance(
                                         effectInstance.getEffect(),
                                         effectInstance.getDuration(),
                                         effectInstance.getAmplifier()
@@ -54,7 +55,7 @@ public class Eating {
                         }
                     }
                 }, 500, TimeUnit.MILLISECONDS);
-                TimerUtil.schedule(()->{
+                TimerUtil.schedule(() -> {
                     if (living != null) {
                         EquipUtils.equipMainHandByString(living, living.getPersistentData().getString("previous_item"));
                     }
@@ -62,9 +63,10 @@ public class Eating {
             }
             if (hand == InteractionHand.OFF_HAND) {
                 EquipUtils.equipOffHandByString(living, living.getPersistentData().getString("itemtoequip"));
-                TimerUtil.schedule(()->{
+                TimerUtil.schedule(() -> {
                     if (living != null) {
-                        living.getOffhandItem().finishUsingItem(living.level(), living);;
+                        living.getOffhandItem().finishUsingItem(living.level(), living);
+                        ;
                     }
                 }, 500, TimeUnit.MILLISECONDS);
                 TimerUtil.schedule(() -> {

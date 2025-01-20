@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI>  {
+public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI> {
     private final static HashMap<String, Object> guistate = ProgressionGUI.guistate;
     private final Level world;
     private final int x, y, z;
@@ -74,46 +74,47 @@ public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         if (player != null) {
             CompoundTag variables = playertags.get(player);
-        guiGraphics.drawString(this.font,
-                ("Strength Level:" + variables.getInt("StrengthLvl")), 118, 14, -1, false);
-        guiGraphics.drawString(this.font,
+            guiGraphics.drawString(this.font,
+                    ("Strength Level:" + variables.getInt("StrengthLvl")), 118, 14, -1, false);
+            guiGraphics.drawString(this.font,
 
-                ("Dexterity Level:" +  variables.getInt("DexterityLvl")), 119, 42, -1, false);
-        guiGraphics.drawString(this.font,
+                    ("Dexterity Level:" + variables.getInt("DexterityLvl")), 119, 42, -1, false);
+            guiGraphics.drawString(this.font,
 
-                ("Vigor Level:" +  variables.getInt("VigorLvl")), 102, 68, -1, false);
-        guiGraphics.drawString(this.font,
+                    ("Vigor Level:" + variables.getInt("VigorLvl")), 102, 68, -1, false);
+            guiGraphics.drawString(this.font,
 
-                ("Endurance Level:" +  variables.getInt("EnduranceLvl")), 125, 93, -1, false);
-        guiGraphics.drawString(this.font,
+                    ("Endurance Level:" + variables.getInt("EnduranceLvl")), 125, 93, -1, false);
+            guiGraphics.drawString(this.font,
 
-                ("Mind Level:" +  variables.getInt("MindLvl")), 98, 121, -1, false);
-        guiGraphics.drawString(this.font,
+                    ("Mind Level:" + variables.getInt("MindLvl")), 98, 121, -1, false);
+            guiGraphics.drawString(this.font,
 
-                ("Total Level:" + ProgressionUtils.getTotalLevel(variables) + "        Weight:"), 47, 167, -1, false);
-        guiGraphics.drawString(this.font,
+                    ("Total Level:" + ProgressionUtils.getTotalLevel(variables) + "        Weight:"), 47, 167, -1, false);
+            guiGraphics.drawString(this.font,
 
-                ("XP:" + variables.getInt("StrengthXp") + "/" + variables.getInt("StrengthMaxXp")), 62, 28, -1, false);
-        guiGraphics.drawString(this.font,
+                    ("XP:" + variables.getInt("StrengthXp") + "/" + variables.getInt("StrengthMaxXp")), 62, 28, -1, false);
+            guiGraphics.drawString(this.font,
 
-                ("XP:" + variables.getInt("DexterityXp") + "/" + variables.getInt("DexterityMaxXp")), 61, 55, -1, false);
-        guiGraphics.drawString(this.font,
+                    ("XP:" + variables.getInt("DexterityXp") + "/" + variables.getInt("DexterityMaxXp")), 61, 55, -1, false);
+            guiGraphics.drawString(this.font,
 
-                ("XP:" + variables.getInt("VigorXp") + "/" + variables.getInt("VigorMaxXp")), 63, 82, -1, false);
-        guiGraphics.drawString(this.font,
+                    ("XP:" + variables.getInt("VigorXp") + "/" + variables.getInt("VigorMaxXp")), 63, 82, -1, false);
+            guiGraphics.drawString(this.font,
 
-                ("XP:" + variables.getInt("EnduranceXp") + "/" + variables.getInt("EnduranceMaxXp")), 63, 107, -1, false);
-        guiGraphics.drawString(this.font,
+                    ("XP:" + variables.getInt("EnduranceXp") + "/" + variables.getInt("EnduranceMaxXp")), 63, 107, -1, false);
+            guiGraphics.drawString(this.font,
 
-                ("XP:" + variables.getInt("MindXp") + "/" + variables.getInt("MindMaxXp")), 63, 135, -1, false);
-        guiGraphics.drawString(this.font,
+                    ("XP:" + variables.getInt("MindXp") + "/" + variables.getInt("MindMaxXp")), 63, 135, -1, false);
+            guiGraphics.drawString(this.font,
 
-                (Math.round((AttributeUtils.getAttributeValue(player, "epicfight:weight")) - 39) + "/" + Math.round(AttributeUtils.getAttributeValue(player, "pride:max_weight"))), 188, 161, -1, false);
-        guiGraphics.drawString(this.font,
+                    (Math.round((AttributeUtils.getAttributeValue(player, "epicfight:weight")) - 39) + "/" + Math.round(AttributeUtils.getAttributeValue(player, "pride:max_weight"))), 188, 161, -1, false);
+            guiGraphics.drawString(this.font,
 
-                (ProgressionUtils.getLoadPercentage(player) + "%"),188, 173, -1, false);
+                    (ProgressionUtils.getLoadPercentage(player) + "%"), 188, 173, -1, false);
         }
     }
+
     @Override
     public void init() {
         super.init();

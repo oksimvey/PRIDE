@@ -11,8 +11,8 @@ import net.minecraftforge.fml.common.Mod;
 public class onJump {
 
     @SubscribeEvent
-    public static void onJump(LivingEvent.LivingJumpEvent event){
-        if (event.getEntity() != null){
+    public static void onJump(LivingEvent.LivingJumpEvent event) {
+        if (event.getEntity() != null) {
             if (event.getEntity() instanceof Player player) {
                 if (StaminaUtils.getStamina(player) >= 3) {
                     StaminaUtils.consumeStamina(player, 3);

@@ -27,9 +27,9 @@ public class CustomTick {
         }
     }
 
-    public static void startRespawnTick(Player player){
+    public static void startRespawnTick(Player player) {
         stopTick(player);
-        TimerUtil.schedule(()->CustomTick.startTick(player), 1002, TimeUnit.MILLISECONDS);
+        TimerUtil.schedule(() -> CustomTick.startTick(player), 1002, TimeUnit.MILLISECONDS);
     }
 
     public static void loopTick(Player player) {

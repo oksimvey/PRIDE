@@ -14,25 +14,25 @@ import java.util.List;
 
 public class RenderingCore {
 
-    public static void renderCore(){
+    public static void renderCore() {
         if (Minecraft.getInstance().player != null) {
             LocalPlayer player = Minecraft.getInstance().player;
             entityRenderer(player);
             List<Entity> list = player.level().getEntities(player, MathUtils.createAABBForCulling(10));
-            for (Entity ent : list){
-                if (ent instanceof LivingEntity living){
+            for (Entity ent : list) {
+                if (ent instanceof LivingEntity living) {
                     entityRenderer(living);
                 }
             }
         }
     }
 
-    public static void entityRenderer(LivingEntity ent){
-        if (ent != null){
-            if (ParticleTracking.shouldRenderParticle(ent.getMainHandItem(), ent)){
+    public static void entityRenderer(LivingEntity ent) {
+        if (ent != null) {
+            if (ParticleTracking.shouldRenderParticle(ent.getMainHandItem(), ent)) {
                 ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR, ParticleTracking.getParticle(ent.getMainHandItem()), ParticleTracking.getAABBForImbuement(ent.getMainHandItem(), ent));
             }
-            if (ParticleTracking.shouldRenderParticle(ent.getOffhandItem(), ent)){
+            if (ParticleTracking.shouldRenderParticle(ent.getOffhandItem(), ent)) {
                 ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolL, ParticleTracking.getParticle(ent.getOffhandItem()), ParticleTracking.getAABBForImbuement(ent.getOffhandItem(), ent));
             }
         }

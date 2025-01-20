@@ -4,8 +4,8 @@ import net.minecraft.world.entity.Mob;
 
 public class MobIsLooking {
 
-    public static boolean mobIsLookingAtLivingEntity(Mob ent){
-        if (ent != null){
+    public static boolean mobIsLookingAtLivingEntity(Mob ent) {
+        if (ent != null) {
         }
         return false;
     }

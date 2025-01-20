@@ -1,7 +1,6 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.mechanics.*;
-import com.robson.pride.api.utils.*;
+import com.robson.pride.entities.special.Shooter;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.skills.special.AirSlamSkill;
 import com.robson.pride.skills.special.CloneSkill;
@@ -28,16 +27,21 @@ public class EntityAttacked {
         if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
             Entity ent = event.getEntity();
             Entity ddmgent = event.getSource().getDirectEntity();
-            if (ddmgent instanceof Projectile){
-                if (ddmgent instanceof AbstractArrow arrow && ent.getPersistentData().getBoolean("mikiri_dodge")){
-                  MikiriCounter.onArrowMikiri(ent, arrow, event);
+            if (event.getSource().getEntity() instanceof Shooter shooter) {
+                if (shooter.getOwner() == ent) {
+                    event.setCanceled(true);
                 }
             }
-            if (ddmgent != null){
-                if (ddmgent.getPersistentData().getBoolean("canrobmainhand")){
+            if (ddmgent instanceof Projectile) {
+                if (ddmgent instanceof AbstractArrow arrow && ent.getPersistentData().getBoolean("mikiri_dodge")) {
+                    MikiriCounter.onArrowMikiri(ent, arrow, event);
+                }
+            }
+            if (ddmgent != null) {
+                if (ddmgent.getPersistentData().getBoolean("canrobmainhand")) {
                     Eating.robTargetItem(ddmgent, ent, InteractionHand.MAIN_HAND);
                 }
-                if (ddmgent.getPersistentData().getBoolean("canroboffhand")){
+                if (ddmgent.getPersistentData().getBoolean("canroboffhand")) {
                     Eating.robTargetItem(ddmgent, ent, InteractionHand.OFF_HAND);
                 }
             }
@@ -55,7 +59,7 @@ public class EntityAttacked {
             if (ddmgent instanceof ServerPlayer player && event.getAmount() > 0) {
                 ProgressionUtils.addXp(player, "Strength", (int) event.getAmount());
             }
-            if (ddmgent.getPersistentData().getBoolean("passive_clone")){
+            if (ddmgent.getPersistentData().getBoolean("passive_clone")) {
                 event.setCanceled(true);
             }
         }
@@ -66,16 +70,16 @@ public class EntityAttacked {
         if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
             Entity ent = event.getEntity();
             Entity ddmgent = event.getSource().getDirectEntity();
-            if (ddmgent.getPersistentData().getBoolean("Airslam")){
+            if (ddmgent.getPersistentData().getBoolean("Airslam")) {
                 AirSlamSkill.onAirSlamDMG(ddmgent, ent);
             }
             ddmgent.setDeltaMovement(ddmgent.getDeltaMovement().x, 0, ddmgent.getDeltaMovement().z);
             ent.setDeltaMovement(ent.getDeltaMovement().x, 0, ent.getDeltaMovement().z);
-            if (ddmgent instanceof LivingEntity liv){
-                if (liv.hasEffect(EffectRegister.HYPNOTIZED.get())){
+            if (ddmgent instanceof LivingEntity liv) {
+                if (liv.hasEffect(EffectRegister.HYPNOTIZED.get())) {
                     event.setCanceled(true);
                     CloneSkill.summonPassiveClone(ent, ddmgent, true);
-                    TimerUtil.schedule(()->TeleportUtils.teleportEntityRelativeToEntity(ent, ddmgent, 0, -ddmgent.getBbHeight()   * 1.5), 100, TimeUnit.MILLISECONDS);
+                    TimerUtil.schedule(() -> TeleportUtils.teleportEntityRelativeToEntity(ent, ddmgent, 0, -ddmgent.getBbHeight() * 1.5), 100, TimeUnit.MILLISECONDS);
                     PlaySoundUtils.playSound(ent, SoundEvents.ENDERMAN_TELEPORT, 1, 1);
                     liv.removeEffect(EffectRegister.HYPNOTIZED.get());
                 }

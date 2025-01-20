@@ -4,35 +4,25 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.robson.pride.api.ai.DataConditions;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.skillcore.WeaponArtRegister;
-import com.robson.pride.api.utils.CustomTick;
-import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
-import com.robson.pride.registries.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
-
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 @Mod("pride")
 public class Pride {
@@ -64,7 +54,7 @@ public class Pride {
         SkillCore.WeaponSkill.ENUM_MANAGER.registerEnumCls(MODID, WeaponArtRegister.class);
     }
 
-    private void registerCommands(final RegisterCommandsEvent event){
+    private void registerCommands(final RegisterCommandsEvent event) {
         event.getDispatcher().register(
                 LiteralArgumentBuilder.<CommandSourceStack>literal(Pride.MOD_ID)
                         .requires(source -> source.hasPermission(2))
@@ -74,6 +64,7 @@ public class Pride {
                                 .then(MikiriCommand.register())
                                 .then(ShootProjectileCommand.register())
                                 .then(SkillExecuteCommand.register())
+                                .then(CastSpellCommand.register())
                                 .then(SetElementCommand.register())));
     }
 

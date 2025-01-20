@@ -47,13 +47,13 @@ public class PlayerSetup {
         NewCap.setupVariables(originaltag, clonetag);
     }
 
-        public static void playerCommonSetup(Player player){
-        if (player != null){
+    public static void playerCommonSetup(Player player) {
+        if (player != null) {
             CompoundTag tag = player.getPersistentData();
             StaminaUtils.resetStamina(player);
             player.getPersistentData().putBoolean("isParrying", false);
             ProgressionGUIRender.playertags.put(player, tag);
-            if (!NewCap.haveVariables(tag)){
+            if (!NewCap.haveVariables(tag)) {
                 NewCap.startVariables(player, tag);
             }
         }

@@ -6,9 +6,9 @@ import net.minecraft.world.InteractionHand;
 
 public class onRClick {
 
-    public static void RClick(ServerPlayer player){
-        if (player != null){
-            if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)){
+    public static void RClick(ServerPlayer player) {
+        if (player != null) {
+            if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)) {
 
             }
         }

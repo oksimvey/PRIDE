@@ -20,40 +20,40 @@ import java.util.Random;
 
 public class ItemStackUtils {
 
-    public static WeaponCategory getWeaponCategory (Entity ent, InteractionHand hand){
-        LivingEntityPatch livingEntityPatch  = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-            if (livingEntityPatch != null ){
-                if (livingEntityPatch.getHoldingItemCapability(hand) != null){
-                    return livingEntityPatch.getHoldingItemCapability(hand).getWeaponCategory();
-                }
+    public static WeaponCategory getWeaponCategory(Entity ent, InteractionHand hand) {
+        LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+        if (livingEntityPatch != null) {
+            if (livingEntityPatch.getHoldingItemCapability(hand) != null) {
+                return livingEntityPatch.getHoldingItemCapability(hand).getWeaponCategory();
             }
+        }
         return null;
     }
 
-    public static Style getStyle(Entity ent){
-        LivingEntityPatch livingEntityPatch  = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-        if (livingEntityPatch != null ){
-            if (livingEntityPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND) != null){
+    public static Style getStyle(Entity ent) {
+        LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+        if (livingEntityPatch != null) {
+            if (livingEntityPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND) != null) {
                 return livingEntityPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND).getStyle(livingEntityPatch);
             }
         }
         return null;
     }
 
-    public static InteractionHand getWeaponSpeed(Entity ent, InteractionHand hand){
-        if (ent != null){
-            LivingEntityPatch livingEntityPatch  = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-            if (livingEntityPatch != null ){
-               if (livingEntityPatch.getHoldingItemCapability(hand) != null){
+    public static InteractionHand getWeaponSpeed(Entity ent, InteractionHand hand) {
+        if (ent != null) {
+            LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (livingEntityPatch != null) {
+                if (livingEntityPatch.getHoldingItemCapability(hand) != null) {
                 }
             }
         }
         return InteractionHand.MAIN_HAND;
     }
 
-    public static float getWeaponWeight(Entity ent, InteractionHand hand, EquipmentSlot slot){
-        if (ent != null){
-            if (ent instanceof LivingEntity  living) {
+    public static float getWeaponWeight(Entity ent, InteractionHand hand, EquipmentSlot slot) {
+        if (ent != null) {
+            if (ent instanceof LivingEntity living) {
                 LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(living, LivingEntityPatch.class);
                 if (livingEntityPatch != null) {
                     ItemStack itemStack;
@@ -77,42 +77,41 @@ public class ItemStackUtils {
         return 0;
     }
 
-    public static InteractionHand checkAttackingHand(Entity ent){
-        if (ent != null){
-            if (getStyle(ent) == PrideStyles.DUAL_WIELD){
-                Random random  = new Random();
-                if (random.nextBoolean()){
+    public static InteractionHand checkAttackingHand(Entity ent) {
+        if (ent != null) {
+            if (getStyle(ent) == PrideStyles.DUAL_WIELD) {
+                Random random = new Random();
+                if (random.nextBoolean()) {
                     return InteractionHand.MAIN_HAND;
-                }
-                else return InteractionHand.OFF_HAND;
+                } else return InteractionHand.OFF_HAND;
             }
         }
         return InteractionHand.MAIN_HAND;
     }
 
-    public static boolean checkWeapon(Entity ent, InteractionHand hand){
-        if (ent != null){
+    public static boolean checkWeapon(Entity ent, InteractionHand hand) {
+        if (ent != null) {
             WeaponCategory category = getWeaponCategory(ent, hand);
-                if (category != null){
-                    return category == WeaponCategoriesEnum.PRIDE_LONGSWORD
-                    || category == CapabilityItem.WeaponCategories.TACHI
-                    || category == WeaponCategoriesEnum.PRIDE_FIGHTNING_STYLE;
+            if (category != null) {
+                return category == WeaponCategoriesEnum.PRIDE_LONGSWORD
+                        || category == CapabilityItem.WeaponCategories.TACHI
+                        || category == WeaponCategoriesEnum.PRIDE_FIGHTNING_STYLE;
             }
         }
         return false;
     }
 
-    public static boolean checkShield(Entity ent, InteractionHand hand){
-        if (ent != null){
+    public static boolean checkShield(Entity ent, InteractionHand hand) {
+        if (ent != null) {
             WeaponCategory category = getWeaponCategory(ent, hand);
-            if (category != null){
+            if (category != null) {
                 return category == CapabilityItem.WeaponCategories.SHIELD;
             }
         }
         return false;
     }
 
-    public static String checkBlockType(Entity ent){
+    public static String checkBlockType(Entity ent) {
         String BlockType = "";
         if (checkShield(ent, InteractionHand.MAIN_HAND)) {
             BlockType = "mainhandshield";

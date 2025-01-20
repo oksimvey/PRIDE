@@ -30,9 +30,9 @@ public class SkillExecuteCommand implements Command<CommandSourceStack> {
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         Entity ent = EntityArgument.getEntity(context, "living_entity");
-        String skill =  StringArgumentType.getString(context, "skilltype");
+        String skill = StringArgumentType.getString(context, "skilltype");
         int power = IntegerArgumentType.getInteger(context, "power");
-        if (ent instanceof LivingEntity liv){
+        if (ent instanceof LivingEntity liv) {
             SkillCore.weaponArtCore(liv, skill.replace("_", " "));
         }
         return 1;

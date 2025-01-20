@@ -21,30 +21,28 @@ public class PerilousAttack {
     public static boolean checkPerilous(Entity ent) {
         if (ent != null) {
             String Perilous = ent.getPersistentData().getString("Perilous");
-            return Objects.equals(Perilous, "pierce_two_hand") || Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand") || Objects.equals(Perilous, "sweep")  || Objects.equals(Perilous, "total");
+            return Objects.equals(Perilous, "pierce_two_hand") || Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand") || Objects.equals(Perilous, "sweep") || Objects.equals(Perilous, "total");
         }
         return false;
     }
 
-    public static void onPerilous(Entity ent, Entity ddmgent, LivingAttackEvent event){
+    public static void onPerilous(Entity ent, Entity ddmgent, LivingAttackEvent event) {
         String Perilous = ddmgent.getPersistentData().getString("Perilous");
         if (Objects.equals(Perilous, "total")) {
             PerilousSucess(ent, event);
         } else if (Objects.equals(Perilous, "pierce_two_hand") || Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand")) {
-                if (ent.getPersistentData().getBoolean("mikiri_dodge")) {
-                    MikiriCounter.onPierceMikiri(ent, ddmgent, Perilous);
-                    event.setCanceled(true);
-                }
-                else PerilousSucess(ent, event);
-        }
-         else if (Objects.equals(Perilous, "sweep") && ent.getPersistentData().getBoolean("mikiri_sweep")) {
+            if (ent.getPersistentData().getBoolean("mikiri_dodge")) {
+                MikiriCounter.onPierceMikiri(ent, ddmgent, Perilous);
+                event.setCanceled(true);
+            } else PerilousSucess(ent, event);
+        } else if (Objects.equals(Perilous, "sweep") && ent.getPersistentData().getBoolean("mikiri_sweep")) {
             event.setCanceled(true);
         } else {
             PerilousSucess(ent, event);
         }
     }
 
-    public static void setPerilous(Entity ent, String PerilousType, int PerilousTime){
+    public static void setPerilous(Entity ent, String PerilousType, int PerilousTime) {
         ent.getPersistentData().putString("Perilous", PerilousType);
         Entity target = TargetUtil.getTarget(ent);
         if (target instanceof Player) {
@@ -62,8 +60,8 @@ public class PerilousAttack {
         }
     }
 
-    public static void disablePerilous(Entity ent, int delay){
-        TimerUtil.schedule(()-> ent.getPersistentData().putString("Perilous",  ""), delay, TimeUnit.MILLISECONDS);
+    public static void disablePerilous(Entity ent, int delay) {
+        TimerUtil.schedule(() -> ent.getPersistentData().putString("Perilous", ""), delay, TimeUnit.MILLISECONDS);
     }
 
     public static void perilousParticle(Entity player) {
@@ -93,11 +91,10 @@ public class PerilousAttack {
         }, delay[0], TimeUnit.MILLISECONDS);
     }
 
-    public static void PerilousSucess(Entity ent, LivingAttackEvent event){
+    public static void PerilousSucess(Entity ent, LivingAttackEvent event) {
         if (ent instanceof Player player) {
             player.stopUsingItem();
-            }
-         else {
+        } else {
             AdvancedCustomHumanoidMobPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
             if (livingEntityPatch != null) {
                 livingEntityPatch.setParry(false);

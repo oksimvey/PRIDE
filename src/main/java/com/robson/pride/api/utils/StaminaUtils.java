@@ -42,31 +42,31 @@ public class StaminaUtils {
         return 1;
     }
 
-    public static void setStamina(Entity ent, float amount){
+    public static void setStamina(Entity ent, float amount) {
         if (ent != null) {
             if (ent instanceof Player) {
                 PlayerPatch playerPatch = EpicFightCapabilities.getEntityPatch(ent, PlayerPatch.class);
                 if (playerPatch != null) {
-                   playerPatch.setStamina(amount);
+                    playerPatch.setStamina(amount);
                 }
             } else {
                 AdvancedCustomHumanoidMobPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
                 if (mobPatch != null) {
-                   mobPatch.setStamina(amount);
+                    mobPatch.setStamina(amount);
                 }
             }
         }
     }
 
-    public static void addStamina(Entity ent, float amount){
+    public static void addStamina(Entity ent, float amount) {
         setStamina(ent, (getStamina(ent) + amount));
     }
 
-    public static void consumeStamina(Entity ent, float amount){
+    public static void consumeStamina(Entity ent, float amount) {
         setStamina(ent, (getStamina(ent) - amount));
     }
 
-    public static void resetStamina(Entity ent){
+    public static void resetStamina(Entity ent) {
         setStamina(ent, getMaxStamina(ent));
     }
 }

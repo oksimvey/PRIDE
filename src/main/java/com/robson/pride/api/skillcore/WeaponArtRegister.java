@@ -1,7 +1,5 @@
 package com.robson.pride.api.skillcore;
 
-import com.robson.pride.skills.weaponarts.*;
-
 public enum WeaponArtRegister implements SkillCore.WeaponSkill {
 
     Darkness_Cut(new DarknessCut()),
