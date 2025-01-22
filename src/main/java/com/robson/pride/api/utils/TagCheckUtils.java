@@ -2,12 +2,10 @@ package com.robson.pride.api.utils;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.biome.Biome;
 
 public class TagCheckUtils {
     public static boolean itemsTagCheck(ItemStack item, String tagname) {

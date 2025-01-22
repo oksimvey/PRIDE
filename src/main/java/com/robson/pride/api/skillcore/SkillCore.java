@@ -10,27 +10,34 @@ import yesman.epicfight.api.utils.ExtendableEnumManager;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
+import static com.robson.pride.registries.WeaponArtRegister.WeaponArts;
+
 public class SkillCore {
 
     public static void onSkillExecute(LivingEntity ent) {
         if (ent != null) {
             if (ent.getMainHandItem().getTag().getBoolean("hasweaponart")) {
                 weaponArtCore(ent, ent.getMainHandItem().getTag().getString("weapon_art"));
-            } else defaultSkillCore(ent, ent.getMainHandItem());
+            }
+            else defaultSkillCore(ent, ent.getMainHandItem());
         }
     }
 
     public static void defaultSkillCore(LivingEntity ent, ItemStack weapon) {
         CapabilityItem itemcap = EpicFightCapabilities.getItemStackCapability(weapon);
         if (itemcap != null) {
-            if (itemcap.getWeaponCategory() instanceof WeaponCategoriesEnum categoriesEnum) {
-                categoriesEnum.skill().tryToExecute(ent);
+            WeaponSkillBase skill = WeaponCategoriesEnum.DefaultSkills.get(itemcap.getWeaponCategory());
+            if (skill != null){
+                skill.tryToExecute(ent);
             }
         }
     }
 
     public static void weaponArtCore(LivingEntity ent, String weaponart) {
-        WeaponArtRegister.valueOf(weaponart).skill().tryToExecute(ent);
+        WeaponSkillBase skill = WeaponArts.get(weaponart);
+        if (skill != null){
+            skill.tryToExecute(ent);
+        }
     }
 
     public interface WeaponSkill extends ExtendableEnum {

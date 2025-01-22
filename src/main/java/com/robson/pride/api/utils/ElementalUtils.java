@@ -1,20 +1,31 @@
 package com.robson.pride.api.utils;
 
 import com.robson.pride.api.entity.PrideMobBase;
+import com.robson.pride.api.skillcore.WeaponSkillBase;
+import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.ParticleRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 import java.util.Random;
+
+import static com.robson.pride.registries.WeaponArtRegister.WeaponArts;
 
 public class ElementalUtils {
 
@@ -63,30 +74,104 @@ public class ElementalUtils {
         return null;
     }
 
+    public static void playSoundByElement(String element, Entity ent, boolean aura, float volume) {
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level != null) {
+            switch (element) {
+                case "Darkness" -> {
+                    if (aura) {
+                        level.playSound(Minecraft.getInstance().player, ent, SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1, 1);
+                    }
+                }
+                case "Light" -> {
+
+                }
+                case "Thunder" -> {
+
+                }
+                case "Sun" -> {
+
+                }
+                case "Moon" -> {
+
+                }
+                case "Blood" -> {
+
+                }
+                case "Wind" -> {
+
+                }
+                case "Nature" -> {
+
+                }
+                case "Ice" -> {
+
+                }
+                case "Water" -> {
+                }
+            }
+        }
+    }
+
+    public static boolean canPutElementalPassive(ItemStack leftitem, ItemStack rightitem){
+        if (leftitem != null && rightitem != null){
+            String leftelement = "";
+            if (leftitem.getTag().getBoolean("hasweaponart")){
+                leftelement = WeaponArts.get(leftitem.getTag().getString("weapon_art")).getSkillElement();
+            }
+            else {
+                CapabilityItem itemcap = EpicFightCapabilities.getItemStackCapability(leftitem);
+                if (itemcap != null) {
+                    WeaponSkillBase skill = WeaponCategoriesEnum.DefaultSkills.get(itemcap.getWeaponCategory());
+                    if (skill != null){
+                        leftelement = skill.getSkillElement();
+                    }
+                }
+            }
+            return leftelement.equals("Neutral") || leftelement.equals(rightitem.getTag().getString("passive_element"));
+        }
+        return false;
+    }
+
+    public static boolean canPutWeaponArt(ItemStack leftitem, ItemStack rightitem){
+        if (leftitem != null && rightitem != null) {
+            String rightelement = WeaponArts.get(rightitem.getTag().getString("weapon_art")).getSkillElement();
+            return rightelement.equals("Neutral") || !leftitem.getTag().contains("passive_element") || leftitem.getTag().getString("passive_element").equals(rightelement);
+        }
+        return false;
+    }
+
     public static void rollElement(Entity ent) {
         if (ent != null) {
             short chance = (short) MathUtils.getRandomInt(1000);
             if (chance == 0) {
                 setElement(ent, "Darkness");
-            } else if (chance >= 1 && chance <= 10) {
-                setElement(ent, "Light");
-            } else if (chance >= 11 && chance <= 40) {
-                setElement(ent, "Thunder");
-            } else if (chance >= 41 && chance <= 90) {
-                setElement(ent, "Sun");
-            } else if (chance >= 91 && chance <= 140) {
-                setElement(ent, "Moon");
-            } else if (chance >= 141 && chance <= 240) {
-                setElement(ent, "Blood");
-            } else if (chance >= 241 && chance <= 340) {
-                setElement(ent, "Wind");
-            } else if (chance >= 341 && chance <= 560) {
-                setElement(ent, "Nature");
-            } else if (chance >= 561 && chance <= 780) {
-                setElement(ent, "Ice");
-            } else if (chance >= 781) {
-                setElement(ent, "Water");
             }
+            else if (chance >= 1 && chance <= 10) {
+                setElement(ent, "Light");
+            }
+            else if (chance >= 11 && chance <= 40) {
+                setElement(ent, "Thunder");
+            }
+            else if (chance >= 41 && chance <= 90) {
+                setElement(ent, "Sun");
+            }
+            else if (chance >= 91 && chance <= 140) {
+                setElement(ent, "Moon");
+            }
+            else if (chance >= 141 && chance <= 240) {
+                setElement(ent, "Blood");
+            }
+            else if (chance >= 241 && chance <= 340) {
+                setElement(ent, "Wind");
+            }
+            else if (chance >= 341 && chance <= 560) {
+                setElement(ent, "Nature");
+            }
+            else if (chance >= 561 && chance <= 780) {
+                setElement(ent, "Ice");
+            }
+            else setElement(ent, "Water");
         }
     }
 

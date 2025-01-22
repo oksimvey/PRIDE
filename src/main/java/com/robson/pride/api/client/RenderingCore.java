@@ -4,6 +4,8 @@ package com.robson.pride.api.client;
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.MathUtils;
 import com.robson.pride.api.utils.ParticleUtils;
+import com.robson.pride.effect.WetEffect;
+import com.robson.pride.registries.EffectRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
@@ -34,6 +36,9 @@ public class RenderingCore {
             }
             if (ParticleTracking.shouldRenderParticle(ent.getOffhandItem(), ent)) {
                 ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolL, ParticleTracking.getParticle(ent.getOffhandItem()), ParticleTracking.getAABBForImbuement(ent.getOffhandItem(), ent));
+            }
+            if (ent.hasEffect(EffectRegister.WET.get())){
+                WetEffect.clientTick(ent);
             }
         }
     }

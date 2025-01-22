@@ -7,9 +7,6 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.robson.pride.api.utils.SpellUtils;
-import com.robson.pride.api.utils.TargetUtil;
-import com.robson.pride.api.utils.TimerUtil;
-import com.robson.pride.entities.special.Shooter;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.command.SpellArgument;
@@ -17,8 +14,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.world.entity.Entity;
-
-import java.util.concurrent.TimeUnit;
+import net.minecraft.world.entity.LivingEntity;
 
 public class CastSpellCommand implements Command<CommandSourceStack> {
     private static final CastSpellCommand COMMAND = new CastSpellCommand();
@@ -30,14 +26,12 @@ public class CastSpellCommand implements Command<CommandSourceStack> {
                                 .executes(COMMAND)));
     }
 
-
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         Entity ent = EntityArgument.getEntity(context, "living_entity");
         String spellId = StringArgumentType.getString(context, "spell");
         int power = IntegerArgumentType.getInteger(context, "power");
-        Shooter shooter = Shooter.summonShooter(ent, TargetUtil.getTarget(ent), true);
-        TimerUtil.schedule(() -> SpellUtils.castSpellFromShooter(shooter, SpellRegistry.getSpell(IronsSpellbooks.MODID + ":" + spellId), power), 75, TimeUnit.MILLISECONDS);
-        return 1;
+        SpellUtils.castSpell((LivingEntity) ent, SpellRegistry.getSpell(IronsSpellbooks.MODID + ":" + spellId), power, 0);
+         return 1;
     }
 }

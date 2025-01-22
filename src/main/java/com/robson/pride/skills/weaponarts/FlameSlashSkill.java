@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class FlameSlashSkill extends WeaponSkillBase {
 
     public FlameSlashSkill() {
-        super("Epic", 25, 5);
+        super("Epic", "Sun", 25, 5);
     }
 
     @Override

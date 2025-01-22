@@ -1,5 +1,6 @@
 package com.robson.pride.registries;
 
+import com.robson.pride.effect.DarknessCloakEffect;
 import com.robson.pride.effect.HypnotizedEffect;
 import com.robson.pride.effect.WetEffect;
 import com.robson.pride.main.Pride;
@@ -14,5 +15,6 @@ public class EffectRegister {
 
     public static final RegistryObject<MobEffect> WET = MOB_EFFECTS.register("wet", WetEffect::new);
     public static final RegistryObject<MobEffect> HYPNOTIZED = MOB_EFFECTS.register("hypnotized", HypnotizedEffect::new);
+    public static final RegistryObject<MobEffect> DARKNESS_CLOAK = MOB_EFFECTS.register("darkness_cloak", DarknessCloakEffect::new);
 
 }

@@ -1,6 +1,7 @@
 package com.robson.pride.effect;
 
 import com.robson.pride.api.utils.ParticleUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -20,9 +21,14 @@ public class WetEffect extends MobEffect {
 
     @Override
     public void applyEffectTick(LivingEntity living, int amplifier) {
-        double radius = living.getBbWidth() / 4;
-        ParticleUtils.spawnParticleRelativeToEntity(ParticleTypes.FALLING_WATER, living, -radius + Math.random() * (radius + radius), (-living.getBbHeight() * 0.5) + Math.random() * ((living.getBbHeight())), -radius + Math.random() * (radius + radius), 1, 0, -0.5, 0, 0.25);
-        living.clearFire();
+         living.clearFire();
+    }
+
+    public static void clientTick(LivingEntity living) {
+        if (living != null){
+            double radius = living.getBbWidth() / 4;
+            Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.FALLING_WATER, -radius + Math.random() * (radius + radius) + living.getX(), (-living.getBbHeight() * 0.5) + Math.random() * ((living.getBbHeight())) + living.getY(), -radius + Math.random() * (radius + radius) + living.getZ(), 0, -0.17, 0);
+        }
     }
 
     @Override

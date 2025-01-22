@@ -4,7 +4,6 @@ import com.robson.pride.api.utils.*;
 import com.robson.pride.entities.special.Shooter;
 import com.robson.pride.registries.AnimationsRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
-import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.entity.spells.ExtendedWitherSkull;
 import io.redspace.ironsspellbooks.entity.spells.acid_orb.AcidOrb;
@@ -22,6 +21,7 @@ import io.redspace.ironsspellbooks.entity.spells.poison_arrow.PoisonArrow;
 import io.redspace.ironsspellbooks.entity.spells.ray_of_frost.RayOfFrostVisualEntity;
 import io.redspace.ironsspellbooks.entity.spells.wisp.WispEntity;
 import io.redspace.ironsspellbooks.spells.fire.HeatSurgeSpell;
+import io.redspace.ironsspellbooks.spells.ice.FrostwaveSpell;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -88,18 +88,23 @@ public class MikiriCounter {
         if (target != null) {
             Shooter shooter = Shooter.summonShooter(ent, target, false);
             TimerUtil.schedule(() -> ProjectileUtil.shootProjectileFromShooter(shooter, projectile, ent, 3, false), 450, TimeUnit.MILLISECONDS);
-        } else
-            TimerUtil.schedule(() -> ProjectileUtil.shootProjectileFromEnt(projectile, ent, 3), 450, TimeUnit.MILLISECONDS);
+        }
+        else TimerUtil.schedule(() -> ProjectileUtil.shootProjectileFromEnt(projectile, ent, 3), 450, TimeUnit.MILLISECONDS);
         AnimUtils.playAnim(ent, AnimationsRegister.PROJECTILE_COUNTER, 0);
     }
 
-    public static void onSpellMikiri(SpellDamageEvent event) {
+    public static void onSpellMikiri(SpellDamageEvent event, AbstractSpell spell) {
         if (event != null && event.getSpellDamageSource().spell() != null && event.getEntity() != null) {
-            AbstractSpell spell = event.getSpellDamageSource().spell();
-
-            AnimUtils.playAnim(event.getEntity(), AnimationsRegister.PROJECTILE_COUNTER, 0);
-            TimerUtil.schedule(() -> SpellUtils.castSpell(event.getEntity(), SpellRegistry.getSpell(spell.getSpellId()), 3, 0), 450, TimeUnit.MILLISECONDS);
             event.setCanceled(true);
+            Entity entity = event.getSpellDamageSource().getDirectEntity().getType().create(event.getEntity().level());
+            event.getSpellDamageSource().getDirectEntity().remove(Entity.RemovalReason.DISCARDED);
+            event.getEntity().level().addFreshEntity(entity);
+            teleportProjectileToEntityHand(event.getEntity(), entity);
+            TimerUtil.schedule(() -> {
+                entity.remove(Entity.RemovalReason.DISCARDED);
+                SpellUtils.castMikiriSpell(event.getEntity(), spell, 3);
+            }, 450, TimeUnit.MILLISECONDS);
+            AnimUtils.playAnim(event.getEntity(), AnimationsRegister.PROJECTILE_COUNTER, 0);
         }
     }
 
@@ -107,7 +112,7 @@ public class MikiriCounter {
         if (owner != null && projectile != null) {
             Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, owner, Armatures.BIPED.handL);
             if (vec3 != null) {
-                projectile.setPos(vec3.x, vec3.y, vec3.z);
+                projectile.moveTo(vec3);
                 TimerUtil.schedule(() -> teleportProjectileToEntityHand(owner, projectile), 50, TimeUnit.MILLISECONDS);
             }
         }
@@ -132,6 +137,7 @@ public class MikiriCounter {
     }
 
     public static boolean isJumpCounterableSpell(AbstractSpell spell) {
-        return spell instanceof HeatSurgeSpell;
+        return spell instanceof HeatSurgeSpell ||
+                spell instanceof FrostwaveSpell;
     }
 }

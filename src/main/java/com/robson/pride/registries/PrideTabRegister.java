@@ -1,17 +1,18 @@
 package com.robson.pride.registries;
 
-import com.robson.pride.api.skillcore.WeaponArtRegister;
 import com.robson.pride.main.Pride;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 import static com.robson.pride.registries.EntityRegister.ENTITIES;
+import static com.robson.pride.registries.WeaponArtRegister.WeaponArts;
 
 
 public class PrideTabRegister {
@@ -33,18 +34,18 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> MATERIALS_TAB = TABS.register("pride_materials", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Materials"))
-            .icon(() -> new ItemStack(ItemsRegister.DARKNESS_GEM.get()))
+            .icon(() -> getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Darkness"))
             .displayItems((enabledFeatures, entries) -> {
-                entries.accept(ItemsRegister.DARKNESS_GEM.get());
-                entries.accept(ItemsRegister.LIGHT_GEM.get());
-                entries.accept(ItemsRegister.THUNDER_GEM.get());
-                entries.accept(ItemsRegister.SUN_GEM.get());
-                entries.accept(ItemsRegister.MOON_GEM.get());
-                entries.accept(ItemsRegister.BLOOD_GEM.get());
-                entries.accept(ItemsRegister.WIND_GEM.get());
-                entries.accept(ItemsRegister.NATURE_GEM.get());
-                entries.accept(ItemsRegister.ICE_GEM.get());
-                entries.accept(ItemsRegister.WATER_GEM.get());
+                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Darkness"));
+                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Light"));
+                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Thunder"));
+                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Sun"));
+                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Moon"));
+                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Blood"));
+                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Wind"));
+                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Nature"));
+                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Ice"));
+                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Water"));
             })
             .withTabsBefore(EQUIPMENT_TAB.getKey())
             .build());
@@ -53,12 +54,12 @@ public class PrideTabRegister {
             .title(Component.literal("Pride Weapon Arts"))
             .icon(() -> new ItemStack(ItemsRegister.WEAPON_ART.get()))
             .displayItems((parameters, output) -> {
-                for (WeaponArtRegister skillsEnum : WeaponArtRegister.values()) {
-                    ItemStack item = new ItemStack(ItemsRegister.WEAPON_ART.get());
-                    item.getOrCreateTag().putString("weapon_art", skillsEnum.name());
-                    item.getOrCreateTag().putString("rarity", skillsEnum.skill().getSkillRarity());
-                    output.accept(item);
-                }
+              for (String key: WeaponArts.keySet()) {
+                  ItemStack item = new ItemStack(ItemsRegister.WEAPON_ART.get());
+                  item.getOrCreateTag().putString("weapon_art", key);
+                  item.getOrCreateTag().putString("rarity", WeaponArts.get(key).getSkillRarity());
+                  output.accept(item);
+                };
             })
             .withTabsBefore(MATERIALS_TAB.getKey())
             .build());
@@ -78,4 +79,11 @@ public class PrideTabRegister {
             })
             .withTabsBefore(SCROLLS_TAB.getKey())
             .build());
+
+    public static ItemStack getElementalGem(Item item, String element){
+        ItemStack itemStack = new ItemStack(item);
+        itemStack.setCount(1);
+        itemStack.getOrCreateTag().putString("passive_element", element);
+        return itemStack;
+    }
 }

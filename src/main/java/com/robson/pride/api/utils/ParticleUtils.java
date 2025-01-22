@@ -1,5 +1,8 @@
 package com.robson.pride.api.utils;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -32,6 +35,12 @@ public class ParticleUtils {
         }
     }
 
+    public static Particle spawnAuraParticle(ParticleOptions particletype, double x, double y, double z, double deltax, double deltay, double deltaz){
+        ParticleEngine particleEngine = Minecraft.getInstance().particleEngine;
+            return particleEngine.createParticle(particletype, x, y, z, deltax, deltay, deltaz).scale(2f);
+
+    }
+
     public static void spawnParticleTracked(LocalPlayer renderer, Entity ent, Joint joint, ParticleOptions particle, Vec3f AABB) {
         if (renderer != null && ent != null) {
             if (renderer.level().isClientSide) {
@@ -49,7 +58,8 @@ public class ParticleUtils {
                             Vec3 vec = ArmatureUtils.getJointWithTranslation(renderer, ent, AABB, joint);
                             if (vec != null) {
                                 renderer.level().addParticle(particle, vec.x, vec.y, vec.z, ((new Random()).nextFloat() - 0.5F) * 0.02F, (double) (((new Random()).nextFloat() - 0.5F) * 0.02F), ((new Random()).nextFloat() - 0.5F) * 0.02F);
-                            } else break;
+                            }
+                            else break;
                         }
                     }
                 }

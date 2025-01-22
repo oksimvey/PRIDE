@@ -4,6 +4,6 @@ import com.robson.pride.api.skillcore.WeaponSkillBase;
 
 public class HeavensStrike extends WeaponSkillBase {
     public HeavensStrike() {
-        super("Legendary", 50, 5);
+        super("Legendary", "Light", 50, 5);
     }
 }

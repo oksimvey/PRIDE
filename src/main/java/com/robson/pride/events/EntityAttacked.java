@@ -1,5 +1,7 @@
 package com.robson.pride.events;
 
+import com.robson.pride.api.mechanics.*;
+import com.robson.pride.api.utils.*;
 import com.robson.pride.entities.special.Shooter;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.skills.special.AirSlamSkill;

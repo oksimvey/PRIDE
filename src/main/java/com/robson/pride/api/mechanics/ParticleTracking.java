@@ -72,6 +72,9 @@ public class ParticleTracking {
             if (TagCheckUtils.itemsTagCheck(item, "tracking_aabb/longsword")) {
                 return new Vec3f(((new Random()).nextFloat() - 0.5F) * 0.2F, ((new Random()).nextFloat() - 0.5F) * 0.8F + 0.08F, -((new Random()).nextFloat() * (1.5F * ent.getBbHeight() / 1.8F)) - 0.15F);
             }
+            else if (TagCheckUtils.itemsTagCheck(item, "tracking_aabb/item")){
+                return new Vec3f(((new Random()).nextFloat() - 0.5F) * 0.2F, ((new Random()).nextFloat() - 0.3F) * 0.3F, -((new Random()).nextFloat() * (0.5f * ent.getBbHeight() / 1.8F)) - 0.1F);
+            }
         }
         return new Vec3f(((new Random()).nextFloat() - 0.5F) * 0.2F, ((new Random()).nextFloat() - 0.3F) * 0.8F, ((new Random()).nextFloat() - 0.5F) * 0.2F);
     }

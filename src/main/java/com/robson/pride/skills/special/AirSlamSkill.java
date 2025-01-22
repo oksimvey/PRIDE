@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class AirSlamSkill extends WeaponSkillBase {
 
     public AirSlamSkill() {
-        super("Rare", 10, 3);
+        super( "Rare", "Neutral", 10, 3);
     }
 
     @Override

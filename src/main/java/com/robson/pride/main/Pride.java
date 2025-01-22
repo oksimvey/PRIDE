@@ -3,9 +3,10 @@ package com.robson.pride.main;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.robson.pride.api.ai.DataConditions;
 import com.robson.pride.api.skillcore.SkillCore;
-import com.robson.pride.api.skillcore.WeaponArtRegister;
+import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
+import com.robson.pride.registries.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -31,7 +32,6 @@ public class Pride {
     private static final String PROTOCOL_VERSION = "1";
     public static final String MOD_ID = "pride";
     public static final SimpleChannel PACKET_HANDLER = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, MODID), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
-    private static int messageID = 0;
 
     public Pride() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -71,9 +71,14 @@ public class Pride {
 
     private void setupCommon(FMLCommonSetupEvent event) {
         PacketRegister.register();
+        event.enqueueWork(()->{
+            WeaponCategoriesEnum.registerDefaultSkills();
+            WeaponArtRegister.registerWeaponArts();
+        });
     }
 
     private void setupClient(FMLClientSetupEvent event) {
         KeyRegister.setupClient(event);
+        ItemPredicateRegister.registerPredicates(event);
     }
 }

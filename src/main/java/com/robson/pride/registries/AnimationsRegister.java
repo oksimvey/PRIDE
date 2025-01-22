@@ -1,36 +1,33 @@
 package com.robson.pride.registries;
 
+import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.main.Pride;
-import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import reascer.wom.animation.attacks.SpecialAttackAnimation;
-import yesman.epicfight.api.animation.Joint;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.*;
 import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.api.forgeevent.AnimationRegistryEvent;
 import yesman.epicfight.api.utils.TimePairList;
-import yesman.epicfight.api.utils.math.OpenMatrix4f;
 import yesman.epicfight.api.utils.math.ValueModifier;
-import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.model.armature.HumanoidArmature;
 import yesman.epicfight.particle.EpicFightParticles;
-import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 import yesman.epicfight.world.damagesource.StunType;
+
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 public class AnimationsRegister {
 
@@ -75,6 +72,7 @@ public class AnimationsRegister {
     public static StaticAnimation MOB_AIM;
     public static StaticAnimation MOB_SHOOT;
 
+    public static ConcurrentHashMap<LivingEntity, Byte> pullLvl = new ConcurrentHashMap<>();
 
     @SubscribeEvent
     public static void registerAnimations(AnimationRegistryEvent event) {
@@ -85,7 +83,7 @@ public class AnimationsRegister {
 
         HumanoidArmature biped = Armatures.BIPED;
 
-        MOB_AIM = (new LongHitAnimation(0.25f, "biped/combat/mob_aim", biped));
+        MOB_AIM = (new LongHitAnimation(0.25f, "biped/combat/mob_aim", biped)).addEvents(AnimationEvent.TimeStampedEvent.create(0F, MOB_AIM_NBTS, AnimationEvent.Side.SERVER));;
         MOB_SHOOT = (new LongHitAnimation(0, "biped/combat/mob_shoot", biped));
         INFERNAL_AUTO_1 = (new BasicAttackAnimation(0.1F, 0.3F, 0.4F, 0.5F, null, biped.toolL, "biped/combat/infernal_auto_1", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.0F)).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.4F);
         INFERNAL_AUTO_2 = (new BasicAttackAnimation(0.2F, 0.1F, 0.2F, 0.25F, null, biped.toolR, "biped/combat/infernal_auto_2", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.0F)).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(1.5F)).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.4F).addEvents(new AnimationEvent.TimeStampedEvent[]{AnimationEvent.TimeStampedEvent.create(0.45F, (entitypatch, self, params) -> {
@@ -209,24 +207,30 @@ public class AnimationsRegister {
 
     }
 
-    public static Vec3 getfloor(LivingEntityPatch<?> entitypatch, StaticAnimation self, Vec3f WeaponOffset, Joint joint) {
-        float dpx = WeaponOffset.x + (float) ((LivingEntity) entitypatch.getOriginal()).getX();
-        float dpy = WeaponOffset.y + (float) ((LivingEntity) entitypatch.getOriginal()).getY();
-        float dpz = WeaponOffset.z + (float) ((LivingEntity) entitypatch.getOriginal()).getZ();
-        if (joint != null) {
-            OpenMatrix4f transformMatrix = entitypatch.getArmature().getBindedTransformFor(entitypatch.getAnimator().getPose(1.0F), joint);
-            transformMatrix.translate(WeaponOffset);
-            OpenMatrix4f CORRECTION = (new OpenMatrix4f()).rotate(-((float) Math.toRadians((double) (((LivingEntity) entitypatch.getOriginal()).yRotO + 180.0F))), new Vec3f(0.0F, 1.0F, 0.0F));
-            OpenMatrix4f.mul(CORRECTION, transformMatrix, transformMatrix);
-            dpx = transformMatrix.m30 + (float) ((LivingEntity) entitypatch.getOriginal()).getX();
-            dpy = transformMatrix.m31 + (float) ((LivingEntity) entitypatch.getOriginal()).getY();
-            dpz = transformMatrix.m32 + (float) ((LivingEntity) entitypatch.getOriginal()).getZ();
-        }
-
-        for (BlockState block = ((LivingEntity) entitypatch.getOriginal()).level().getBlockState(new BlockPos.MutableBlockPos((double) dpx, (double) dpy, (double) dpz)); (block.getBlock() instanceof BushBlock || block.isAir()) && !block.is(Blocks.VOID_AIR) && dpy > -64.0F; block = ((LivingEntity) entitypatch.getOriginal()).level().getBlockState(new BlockPos.MutableBlockPos((double) dpx, (double) dpy, (double) dpz))) {
-            --dpy;
-        }
-
-        return new Vec3((double) dpx, (double) dpy, (double) dpz);
-    }
+    public static final AnimationEvent.AnimationEventConsumer MOB_AIM_NBTS = (entitypatch, animation, params) -> {
+            Entity ent = entitypatch.getOriginal();
+            if (ent instanceof LivingEntity livingEntity){
+                ItemStack bow = livingEntity.getOffhandItem();
+                TimerUtil.schedule(()->{
+                    if (bow != null){
+                       pullLvl.put(livingEntity, (byte) 1);
+                        TimerUtil.schedule(()->{
+                            if (bow != null){
+                                pullLvl.put(livingEntity, (byte) 2);
+                                TimerUtil.schedule(()->{
+                                    if (bow != null){
+                                        pullLvl.put(livingEntity, (byte) 3);
+                                        TimerUtil.schedule(()->{
+                                            if (bow != null){
+                                                pullLvl.put(livingEntity, (byte) 0);
+                                            }
+                                        }, 200, TimeUnit.MILLISECONDS);
+                                    }
+                                }, 200, TimeUnit.MILLISECONDS);
+                            }
+                        }, 200, TimeUnit.MILLISECONDS);
+                    }
+                }, 200, TimeUnit.MILLISECONDS);
+            }
+    };
 }

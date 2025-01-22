@@ -4,6 +4,7 @@ import com.robson.pride.api.mechanics.ElementalPassives;
 import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
+import com.robson.pride.api.utils.*;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -26,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class DarknessCut extends WeaponSkillBase {
 
     public DarknessCut() {
-        super("Mythical", 50, 6);
+        super("Mythical", "Darkness", 50, 6);
     }
 
     @Override

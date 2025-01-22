@@ -6,20 +6,19 @@ import net.minecraft.world.item.Item;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public enum WeaponCategoriesEnum implements WeaponCategory, Function<Item, CapabilityItem.Builder> {
-    PRIDE_LONGSWORD(new LongSwordWeaponSkill()),
-    PRIDE_GREATSWORD(new LongSwordWeaponSkill()),
-    PRIDE_COLOSSALSWORD(new LongSwordWeaponSkill()),
-    PRIDE_GUN(new LongSwordWeaponSkill()),
-    PRIDE_FIGHTNING_STYLE(new LongSwordWeaponSkill());
-    final WeaponSkillBase skillBase;
+    PRIDE_LONGSWORD(),
+    PRIDE_GREATSWORD(),
+    PRIDE_COLOSSALSWORD(),
+    PRIDE_GUN(),
+    PRIDE_FIGHTNING_STYLE();
     final int id;
 
-    WeaponCategoriesEnum(WeaponSkillBase skillBase) {
+    WeaponCategoriesEnum() {
         this.id = WeaponCategory.ENUM_MANAGER.assign(this);
-        this.skillBase = skillBase;
     }
 
     @Override
@@ -32,7 +31,9 @@ public enum WeaponCategoriesEnum implements WeaponCategory, Function<Item, Capab
         return null;
     }
 
-    public WeaponSkillBase skill() {
-        return this.skillBase;
+    public static ConcurrentHashMap<WeaponCategory, WeaponSkillBase> DefaultSkills = new ConcurrentHashMap<>();
+
+    public static void registerDefaultSkills(){
+        DefaultSkills.put(PRIDE_LONGSWORD, new LongSwordWeaponSkill());
     }
 }

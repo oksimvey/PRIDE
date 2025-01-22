@@ -7,20 +7,28 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 public abstract class WeaponSkillBase {
 
     private String SkillRarity;
+    private String SkillElement;
     private float ManaConsumption;
     private float StaminaConsumption;
 
-    public WeaponSkillBase(String SkillRarity, float ManaConsumption, float StaminaConsumption) {
+    public WeaponSkillBase(String SkillRarity, String SkillElement, float ManaConsumption, float StaminaConsumption) {
         this.SkillRarity = SkillRarity;
+        this.SkillElement = SkillElement;
         this.StaminaConsumption = StaminaConsumption;
         this.ManaConsumption = ManaConsumption;
     }
 
     public String getSkillRarity() {
         return this.SkillRarity;
+    }
+
+    public String getSkillElement(){
+        return this.SkillElement;
     }
 
     public void tryToExecute(LivingEntity ent) {
@@ -31,7 +39,8 @@ public abstract class WeaponSkillBase {
                     ManaUtils.consumeMana(ent, this.ManaConsumption);
                     onExecution(ent);
                 }
-            } else onExecution(ent);
+            }
+            else onExecution(ent);
         }
     }
 

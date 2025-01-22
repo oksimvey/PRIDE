@@ -8,7 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class LongSwordWeaponSkill extends WeaponSkillBase {
 
     public LongSwordWeaponSkill() {
-        super("Common", 10, 3);
+        super("Common", "Neutral", 10, 3);
     }
 
     @Override

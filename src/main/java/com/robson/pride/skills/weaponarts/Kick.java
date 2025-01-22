@@ -4,6 +4,6 @@ import com.robson.pride.api.skillcore.WeaponSkillBase;
 
 public class Kick extends WeaponSkillBase {
     public Kick() {
-        super("Common", 4, 1);
+        super("Common", "Neutral", 4, 1);
     }
 }

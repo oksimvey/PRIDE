@@ -2,6 +2,7 @@ package com.robson.pride.keybinding;
 
 import com.robson.pride.api.mechanics.Aura;
 import com.robson.pride.progression.ProgressionGUI;
+import com.robson.pride.skills.special.RechargeSkill;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -70,7 +71,7 @@ public class KeyActionPacket {
         }
 
         if (packet.action.equals("recharge")) {
-            Aura.playerRecharge(player, 50);
+            RechargeSkill.playerRecharge(player, 0);
         }
 
         if (packet.action.equals("menu")) {

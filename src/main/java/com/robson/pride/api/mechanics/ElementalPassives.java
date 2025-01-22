@@ -1,6 +1,7 @@
 package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.skillcore.SkillCore;
+import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.EffectRegister;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
@@ -66,13 +67,8 @@ public class ElementalPassives {
 
     public static void darknessPassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent != null) {
-            for (int i = 0; i < ent.getBbHeight() * 25; i++) {
-                Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.LARGE_SMOKE, ent.getX(), ent.getY() + ent.getBbHeight() / 2, ent.getZ(), 0.15, 0.15, 0.15);
-                if (particle != null) {
-                    particle.setLifetime(100);
-                    ent.hurt(dmgent.damageSources().wither(), power * 2);
-                }
-            }
+
+
         }
     }
 
@@ -111,15 +107,12 @@ public class ElementalPassives {
                         double x2 = entko.getX();
                         double y2 = entko.getY() + entko.getBbHeight() / 2;
                         double z2 = entko.getZ();
-                        double finalx;
-                        double finaly;
-                        double finalz;
                         PlaySoundUtils.playSound(ent, SoundRegistry.CHAIN_LIGHTNING_CHAIN.get(), 1, 1);
                         for (int i = 0; i < 100; i++) {
                             double t = i / (double) 50;
-                            finalx = x1 + (x2 - x1) * t;
-                            finaly = y1 + (y2 - y1) * t;
-                            finalz = z1 + (z2 - z1) * t;
+                            double finalx = x1 + (x2 - x1) * t;
+                            double finaly = y1 + (y2 - y1) * t;
+                            double finalz = z1 + (z2 - z1) * t;
                             ParticleUtils.spawnParticleOnServer(ParticleRegistry.ELECTRICITY_PARTICLE.get(), ent.level(), finalx, finaly, finalz, 1, 0, 0, 0, 0);
                             double distance = MathUtils.getTotalDistance(x2 - finalx, y2 - finaly, z2 - finalz);
                             if (distance < 0.1) {
