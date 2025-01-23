@@ -42,7 +42,7 @@ public class ParticleUtils {
     }
 
     public static void spawnParticleTracked(LocalPlayer renderer, Entity ent, Joint joint, ParticleOptions particle, Vec3f AABB) {
-        if (renderer != null && ent != null) {
+        if (renderer != null && ent != null && particle != null) {
             if (renderer.level().isClientSide) {
                 LivingEntityPatch entitypatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
                 if (entitypatch != null) {

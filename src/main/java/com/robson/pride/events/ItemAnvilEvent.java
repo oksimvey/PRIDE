@@ -2,6 +2,7 @@ package com.robson.pride.events;
 
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.ElementalUtils;
+import com.robson.pride.progression.AttributeModifiers;
 import com.robson.pride.registries.ItemsRegister;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AnvilUpdateEvent;
@@ -31,6 +32,7 @@ public class ItemAnvilEvent {
                     if (ElementalUtils.canPutElementalPassive(leftitem, rightitem)) {
                         ItemStack output = event.getLeft().copy();
                         output.getOrCreateTag().putString("passive_element", rightitem.getTag().getString("passive_element"));
+                        AttributeModifiers.setModifierForImbuement(output);
                         event.setOutput(output);
                         event.setCost(5);
                         event.setMaterialCost(1);

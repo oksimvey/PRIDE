@@ -2,6 +2,7 @@ package com.robson.pride.main;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.robson.pride.api.ai.DataConditions;
+import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
@@ -12,6 +13,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -36,6 +38,7 @@ public class Pride {
     public Pride() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         SoundsRegister.SOUNDS.register(bus);
+        MinecraftForge.EVENT_BUS.addListener(this::addReloadListnerEvent);
         ItemsRegister.REGISTRY.register(bus);
         EntityRegister.ENTITIES.register(bus);
         AttributeRegister.register(bus);
@@ -51,7 +54,7 @@ public class Pride {
         EffectRegister.MOB_EFFECTS.register(bus);
         DataConditions.CONDITIONS.register(bus);
         PrideTabRegister.register(bus);
-        SkillCore.WeaponSkill.ENUM_MANAGER.registerEnumCls(MODID, WeaponArtRegister.class);
+        SkillCore.WeaponSkill.ENUM_MANAGER.registerEnumCls(MODID, WeaponSkillRegister.class);
     }
 
     private void registerCommands(final RegisterCommandsEvent event) {
@@ -68,13 +71,14 @@ public class Pride {
                                 .then(SetElementCommand.register())));
     }
 
+    private void addReloadListnerEvent(final AddReloadListenerEvent event) {
+        event.addListener(new PrideCapabilityReloadListener());
+    }
+
 
     private void setupCommon(FMLCommonSetupEvent event) {
         PacketRegister.register();
-        event.enqueueWork(()->{
-            WeaponCategoriesEnum.registerDefaultSkills();
-            WeaponArtRegister.registerWeaponArts();
-        });
+        event.enqueueWork(WeaponSkillRegister::registerWeaponArts);
     }
 
     private void setupClient(FMLClientSetupEvent event) {

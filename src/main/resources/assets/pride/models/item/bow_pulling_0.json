@@ -1,0 +1,6 @@
+{
+  "parent": "pride:item/mob_bow",
+  "textures": {
+    "layer0": "minecraft:item/bow_pulling_0"
+  }
+}

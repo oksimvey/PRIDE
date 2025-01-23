@@ -1,7 +1,7 @@
 {
-  "parent": "item/generated",
+  "parent": "pride:bow_model",
   "textures": {
-    "layer0": "item/bow"
+    "layer0": "minecraft:item/bow"
   },
   "display": {
     "thirdperson_righthand": {
@@ -25,25 +25,24 @@
       "scale": [ 0.68, 0.68, 0.68 ]
     }
   },
-
   "overrides": [
     {
       "predicate": {
         "pride:pulling": 1
       },
-      "model": "minecraft:item/bow_pulling_0"
+      "model": "pride:item/bow_pulling_0"
     },
     {
       "predicate": {
         "pride:pulling": 2
       },
-      "model": "minecraft:item/bow_pulling_1"
+      "model": "pride:item/bow_pulling_1"
     },
     {
       "predicate": {
         "pride:pulling": 3
       },
-      "model": "minecraft:item/bow_pulling_2"
+      "model": "pride:item/bow_pulling_2"
     }
   ]
 }

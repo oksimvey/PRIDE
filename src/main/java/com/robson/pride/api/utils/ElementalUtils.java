@@ -1,8 +1,8 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
-import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.ParticleRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -20,12 +21,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 import java.util.Random;
 
-import static com.robson.pride.registries.WeaponArtRegister.WeaponArts;
+import static com.robson.pride.registries.WeaponSkillRegister.WeaponSkills;
+import static com.robson.pride.registries.WeaponSkillRegister.elements;
 
 public class ElementalUtils {
 
@@ -117,14 +117,16 @@ public class ElementalUtils {
         if (leftitem != null && rightitem != null){
             String leftelement = "";
             if (leftitem.getTag().getBoolean("hasweaponart")){
-                leftelement = WeaponArts.get(leftitem.getTag().getString("weapon_art")).getSkillElement();
+                leftelement = WeaponSkills.get(leftitem.getTag().getString("weapon_art")).getSkillElement();
             }
             else {
-                CapabilityItem itemcap = EpicFightCapabilities.getItemStackCapability(leftitem);
-                if (itemcap != null) {
-                    WeaponSkillBase skill = WeaponCategoriesEnum.DefaultSkills.get(itemcap.getWeaponCategory());
-                    if (skill != null){
-                        leftelement = skill.getSkillElement();
+                CompoundTag tag = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(leftitem.getItem());
+                if (tag != null){
+                    if (tag.contains("skill")){
+                        WeaponSkillBase skill = WeaponSkills.get(tag.getString("skill"));
+                        if (skill != null){
+                            leftelement = skill.getSkillElement();
+                        }
                     }
                 }
             }
@@ -135,10 +137,30 @@ public class ElementalUtils {
 
     public static boolean canPutWeaponArt(ItemStack leftitem, ItemStack rightitem){
         if (leftitem != null && rightitem != null) {
-            String rightelement = WeaponArts.get(rightitem.getTag().getString("weapon_art")).getSkillElement();
+            String rightelement = WeaponSkills.get(rightitem.getTag().getString("weapon_art")).getSkillElement();
             return rightelement.equals("Neutral") || !leftitem.getTag().contains("passive_element") || leftitem.getTag().getString("passive_element").equals(rightelement);
         }
         return false;
+    }
+
+    public static String getItemElement(ItemStack item){
+        String element = "";
+        if (item != null) {
+            if (item.getTag() != null) {
+                element = item.getTag().getString("passive_element");
+                if (!elements.contains(element)) {
+                    CompoundTag tag = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem());
+                    if (tag != null) {
+                        if (tag.contains("element")) {
+                            if (elements.contains(tag.getString("element"))) {
+                                element = tag.getString("element");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return element;
     }
 
     public static void rollElement(Entity ent) {

@@ -1,11 +1,14 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
@@ -16,6 +19,7 @@ import yesman.epicfight.world.capabilities.item.WeaponCategory;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class ItemStackUtils {
@@ -37,7 +41,7 @@ public class ItemStackUtils {
                 return livingEntityPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND).getStyle(livingEntityPatch);
             }
         }
-        return null;
+        return CapabilityItem.Styles.COMMON;
     }
 
     public static InteractionHand getWeaponSpeed(Entity ent, InteractionHand hand) {
@@ -54,23 +58,20 @@ public class ItemStackUtils {
     public static float getWeaponWeight(Entity ent, InteractionHand hand, EquipmentSlot slot) {
         if (ent != null) {
             if (ent instanceof LivingEntity living) {
-                LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(living, LivingEntityPatch.class);
-                if (livingEntityPatch != null) {
-                    ItemStack itemStack;
-                    if (hand == InteractionHand.MAIN_HAND) {
-                        itemStack = living.getMainHandItem();
-                    } else itemStack = living.getOffhandItem();
-                    List<AttributeModifier> modifiers = CapabilityItem.getAttributeModifiers(
-                            EpicFightAttributes.MAX_STRIKES.get(),
-                            slot,
-                            itemStack,
-                            livingEntityPatch
-                    );
-                    float total = 0.0f;
-                    for (AttributeModifier modifier : modifiers) {
-                        total += (float) modifier.getAmount();
+                ItemStack itemStack;
+                if (hand == InteractionHand.MAIN_HAND) {
+                    itemStack = living.getMainHandItem();
+                } else itemStack = living.getOffhandItem();
+                CompoundTag tag = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(itemStack.getItem());
+                if (tag != null) {
+                    if (tag.contains("attributes")) {
+                        CompoundTag attributes = tag.getCompound("attributes");
+                        for (String key : attributes.getAllKeys()) {
+                            if(attributes.getCompound(key).contains("weight")){
+                                return (float) attributes.getCompound(key).getDouble("weight");
+                            }
+                        }
                     }
-                    return total;
                 }
             }
         }

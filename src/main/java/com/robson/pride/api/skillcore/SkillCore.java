@@ -1,16 +1,15 @@
 package com.robson.pride.api.skillcore;
 
-import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
+import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import io.redspace.ironsspellbooks.damage.DamageSources;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import yesman.epicfight.api.utils.ExtendableEnum;
 import yesman.epicfight.api.utils.ExtendableEnumManager;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
-import static com.robson.pride.registries.WeaponArtRegister.WeaponArts;
+import static com.robson.pride.registries.WeaponSkillRegister.WeaponSkills;
 
 public class SkillCore {
 
@@ -24,17 +23,19 @@ public class SkillCore {
     }
 
     public static void defaultSkillCore(LivingEntity ent, ItemStack weapon) {
-        CapabilityItem itemcap = EpicFightCapabilities.getItemStackCapability(weapon);
-        if (itemcap != null) {
-            WeaponSkillBase skill = WeaponCategoriesEnum.DefaultSkills.get(itemcap.getWeaponCategory());
-            if (skill != null){
-                skill.tryToExecute(ent);
-            }
-        }
+       CompoundTag tag = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(weapon.getItem());
+       if (tag != null){
+           if (tag.contains("skill")){
+               WeaponSkillBase skill = WeaponSkills.get(tag.getString("skill"));
+               if (skill != null){
+                   skill.tryToExecute(ent);
+               }
+           }
+       }
     }
 
     public static void weaponArtCore(LivingEntity ent, String weaponart) {
-        WeaponSkillBase skill = WeaponArts.get(weaponart);
+        WeaponSkillBase skill = WeaponSkills.get(weaponart);
         if (skill != null){
             skill.tryToExecute(ent);
         }
