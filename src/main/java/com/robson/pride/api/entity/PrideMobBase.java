@@ -12,10 +12,9 @@ public class PrideMobBase extends Monster {
     private List<String> skills;
     private byte variant;
 
-    protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_, String element, List<String> skills, byte variant) {
-        super(p_33002_, p_33003_);
+    protected PrideMobBase(EntityType<?> p_33002_, Level p_33003_, String element, byte variant) {
+        super((EntityType<? extends Monster>) p_33002_, p_33003_);
         this.element = element;
-        this.skills = skills;
         this.variant = variant;
     }
 

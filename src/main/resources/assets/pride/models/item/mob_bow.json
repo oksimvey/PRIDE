@@ -1,5 +1,5 @@
 {
-  "parent": "pride:bow_model",
+  "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "minecraft:item/bow"
   },

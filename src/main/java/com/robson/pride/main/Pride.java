@@ -1,8 +1,10 @@
 package com.robson.pride.main;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.nameless.indestructible.network.SPDatapackSync;
 import com.robson.pride.api.ai.DataConditions;
 import com.robson.pride.api.data.PrideCapabilityReloadListener;
+import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
@@ -12,8 +14,10 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -24,6 +28,7 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import yesman.epicfight.network.EpicFightNetworkManager;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
@@ -41,6 +46,7 @@ public class Pride {
         MinecraftForge.EVENT_BUS.addListener(this::addReloadListnerEvent);
         ItemsRegister.REGISTRY.register(bus);
         EntityRegister.ENTITIES.register(bus);
+        MinecraftForge.EVENT_BUS.addListener(this::onDatapackSync);
         AttributeRegister.register(bus);
         GUIRegister.REGISTRY.register(bus);
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
@@ -73,11 +79,28 @@ public class Pride {
 
     private void addReloadListnerEvent(final AddReloadListenerEvent event) {
         event.addListener(new PrideCapabilityReloadListener());
+        event.addListener(new PrideMobPatchReloader());
     }
 
+    private void onDatapackSync(final OnDatapackSyncEvent event) {
+        ServerPlayer player = event.getPlayer();
+        if (player != null) {
+            if (!player.getServer().isSingleplayerOwner(player.getGameProfile())) {
+                SPDatapackSync mobPatchPacket = new SPDatapackSync(PrideMobPatchReloader.getTagCount());
+                PrideMobPatchReloader.getDataStream().forEach(mobPatchPacket::write);
+                EpicFightNetworkManager.sendToPlayer(mobPatchPacket, player);
+            }
+        } else {
+            event.getPlayerList().getPlayers().forEach((serverPlayer -> {
+                SPDatapackSync mobPatchPacket = new SPDatapackSync(PrideMobPatchReloader.getTagCount());
+                PrideMobPatchReloader.getDataStream().forEach(mobPatchPacket::write);
+                EpicFightNetworkManager.sendToPlayer(mobPatchPacket, serverPlayer);
+            }));
+        }
+    }
 
-    private void setupCommon(FMLCommonSetupEvent event) {
-        PacketRegister.register();
+        private void setupCommon(FMLCommonSetupEvent event) {
+            PacketRegister.register();
         event.enqueueWork(WeaponSkillRegister::registerWeaponArts);
     }
 

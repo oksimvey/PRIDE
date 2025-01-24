@@ -9,8 +9,11 @@ import com.robson.pride.registries.KeyRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 import java.util.concurrent.TimeUnit;
 
@@ -71,7 +74,17 @@ public class onQPress {
                 anim = "step_right";
             }
             AnimUtils.playAnimByString(player, "epicfight:biped/skill/" + anim, 0);
-
+            TimerUtil.schedule(()-> {
+                Entity target = TargetUtil.getTarget(player);
+                if (target != null){
+                    LivingEntityPatch l = EpicFightCapabilities.getEntityPatch(target, LivingEntityPatch.class);
+                    if (l  != null){
+                        if (!l.isLastAttackSuccess()){
+                            ProgressionUtils.addXp(player,  "Dexterity", 10);
+                        }
+                    }
+                }
+            },200, TimeUnit.MILLISECONDS);
         }
     }
 

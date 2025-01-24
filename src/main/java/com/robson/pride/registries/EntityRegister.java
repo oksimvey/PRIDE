@@ -7,6 +7,7 @@ import com.robson.pride.entities.pre_hardmode.japanese.mob.ronin.Ronin;
 import com.robson.pride.entities.pre_hardmode.knight.mob.eliteknight.EliteKnight;
 import com.robson.pride.entities.special.CloneEntity;
 import com.robson.pride.entities.special.Shooter;
+import com.robson.pride.entities.thunderdomain.thundermage.ThunderMage;
 import com.robson.pride.main.Pride;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;

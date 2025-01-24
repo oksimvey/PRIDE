@@ -5,6 +5,7 @@
   "isHumanoid": true,
   "faction": "undead",
   "boss_bar": true,
+  "music": "pride:shogun",
   "custom_texture": "indestructible:textures/gui/boss_bar.png",
   "custom_name": "Isshin, the Sword Saint    ",
   "attributes": {
@@ -143,10 +144,10 @@
                   "max": 0
                 }
               ],
-              "animation": "epicfight:biped/combat/tachi_auto3",
+              "animation": "pride:biped/combat/mob_aim",
               "command_list": [
                 {
-                  "time": 0,
+                  "time": 0.0,
                   "command": "pride @s skill Darkness_Cut 10",
                   "execute_at_target": false
                 }

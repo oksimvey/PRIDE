@@ -21,8 +21,10 @@ public class AttributeModification {
             if (event.getEntity() instanceof Player ent) {
                 AttributeUtils.addModifier(ent, "epicfight:weight", "b4c793f6-b421-43cb-81e8-754fdfe278e4", ItemStackUtils.getWeaponWeight(ent, InteractionHand.OFF_HAND, EquipmentSlot.OFFHAND), AttributeModifier.Operation.ADDITION);
                 onFPress.addModifierToStyle(ent);
-                AttributeModifiers.addModifierToItem(ent, ent.getMainHandItem());
-                AttributeModifiers.addModifierToItem(ent, ent.getOffhandItem());
+                float missingreq = AttributeModifiers.calculateModifier(ent, ent.getMainHandItem(), 1);
+                if (missingreq < 1){
+                    AttributeUtils.addModifier(ent, "minecraft:generic.attack_speed","63104183-c72f-4f0b-9c98-b06743e886de", missingreq , AttributeModifier.Operation.MULTIPLY_TOTAL);
+                }
             }
         }
     }

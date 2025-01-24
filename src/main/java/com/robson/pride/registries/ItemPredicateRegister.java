@@ -47,10 +47,12 @@ public class ItemPredicateRegister {
             });
 
             ItemPropertyFunction PULLING = (((itemStack, clientLevel, livingEntity, i) -> {
+                if (livingEntity != null){
                if (AnimationsRegister.pullLvl.get(livingEntity) != null) {
                    if (AnimationsRegister.pullLvl.get(livingEntity) != 0) {
                        return AnimationsRegister.pullLvl.get(livingEntity);
                    }
+               }
                }
                 return 0;
             }));

@@ -1,29 +1,18 @@
 package com.robson.pride.progression;
 
-import com.mojang.datafixers.util.Pair;
 import com.robson.pride.api.data.PrideCapabilityReloadListener;
-import com.robson.pride.api.utils.ItemStackUtils;
-import com.robson.pride.api.utils.MathUtils;
+import com.robson.pride.api.utils.ElementalUtils;
+import com.robson.pride.registries.WeaponSkillRegister;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.item.CapabilityItem;
-import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class AttributeModifiers {
 
     public static List<String> scale_tiers = Arrays.asList("E", "D", "C", "B", "A", "S");
-    private static final UUID Strength_Modifier = UUID.fromString("725093a2-e7a7-437d-90e1-44730070d657");
-    private static final UUID Dexterity_Modifier = UUID.fromString("f31fb58f-993c-46aa-a19c-f454b430f886");
-    private static final UUID Mind_Modifier = UUID.fromString("976715de-9792-485d-b8f4-82273ee07f32");
 
     public static void setModifierForImbuement(ItemStack item){
         if (item != null){
@@ -34,6 +23,22 @@ public class AttributeModifiers {
             item.getOrCreateTag().putString("scaleMind", scale_tiers.get(newtier));
             item.getOrCreateTag().putInt("requiredMind", (int) ((getValueOfDefaultAttribute(item, "required", "Strength") + getValueOfDefaultAttribute(item, "required", "Dexterity")) / 1.5f) + getValueOfDefaultAttribute(item,  "required", "Mind"));
         }
+    }
+
+    public static ChatFormatting getModifierColor(ItemStack item, float modifier){
+        if (item  != null){
+            if (modifier < 0){
+                return ChatFormatting.RED;
+            }
+            else {
+                String element = ElementalUtils.getItemElement(item);
+                if (WeaponSkillRegister.elements.contains(element)){
+                    return ElementalUtils.getColorByElement(element);
+                }
+                else return ChatFormatting.DARK_GREEN;
+            }
+        }
+        return ChatFormatting.WHITE;
     }
 
     public static int getValueOfDefaultAttribute(ItemStack item, String type, String stat){
@@ -52,64 +57,66 @@ public class AttributeModifiers {
         return 0;
     }
 
-    public static void addModifierToItem(Player player, ItemStack  item){
+    public static String getSignal(float number){
+        if (number < 0){
+            return "";
+        }
+        return "+";
+    }
+
+    public static float calculateModifier(Player player, ItemStack  item, float defaultmodifier){
         if(item != null && player != null){
             CompoundTag tag = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem());
             if (tag != null){
+                float strmodifier =  0;
+                float dexmodifier = 0;
+                float mindmofier = 0;
+                byte modifiers = 0;
                 if (tag.contains("requiredStrength")){
-                    deserializeStrength(player, item, tag);
+                    modifiers = (byte) (modifiers + 1);
+                    strmodifier = calculateAttributeModifier(player, item, tag,  "Strength");
                 }
-                if (tag.contains("requiredStrength")){
-                    deserializeStrength(player, item, tag);
+                if (tag.contains("requiredDexterity")){
+                    modifiers = (byte) (modifiers + 1);
+                    dexmodifier =  calculateAttributeModifier(player, item, tag,  "Dexterity");
                 }
-                if (tag.contains("requiredStrength")){
-                    deserializeStrength(player, item, tag);
+                if (tag.contains("requiredMind") || item.getOrCreateTag().contains("requiredMind")){
+                    modifiers = (byte) (modifiers + 1);
+                    mindmofier =  calculateAttributeModifier(player, item, tag,  "Mind");
                 }
-            }
-        }
-    }
-
-    public static void deserializeStrength(Player player, ItemStack item, CompoundTag tag){
-        if (player != null && item != null && tag != null){
-            int lvl = player.getPersistentData().getInt("StrengthLvl");
-            double required = tag.getDouble("requiredStrength");
-            float difference = (float) (lvl - required);
-            float defaultmodifier = getDamageModifier(item, player);
-            if (difference < 0){
-            }
-            else {
-                String scale = tag.getString("scaleStrength");
-                addDamageModifier(item, player, Strength_Modifier, (float) (100 * Math.pow(getIncrementByScale(scale), defaultmodifier)));
-            }
-        }
-    }
-
-    public static void addDamageModifier(ItemStack item, Player player, UUID uuid, float amount){
-        if (item != null && player != null){
-            CapabilityItem itemcap = EpicFightCapabilities.getItemStackCapability(item);
-            if (itemcap != null) {
-
-            }
-        }
-    }
-
-    public static float getDamageModifier(ItemStack item, Player player){
-        if (item != null && player != null){
-            CapabilityItem itemcap = EpicFightCapabilities.getItemStackCapability(item);
-            if (itemcap != null) {
-                AttributeModifier modifier = itemcap.getDamageAttributesInCondition(ItemStackUtils.getStyle(player)).get(Attributes.ATTACK_DAMAGE);
-                if (modifier != null) {
-                    return (float) modifier.getAmount();
-                }
+                float agroup = mindmofier + dexmodifier + strmodifier;
+                float finalmodifier = agroup  / modifiers;
+                return defaultmodifier * finalmodifier;
             }
         }
         return 0;
     }
 
+    public static float calculateAttributeModifier(Player player, ItemStack item, CompoundTag tag, String attribute){
+        if (player != null && item != null && tag != null) {
+            CompoundTag playertag = ProgressionGUIRender.playertags.get(player);
+            if (playertag != null) {
+                int lvl = playertag.getInt(attribute  + "Lvl");
+                float required = (float) tag.getDouble("required" + attribute);
+                String scale = tag.getString("scale" + attribute);
+                if (attribute.equals("Mind") && scale_tiers.contains(item.getOrCreateTag().getString("scaleMind")) && item.getOrCreateTag().contains("requiredMind")) {
+                    required = item.getTag().getInt("requiredMind");
+                    scale = item.getTag().getString("scaleMind");
+                }
+                float difference = (lvl - required) / 10;
+                if (difference < 0) {
+                    return difference;
+                }
+                else return 1 + (difference * getIncrementByScale(scale));
+            }
+        }
+        return 0;
+    }
     public static float getIncrementByScale(String scale){
         if (scale_tiers.contains(scale)){
-            return 1.01f + (float) scale_tiers.indexOf(scale) / 100;
+            return 0.01f + (float) scale_tiers.indexOf(scale) / 100;
         }
-        return 1;
+        return 0;
     }
 }
+

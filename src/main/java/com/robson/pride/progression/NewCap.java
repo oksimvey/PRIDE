@@ -1,8 +1,12 @@
 package com.robson.pride.progression;
 
 import com.robson.pride.api.utils.ElementalUtils;
+import com.robson.pride.registries.WeaponSkillRegister;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 public class NewCap {
 
@@ -55,19 +59,6 @@ public class NewCap {
                 tag.getInt("VigorMaxXp") != 0 &&
                 tag.getInt("EnduranceMaxXp") != 0 &&
                 tag.getInt("MindMaxXp") != 0 &&
-                hasElement(tag.getString("Element"));
-    }
-
-    public static boolean hasElement(String element) {
-        return element.equals("Darkness") ||
-                element.equals("Light") ||
-                element.equals("Thunder") ||
-                element.equals("Sun") ||
-                element.equals("Moon") ||
-                element.equals("Blood") ||
-                element.equals("Wind") ||
-                element.equals("Nature") ||
-                element.equals("Ice") ||
-                element.equals("Water");
+                WeaponSkillRegister.elements.contains(tag.getString("Element"));
     }
 }

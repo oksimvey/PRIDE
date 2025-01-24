@@ -28,6 +28,12 @@ public class MathUtils {
         return Math.sqrt(Math.pow(deltax, 2) + Math.pow(deltay, 2) + Math.pow(deltaz, 2));
     }
 
+    public static float setDecimalsOnFloat(float number, byte decimals){
+        int amount = (int) Math.pow(10, decimals);
+        int newnumber = (int) (number * amount);
+        return (float) newnumber / amount;
+    }
+
     public static AABB createAABBAroundEnt(Entity ent, float size) {
         return new AABB(ent.getX() + size, ent.getY() + size * 1.5, ent.getZ() + size, ent.getX() - size, ent.getY() - size, ent.getZ() - size);
     }

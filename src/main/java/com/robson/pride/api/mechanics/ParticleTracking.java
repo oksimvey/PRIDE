@@ -55,8 +55,8 @@ public class ParticleTracking {
         if (item != null) {
             CompoundTag aabb1 = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem());
             if (aabb1 != null) {
-                if (aabb1.contains("minX") && aabb1.contains("maxX") && aabb1.contains("minY") && aabb1.contains("maxY") && aabb1.contains("minY") && aabb1.contains("maxY")) {
-                    if (aabb1.contains("minX1") && aabb1.contains("maxX1") && aabb1.contains("minY1") && aabb1.contains("maxY1") && aabb1.contains("minY1") && aabb1.contains("maxY1")) {
+                if (aabb1.contains("minX") && aabb1.contains("maxX") && aabb1.contains("minY") && aabb1.contains("maxY") && aabb1.contains("minZ") && aabb1.contains("maxZ")) {
+                    if (aabb1.contains("minX1") && aabb1.contains("maxX1") && aabb1.contains("minY1") && aabb1.contains("maxY1") && aabb1.contains("minZ1") && aabb1.contains("maxZ1")) {
                         Random random = new Random();
                         if (random.nextInt(2) == 0) {
                             return new Vec3f((float) (((new Random()).nextFloat() + aabb1.getDouble("minX1")) * aabb1.getDouble("maxX1")), (float) (((new Random()).nextFloat() + aabb1.getDouble("minY1")) * aabb1.getDouble("maxY1") + (aabb1.getDouble("maxY1") / 10)), (float) (-((new Random()).nextFloat() * (aabb1.getDouble("maxZ1") * ent.getBbHeight() / 1.8F)) + aabb1.getDouble("minZ1")));

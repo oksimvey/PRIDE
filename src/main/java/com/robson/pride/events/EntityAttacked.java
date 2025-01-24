@@ -3,6 +3,7 @@ package com.robson.pride.events;
 import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.entities.special.Shooter;
+import com.robson.pride.progression.AttributeModifiers;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.skills.special.AirSlamSkill;
 import com.robson.pride.skills.special.CloneSkill;
@@ -11,9 +12,11 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -99,6 +102,24 @@ public class EntityAttacked {
                             ElementalPassives.onElementalDamage(ent, living, living.getOffhandItem(), event);
                         }
                     }
+                }
+            }
+        }
+    }
+    @SubscribeEvent
+    public static void hurtEnt(LivingHurtEvent event){
+        if (event.getSource().getDirectEntity() != null){
+            if  (event.getSource().getDirectEntity() instanceof Player player){
+                InteractionHand hand = ItemStackUtils.checkAttackingHand(player);
+                if (hand != null) {
+                    float extradamage = 0;
+                    if (hand == InteractionHand.MAIN_HAND) {
+                        extradamage = AttributeModifiers.calculateModifier(player, player.getMainHandItem(), event.getAmount());
+                    }
+                    else if (hand == InteractionHand.OFF_HAND){
+                        extradamage = AttributeModifiers.calculateModifier(player, player.getOffhandItem(), event.getAmount());
+                    }
+                    event.setAmount(event.getAmount() + extradamage);
                 }
             }
         }

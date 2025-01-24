@@ -6,6 +6,7 @@ import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.ParticleRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -34,6 +35,7 @@ public class ElementalUtils {
             player.getPersistentData().putString("Element", element);
         }
     }
+
 
     public static ParticleOptions getParticleByElement(String element) {
         switch (element) {
@@ -72,6 +74,42 @@ public class ElementalUtils {
             }
         }
         return null;
+    }
+
+    public static ChatFormatting getColorByElement(String element) {
+        switch (element) {
+            case "Darkness" -> {
+                return ChatFormatting.BLACK;
+            }
+            case "Light" -> {
+                return ChatFormatting.YELLOW;
+            }
+            case "Thunder" -> {
+                return ChatFormatting.AQUA;
+            }
+            case "Sun" -> {
+                return ChatFormatting.GOLD;
+            }
+            case "Moon" -> {
+                return ChatFormatting.DARK_PURPLE;
+            }
+            case "Blood" -> {
+                return ChatFormatting.DARK_RED;
+            }
+            case "Wind" -> {
+                return ChatFormatting.WHITE;
+            }
+            case "Nature" -> {
+                return ChatFormatting.DARK_GREEN;
+            }
+            case "Ice" -> {
+                return ChatFormatting.DARK_AQUA;
+            }
+            case "Water" -> {
+                return ChatFormatting.DARK_BLUE;
+            }
+        }
+        return ChatFormatting.GRAY;
     }
 
     public static void playSoundByElement(String element, Entity ent, boolean aura, float volume) {
