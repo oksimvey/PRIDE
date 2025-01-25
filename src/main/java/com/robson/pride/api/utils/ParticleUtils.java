@@ -1,5 +1,6 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.particles.StringParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
@@ -20,6 +21,17 @@ import java.util.Random;
 
 @Mod.EventBusSubscriber
 public class ParticleUtils {
+
+    public static void spawnNumberParticle(Entity ent, String text, StringParticle.StringParticleTypes type) {
+        if (ent != null) {
+                StringParticle particle = new StringParticle(Minecraft.getInstance().level, ent.getX() + new Random().nextFloat() - ent.getBbWidth() * ent.getBbWidth() , ent.getY() + ent.getBbHeight() * 1.25, ent.getZ() +  new Random().nextFloat() - ent.getBbWidth() * ent.getBbWidth(), 0, 0, type.ordinal());
+                StringParticle.particletext.put(particle, text);
+                particle.setColor((float) ((type.getColor() >> 16) & 0xFF) / 255.0f,
+                        (float) ((type.getColor() >> 8) & 0xFF) / 255.0f,
+                        (float) (type.getColor() & 0xFF) / 255.0f);
+                Minecraft.getInstance().particleEngine.add(particle);
+        }
+    }
 
     public static void spawnParticleOnServer(ParticleOptions particle, Level world, double x, double y, double z, int count, double deltax, double deltay, double deltaz, double speed) {
         if (!world.isClientSide) {

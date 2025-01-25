@@ -21,8 +21,11 @@ import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ItemStackUtils {
+
+    private static boolean toggle = false;
 
     public static WeaponCategory getWeaponCategory(Entity ent, InteractionHand hand) {
         LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
@@ -81,10 +84,8 @@ public class ItemStackUtils {
     public static InteractionHand checkAttackingHand(Entity ent) {
         if (ent != null) {
             if (getStyle(ent) == PrideStyles.DUAL_WIELD) {
-                Random random = new Random();
-                if (random.nextBoolean()) {
-                    return InteractionHand.MAIN_HAND;
-                } else return InteractionHand.OFF_HAND;
+                toggle = !toggle;
+                    return toggle ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
             }
         }
         return InteractionHand.MAIN_HAND;

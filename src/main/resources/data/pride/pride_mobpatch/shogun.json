@@ -144,11 +144,11 @@
                   "max": 0
                 }
               ],
-              "animation": "pride:biped/combat/mob_aim",
+              "animation": "epicfight:biped/combat/tachi_auto3",
               "command_list": [
                 {
                   "time": 0.0,
-                  "command": "pride @s skill Darkness_Cut 10",
+                  "command": "pride @s skill Darkness_Cut",
                   "execute_at_target": false
                 }
                 ]

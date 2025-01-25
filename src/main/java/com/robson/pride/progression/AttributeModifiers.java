@@ -92,26 +92,24 @@ public class AttributeModifiers {
         return 0;
     }
 
-    public static float calculateAttributeModifier(Player player, ItemStack item, CompoundTag tag, String attribute){
+    public static float calculateAttributeModifier(Player player, ItemStack item, CompoundTag tag, String attribute) {
         if (player != null && item != null && tag != null) {
             CompoundTag playertag = ProgressionGUIRender.playertags.get(player);
             if (playertag != null) {
-                int lvl = playertag.getInt(attribute  + "Lvl");
+                int lvl = playertag.getInt(attribute + "Lvl");
                 float required = (float) tag.getDouble("required" + attribute);
                 String scale = tag.getString("scale" + attribute);
                 if (attribute.equals("Mind") && scale_tiers.contains(item.getOrCreateTag().getString("scaleMind")) && item.getOrCreateTag().contains("requiredMind")) {
                     required = item.getTag().getInt("requiredMind");
                     scale = item.getTag().getString("scaleMind");
                 }
-                float difference = (lvl - required) / 10;
-                if (difference < 0) {
-                    return difference;
-                }
-                else return 1 + (difference * getIncrementByScale(scale));
+                float difference = lvl - required;
+                return difference < 0 ? difference / 10 : difference * getIncrementByScale(scale) / 2;
             }
         }
         return 0;
     }
+
     public static float getIncrementByScale(String scale){
         if (scale_tiers.contains(scale)){
             return 0.01f + (float) scale_tiers.indexOf(scale) / 100;

@@ -1,8 +1,10 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 public class ProgressionUtils {
 
@@ -55,6 +57,32 @@ public class ProgressionUtils {
                 }
             }
         }
+    }
+
+    public static boolean haveReqs(Player player){
+        if (player != null){
+            ItemStack weapon = player.getMainHandItem();
+            CompoundTag tags = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(weapon.getItem());
+            if (tags != null){
+                boolean mindreqs = true;
+                boolean strreqs = true;
+                boolean dexreqs = true;
+                if (tags.contains("requiredStrength")){
+                    strreqs = tags.getDouble("requiredStrength") <= player.getPersistentData().getInt("StrengthLvl");
+                }
+                if (tags.contains("requiredDexterity")){
+                    dexreqs = tags.getDouble("requiredDexterity") <= player.getPersistentData().getInt("DexterityLvl");
+                }
+                if (weapon.getTag().contains("requiredMind")){
+                    mindreqs = weapon.getTag().getDouble("requiredMind") <= player.getPersistentData().getInt("MindLvl");
+                }
+                else if (tags.contains("requiredMind")){
+                    mindreqs = tags.getDouble("requiredMind") <= player.getPersistentData().getInt("MindLvl");
+                }
+                return mindreqs && strreqs && dexreqs;
+            }
+        }
+        return false;
     }
 
     public static int[] addXpBase(int lvl, int xp, int maxxp, int amount) {

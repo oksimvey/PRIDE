@@ -41,12 +41,6 @@ public class SkillCore {
         }
     }
 
-    public interface WeaponSkill extends ExtendableEnum {
-        ExtendableEnumManager<WeaponSkill> ENUM_MANAGER = new ExtendableEnumManager<>("weapon_skill");
-
-        WeaponSkillBase skill();
-    }
-
     public static boolean canHit(Entity dmgent, Entity target, String skillname, int skillid) {
         if (dmgent != null && target != null) {
             return target instanceof LivingEntity && !DamageSources.isFriendlyFireBetween(target, dmgent) && target != dmgent && target.getPersistentData().getInt(skillname) != skillid;

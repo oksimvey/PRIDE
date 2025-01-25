@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 public class CameraUtils implements ITargetCameraOffsetCallback {
 
-
     public static void unlockCamera(LocalPlayer ent, byte duration) {
         LocalPlayerPatch player = EpicFightCapabilities.getEntityPatch(ent, LocalPlayerPatch.class);
         if (player != null) {

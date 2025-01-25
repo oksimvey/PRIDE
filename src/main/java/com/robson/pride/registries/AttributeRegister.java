@@ -39,7 +39,7 @@ public class AttributeRegister {
     public static final RegistryObject<Attribute> THUNDER_POWER = newPowerAttribute("thunder");
     public static final RegistryObject<Attribute> SUN_POWER = newPowerAttribute("sun");
     public static final RegistryObject<Attribute> MOON_POWER = newPowerAttribute("moon");
-    public static final RegistryObject<Attribute> BLOOD_SPELL_POWER = newPowerAttribute("blood");
+    public static final RegistryObject<Attribute> BLOOD_POWER = newPowerAttribute("blood");
     public static final RegistryObject<Attribute> WIND_POWER = newPowerAttribute("wind");
     public static final RegistryObject<Attribute> NATURE_POWER = newPowerAttribute("nature");
     public static final RegistryObject<Attribute> ICE_POWER = newPowerAttribute("ice");

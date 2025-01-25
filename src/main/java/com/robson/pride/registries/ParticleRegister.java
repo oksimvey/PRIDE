@@ -1,6 +1,7 @@
 package com.robson.pride.registries;
 
 import com.robson.pride.main.Pride;
+import com.robson.pride.particles.StringParticle;
 import com.robson.pride.particles.PerilousParticle;
 import com.robson.pride.particles.RedLightningParticle;
 import com.robson.pride.particles.VulnerableParticle;
@@ -21,11 +22,13 @@ public class ParticleRegister {
     public static final RegistryObject<SimpleParticleType> PERILOUS = PARTICLES.register("perilous", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> VULNERABLE = PARTICLES.register("vulnerable", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> RED_LIGHTNING = PARTICLES.register("red_lightning", () -> new SimpleParticleType(true));
-
+    public static final RegistryObject<SimpleParticleType> NUMBER_PARTICLE = PARTICLES.register("number_particle", () -> new SimpleParticleType(true));
     @SubscribeEvent
     public static void registerParticles(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(PERILOUS.get(), PerilousParticle::provider);
         event.registerSpriteSet(VULNERABLE.get(), VulnerableParticle::provider);
         event.registerSpriteSet(RED_LIGHTNING.get(), RedLightningParticle.Provider::new);
+        event.registerSpriteSet(NUMBER_PARTICLE.get(), StringParticle.Provider::new);
+
     }
 }

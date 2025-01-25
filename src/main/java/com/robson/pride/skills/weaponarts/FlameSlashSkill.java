@@ -8,6 +8,8 @@ import com.robson.pride.api.utils.TimerUtil;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import net.minecraft.world.entity.LivingEntity;
 import reascer.wom.gameasset.WOMAnimations;
+import yesman.epicfight.api.animation.property.AnimationProperty;
+import yesman.epicfight.api.animation.types.EntityState;
 
 import java.util.concurrent.TimeUnit;
 

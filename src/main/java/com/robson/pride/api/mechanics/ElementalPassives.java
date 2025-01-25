@@ -3,6 +3,7 @@ package com.robson.pride.api.mechanics;
 import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.*;
+import com.robson.pride.particles.StringParticle;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.WeaponSkillRegister;
@@ -21,6 +22,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import yesman.epicfight.gameasset.EpicFightSounds;
+import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.damagesource.StunType;
 
 import java.util.List;
@@ -143,8 +145,12 @@ public class ElementalPassives {
     public static void bloodPassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent != null) {
             PlaySoundUtils.playSound(ent, SoundRegistry.BLOOD_EXPLOSION.get(), 1, 1);
-            if (stackablePassiveBase(ent, ElementalUtils.getFinalValueForBloodDMG(ent, power), "bleed_stacks")) {
-                HealthUtils.hurtEntity(ent, AttributeUtils.getAttributeValue(ent, "minecraft:generic.max_health") / 10, dmgent.damageSources().generic());
+            if (ent instanceof LivingEntity liv) {
+                if (stackablePassiveBase(ent, ElementalUtils.getFinalValueForBloodDMG(ent, power), "bleed_stacks", StringParticle.StringParticleTypes.RED)) {
+                    PlaySoundUtils.playSound(ent, EpicFightSounds.EVISCERATE.get(), 1, 1);
+                    ParticleUtils.spawnParticleRelativeToEntity(EpicFightParticles.BLOOD.get(), ent, 0, ent.getBbHeight()/2, 0, 10, 0, 0, 0, 0.1);
+                    HealthUtils.hurtEntity(ent, liv.getMaxHealth() / 10, dmgent.damageSources().generic());
+                }
             }
         }
     }
@@ -158,7 +164,7 @@ public class ElementalPassives {
     public static void naturePassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent instanceof LivingEntity living) {
             PlaySoundUtils.playSound(ent, SoundRegistry.NATURE_CAST.get(), 1, 1);
-            if (stackablePassiveBase(ent, ElementalUtils.getFinalValueForNatureDMG(ent, power), "root_stacks")) {
+            if (stackablePassiveBase(ent, ElementalUtils.getFinalValueForNatureDMG(ent, power), "root_stacks", StringParticle.StringParticleTypes.RED)) {
                 SpellUtils.castSpell(living, new RootSpell(), 10, 0);
             }
         }
@@ -168,11 +174,11 @@ public class ElementalPassives {
         if (ent != null && dmgent != null) {
             PlaySoundUtils.playSound(ent, SoundRegistry.RAY_OF_FROST.get(), 1, 1);
             byte multiplier = 1;
-            if (!ElementalUtils.isNotInWater(ent, new Vec3(ent.getX(), ent.getY(), ent.getZ()))) {
+            if (!ElementalUtils.isNotInWater(ent, ent.position())) {
                 multiplier = 2;
             }
-            if (stackablePassiveBase(ent, multiplier * ElementalUtils.getFinalValueForIceDMG(ent, power), "frost_stacks")) {
-                AnimUtils.applyStun(ent, StunType.HOLD, 15);
+            if (stackablePassiveBase(ent, multiplier * ElementalUtils.getFinalValueForIceDMG(ent, power), "frost_stacks", StringParticle.StringParticleTypes.LIGHT_BLUE)) {
+                AnimUtils.applyStun(ent, StunType.SHORT, ElementalUtils.getFinalValueForIceDMG(ent, power) / 3);
             }
         }
     }
@@ -185,14 +191,16 @@ public class ElementalPassives {
         }
     }
 
-    public static boolean stackablePassiveBase(Entity ent, float amounttoadd, String tag) {
+    public static boolean stackablePassiveBase(Entity ent, float amounttoadd, String tag, StringParticle.StringParticleTypes type) {
         if (ent != null) {
             ent.getPersistentData().putByte(tag, (byte) (ent.getPersistentData().getByte(tag) + amounttoadd));
             if (ent.getPersistentData().getByte(tag) >= 100) {
+                ParticleUtils.spawnNumberParticle(ent, 100 + "%", type);
                 ent.getPersistentData().putByte(tag, (byte) 0);
                 ent.getPersistentData().putBoolean(tag, true);
                 return true;
             }
+            ParticleUtils.spawnNumberParticle(ent, ent.getPersistentData().getByte(tag) + "%", type);
         }
         return false;
     }

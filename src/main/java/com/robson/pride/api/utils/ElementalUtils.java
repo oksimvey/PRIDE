@@ -9,6 +9,7 @@ import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
@@ -114,15 +115,16 @@ public class ElementalUtils {
 
     public static void playSoundByElement(String element, Entity ent, boolean aura, float volume) {
         ClientLevel level = Minecraft.getInstance().level;
+        LocalPlayer player = Minecraft.getInstance().player;
         if (level != null) {
             switch (element) {
                 case "Darkness" -> {
                     if (aura) {
-                        level.playSound(Minecraft.getInstance().player, ent, SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1, 1);
+                        level.playSound(player, ent, SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, volume, 1);
                     }
                 }
                 case "Light" -> {
-
+                    level.playSound(player, ent, SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, volume, 1);
                 }
                 case "Thunder" -> {
 
@@ -146,6 +148,7 @@ public class ElementalUtils {
 
                 }
                 case "Water" -> {
+
                 }
             }
         }

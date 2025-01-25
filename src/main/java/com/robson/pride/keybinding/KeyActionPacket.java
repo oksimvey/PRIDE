@@ -1,6 +1,5 @@
 package com.robson.pride.keybinding;
 
-import com.robson.pride.api.mechanics.Aura;
 import com.robson.pride.progression.ProgressionGUI;
 import com.robson.pride.skills.special.RechargeSkill;
 import io.netty.buffer.Unpooled;
@@ -18,6 +17,7 @@ import net.minecraftforge.network.NetworkHooks;
 import java.util.function.Supplier;
 
 public class KeyActionPacket {
+
     private final String action;
     private final long pressDuration;
 
@@ -40,7 +40,6 @@ public class KeyActionPacket {
     public static void handle(KeyActionPacket packet, Supplier<NetworkEvent.Context> context) {
 
         context.get().enqueueWork(() -> {
-
             ServerPlayer player = context.get().getSender();
             if (player != null) {
 

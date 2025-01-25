@@ -12,6 +12,8 @@ import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.robson.pride.api.utils.ProgressionUtils.haveReqs;
+
 public abstract class WeaponSkillBase {
 
     private String SkillRarity;
@@ -45,32 +47,6 @@ public abstract class WeaponSkillBase {
             }
             else onExecution(ent);
         }
-    }
-
-    public static boolean haveReqs(Player player){
-        if (player != null){
-            ItemStack weapon = player.getMainHandItem();
-            CompoundTag tags = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(weapon.getItem());
-            if (tags != null){
-                boolean mindreqs = true;
-                boolean strreqs = true;
-                boolean dexreqs = true;
-                if (tags.contains("requiredStrength")){
-                    strreqs = tags.getDouble("requiredStrength") <= player.getPersistentData().getInt("StrengthLvl");
-                }
-                if (tags.contains("requiredDexterity")){
-                    dexreqs = tags.getDouble("requiredDexterity") <= player.getPersistentData().getInt("DexterityLvl");
-                }
-                if (weapon.getTag().contains("requiredMind")){
-                mindreqs = weapon.getTag().getDouble("requiredMind") <= player.getPersistentData().getInt("MindLvl");
-                }
-                else if (tags.contains("requiredMind")){
-                    mindreqs = tags.getDouble("requiredMind") <= player.getPersistentData().getInt("MindLvl");
-                }
-                return mindreqs && strreqs && dexreqs;
-            }
-        }
-        return false;
     }
 
     public void onExecution(LivingEntity ent) {

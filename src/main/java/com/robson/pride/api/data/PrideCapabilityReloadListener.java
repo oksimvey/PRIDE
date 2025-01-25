@@ -11,6 +11,7 @@ import com.google.gson.JsonElement;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.datafixers.util.Pair;
 
+import com.robson.pride.registries.AttributeRegister;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -198,8 +199,12 @@ public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListe
         if (tag.contains("speed_bonus")) {
             modifierMap.put(Attributes.ATTACK_SPEED, EpicFightAttributes.getSpeedBonusModifier(tag.getDouble("speed_bonus")));
         }
+        if (tag.contains("darkness_power")){
+            modifierMap.put(AttributeRegister.DARKNESS_POWER.get(), new AttributeModifier(UUID.fromString("5975a582-14e0-4d16-b6ef-8cbe2c9593c0"), "epicfight:weapon_modifier", tag.getDouble("weight"), AttributeModifier.Operation.ADDITION));
+
+        }
         if (tag.contains("weight")){
-            modifierMap.put(EpicFightAttributes.WEIGHT.get(), getWeightModifier(tag.getDouble("weight")));
+            modifierMap.put(EpicFightAttributes.WEIGHT.get(), new AttributeModifier(UUID.fromString("5975a582-14e0-4d16-b6ef-8cbe2c9593c0"), "epicfight:weapon_modifier", tag.getDouble("weight"), AttributeModifier.Operation.ADDITION));
         }
 
         return modifierMap;

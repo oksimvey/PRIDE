@@ -60,7 +60,6 @@ public class Pride {
         EffectRegister.MOB_EFFECTS.register(bus);
         DataConditions.CONDITIONS.register(bus);
         PrideTabRegister.register(bus);
-        SkillCore.WeaponSkill.ENUM_MANAGER.registerEnumCls(MODID, WeaponSkillRegister.class);
     }
 
     private void registerCommands(final RegisterCommandsEvent event) {

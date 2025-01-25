@@ -29,9 +29,8 @@ public class AnimUtils {
                     if (livingEntityPatch instanceof AdvancedCustomHumanoidMobPatch<?> AHPatch) {
                         AHPatch.setBlocking(false);
                         AHPatch.setParry(false);
-                        AHPatch.setAttackSpeed(convert);
                         AHPatch.resetMotion();
-                        AHPatch.playAnimationSynchronized(animation, convert, SPPlayAnimation::new);
+                       AHPatch.playAnimationSynchronized(animation, convert, SPPlayAnimation::new);
                     } else livingEntityPatch.playAnimationSynchronized(animation, convert, SPPlayAnimation::new);
                 }
             }
@@ -111,6 +110,10 @@ public class AnimUtils {
     public static void applyStun(Entity ent, StunType stuntype, float duration) {
         LivingEntityPatch livingent = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
         if (livingent != null) {
+            if (livingent instanceof AdvancedCustomHumanoidMobPatch<?> mobPatch){
+                mobPatch.applyStun(stuntype, duration);
+                return;
+            }
             livingent.applyStun(stuntype, duration);
         }
     }
@@ -135,6 +138,9 @@ public class AnimUtils {
     public static void cancelMotion(Entity ent) {
         LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
         if (livingEntityPatch != null) {
+            if (livingEntityPatch instanceof AdvancedCustomHumanoidMobPatch<?> mobPatch){
+                mobPatch.resetMotion();
+            }
             livingEntityPatch.cancelAnyAction();
         }
     }
