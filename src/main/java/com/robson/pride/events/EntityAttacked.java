@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -106,17 +107,20 @@ public class EntityAttacked {
             }
         }
     }
+
     @SubscribeEvent
-    public static void hurtEnt(LivingHurtEvent event){
-        if (event.getSource().getDirectEntity() != null){
-            if  (event.getSource().getDirectEntity() instanceof Player player){
+    public static void hurtEnt(LivingHurtEvent event) {
+        if (event.getSource().getDirectEntity() != null && event.getSource().getEntity() != null) {
+            if (event.getSource().getEntity() instanceof AbstractArrow  ) {
+                event.setAmount(event.getAmount() + AttributeUtils.getAttributeValue(event.getSource().getEntity(), "pride:arrow_power"));
+            }
+            if (event.getSource().getDirectEntity() instanceof Player player) {
                 InteractionHand hand = ItemStackUtils.checkAttackingHand(player);
                 if (hand != null) {
                     float extradamage = 0;
                     if (hand == InteractionHand.MAIN_HAND) {
                         extradamage = AttributeModifiers.calculateModifier(player, player.getMainHandItem(), event.getAmount());
-                    }
-                    else if (hand == InteractionHand.OFF_HAND){
+                    } else if (hand == InteractionHand.OFF_HAND) {
                         extradamage = AttributeModifiers.calculateModifier(player, player.getOffhandItem(), event.getAmount());
                     }
                     event.setAmount(event.getAmount() + extradamage);

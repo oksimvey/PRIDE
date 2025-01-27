@@ -29,5 +29,29 @@
         "name": "pride:musics/shogun"
       }
     ]
+  },
+  "male_1_hello": {
+    "sounds": [
+      {
+        "name": "pride:npcs/male1_hello",
+        "stream": false
+      }
+    ]
+  },
+  "male_1_rage": {
+    "sounds": [
+      {
+        "name": "pride:npcs/male1_rage",
+        "stream": false
+      }
+    ]
+  },
+  "male_1_presentation": {
+    "sounds": [
+      {
+        "name": "pride:npcs/male1_presentation",
+        "stream": false
+      }
+    ]
   }
 }

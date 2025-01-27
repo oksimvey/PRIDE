@@ -22,6 +22,7 @@ public class AttributeRegister {
     }
 
     public static final RegistryObject<Attribute> MAX_WEIGHT = ATTRIBUTES.register("max_weight", () -> new RangedAttribute("attribute." + Pride.MODID + ".max_weight", 50.0D, 0.0D, 1024.0D).setSyncable(true));
+    public static final RegistryObject<Attribute> ARROW_POWER  = ATTRIBUTES.register("arrow_power", ()-> new RangedAttribute("attribute." + Pride.MODID + ".arrow_power", 100.0D, 0.0D,  1024.0D).setSyncable(true));
 
     public static final RegistryObject<Attribute> DARKNESS_RESIST = newResistanceAttribute("darkness");
     public static final RegistryObject<Attribute> LIGHT_RESIST = newResistanceAttribute("light");

@@ -18,11 +18,9 @@ public class PerilousCommand implements Command<CommandSourceStack> {
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
         return Commands.literal("perilous")
                 .then(Commands.argument("periloustype", StringArgumentType.word()).suggests(((commandContext, suggestionsBuilder) -> {
-                            suggestionsBuilder.suggest("sweep");
-                            suggestionsBuilder.suggest("pierce_one_hand");
-                            suggestionsBuilder.suggest("pierce_two_hand");
-                            suggestionsBuilder.suggest("pierce_dual_wield");
-                            suggestionsBuilder.suggest("total");
+                    for (String periloustypes : PerilousAttack.periloustypes) {
+                        suggestionsBuilder.suggest(periloustypes);
+                    }
                             return suggestionsBuilder.buildFuture();
                         }))
                         .then(Commands.argument("window", IntegerArgumentType.integer())

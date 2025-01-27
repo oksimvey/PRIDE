@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.Joint;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.api.animation.types.StaticAnimation;
@@ -119,9 +120,13 @@ public class Guard {
     public static StaticAnimation getParryMotion(Player player) {
         if (player != null) {
             Style style = ItemStackUtils.getStyle(player);
-            if (ItemStackUtils.getWeaponCategory(player, InteractionHand.MAIN_HAND) == WeaponCategoriesEnum.PRIDE_FIGHTNING_STYLE) {
-                return AnimationsRegister.INFERNAL_GUARD_PARRY;
-            } else if (style == PrideStyles.DUAL_WIELD) {
+            if (ItemStackUtils.checkShield(player, InteractionHand.MAIN_HAND)) {
+                return AnimationManager.getInstance().byKeyOrThrow("pride:biped/combat/shield_parry1");
+            }
+            else if (ItemStackUtils.checkShield(player, InteractionHand.OFF_HAND)){
+                return AnimationManager.getInstance().byKeyOrThrow("pride:biped/combat/shield_parry2");
+            }
+            else if (style == PrideStyles.DUAL_WIELD) {
                 toggle = !toggle;
                 return toggle ? Animations.SWORD_GUARD_ACTIVE_HIT2 : Animations.SWORD_GUARD_ACTIVE_HIT3;
             } else if (style == CapabilityItem.Styles.TWO_HAND) {

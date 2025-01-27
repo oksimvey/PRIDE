@@ -12,7 +12,7 @@ public class Parry {
         if (ent != null) {
             String BlockType = ItemStackUtils.checkBlockType(ent);
             if (Objects.equals(BlockType, "mainhandshield") || Objects.equals(BlockType, "offhandshield")) {
-                onShieldParry(ent, ddmgent, BlockType);
+                onShieldParry(ent, ddmgent);
             }
             if (Objects.equals(BlockType, "weapon")) {
                 onWeaponParry(ent, ddmgent);
@@ -20,15 +20,9 @@ public class Parry {
         }
     }
 
-    public static void onShieldParry(Entity ent, Entity ddmgent, String BlockType) {
+    public static void onShieldParry(Entity ent, Entity ddmgent) {
         StaminaUtils.consumeStamina(ddmgent, 4);
         PlaySoundUtils.playSoundByString(ent, "pride:shieldparry", 0.5f, 1f);
-        if (Objects.equals(BlockType, "mainhandshield")) {
-            AnimUtils.playAnimByString(ent, "pride:biped/combat/shield_parry1", 0.05F);
-        }
-        if (Objects.equals(BlockType, "offhandshield")) {
-            AnimUtils.playAnimByString(ent, "pride:biped/combat/shield_parry2", 0.05F);
-        }
     }
 
     public static void onWeaponParry(Entity ent, Entity ddmgent) {

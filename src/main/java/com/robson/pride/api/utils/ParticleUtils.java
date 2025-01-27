@@ -18,18 +18,30 @@ import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Mod.EventBusSubscriber
 public class ParticleUtils {
 
-    public static void spawnNumberParticle(Entity ent, String text, StringParticle.StringParticleTypes type) {
+    public static Particle spawnNumberParticle(Entity ent, String text, StringParticle.StringParticleTypes type) {
         if (ent != null) {
-                StringParticle particle = new StringParticle(Minecraft.getInstance().level, ent.getX() + new Random().nextFloat() - ent.getBbWidth() * ent.getBbWidth() , ent.getY() + ent.getBbHeight() * 1.25, ent.getZ() +  new Random().nextFloat() - ent.getBbWidth() * ent.getBbWidth(), 0, 0, type.ordinal());
+               Vec3 pos = new Vec3( new Random().nextFloat() - ent.getBbWidth() * ent.getBbWidth() ,  ent.getBbHeight() * 1.25,  new Random().nextFloat() - ent.getBbWidth() * ent.getBbWidth());
+                StringParticle particle = new StringParticle(Minecraft.getInstance().level, pos.x + ent.getX(), pos.y + ent.getY(), pos.z + ent.getZ(), 0, 0, type.ordinal());
                 StringParticle.particletext.put(particle, text);
                 particle.setColor((float) ((type.getColor() >> 16) & 0xFF) / 255.0f,
                         (float) ((type.getColor() >> 8) & 0xFF) / 255.0f,
                         (float) (type.getColor() & 0xFF) / 255.0f);
                 Minecraft.getInstance().particleEngine.add(particle);
+                tpParticleToEnt(ent, particle);
+                return particle;
+        }
+        return null;
+    }
+
+    public static void tpParticleToEnt(Entity ent, Particle particle){
+        if (ent != null && particle != null){
+            particle.setPos(ent.getX(), ent.getY() + ent.getBbHeight() * 1.25, ent.getZ());
+            TimerUtil.schedule(()-> tpParticleToEnt(ent, particle), 50, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -48,8 +60,8 @@ public class ParticleUtils {
     }
 
     public static Particle spawnAuraParticle(ParticleOptions particletype, double x, double y, double z, double deltax, double deltay, double deltaz){
-        ParticleEngine particleEngine = Minecraft.getInstance().particleEngine;
-            return particleEngine.createParticle(particletype, x, y, z, deltax, deltay, deltaz).scale(2f);
+           ParticleEngine particleEngine = Minecraft.getInstance().particleEngine;
+            return particleEngine.createParticle(particletype, x, y, z, deltax, deltay, deltaz);
 
     }
 

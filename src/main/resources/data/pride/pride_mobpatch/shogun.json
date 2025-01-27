@@ -5,7 +5,8 @@
   "isHumanoid": true,
   "faction": "undead",
   "boss_bar": true,
-  "music": "pride:shogun",
+  "music_priority": 1,
+  "custom_music": "pride:shogun",
   "custom_texture": "indestructible:textures/gui/boss_bar.png",
   "custom_name": "Isshin, the Sword Saint    ",
   "attributes": {

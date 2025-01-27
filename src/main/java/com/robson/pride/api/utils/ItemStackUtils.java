@@ -114,18 +114,15 @@ public class ItemStackUtils {
     }
 
     public static String checkBlockType(Entity ent) {
-        String BlockType = "";
         if (checkShield(ent, InteractionHand.MAIN_HAND)) {
-            BlockType = "mainhandshield";
-        } else {
-            if (checkShield(ent, InteractionHand.OFF_HAND)) {
-                BlockType = "offhandshield";
-            } else {
-                if (checkWeapon(ent, InteractionHand.MAIN_HAND)) {
-                    BlockType = "weapon";
-                }
-            }
+            return "mainhandshield";
         }
-        return BlockType;
+         if (checkShield(ent, InteractionHand.OFF_HAND)) {
+             return "offhandshield";
+         }
+             if (checkWeapon(ent, InteractionHand.MAIN_HAND)) {
+            return "weapon";
+        }
+        return "";
     }
 }

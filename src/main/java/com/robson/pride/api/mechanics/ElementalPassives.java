@@ -7,20 +7,25 @@ import com.robson.pride.particles.StringParticle;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.WeaponSkillRegister;
+import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.spells.nature.RootSpell;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import reascer.wom.particle.WOMParticles;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.damagesource.StunType;
@@ -67,8 +72,26 @@ public class ElementalPassives {
 
     public static void darknessPassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent != null) {
+            if (dmgent instanceof Player p){
+                ManaUtils.addMana(p, power);
+            }
+            if (ent instanceof LivingEntity living){
+                ManaUtils.consumeMana(living, power);
+                living.addEffect(new MobEffectInstance(MobEffects.WITHER, (int) power * 10, 0),living);
+            }
+        }
+    }
 
-
+    public static void darknessSpellDmg(Entity ent, SpellDamageEvent event){
+        if (ent != null){
+            event.setCanceled(true);
+            Entity spellent = event.getSpellDamageSource().getDirectEntity();
+            PlaySoundUtils.playSound(ent, SoundRegistry.TELEKINESIS_CAST.get(), 1,  1);
+            if (spellent != null){
+                Minecraft.getInstance().particleEngine.createParticle(WOMParticles.ANTITHEUS_BLACKHOLE_END.get(), spellent.getX(), spellent.getY(), spellent.getZ(), 0, 0, 0).scale(0.5f);
+                spellent.remove(Entity.RemovalReason.DISCARDED);
+            }
+            else Minecraft.getInstance().particleEngine.createParticle(WOMParticles.ANTITHEUS_BLACKHOLE_END.get(), ent.getX(), ent.getY(), ent.getZ(), 0, 0, 0).scale(0.5f);
         }
     }
 

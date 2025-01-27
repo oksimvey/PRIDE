@@ -24,6 +24,8 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
+
+import com.robson.pride.api.npc.JsonDialoguesReader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -76,6 +78,8 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
     private static final Gson GSON = (new GsonBuilder()).create();
     private static final Map<EntityType<?>, CompoundTag> TAGMAP = Maps.newHashMap();
     public static final Map<EntityType<?>, MobPatchReloadListener.AbstractMobPatchProvider> ADVANCED_MOB_PATCH_PROVIDERS = Maps.newHashMap();
+    public static Map<EntityType<?>, ListTag> DIALOGUES = Maps.newHashMap();
+    public static Map<EntityType<?>, ListTag> QUESTS = Maps.newHashMap();
 
     public PrideMobPatchReloader() {
         super(GSON, "pride_mobpatch");
@@ -84,6 +88,7 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
     protected Map<ResourceLocation, JsonElement> prepare(ResourceManager resourceManager, ProfilerFiller profileIn) {
         ADVANCED_MOB_PATCH_PROVIDERS.clear();
         TAGMAP.clear();
+        DIALOGUES.clear();
         return super.prepare(resourceManager, profileIn);
     }
 
@@ -107,6 +112,12 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
                 ADVANCED_MOB_PATCH_PROVIDERS.put(entityType, deserializeMobPatchProvider(entityType, tag, false, resourceManagerIn));
                 EntityPatchProvider.putCustomEntityPatch(entityType, (entity) -> () -> ((MobPatchReloadListener.AbstractMobPatchProvider)ADVANCED_MOB_PATCH_PROVIDERS.get(entity.getType())).get(entity));
                 TAGMAP.put(entityType, filterClientData(tag));
+                if (tag.contains("interaction_behaviors")){
+                    DIALOGUES.put(entityType, tag.getList("interaction_behaviors",10));
+                }
+                if (tag.contains("quests")){
+                    QUESTS.put(entityType, tag.getList("quests", 8));
+                }
                 if (EpicFightMod.isPhysicalClient()) {
                     ClientEngine.getInstance().renderEngine.registerCustomEntityRenderer(entityType, tag.contains("preset") ? tag.getString("preset") : tag.getString("renderer"), tag);
                 }
@@ -317,6 +328,9 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
                 int hurt_level = behavior.contains("end_by_hurt_level") ? behavior.getInt("end_by_hurt_level") : 2;
                 if (behavior.contains("animation")) {
                     StaticAnimation animation = AnimationManager.getInstance().byKeyOrThrow(behavior.getString("animation"));
+                    if (behavior.contains("dialogues")){
+                        deserializeDialogues(behavior.getList("dialogues", 10));
+                    }
                     float speed = behavior.contains("play_speed") ? (float)behavior.getDouble("play_speed") : 1.0F;
                     float stamina = behavior.contains("stamina") ? (float)behavior.getDouble("stamina") : 0.0F;
                     float convertTime = behavior.contains("convert_time") ? (float)behavior.getDouble("convert_time") : 0.0F;
@@ -359,6 +373,15 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         }
 
         return builder;
+    }
+
+    private static <T extends MobPatch<?>> Consumer<T> deserializeDialogues(ListTag dialogues) {
+        return (mobpatch) -> {
+          Entity entity = mobpatch.getOriginal();
+          if (entity != null){
+              JsonDialoguesReader.deserializeDialogues(entity, dialogues, (byte) 0);
+          }
+        };
     }
 
     private static <T extends MobPatch<?>> Consumer<T> customAttackAnimation(AdvancedCustomHumanoidMobPatch.CustomAnimationMotion motion, @Nullable AdvancedCustomHumanoidMobPatch.DamageSourceModifier damageSourceModifier, @Nullable List<CommandEvent.TimeStampedEvent> timeEvents, @Nullable List<CommandEvent.HitEvent> hitEvents, int phase, int hurtResist) {
@@ -629,7 +652,7 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         public ResourceLocation getMusic(){
             return this.music;
         }
-        public int getMusicPriority(){
+        public Integer getMusicPriority(){
             return this.getMusicPriority();
         }
     }

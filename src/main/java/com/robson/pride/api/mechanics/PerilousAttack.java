@@ -13,15 +13,19 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class PerilousAttack {
 
+    public static List<String> periloustypes = Arrays.asList("pierce_two_hand", "pierce_dual_wield", "pierce_one_hand", "sweep", "total");
+
+
     public static boolean checkPerilous(Entity ent) {
         if (ent != null) {
-            String Perilous = ent.getPersistentData().getString("Perilous");
-            return Objects.equals(Perilous, "pierce_two_hand") || Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand") || Objects.equals(Perilous, "sweep") || Objects.equals(Perilous, "total");
+            return periloustypes.contains(ent.getPersistentData().getString("Perilous"));
         }
         return false;
     }

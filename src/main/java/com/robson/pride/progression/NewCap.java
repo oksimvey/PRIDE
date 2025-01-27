@@ -27,6 +27,7 @@ public class NewCap {
         newtag.putInt("EnduranceMaxXp", oldtag.getInt("EnduranceMaxXp"));
         newtag.putInt("MindMaxXp", oldtag.getInt("MindMaxXp"));
         newtag.putString("Element", oldtag.getString("Element"));
+
     }
 
     public static void startVariables(Player player, CompoundTag newtag) {

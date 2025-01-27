@@ -1,11 +1,14 @@
 package com.robson.pride.events;
 
+import com.robson.pride.api.mechanics.ElementalPassives;
 import com.robson.pride.api.mechanics.MikiriCounter;
 import com.robson.pride.api.utils.ProgressionUtils;
+import com.robson.pride.registries.EffectRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -23,6 +26,11 @@ public class onSpellDamage {
             if (MikiriCounter.isDodgeCounterableSpell(event.getSpellDamageSource().getDirectEntity())) {
                 if (ent.getPersistentData().getBoolean("mikiri_dodge")) {
                     MikiriCounter.onSpellMikiri(event, spell);
+                }
+                if(ent instanceof LivingEntity living){
+                    if(living.hasEffect(EffectRegister.DARKNESS_WRATH.get())){
+                        ElementalPassives.darknessSpellDmg(ent, event);
+                    }
                 }
             }
             if (MikiriCounter.isJumpCounterableSpell(event.getSpellDamageSource().spell())) {

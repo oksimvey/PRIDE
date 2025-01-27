@@ -6,10 +6,12 @@ import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.SpellUtils;
 import com.robson.pride.api.utils.TimerUtil;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import net.minecraft.client.model.AnimationUtils;
 import net.minecraft.world.entity.LivingEntity;
 import reascer.wom.gameasset.WOMAnimations;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.EntityState;
+import yesman.epicfight.api.animation.types.StaticAnimation;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,11 +22,16 @@ public class FlameSlashSkill extends WeaponSkillBase {
     }
 
     @Override
+    public void twohandExecute(LivingEntity ent) {
+
+    }
+
+    @Override
     public void onehandExecute(LivingEntity ent) {
         if (ent != null) {
-            AnimUtils.playAnim(ent, WOMAnimations.SOLAR_OBSCURIDAD_AUTO_1, 0);
-            TimerUtil.schedule(() -> SpellUtils.castSpell(ent, SpellRegistry.FLAMING_STRIKE_SPELL.get(), 3, 0), 400, TimeUnit.MILLISECONDS);
-            PerilousAttack.setPerilous(ent, "total", 1500);
+                AnimUtils.playAnim(ent, WOMAnimations.SOLAR_OBSCURIDAD_AUTO_1, 0);
+                TimerUtil.schedule(() -> SpellUtils.castSpell(ent, SpellRegistry.FLAMING_STRIKE_SPELL.get(), 3, 0), 400, TimeUnit.MILLISECONDS);
+                PerilousAttack.setPerilous(ent, "total", 1500);
         }
     }
 }

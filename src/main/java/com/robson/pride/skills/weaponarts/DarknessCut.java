@@ -35,6 +35,11 @@ public class DarknessCut extends WeaponSkillBase {
         DarknessSlash(ent);
     }
 
+    @Override
+    public void onehandExecute(LivingEntity ent) {
+
+    }
+
     public static void DarknessSlash(LivingEntity ent) {
         if (ent != null) {
             StaticAnimation animation = Animations.TACHI_AUTO3;

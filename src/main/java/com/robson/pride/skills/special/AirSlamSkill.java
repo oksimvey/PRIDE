@@ -36,6 +36,11 @@ public class AirSlamSkill extends WeaponSkillBase {
     }
 
     @Override
+    public void twohandExecute(LivingEntity ent) {
+
+    }
+
+    @Override
     public void onehandExecute(LivingEntity ent) {
         if (ent != null) {
             ent.getPersistentData().putBoolean("Airslam", true);

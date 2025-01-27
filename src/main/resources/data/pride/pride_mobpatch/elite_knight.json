@@ -12,7 +12,7 @@
     "armor_negation": 0,
     "max_strikes": 3,
     "chasing_speed": 1,
-    "scale": 1.2,
+    "scale": 1.15,
     "max_stamina": 20,
     "stamina_regan_multiply": 0.75,
     "stamina_regan_delay": 2000,
@@ -65,6 +65,28 @@
     "knockdown": "epicfight:biped/combat/knockdown",
     "fall": "epicfight:biped/living/landing"
   },
+  "interaction_behaviors": [
+    {
+      "conditions": [
+        {
+          "predicate": "isRaining",
+          "invert": true
+        }
+      ],
+      "dialogues": [
+        {
+          "subtitle": "Hello traveller",
+          "duration": 1250,
+          "sound": "pride:male_1_hello"
+        },
+        {
+          "subtitle": "I'm a warrior from Valloria",
+          "duration": 2000,
+          "sound": "pride:male_1_presentation"
+        }
+      ]
+    }
+  ],
   "combat_behavior": [
     {
       "weapon_categories": ["pride_longsword"],
@@ -323,6 +345,13 @@
                   "time": 0,
                   "command": "pride @s perilous total 1500",
                   "execute_at_target": false
+                }
+                ],
+              "dialogues": [
+                {
+                  "subtitle": "I will kill you!",
+                  "duration": 1250,
+                  "sound": "pride:male_1_rage"
                 }
                 ]
             },

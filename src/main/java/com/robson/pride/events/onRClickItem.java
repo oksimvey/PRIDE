@@ -18,7 +18,7 @@ public class onRClickItem {
             if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)) {
                 player.startUsingItem(InteractionHand.MAIN_HAND);
                 Parry.ParryWindow(player);
-             }
+            }
         }
     }
 }

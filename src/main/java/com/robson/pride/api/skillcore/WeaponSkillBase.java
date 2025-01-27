@@ -53,13 +53,12 @@ public abstract class WeaponSkillBase {
         if (ent != null) {
             if (ItemStackUtils.getStyle(ent) == CapabilityItem.Styles.TWO_HAND) {
                 twohandExecute(ent);
-            } else onehandExecute(ent);
+            }
+            else onehandExecute(ent);
         }
     }
 
-    public void twohandExecute(LivingEntity ent) {
-    }
+    public abstract void twohandExecute(LivingEntity ent);
 
-    public void onehandExecute(LivingEntity ent) {
-    }
+    public abstract void onehandExecute(LivingEntity ent);
 }

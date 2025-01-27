@@ -5,6 +5,8 @@ import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.api.utils.MathUtils;
 import com.robson.pride.api.utils.ParticleUtils;
+import com.robson.pride.effect.DarknessWrathEffect;
+import com.robson.pride.effect.DivineProtectionEffect;
 import com.robson.pride.effect.WetEffect;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.registries.EffectRegister;
@@ -35,6 +37,12 @@ public class RenderingCore {
         if (ent != null) {
             if (ent.hasEffect(EffectRegister.WET.get())){
                 WetEffect.clientTick(ent);
+            }
+            if (ent.hasEffect(EffectRegister.DIVINE_PROTECTION.get())){
+                DivineProtectionEffect.tick(ent);
+            }
+            if (ent.hasEffect(EffectRegister.DARKNESS_WRATH.get())){
+                DarknessWrathEffect.tick(ent);
             }
             if (ParticleTracking.shouldRenderParticle(ent.getMainHandItem(), ent)) {
                 ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR, ParticleTracking.getParticle(ent.getMainHandItem()), ParticleTracking.getAABBForImbuement(ent.getMainHandItem(), ent));
