@@ -24,8 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class StringParticle extends TextureSheetParticle {
 
-    public static ConcurrentHashMap<StringParticle, String> particletext = new ConcurrentHashMap<>();
-
     private final Font fontRenderer = Minecraft.getInstance().font;
     private float visualDY = 0;
     private float prevVisualDY = 0;
@@ -34,6 +32,13 @@ public class StringParticle extends TextureSheetParticle {
     private float fadeout = -1;
     private float prevFadeout = -1;
     private final int darkColor;
+    private String particletext;
+    private int lifetime;
+
+    public void setparams(int lifetime, String text){
+        this.lifetime = lifetime;
+        this.particletext = text;
+    }
 
     public enum StringParticleTypes {
         WHITE( 0xFFFFFF),
@@ -57,7 +62,6 @@ public class StringParticle extends TextureSheetParticle {
     public StringParticle(ClientLevel level, double x, double y, double z, double velX, double number, double type) {
         super(level, x, y, z, velX, 0, 0);
         this.type = StringParticleTypes.values()[(int) type];
-        this.lifetime = 50;
         this.darkColor = FastColor.ARGB32.color(255, (int) (this.rCol * 0.25f), (int) (this.rCol * 0.25f), (int) (this.rCol * 0.25));
     }
 
@@ -89,8 +93,8 @@ public class StringParticle extends TextureSheetParticle {
 
     @Override
     public void render(VertexConsumer consumer, Camera camera, float partialTicks) {
-        if (particletext.get(this) != null) {
-            Component text1 = Component.literal(particletext.get(this));
+        if (this.particletext != null) {
+            Component text1 = Component.literal(this.particletext);
             Vec3 cameraPos = camera.getPosition();
             float particleX = (float) (Mth.lerp((double) partialTicks, this.xo, this.x) - cameraPos.x());
             float particleY = (float) (Mth.lerp((double) partialTicks, this.yo, this.y) - cameraPos.y());

@@ -1,10 +1,16 @@
-package com.robson.pride.entities.pre_hardmode.knight.mob.eliteknight;
+package com.robson.pride.entities.forest.eliteknight;
 
+import com.robson.pride.api.ai.goals.InteractGoal;
+import com.robson.pride.api.entity.PrideMobBase;
+import com.robson.pride.api.npc.JsonDialoguesReader;
 import com.robson.pride.api.utils.EquipUtils;
+import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.entities.pre_hardmode.japanese.boss.shogun.Shogun;
 import com.robson.pride.entities.pre_hardmode.japanese.mob.ronin.Ronin;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -15,10 +21,12 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public class EliteKnight extends Monster {
+public class EliteKnight extends PrideMobBase {
+
 
     public EliteKnight(EntityType<? extends EliteKnight> type, Level world) {
         super(type, world);
@@ -49,6 +57,14 @@ public class EliteKnight extends Monster {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Ronin.class, true));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Shogun.class, true));
+        this.goalSelector.addGoal(1, new InteractGoal(
+                this,
+                EliteKnight.class,
+                1.5,
+                10.0,
+                200,
+                0.25
+        ));
     }
 
     public static AttributeSupplier.Builder registerAttributes() {

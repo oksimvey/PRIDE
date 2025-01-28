@@ -8,7 +8,8 @@ import java.util.List;
 
 public class ThunderMage extends PrideMobBase {
 
-    public ThunderMage(EntityType<? extends ThunderMage> pEntityType, Level pLevel, List<String> skills, byte variant) {
-        super(pEntityType, pLevel, "Thunder",variant);
+
+    protected ThunderMage(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_) {
+        super(p_33002_, p_33003_);
     }
 }

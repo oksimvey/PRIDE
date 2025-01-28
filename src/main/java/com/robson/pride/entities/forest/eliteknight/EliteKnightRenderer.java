@@ -1,4 +1,4 @@
-package com.robson.pride.entities.pre_hardmode.knight.mob.eliteknight;
+package com.robson.pride.entities.forest.eliteknight;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;

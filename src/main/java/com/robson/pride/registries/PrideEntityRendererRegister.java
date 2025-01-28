@@ -4,7 +4,7 @@ import com.robson.pride.entities.forest.hunter.HunterRenderer;
 import com.robson.pride.entities.forest.magmamonster.MagmaMonsterRenderer;
 import com.robson.pride.entities.pre_hardmode.japanese.boss.shogun.ShogunRenderer;
 import com.robson.pride.entities.pre_hardmode.japanese.mob.ronin.RoninRenderer;
-import com.robson.pride.entities.pre_hardmode.knight.mob.eliteknight.EliteKnightRenderer;
+import com.robson.pride.entities.forest.eliteknight.EliteKnightRenderer;
 import com.robson.pride.entities.special.CloneEntityRenderer;
 import com.robson.pride.entities.special.ShooterRenderer;
 import net.minecraftforge.api.distmarker.Dist;

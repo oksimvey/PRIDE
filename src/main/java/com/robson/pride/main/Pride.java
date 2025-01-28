@@ -73,6 +73,7 @@ public class Pride {
                                 .then(ShootProjectileCommand.register())
                                 .then(SkillExecuteCommand.register())
                                 .then(CastSpellCommand.register())
+                                .then(DialogueCommand.register())
                                 .then(SetElementCommand.register())));
     }
 
@@ -100,7 +101,10 @@ public class Pride {
 
         private void setupCommon(FMLCommonSetupEvent event) {
             PacketRegister.register();
-        event.enqueueWork(WeaponSkillRegister::registerWeaponArts);
+        event.enqueueWork(()-> {
+            WeaponSkillRegister.registerWeaponArts();
+            DialogueConditionsRegister.register();
+        });
     }
 
     private void setupClient(FMLClientSetupEvent event) {

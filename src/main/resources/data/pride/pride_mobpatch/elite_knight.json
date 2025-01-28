@@ -71,6 +71,42 @@
         {
           "predicate": "isRaining",
           "invert": true
+        },
+        {
+          "predicate": "entityType",
+          "types": ["pride:elite_knight"]
+        }
+      ],
+      "dialogues": [
+        {
+          "subtitle": "Rizz Gyat Oil Up Sigma Male",
+          "duration": 3000,
+          "sound": "pride:male_1_brainrot",
+          "answers": [
+            {
+              "conditions": [
+                {
+                  "predicate": "entityType",
+                  "types": ["pride:elite_knight"]
+                }
+              ],
+              "dialogues": [
+                {
+                  "subtitle": "That level of brain rot is just wild",
+                  "duration": 2000,
+                  "sound": "pride:male_1_brainrotanswer"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "conditions": [
+        {
+          "predicate": "isRaining",
+          "invert": true
         }
       ],
       "dialogues": [
@@ -345,13 +381,11 @@
                   "time": 0,
                   "command": "pride @s perilous total 1500",
                   "execute_at_target": false
-                }
-                ],
-              "dialogues": [
+                },
                 {
-                  "subtitle": "I will kill you!",
-                  "duration": 1250,
-                  "sound": "pride:male_1_rage"
+                  "time": 0,
+                  "command": "pride @s dialogue 0 \"I will kill you!\" 1250 \"pride:male_1_rage\" 3",
+                  "execute_at_target": false
                 }
                 ]
             },

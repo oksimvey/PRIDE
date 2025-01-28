@@ -8,7 +8,7 @@ import java.util.*;
 
 public class WeaponSkillRegister {
 
-    public static Map<String, WeaponSkillBase> WeaponSkills =new HashMap<>();
+    public static Map<String, WeaponSkillBase> WeaponSkills = new HashMap<>();
     public static List<String> elements = Arrays.asList("Darkness", "Light", "Thunder", "Sun", "Moon", "Blood", "Wind", "Nature", "Ice", "Water", "Neutral");
     public static List<String> rarities = Arrays.asList("Mythical", "Legendary", "Epic", "Rare", "Uncommon", "Common");
 

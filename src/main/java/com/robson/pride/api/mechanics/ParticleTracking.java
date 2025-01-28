@@ -7,6 +7,7 @@ import com.robson.pride.registries.WeaponSkillRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -37,8 +38,7 @@ public class ParticleTracking {
                             togglefire.put(ent, false);
                         }
                     }
-                }
-                else return WeaponSkillRegister.elements.contains(element);
+                } else return WeaponSkillRegister.elements.contains(element);
             }
         }
         return false;
@@ -53,16 +53,15 @@ public class ParticleTracking {
 
     public static Vec3f getAABBForImbuement(ItemStack item, Entity ent) {
         if (item != null) {
-            CompoundTag aabb1 = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem());
-            if (aabb1 != null) {
-                if (aabb1.contains("minX") && aabb1.contains("maxX") && aabb1.contains("minY") && aabb1.contains("maxY") && aabb1.contains("minZ") && aabb1.contains("maxZ")) {
-                    if (aabb1.contains("minX1") && aabb1.contains("maxX1") && aabb1.contains("minY1") && aabb1.contains("maxY1") && aabb1.contains("minZ1") && aabb1.contains("maxZ1")) {
-                        Random random = new Random();
-                        if (random.nextInt(2) == 0) {
-                            return new Vec3f((float) (((new Random()).nextFloat() + aabb1.getDouble("minX1")) * aabb1.getDouble("maxX1")), (float) (((new Random()).nextFloat() + aabb1.getDouble("minY1")) * aabb1.getDouble("maxY1") + (aabb1.getDouble("maxY1") / 10)), (float) (-((new Random()).nextFloat() * (aabb1.getDouble("maxZ1") * ent.getBbHeight() / 1.8F)) + aabb1.getDouble("minZ1")));
-                        }
+            CompoundTag tags = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem());
+            if (tags != null) {
+                if (tags.contains("colliders")) {
+                    ListTag colliders = tags.getList("colliders", 10);
+                    CompoundTag collider = colliders.getCompound(new Random().nextInt(colliders.size()));
+                    if (collider.contains("minX") && collider.contains("maxX") && collider.contains("minY") && collider.contains("maxY") && collider.contains("minZ") && collider.contains("maxZ")) {
+                        return new Vec3f((float) (((new Random()).nextFloat() + collider.getDouble("minX")) * collider.getDouble("maxX")), (float) (((new Random()).nextFloat() + collider.getDouble("minY")) * collider.getDouble("maxY") + (collider.getDouble("maxY") / 10)), (float) (-((new Random()).nextFloat() * (collider.getDouble("maxZ") * ent.getBbHeight() / 1.8F)) + collider.getDouble("minZ")));
+
                     }
-                    return new Vec3f((float) (((new Random()).nextFloat() + aabb1.getDouble("minX")) * aabb1.getDouble("maxX")), (float) (((new Random()).nextFloat() + aabb1.getDouble("minY")) * aabb1.getDouble("maxY") + (aabb1.getDouble("maxY") / 10)), (float) (-((new Random()).nextFloat() * (aabb1.getDouble("maxZ") * ent.getBbHeight() / 1.8F)) + aabb1.getDouble("minZ")));
                 }
             }
         }

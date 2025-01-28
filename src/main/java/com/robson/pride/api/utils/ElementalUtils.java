@@ -242,8 +242,6 @@ public class ElementalUtils {
         if (ent != null) {
             if (ent instanceof Player player) {
                 return player.getPersistentData().getString("Element");
-            } else if (ent instanceof PrideMobBase prideMobBase) {
-                return prideMobBase.getElement();
             }
         }
         return "";

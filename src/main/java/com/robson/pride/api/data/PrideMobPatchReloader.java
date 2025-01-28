@@ -328,9 +328,6 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
                 int hurt_level = behavior.contains("end_by_hurt_level") ? behavior.getInt("end_by_hurt_level") : 2;
                 if (behavior.contains("animation")) {
                     StaticAnimation animation = AnimationManager.getInstance().byKeyOrThrow(behavior.getString("animation"));
-                    if (behavior.contains("dialogues")){
-                        deserializeDialogues(behavior.getList("dialogues", 10));
-                    }
                     float speed = behavior.contains("play_speed") ? (float)behavior.getDouble("play_speed") : 1.0F;
                     float stamina = behavior.contains("stamina") ? (float)behavior.getDouble("stamina") : 0.0F;
                     float convertTime = behavior.contains("convert_time") ? (float)behavior.getDouble("convert_time") : 0.0F;
@@ -373,15 +370,6 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         }
 
         return builder;
-    }
-
-    private static <T extends MobPatch<?>> Consumer<T> deserializeDialogues(ListTag dialogues) {
-        return (mobpatch) -> {
-          Entity entity = mobpatch.getOriginal();
-          if (entity != null){
-              JsonDialoguesReader.deserializeDialogues(entity, dialogues, (byte) 0);
-          }
-        };
     }
 
     private static <T extends MobPatch<?>> Consumer<T> customAttackAnimation(AdvancedCustomHumanoidMobPatch.CustomAnimationMotion motion, @Nullable AdvancedCustomHumanoidMobPatch.DamageSourceModifier damageSourceModifier, @Nullable List<CommandEvent.TimeStampedEvent> timeEvents, @Nullable List<CommandEvent.HitEvent> hitEvents, int phase, int hurtResist) {

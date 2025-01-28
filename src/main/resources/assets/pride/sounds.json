@@ -53,5 +53,21 @@
         "stream": false
       }
     ]
+  },
+  "male_1_brainrotanswer": {
+    "sounds": [
+      {
+        "name": "pride:npcs/male1_brainrotanswer",
+        "stream": false
+      }
+    ]
+  },
+  "male_1_brainrot": {
+    "sounds": [
+      {
+        "name": "pride:npcs/male1_brainrot",
+        "stream": false
+      }
+    ]
   }
 }

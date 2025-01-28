@@ -1,9 +1,12 @@
 package com.robson.pride.progression;
 
+import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.registries.WeaponSkillRegister;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +30,19 @@ public class NewCap {
         newtag.putInt("EnduranceMaxXp", oldtag.getInt("EnduranceMaxXp"));
         newtag.putInt("MindMaxXp", oldtag.getInt("MindMaxXp"));
         newtag.putString("Element", oldtag.getString("Element"));
-
+        for (EntityType<?> entityType : PrideMobPatchReloader.QUESTS.keySet()){
+            ListTag quests = PrideMobPatchReloader.QUESTS.get(entityType);
+            if (quests != null){
+                for (int i = 0; i < quests.size(); ++i){
+                    String quest = quests.getString(i);
+                    if (oldtag.contains(quest)){
+                        if (oldtag.getBoolean(quest)){
+                            newtag.putBoolean(quest, true);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static void startVariables(Player player, CompoundTag newtag) {
