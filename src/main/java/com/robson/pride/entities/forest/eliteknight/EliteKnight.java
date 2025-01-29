@@ -1,16 +1,12 @@
 package com.robson.pride.entities.forest.eliteknight;
 
-import com.robson.pride.api.ai.goals.InteractGoal;
+import com.robson.pride.api.ai.goals.JsonGoalsReader;
 import com.robson.pride.api.entity.PrideMobBase;
-import com.robson.pride.api.npc.JsonDialoguesReader;
 import com.robson.pride.api.utils.EquipUtils;
-import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.entities.pre_hardmode.japanese.boss.shogun.Shogun;
 import com.robson.pride.entities.pre_hardmode.japanese.mob.ronin.Ronin;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -21,7 +17,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
@@ -34,37 +29,6 @@ public class EliteKnight extends PrideMobBase {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             this.setDropChance(slot, 0);
         }
-    }
-
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity attackTarget) {
-                return this.mob.getBbWidth() * this.mob.getBbHeight();
-            }
-
-            @Override
-            protected void checkAndPerformAttack(LivingEntity pEnemy, double pDistToEnemySqr) {
-                double eyeHeightDistToEnemySqr = this.mob.distanceToSqr(pEnemy.getX(), pEnemy.getY() - this.mob.getEyeHeight() + pEnemy.getEyeHeight(), pEnemy.getZ());
-                super.checkAndPerformAttack(pEnemy, Math.min(pDistToEnemySqr, eyeHeightDistToEnemySqr * 0.8D));
-            }
-        });
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Ronin.class, true));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Shogun.class, true));
-        this.goalSelector.addGoal(1, new InteractGoal(
-                this,
-                EliteKnight.class,
-                1.5,
-                10.0,
-                200,
-                0.25
-        ));
     }
 
     public static AttributeSupplier.Builder registerAttributes() {

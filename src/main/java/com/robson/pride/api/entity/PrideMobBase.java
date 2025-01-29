@@ -1,6 +1,7 @@
 package com.robson.pride.api.entity;
 
-import com.robson.pride.api.npc.JsonDialoguesReader;
+import com.robson.pride.api.ai.goals.JsonGoalsReader;
+import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
 import com.robson.pride.api.utils.TargetUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
@@ -12,6 +13,11 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -22,25 +28,38 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     private byte variation;
 
+    public List<String> targets = new ArrayList<>();
+
     protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
         this.xpReward = 5;
+        this.setPersistenceRequired();
+        JsonGoalsReader.deserializeTargetGoals(this);
     }
 
     public SoundSource getSoundSource() {
         return SoundSource.HOSTILE;
     }
 
-    public void aiStep() {
-        this.updateSwingTime();
-        this.updateNoActionTime();
-        super.aiStep();
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, false));
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(
+                    this,
+                    LivingEntity.class,
+                    true,
+                    entity -> this.targets.contains(EntityType.getKey(entity.getType()).toString())));
     }
 
     protected void updateNoActionTime() {
@@ -53,8 +72,8 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     @Override
     public void travel(Vec3 travel){
-        if (JsonDialoguesReader.isSpeaking.get(this) != null && TargetUtil.getTarget(this) == null) {
-            travel = new Vec3(0, 0, 0);
+        if (JsonInteractionsReader.isSpeaking.get(this) != null && TargetUtil.getTarget(this) == null) {
+           travel = new Vec3(0, 0,0);
         }
         super.travel(travel);
     }

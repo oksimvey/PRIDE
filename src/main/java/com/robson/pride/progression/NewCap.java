@@ -5,11 +5,8 @@ import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.registries.WeaponSkillRegister;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 public class NewCap {
 

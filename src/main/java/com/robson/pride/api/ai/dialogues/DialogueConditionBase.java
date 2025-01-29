@@ -1,4 +1,4 @@
-package com.robson.pride.api.npc;
+package com.robson.pride.api.ai.dialogues;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;

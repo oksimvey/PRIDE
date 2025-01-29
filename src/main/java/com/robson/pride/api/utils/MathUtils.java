@@ -40,11 +40,12 @@ public class MathUtils {
 
     public static AABB createAABBByLookingAngle(Vec3 pos, Vector3f lookangle, double radius) {
         double length = radius * 2;
+        double yOffset = lookangle.y * radius;
         return new AABB(pos.x + lookangle.x * radius - (radius * 1.5),
-                pos.y - (radius * 0.5),
+                pos.y + yOffset - (radius),
                 pos.z + lookangle.z * radius - (radius * 2),
                 pos.x + lookangle.x * length + (radius * 1.5),
-                pos.y + (radius * 1.5),
+                pos.y + yOffset + (radius),
                 pos.z + lookangle.z * length + (radius * 2));
     }
 

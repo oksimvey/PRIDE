@@ -1,6 +1,7 @@
 package com.robson.pride.api.utils;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
+import com.robson.pride.api.entity.PrideMobBase;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -24,7 +25,7 @@ public class TargetUtil {
             if (livingEntityPatch != null) {
                 livingEntityPatch.setAttakTargetSync(targetl);
             }
-            if (ent instanceof Mob mob) {
+            if (ent instanceof PrideMobBase mob) {
                 mob.setTarget(targetl);
             }
         }

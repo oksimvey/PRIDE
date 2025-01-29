@@ -65,6 +65,12 @@
     "knockdown": "epicfight:biped/combat/knockdown",
     "fall": "epicfight:biped/living/landing"
   },
+  "goals": [
+    {
+
+    }
+  ],
+  "targets": ["minecraft:zombie", "pride:hunter"],
   "interaction_behaviors": [
     {
       "conditions": [

@@ -1,6 +1,6 @@
-package com.robson.pride.api.npc.conditions;
+package com.robson.pride.api.ai.dialogues.conditions;
 
-import com.robson.pride.api.npc.DialogueConditionBase;
+import com.robson.pride.api.ai.dialogues.DialogueConditionBase;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 

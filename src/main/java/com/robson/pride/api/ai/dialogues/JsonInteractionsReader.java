@@ -1,4 +1,4 @@
-package com.robson.pride.api.npc;
+package com.robson.pride.api.ai.dialogues;
 
 import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.api.utils.*;
@@ -18,15 +18,15 @@ import net.minecraft.world.entity.Entity;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-public class JsonDialoguesReader {
+public class JsonInteractionsReader {
 
     public static ConcurrentHashMap<Entity, Boolean> isSpeaking = new ConcurrentHashMap<>();
 
     public static void onInteraction(Entity target, Entity sourceent) {
         if (target != null && sourceent != null) {
-            ListTag tag = PrideMobPatchReloader.DIALOGUES.get(target.getType());
-            if (tag != null) {
-                deserializeConditions(target, sourceent, tag);
+                ListTag tag = PrideMobPatchReloader.DIALOGUES.get(target.getType());
+                if (tag != null) {
+                    deserializeConditions(target, sourceent, tag);
             }
         }
     }
@@ -86,7 +86,7 @@ public class JsonDialoguesReader {
                             level.playSound(player, ent, holder.get(), SoundSource.NEUTRAL, volume, 1);
                         }
                         if (ent.distanceTo(player) < ent.getBbHeight() * volumemultiplier) {
-                            ParticleUtils.spawnNumberParticle(ent, dialogue.getString("subtitle"), StringParticle.StringParticleTypes.WHITE, duration / 50 - 1);
+                            ParticleUtils.spawnStringParticle(ent, dialogue.getString("subtitle"), StringParticle.StringParticleTypes.WHITE, duration / 50 - 1);
                         }
                         TimerUtil.schedule(() -> {
                             if (ent != null) {

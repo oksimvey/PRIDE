@@ -218,12 +218,12 @@ public class ElementalPassives {
         if (ent != null) {
             ent.getPersistentData().putByte(tag, (byte) (ent.getPersistentData().getByte(tag) + amounttoadd));
             if (ent.getPersistentData().getByte(tag) >= 100) {
-                ParticleUtils.spawnNumberParticle(ent, 100 + "%", type, 60);
+                ParticleUtils.spawnStringParticle(ent, 100 + "%", type, 60);
                 ent.getPersistentData().putByte(tag, (byte) 0);
                 ent.getPersistentData().putBoolean(tag, true);
                 return true;
             }
-            ParticleUtils.spawnNumberParticle(ent, ent.getPersistentData().getByte(tag) + "%", type, 60);
+            ParticleUtils.spawnStringParticle(ent, ent.getPersistentData().getByte(tag) + "%", type, 60);
         }
         return false;
     }

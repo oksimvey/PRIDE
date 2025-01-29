@@ -25,7 +25,6 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
-import com.robson.pride.api.npc.JsonDialoguesReader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -80,6 +79,8 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
     public static final Map<EntityType<?>, MobPatchReloadListener.AbstractMobPatchProvider> ADVANCED_MOB_PATCH_PROVIDERS = Maps.newHashMap();
     public static Map<EntityType<?>, ListTag> DIALOGUES = Maps.newHashMap();
     public static Map<EntityType<?>, ListTag> QUESTS = Maps.newHashMap();
+    public static Map<EntityType<?>, ListTag> TARGETS = Maps.newHashMap();
+    public static Map<EntityType<?>, ListTag> GOALS = Maps.newHashMap();
 
     public PrideMobPatchReloader() {
         super(GSON, "pride_mobpatch");
@@ -117,6 +118,12 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
                 }
                 if (tag.contains("quests")){
                     QUESTS.put(entityType, tag.getList("quests", 8));
+                }
+                if (tag.contains("targets")){
+                    TARGETS.put(entityType, tag.getList("targets", 8));
+                }
+                if (tag.contains("goals")){
+                    GOALS.put(entityType, tag.getList("goals", 10));
                 }
                 if (EpicFightMod.isPhysicalClient()) {
                     ClientEngine.getInstance().renderEngine.registerCustomEntityRenderer(entityType, tag.contains("preset") ? tag.getString("preset") : tag.getString("renderer"), tag);

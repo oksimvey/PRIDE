@@ -7,7 +7,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.robson.pride.api.npc.JsonDialoguesReader;
+import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
 import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.api.utils.TimerUtil;
 import net.minecraft.commands.CommandSourceStack;
@@ -49,7 +49,7 @@ public class DialogueCommand implements Command<CommandSourceStack> {
             dialogue1.putString("sound", sound);
             dialogue1.putDouble("volume", volume);
             dialoguetags.add(dialogue1);
-            JsonDialoguesReader.deserializeDialogues(ent, TargetUtil.getTarget(ent), dialoguetags, (byte) 0);
+            JsonInteractionsReader.deserializeDialogues(ent, TargetUtil.getTarget(ent), dialoguetags, (byte) 0);
         }, delay, TimeUnit.MILLISECONDS);
         return 1;
     }
