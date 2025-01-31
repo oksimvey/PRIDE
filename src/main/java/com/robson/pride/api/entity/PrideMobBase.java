@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +26,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -37,6 +39,12 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
     private byte variation;
 
     public List<String> targets = new ArrayList<>();
+
+    private Vec3 targetpos;
+
+    private float speed = 1;
+
+    private float moveRadius = 1;
 
     protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
@@ -62,18 +70,34 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
                     entity -> this.targets.contains(EntityType.getKey(entity.getType()).toString())));
     }
 
-    protected void updateNoActionTime() {
-        float f = this.getLightLevelDependentMagicValue();
-        if (f > 0.5F) {
-            this.noActionTime += 2;
-        }
+    public void setTargetpos(Vec3 newpos){
+        this.targetpos = newpos;
+    }
 
+    public void setMoveRadius(float radius){
+        this.moveRadius = radius;
+    }
+
+    public void setTravellingSpeed(float speed){
+        this.speed = speed;
     }
 
     @Override
-    public void travel(Vec3 travel){
+    public void travel(Vec3 travel) {
         if (JsonInteractionsReader.isSpeaking.get(this) != null && TargetUtil.getTarget(this) == null) {
-           travel = new Vec3(0, 0,0);
+            travel = new Vec3(0, 0, 0);
+        }
+        else if (this.targetpos != null) {
+            if (this.distanceToSqr(targetpos) >= this.moveRadius) {
+                PathNavigation navigator = this.getNavigation();
+                Path path = navigator.createPath(this.targetpos.x, this.targetpos.y, this.targetpos.z, 0);
+                navigator.moveTo(path, speed);
+            }
+            else {
+                this.targetpos = null;
+                this.moveRadius = 1;
+                this.speed = 1;
+            }
         }
         super.travel(travel);
     }

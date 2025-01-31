@@ -83,13 +83,13 @@ public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListe
                 } catch (CommandSyntaxException e) {
                     e.printStackTrace();
                 }
-
                 try {
                     if (str[0].equals("armors")) {
                         CapabilityItem capability = deserializeArmor(item, tag);
                         ItemCapabilityProvider.put(item, capability);
                         CAPABILITY_ARMOR_DATA_MAP.put(item, tag);
-                    } else if (str[0].equals("weapons")) {
+                    }
+                    else if (str[0].equals("weapons")) {
                         CapabilityItem capability = deserializeWeapon(item, tag);
                         ItemCapabilityProvider.put(item, capability);
                         CAPABILITY_WEAPON_DATA_MAP.put(item, tag);
@@ -177,10 +177,6 @@ public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListe
         return capability;
     }
 
-    public static AttributeModifier getWeightModifier(double value) {
-        return new AttributeModifier(UUID.fromString("5975a582-14e0-4d16-b6ef-8cbe2c9593c0"), "epicfight:weapon_modifier", value, AttributeModifier.Operation.ADDITION);
-    }
-
     private static Map<Attribute, AttributeModifier> deserializeAttributes(CompoundTag tag) {
         Map<Attribute, AttributeModifier> modifierMap = Maps.newHashMap();
 
@@ -206,97 +202,6 @@ public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListe
         if (tag.contains("weight")){
             modifierMap.put(EpicFightAttributes.WEIGHT.get(), new AttributeModifier(UUID.fromString("5975a582-14e0-4d16-b6ef-8cbe2c9593c0"), "epicfight:weapon_modifier", tag.getDouble("weight"), AttributeModifier.Operation.ADDITION));
         }
-
         return modifierMap;
-    }
-
-    public static Stream<CompoundTag> getArmorDataStream() {
-        Stream<CompoundTag> tagStream = CAPABILITY_ARMOR_DATA_MAP.entrySet().stream().map((entry) -> {
-            entry.getValue().putInt("id", Item.getId(entry.getKey()));
-            return entry.getValue();
-        });
-        return tagStream;
-    }
-
-    public static Stream<CompoundTag> getWeaponDataStream() {
-        Stream<CompoundTag> tagStream = CAPABILITY_WEAPON_DATA_MAP.entrySet().stream().map((entry) -> {
-            entry.getValue().putInt("id", Item.getId(entry.getKey()));
-            return entry.getValue();
-        });
-        return tagStream;
-    }
-
-    public static int armorCount() {
-        return CAPABILITY_ARMOR_DATA_MAP.size();
-    }
-
-    public static int weaponCount() {
-        return CAPABILITY_WEAPON_DATA_MAP.size();
-    }
-
-    private static boolean armorReceived = false;
-    private static boolean weaponReceived = false;
-    private static boolean weaponTypeReceived = false;
-
-    public static void weaponTypeProcessedCheck() {
-        weaponTypeReceived = true;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static void reset() {
-        armorReceived = false;
-        weaponReceived = false;
-        weaponTypeReceived = false;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static void processServerPacket(SPDatapackSync packet) {
-        switch (packet.getType()) {
-            case ARMOR:
-                for (CompoundTag tag : packet.getTags()) {
-                    Item item = Item.byId(tag.getInt("id"));
-                    CAPABILITY_ARMOR_DATA_MAP.put(item, tag);
-                }
-                armorReceived = true;
-                break;
-            case WEAPON:
-                for (CompoundTag tag : packet.getTags()) {
-                    Item item = Item.byId(tag.getInt("id"));
-                    CAPABILITY_WEAPON_DATA_MAP.put(item, tag);
-                }
-                weaponReceived = true;
-                break;
-            default:
-                break;
-        }
-
-        if (weaponTypeReceived && armorReceived && weaponReceived) {
-            CAPABILITY_ARMOR_DATA_MAP.forEach((item, tag) -> {
-                try {
-                    CapabilityItem itemCap = deserializeArmor(item, tag);
-                    ItemCapabilityProvider.put(item, itemCap);
-                } catch (NoSuchElementException e) {
-                    e.printStackTrace();
-                    throw e;
-                } catch (Exception e) {
-                    EpicFightMod.LOGGER.warn("Can't read item capability for " + item);
-                    e.printStackTrace();
-                }
-            });
-
-            CAPABILITY_WEAPON_DATA_MAP.forEach((item, tag) -> {
-                try {
-                    CapabilityItem itemCap = deserializeWeapon(item, tag);
-                    ItemCapabilityProvider.put(item, itemCap);
-                } catch (NoSuchElementException e) {
-                    e.printStackTrace();
-                    throw e;
-                } catch (Exception e) {
-                    EpicFightMod.LOGGER.warn("Can't read item capability for " + item);
-                    e.printStackTrace();
-                }
-            });
-            ItemCapabilityProvider.addDefaultItems();
-        }
     }
 }

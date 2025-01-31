@@ -9,6 +9,8 @@ import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.KeyRegister;
 import com.robson.pride.skills.special.AirSlamSkill;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.client.events.engine.ControllEngine;
@@ -61,7 +63,9 @@ public class OnLeftClick {
         TimerUtil.schedule(() -> {
             if (target.getPersistentData().getBoolean("isVulnerable")) {
                 AnimUtils.playAnim(ent, AnimationsRegister.EXECUTE, 0);
-                CutsceneUtils.executionCutscene(ent, target);
+                LocalPlayer player = Minecraft.getInstance().player;
+                if (ent == player) {
+                }
             }
         }, 5, TimeUnit.MILLISECONDS);
     }

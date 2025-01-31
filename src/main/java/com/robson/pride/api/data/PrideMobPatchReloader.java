@@ -90,6 +90,9 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         ADVANCED_MOB_PATCH_PROVIDERS.clear();
         TAGMAP.clear();
         DIALOGUES.clear();
+        QUESTS.clear();
+        GOALS.clear();
+        TARGETS.clear();
         return super.prepare(resourceManager, profileIn);
     }
 

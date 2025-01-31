@@ -4,6 +4,7 @@ import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -11,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
@@ -26,6 +28,48 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ItemStackUtils {
 
     private static boolean toggle = false;
+
+    public static ConcurrentHashMap<Entity, ListTag> storePreviousItems = new ConcurrentHashMap<>();
+
+    public static void storeItem(Entity ent, String slot){
+        if (ent != null){
+            if (ent instanceof LivingEntity living){
+                ItemStack itemstostore = null;
+                switch (slot){
+                    case "mainhand"-> itemstostore = living.getMainHandItem();
+                    case "offhand" -> itemstostore = living.getOffhandItem();
+                    case "head" -> itemstostore = living.getItemBySlot(EquipmentSlot.HEAD);
+                    case "chest"-> itemstostore = living.getItemBySlot(EquipmentSlot.CHEST);
+                    case "leg"-> itemstostore = living.getItemBySlot(EquipmentSlot.LEGS);
+                    case "feet"-> itemstostore = living.getItemBySlot(EquipmentSlot.FEET);
+                }
+                if (itemstostore != null){
+                    ListTag storeditems = new ListTag();
+                    if (storePreviousItems.get(living) != null){
+                        storeditems = storePreviousItems.get(living);
+                    }
+                    CompoundTag itemtostore = new CompoundTag();
+                    itemtostore.putString("slot", slot);
+                    itemtostore.putString("itemid", ForgeRegistries.ITEMS.getKey(itemstostore.getItem()).toString());
+                    CompoundTag previoustags = itemstostore.getTag();
+                    if (previoustags != null) {
+                        itemtostore.put("previoustags", previoustags);
+                    }
+                    storeditems.add(itemtostore);
+                }
+            }
+        }
+    }
+
+    public static void equipOldItems(Entity ent){
+        if (ent != null){
+            if (ent instanceof LivingEntity living){
+
+            }
+        }
+    }
+
+    public static void equipSpecificOldItem(Entity ent, String slot){}
 
     public static WeaponCategory getWeaponCategory(Entity ent, InteractionHand hand) {
         LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);

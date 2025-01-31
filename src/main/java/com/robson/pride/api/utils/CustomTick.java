@@ -3,18 +3,13 @@ package com.robson.pride.api.utils;
 import com.robson.pride.api.ai.goals.JsonGoalsReader;
 import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.mechanics.MusicCore;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.AABB;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class CustomTick {
-
-    private static int enttickcounter = 0;
-    private static byte tickcount = 0;
 
     private static final ConcurrentHashMap<Player, Boolean> activePlayers = new ConcurrentHashMap<>();
 
@@ -37,13 +32,12 @@ public class CustomTick {
     }
 
     public static void entityTick(Player player) {
-        ++enttickcounter;
         if (player != null) {
             for (Entity ent : player.level().getEntities(player, MathUtils.createAABBForCulling(75))) {
                 if (ent != null) {
                     if (ent instanceof PrideMobBase prideMobBase) {
                         short distance = (short) (Math.pow(1.025, player.distanceTo(prideMobBase)) * 2);
-                        if (enttickcounter % distance == 0) {
+                        if (player.tickCount % distance == 0) {
                             JsonGoalsReader.onEntTick(prideMobBase);
                         }
                     }

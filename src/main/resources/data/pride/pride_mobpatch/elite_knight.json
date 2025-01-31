@@ -65,12 +65,46 @@
     "knockdown": "epicfight:biped/combat/knockdown",
     "fall": "epicfight:biped/living/landing"
   },
+  "targets": ["minecraft:zombie", "pride:hunter"],
   "goals": [
     {
-
+      "conditions": [
+        {
+          "predicate": "isRaining",
+          "invert": false
+        }
+        ],
+      "actions": [
+        {
+          "action": "moveToVec",
+          "x": 123,
+          "y": 17,
+          "z": 296
+        }
+      ]
+    },
+    {
+      "conditions": [
+        {
+          "predicate": "isRaining",
+          "invert": true
+        }
+      ],
+      "actions": [
+        {
+          "action": "find_entity",
+          "entity_types": ["pride:elite_knight"],
+          "range": 100,
+          "duration": 500
+        },
+        {
+          "action": "interact",
+          "interaction_range": 3,
+          "entity_types": ["pride:elite_knight"]
+        }
+      ]
     }
   ],
-  "targets": ["minecraft:zombie", "pride:hunter"],
   "interaction_behaviors": [
     {
       "conditions": [
@@ -167,6 +201,7 @@
               "conditions": [
                 {"predicate":"within_eye_height"},{"predicate": "random_chance", "chance": 0.75}, {"predicate":"within_distance", "min": 0.0, "max": 10.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
+
               "animation": "epicfight:biped/combat/longsword_dash",
               "command_list": [
                 {

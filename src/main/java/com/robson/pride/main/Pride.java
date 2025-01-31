@@ -104,6 +104,7 @@ public class Pride {
         event.enqueueWork(()-> {
             WeaponSkillRegister.registerWeaponArts();
             DialogueConditionsRegister.register();
+            ActionsRegister.register();
         });
     }
 

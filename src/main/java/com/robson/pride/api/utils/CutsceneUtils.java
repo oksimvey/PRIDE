@@ -9,12 +9,11 @@ import java.util.concurrent.TimeUnit;
 
 public class CutsceneUtils {
 
-    public static void cutsceneStart(Player ent, byte duration, String mode) {
+    public static void cutsceneStart(LocalPlayer ent, byte duration, String mode) {
         if (ent != null) {
-            LocalPlayer player1 = (LocalPlayer) ent;
-            player1.connection.sendCommand("say cam clear");
-            player1.connection.sendCommand("cam mode " + mode);
-            TimerUtil.schedule(() -> player1.connection.sendCommand("cam start " + duration + "s"), 10, TimeUnit.MILLISECONDS);
+            ent.connection.sendCommand("say cam clear");
+            ent.connection.sendCommand("cam mode " + mode);
+            TimerUtil.schedule(() -> ent.connection.sendCommand("cam start " + duration + "s"), 10, TimeUnit.MILLISECONDS);
             CameraUtils.unlockCamera(Minecraft.getInstance().player, duration);
             if (!(Minecraft.getInstance().options.getCameraType().isFirstPerson())) {
                 CameraUtils.putonFirstPerson(ent, duration);
@@ -22,12 +21,11 @@ public class CutsceneUtils {
         }
     }
 
-    public static void addPoint(Player ent, String pointpos) {
-        LocalPlayer player1 = (LocalPlayer) ent;
-        player1.connection.sendCommand("cam add " + pointpos);
+    public static void addPoint(LocalPlayer ent, String pointpos) {
+        ent.connection.sendCommand("cam add " + pointpos);
     }
 
-    public static void executionCutscene(Player ent, Entity target) {
+    public static void executionCutscene(LocalPlayer ent, Entity target) {
         cutsceneStart(ent, (byte) 1, "outside");
         double offset = -target.getBbHeight();
         TimerUtil.schedule(() -> addPoint(ent, "^" + offset * 1.5 + " ^0.25 ^" + offset * 1.5 + " ~-45 ~-25"), 1, TimeUnit.MILLISECONDS);
