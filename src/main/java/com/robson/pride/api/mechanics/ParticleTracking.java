@@ -33,7 +33,8 @@ public class ParticleTracking {
                         if (ElementalUtils.isNotInWater(ent, vec3)) {
                             togglefire.put(ent, true);
                             return true;
-                        } else if (togglefire.get(ent)) {
+                        }
+                        else if (togglefire.getOrDefault(ent, false)) {
                             Minecraft.getInstance().level.playSound(Minecraft.getInstance().player, ent, SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1, 1);
                             togglefire.put(ent, false);
                         }

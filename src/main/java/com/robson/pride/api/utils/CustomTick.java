@@ -1,6 +1,7 @@
 package com.robson.pride.api.utils;
 
 import com.robson.pride.api.ai.goals.JsonGoalsReader;
+import com.robson.pride.api.ai.goals.PassiveSkillsReader;
 import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.mechanics.MusicCore;
 import net.minecraft.world.entity.Entity;
@@ -48,7 +49,7 @@ public class CustomTick {
 
     public static void startRespawnTick(Player player) {
         stopTick(player);
-        TimerUtil.schedule(() -> CustomTick.startTick(player), 1002, TimeUnit.MILLISECONDS);
+        TimerUtil.schedule(() -> CustomTick.startTick(player), 502, TimeUnit.MILLISECONDS);
     }
 
     public static void loopTick(Player player) {

@@ -2,8 +2,12 @@ package com.robson.pride.api.entity;
 
 import com.robson.pride.api.ai.goals.JsonGoalsReader;
 import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
+import com.robson.pride.api.ai.goals.PassiveSkillsReader;
+import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.TargetUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -25,10 +29,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
+import reascer.wom.gameasset.WOMAnimations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,17 +47,24 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     public List<String> targets = new ArrayList<>();
 
+    public List<String> skills = new ArrayList<>();
+
+    private ListTag pathpositions;
+
     private Vec3 targetpos;
 
     private float speed = 1;
 
     private float moveRadius = 1;
 
+    private byte pathcounter = 0;
+
     protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
         this.xpReward = 5;
         this.setPersistenceRequired();
         JsonGoalsReader.deserializeTargetGoals(this);
+        PassiveSkillsReader.deserializePassiveSkills(this);
     }
 
     public SoundSource getSoundSource() {
@@ -74,6 +88,14 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         this.targetpos = newpos;
     }
 
+    public void setPathpositions(ListTag pathpositions){
+        if (this.pathpositions != pathpositions) {
+            this.targetpos = null;
+            this.pathcounter = 0;
+            this.pathpositions = pathpositions;
+        }
+    }
+
     public void setMoveRadius(float radius){
         this.moveRadius = radius;
     }
@@ -84,22 +106,68 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     @Override
     public void travel(Vec3 travel) {
-        if (JsonInteractionsReader.isSpeaking.get(this) != null && TargetUtil.getTarget(this) == null) {
-            travel = new Vec3(0, 0, 0);
-        }
-        else if (this.targetpos != null) {
-            if (this.distanceToSqr(targetpos) >= this.moveRadius) {
-                PathNavigation navigator = this.getNavigation();
-                Path path = navigator.createPath(this.targetpos.x, this.targetpos.y, this.targetpos.z, 0);
-                navigator.moveTo(path, speed);
+        if (TargetUtil.getTarget(this) == null) {
+            if (JsonInteractionsReader.isSpeaking.get(this) != null) {
+                travel = new Vec3(0, 0, 0);
+            } else if (this.targetpos != null) {
+                if (this.distanceToSqr(targetpos) >= this.moveRadius) {
+                    PathNavigation navigator = this.getNavigation();
+                    Path path = navigator.createPath(this.targetpos.x, this.targetpos.y, this.targetpos.z, 0);
+                    navigator.moveTo(path, speed);
+                } else {
+                    this.targetpos = null;
+                    this.moveRadius = 1;
+                    this.speed = 1;
+                    if (this.pathpositions != null) {
+                        this.pathcounter++;
+                    }
+                }
             }
-            else {
-                this.targetpos = null;
-                this.moveRadius = 1;
-                this.speed = 1;
+            else if (this.pathpositions != null) {
+                deserializePaths();
             }
         }
         super.travel(travel);
+    }
+
+    private void deserializePaths() {
+        if (this.pathcounter < this.pathpositions.size()) {
+            CompoundTag path = this.pathpositions.getCompound(this.pathcounter);
+            if (path.contains("x") && path.contains("y") && path.contains("z")) {
+                this.targetpos = new Vec3(path.getInt("x"), path.getInt("y"), path.getInt("z"));
+                this.speed = path.contains("speed") ? path.getFloat("speed") : 1;
+                this.moveRadius = path.contains("radius") ? path.getInt("radius") : 1;
+            }
+        }
+        else {
+            this.pathpositions = null;
+            this.pathcounter = 0;
+        }
+    }
+
+    public void deserializePathRoll(){
+        if (!(this.level().getBlockState(getBlockPosAhead().offset(0, (int) this.getBbHeight() / 2, 0)).getBlock() instanceof AirBlock) && this.level().getBlockState(getBlockPosAhead().offset(0, (int) this.getBbHeight() / 2, 0).below()).getBlock() instanceof AirBlock){
+            AnimUtils.playAnim(this, WOMAnimations.KNIGHT_ROLL_FORWARD, 0);
+        }
+    }
+
+    public void deserializePathSneak(){
+       if (!(this.level().getBlockState(getBlockPosAhead().offset(0, (int) this.getBbHeight(), 0)).getBlock() instanceof AirBlock) && this.level().getBlockState(getBlockPosAhead().offset(0, (int) this.getBbHeight(), 0).below()).getBlock() instanceof AirBlock){
+            AnimUtils.playAnimchangingBox(this, "pride:biped/skill/mob_sneak", 0.1f, this.getBbWidth(), this.getBbHeight() * 0.8f, 2000);
+       }
+    }
+
+    public void deserializeOpenDoor(){
+        if (this.level().getBlockState(getBlockPosAhead()).getBlock() instanceof DoorBlock door){
+            if (!door.isOpen(this.level().getBlockState(getBlockPosAhead()))){
+                door.setOpen(this, this.level(), this.level().getBlockState(getBlockPosAhead()), getBlockPosAhead(), true);
+            }
+        }
+    }
+
+    public BlockPos getBlockPosAhead() {
+        Vec3 lookVec = this.getLookAngle().scale(1.1).add(this.getX(), this.getY(), this.getZ());
+        return new BlockPos((int) lookVec.x, (int) lookVec.y, (int) lookVec.z);
     }
 
     protected boolean shouldDespawnInPeaceful() {

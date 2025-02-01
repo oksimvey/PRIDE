@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -71,6 +72,7 @@ public class AnimationsRegister {
     public static StaticAnimation INFERNAL_STRAIGHT_FLUSH;
     public static StaticAnimation MOB_AIM;
     public static StaticAnimation MOB_SHOOT;
+    public static StaticAnimation MOB_SNEAK;
 
     public static ConcurrentHashMap<LivingEntity, Byte> pullLvl = new ConcurrentHashMap<>();
 
@@ -83,8 +85,10 @@ public class AnimationsRegister {
 
         HumanoidArmature biped = Armatures.BIPED;
 
+        MOB_SNEAK = (new MovementAnimation(0.15f, true,"biped/skill/mob_sneak", biped));
+
         MOB_AIM = (new LongHitAnimation(0.25f, "biped/combat/mob_aim", biped)).addEvents(AnimationEvent.TimeStampedEvent.create(0F, MOB_AIM_NBTS, AnimationEvent.Side.SERVER));
-        ;
+
         MOB_SHOOT = (new LongHitAnimation(0, "biped/combat/mob_shoot", biped));
         INFERNAL_AUTO_1 = (new BasicAttackAnimation(0.1F, 0.3F, 0.4F, 0.5F, null, biped.toolL, "biped/combat/infernal_auto_1", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.0F)).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.4F);
         INFERNAL_AUTO_2 = (new BasicAttackAnimation(0.2F, 0.1F, 0.2F, 0.25F, null, biped.toolR, "biped/combat/infernal_auto_2", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.0F)).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(1.5F)).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.4F).addEvents(new AnimationEvent.TimeStampedEvent[]{AnimationEvent.TimeStampedEvent.create(0.45F, (entitypatch, self, params) -> {

@@ -20,9 +20,7 @@ import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ItemStackUtils {
@@ -31,32 +29,13 @@ public class ItemStackUtils {
 
     public static ConcurrentHashMap<Entity, ListTag> storePreviousItems = new ConcurrentHashMap<>();
 
-    public static void storeItem(Entity ent, String slot){
-        if (ent != null){
-            if (ent instanceof LivingEntity living){
+    private static List<EquipmentSlot> Slots = Arrays.asList(EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
+
+    public static void storeItem(Entity ent, EquipmentSlot slot) {
+        if (ent != null) {
+            if (ent instanceof LivingEntity living) {
                 ItemStack itemstostore = null;
-                switch (slot){
-                    case "mainhand"-> itemstostore = living.getMainHandItem();
-                    case "offhand" -> itemstostore = living.getOffhandItem();
-                    case "head" -> itemstostore = living.getItemBySlot(EquipmentSlot.HEAD);
-                    case "chest"-> itemstostore = living.getItemBySlot(EquipmentSlot.CHEST);
-                    case "leg"-> itemstostore = living.getItemBySlot(EquipmentSlot.LEGS);
-                    case "feet"-> itemstostore = living.getItemBySlot(EquipmentSlot.FEET);
-                }
-                if (itemstostore != null){
-                    ListTag storeditems = new ListTag();
-                    if (storePreviousItems.get(living) != null){
-                        storeditems = storePreviousItems.get(living);
-                    }
-                    CompoundTag itemtostore = new CompoundTag();
-                    itemtostore.putString("slot", slot);
-                    itemtostore.putString("itemid", ForgeRegistries.ITEMS.getKey(itemstostore.getItem()).toString());
-                    CompoundTag previoustags = itemstostore.getTag();
-                    if (previoustags != null) {
-                        itemtostore.put("previoustags", previoustags);
-                    }
-                    storeditems.add(itemtostore);
-                }
+
             }
         }
     }

@@ -65,21 +65,53 @@
     "knockdown": "epicfight:biped/combat/knockdown",
     "fall": "epicfight:biped/living/landing"
   },
+  "skills": ["open_door", "path_sneak", "path_roll"],
   "targets": ["minecraft:zombie", "pride:hunter"],
   "goals": [
     {
       "conditions": [
         {
           "predicate": "isRaining",
-          "invert": false
+          "invert": true
         }
-        ],
+      ],
       "actions": [
         {
           "action": "moveToVec",
-          "x": 123,
-          "y": 17,
-          "z": 296
+          "path": [
+            {
+              "x": 123,
+              "y": 17,
+              "z": 296,
+              "speed": 2
+            },
+            {
+              "x": 220,
+              "y": 26,
+              "z": 296,
+              "speed": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "conditions": [
+        {
+          "predicate": "isRaining",
+          "invert": false
+        }
+      ],
+      "actions": [
+        {
+          "action": "moveToVec",
+          "path": [
+            {
+              "x": 205,
+              "y": 26,
+              "z": 296
+            }
+          ]
         }
       ]
     },
