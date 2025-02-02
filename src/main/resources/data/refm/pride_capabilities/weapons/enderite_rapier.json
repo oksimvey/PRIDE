@@ -1,0 +1,28 @@
+{
+  "attributes":
+  {
+    "common":
+    {
+      "weight": 5
+    }
+  },
+  "colliders": [
+    {
+      "minX": -0.5,
+      "maxX": 0.2,
+      "minY": -0.5,
+      "maxY": 0.8,
+      "minZ": -0.15,
+      "maxZ": 1.5
+    }
+  ],
+  "element": "Moon",
+  "requiredStrength": 10,
+  "requiredDexterity": 15,
+  "requiredMind": 18,
+  "scaleStrength": "C",
+  "scaleDexterity": "A",
+  "scaleMind": "A",
+  "skill": "Longsword Skill",
+  "type": "refm:ender_rapier"
+}

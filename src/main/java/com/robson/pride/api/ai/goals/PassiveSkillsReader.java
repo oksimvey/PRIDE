@@ -6,20 +6,6 @@ import net.minecraft.nbt.ListTag;
 
 public class PassiveSkillsReader {
 
-    public static void deserializePassiveSkillsTick(PrideMobBase prideMobBase){
-        if (prideMobBase != null){
-            if (prideMobBase.skills.contains("path_roll")){
-                prideMobBase.deserializePathRoll();
-            }
-            if (prideMobBase.skills.contains("path_sneak")){
-                prideMobBase.deserializePathSneak();
-            }
-            if (prideMobBase.skills.contains("open_door")){
-                prideMobBase.deserializeOpenDoor();
-            }
-        }
-    }
-
     public static void deserializePassiveSkills(PrideMobBase prideMobBase) {
         if (prideMobBase != null) {
             ListTag targets = PrideMobPatchReloader.SKILLS.get(prideMobBase.getType());
@@ -28,5 +14,4 @@ public class PassiveSkillsReader {
             }
         }
     }
-
 }

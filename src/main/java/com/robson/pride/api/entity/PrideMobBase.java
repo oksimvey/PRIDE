@@ -4,7 +4,9 @@ import com.robson.pride.api.ai.goals.JsonGoalsReader;
 import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
 import com.robson.pride.api.ai.goals.PassiveSkillsReader;
 import com.robson.pride.api.utils.AnimUtils;
+import com.robson.pride.api.utils.MathUtils;
 import com.robson.pride.api.utils.TargetUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -33,6 +35,7 @@ import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 import reascer.wom.gameasset.WOMAnimations;
@@ -107,25 +110,37 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
     @Override
     public void travel(Vec3 travel) {
         if (TargetUtil.getTarget(this) == null) {
+            Minecraft client = Minecraft.getInstance();
             if (JsonInteractionsReader.isSpeaking.get(this) != null) {
                 travel = new Vec3(0, 0, 0);
-            } else if (this.targetpos != null) {
-                if (this.distanceToSqr(targetpos) >= this.moveRadius) {
-                    PathNavigation navigator = this.getNavigation();
-                    Path path = navigator.createPath(this.targetpos.x, this.targetpos.y, this.targetpos.z, 0);
-                    navigator.moveTo(path, speed);
-                } else {
-                    this.targetpos = null;
-                    this.moveRadius = 1;
-                    this.speed = 1;
-                    if (this.pathpositions != null) {
-                        this.pathcounter++;
+            }
+            else if (client.player != null) {
+                AABB renderingarea = MathUtils.createAABBByLookingAngle(client.gameRenderer.getMainCamera().getPosition(), client.gameRenderer.getMainCamera().getLookVector(), 75);
+                if (renderingarea.contains(this.position())) {
+                    short distance = (short) (Math.pow(1.025, client.player.distanceTo(this)) * 2);
+                    if (client.player.tickCount % distance == 0) {
+                            JsonGoalsReader.onEntTick(this);
+                            deserializePassiveSkills();
+                             if (this.targetpos != null) {
+                                if (this.distanceToSqr(targetpos) >= this.moveRadius) {
+                                    PathNavigation navigator = this.getNavigation();
+                                    Path path = navigator.createPath(this.targetpos.x, this.targetpos.y, this.targetpos.z, 0);
+                                    navigator.moveTo(path, speed);
+                                }
+                                else {
+                                    this.targetpos = null;
+                                    this.moveRadius = 1;
+                                    this.speed = 1;
+                                    if (this.pathpositions != null) {
+                                        this.pathcounter++;
+                                    }
+                                }
+                            } else if (this.pathpositions != null) {
+                                deserializePaths();
+                            }
+                        }
                     }
                 }
-            }
-            else if (this.pathpositions != null) {
-                deserializePaths();
-            }
         }
         super.travel(travel);
     }
@@ -145,10 +160,24 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         }
     }
 
-    public void deserializePathRoll(){
-        if (!(this.level().getBlockState(getBlockPosAhead().offset(0, (int) this.getBbHeight() / 2, 0)).getBlock() instanceof AirBlock) && this.level().getBlockState(getBlockPosAhead().offset(0, (int) this.getBbHeight() / 2, 0).below()).getBlock() instanceof AirBlock){
-            AnimUtils.playAnim(this, WOMAnimations.KNIGHT_ROLL_FORWARD, 0);
+    public void deserializePassiveSkills(){
+        if (this.skills.contains("path_sneak")){
+            deserializePathSneak();
         }
+        if (this.skills.contains("path_roll")){
+            deserializePathRoll();
+        }
+        if (this.skills.contains("open_door")){
+            deserializeOpenDoor();
+        }
+    }
+
+    public void deserializePathRoll(){
+            BlockPos posAhead = getBlockPosAhead();
+            BlockPos checkPos = posAhead.above((int) this.getEyeHeight());
+            if (!(level().getBlockState(checkPos).getBlock() instanceof AirBlock) && level().getBlockState(checkPos.below()).getBlock() instanceof AirBlock) {
+                AnimUtils.playAnim(this, WOMAnimations.KNIGHT_ROLL_FORWARD, 0);
+            }
     }
 
     public void deserializePathSneak(){
@@ -165,9 +194,9 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         }
     }
 
-    public BlockPos getBlockPosAhead() {
-        Vec3 lookVec = this.getLookAngle().scale(1.1).add(this.getX(), this.getY(), this.getZ());
-        return new BlockPos((int) lookVec.x, (int) lookVec.y, (int) lookVec.z);
+    public BlockPos getBlockPosAhead(){
+        Vec3 lookVec = this.getLookAngle().scale(1.5).add(this.position());
+        return BlockPos.containing(lookVec);
     }
 
     protected boolean shouldDespawnInPeaceful() {
