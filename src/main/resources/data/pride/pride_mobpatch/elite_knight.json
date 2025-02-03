@@ -67,6 +67,19 @@
   },
   "skills": ["open_door", "path_sneak", "path_roll"],
   "targets": ["minecraft:zombie", "pride:hunter"],
+  "equipment": [
+    {
+      "variations": [0],
+      "slot": "mainhand",
+      "item": "pride:european_longsword",
+      "element": "Light"
+    },
+    {
+      "variations": [0],
+      "slot": "offhand",
+      "item": "minecraft:shield"
+    }
+  ],
   "goals": [
     {
       "conditions": [

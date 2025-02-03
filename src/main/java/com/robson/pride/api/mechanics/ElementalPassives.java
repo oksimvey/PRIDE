@@ -31,6 +31,7 @@ import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.damagesource.StunType;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ElementalPassives {
 
@@ -99,6 +100,18 @@ public class ElementalPassives {
         if (ent != null && dmgent != null) {
             PlaySoundUtils.playSound(ent, EpicFightSounds.LASER_BLAST.get(), 1, 100);
 
+        }
+    }
+
+    public static void divineResurrection(LivingEntity living){
+        if (living != null) {
+            living.setHealth(living.getMaxHealth());
+            AnimUtils.playAnim(living, AnimationsRegister.DIVINE_RESURRECTION, 0.25f);
+            TimerUtil.schedule(() -> {
+                if (living != null) {
+                    living.removeEffect(EffectRegister.DIVINE_PROTECTION.get());
+                }
+            }, 3, TimeUnit.SECONDS);
         }
     }
 

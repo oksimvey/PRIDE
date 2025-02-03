@@ -1,6 +1,5 @@
 package com.robson.pride.api.utils;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -47,10 +46,6 @@ public class MathUtils {
                 pos.x + lookangle.x * length + (radius * 1.5),
                 pos.y + yOffset + (radius),
                 pos.z + lookangle.z * length + (radius * 2));
-    }
-
-    public static AABB createAABBForCulling(double radius) {
-        return createAABBByLookingAngle(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition(), Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector(), radius);
     }
 
     public static float getAngleDifferencee(Entity ent1, Entity ent2) {

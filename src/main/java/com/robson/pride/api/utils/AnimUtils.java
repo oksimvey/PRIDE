@@ -93,39 +93,14 @@ public class AnimUtils {
         playAnim(ent, animation, convert);
     }
 
-    public static void playAnimchangingBox(Entity ent, String anim, float convert, float width, float height, int duration) {
-        TimerUtil.schedule(() -> {
+
+    public static void resizeBoundingBox(Entity ent, float width, float height) {
+        if (ent != null) {
             LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-            if (livingEntityPatch != null) {
-                StaticAnimation animation = AnimationManager.getInstance().byKeyOrThrow(anim);
-                if (animation != null) {
-                    resizeBoundingBox(animation, width, height);
-                    TimerUtil.schedule(() -> restoreBoundingBox(animation), duration, TimeUnit.MILLISECONDS);
-                    if (livingEntityPatch instanceof AdvancedCustomHumanoidMobPatch<?> AHPatch) {
-                        AHPatch.setBlocking(false);
-                        AHPatch.setParry(false);
-                        AHPatch.setAttackSpeed(convert);
-                        AHPatch.resetMotion();
-                        AHPatch.playAnimationSynchronized(animation, convert, SPPlayAnimation::new);
-                    } else livingEntityPatch.playAnimationSynchronized(animation, convert, SPPlayAnimation::new);
-                }
+            if (livingEntityPatch != null){
+                livingEntityPatch.resetSize(new EntityDimensions(width, height, true));
             }
-        }, 10, TimeUnit.MILLISECONDS);
-    }
-
-    public static void resizeBoundingBox(StaticAnimation animation, float width, float height) {
-        animation.addEvents(
-                AnimationProperty.StaticAnimationProperty.EVENTS,
-                AnimationEvent.create(Animations.ReusableSources.RESIZE_BOUNDING_BOX, AnimationEvent.Side.BOTH)
-                        .params(EntityDimensions.scalable(width, height))
-        );
-    }
-
-    public static void restoreBoundingBox(StaticAnimation animation) {
-        animation.addEvents(
-                AnimationProperty.StaticAnimationProperty.ON_END_EVENTS,
-                AnimationEvent.create(Animations.ReusableSources.RESTORE_BOUNDING_BOX, AnimationEvent.Side.BOTH)
-        );
+        }
     }
 
     public static byte getDodgeType(ServerPlayer player) {

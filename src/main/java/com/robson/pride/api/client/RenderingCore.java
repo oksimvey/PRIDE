@@ -11,23 +11,24 @@ import com.robson.pride.effect.WetEffect;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.registries.EffectRegister;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import yesman.epicfight.gameasset.Armatures;
 
-import java.util.List;
-
 public class RenderingCore {
 
     public static void renderCore() {
-        if (Minecraft.getInstance().player != null) {
-            LocalPlayer player = Minecraft.getInstance().player;
-            entityRenderer(player);
-            List<Entity> list = player.level().getEntities(player, MathUtils.createAABBForCulling(10));
-            for (Entity ent : list) {
-                if (ent instanceof LivingEntity living) {
-                    entityRenderer(living);
+        Minecraft client = Minecraft.getInstance();
+        if (client.player != null) {
+            entityRenderer(client.player);
+            for (Entity ent : client.player.level().getEntities(client.player, MathUtils.createAABBByLookingAngle(client.gameRenderer.getMainCamera().getPosition(), client.gameRenderer.getMainCamera().getLookVector(), 75))){
+                if (ent != null) {
+                    if (ent instanceof LivingEntity living) {
+                        short distance = (short) (1 + Math.pow(1.025, client.player.distanceTo(ent)) * 2);
+                        if (client.player.tickCount % distance == 0) {
+                            entityRenderer(living);
+                        }
+                    }
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.robson.pride.effect;
 
+import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.particles.ParticleTypes;
@@ -28,7 +29,7 @@ public class DivineProtectionEffect extends MobEffect {
 
     public static void tick(LivingEntity ent) {
         if (ent != null) {
-            int particlesPerWing = 18;
+            int particlesPerWing = 20;
             float animationSpeed = 0.05F;
             float time = System.currentTimeMillis() / 1000f;
             for (int side : new int[]{-1, 1}) {
@@ -39,14 +40,13 @@ public class DivineProtectionEffect extends MobEffect {
                             Minecraft.getInstance().player,
                             ent,
                             wingPoint,
-                            Armatures.BIPED.torso
-                    );
+                            Armatures.BIPED.torso);
                    if (pos != null) {
                        float yoffset = new Random().nextFloat(0.5f);
-                       Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.END_ROD, pos.x, pos.y + 0.4f - yoffset, pos.z, 0, 0, 0);
+                       Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.WISP_PARTICLE.get(), pos.x, pos.y + 0.4f - yoffset, pos.z, ent.getDeltaMovement().x, ent.getDeltaMovement().y, ent.getDeltaMovement().z);
                        if (particle != null) {
-                           particle.scale(1.5f);
-                           particle.setLifetime(5);
+                           particle.scale(1.75f);
+                           particle.setLifetime(1);
                        }
                    }
                 }

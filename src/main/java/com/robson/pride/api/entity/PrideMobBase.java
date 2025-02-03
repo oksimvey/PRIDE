@@ -1,11 +1,11 @@
 package com.robson.pride.api.entity;
 
+import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.ai.goals.JsonGoalsReader;
 import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
-import com.robson.pride.api.ai.goals.PassiveSkillsReader;
-import com.robson.pride.api.utils.AnimUtils;
-import com.robson.pride.api.utils.MathUtils;
-import com.robson.pride.api.utils.TargetUtil;
+import com.robson.pride.api.data.PrideMobPatchReloader;
+import com.robson.pride.api.utils.*;
+import com.robson.pride.registries.AnimationsRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -15,6 +15,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -35,18 +36,23 @@ import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
-import reascer.wom.gameasset.WOMAnimations;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
-    private byte variation;
+    private byte variation = 0;
+
+    private byte maxvariations;
 
     public List<String> targets = new ArrayList<>();
 
@@ -62,16 +68,20 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     private byte pathcounter = 0;
 
-    protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_) {
+    protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_, byte maxvariations) {
         super(p_33002_, p_33003_);
         this.xpReward = 5;
+        this.maxvariations = maxvariations;
         this.setPersistenceRequired();
         JsonGoalsReader.deserializeTargetGoals(this);
-        PassiveSkillsReader.deserializePassiveSkills(this);
+        deserializePassiveSkillsJson();
     }
 
-    public SoundSource getSoundSource() {
-        return SoundSource.HOSTILE;
+    public void deserializePassiveSkillsJson() {
+        ListTag targets = PrideMobPatchReloader.SKILLS.get(this.getType());
+        for (int i = 0; i < targets.size(); ++i){
+            this.skills.add(targets.getString(i));
+        }
     }
 
     @Override
@@ -85,6 +95,63 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
                     LivingEntity.class,
                     true,
                     entity -> this.targets.contains(EntityType.getKey(entity.getType()).toString())));
+    }
+
+    @Nullable
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+        SpawnGroupData data = super.finalizeSpawn(accessor, difficulty, reason, spawnDataIn, dataTag);
+        if (this.maxvariations > 0){
+            this.variation = (byte) ThreadLocalRandom.current().nextInt(this.maxvariations + 1);
+        }
+        equipAllSlotsToDefault();
+        return data;
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity p_21544_) {
+        super.setTarget(p_21544_);
+        equipAllSlotsToDefault();
+    }
+
+    public byte getVariation(){
+        return this.variation;
+    }
+
+    public void equipAllSlotsToDefault(){
+        ListTag equipments = PrideMobPatchReloader.EQUIPMENTS.get(this.getType());
+        if (equipments != null){
+            for (int i = 0; i < equipments.size(); ++i){
+                CompoundTag equipment = equipments.getCompound(i);
+                if (equipment.contains("variations")){
+                    ListTag variations = equipment.getList("variations", 3);
+                    for (int j = 0; j < variations.size(); ++j){
+                        if (this.variation == variations.getInt(j)){
+                            deserializeEquipment(equipment);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void deserializeEquipment(CompoundTag tag){
+        if (tag != null){
+            if (tag.contains("slot") && tag.contains("item")){
+                ItemStack item = EquipUtils.locateItem(tag.getString("item"));
+                if (tag.contains("element")){
+                    item.getOrCreateTag().putString("passive_element", tag.getString("element"));
+                }
+                switch (tag.getString("slot")){
+                    case "mainhand" -> this.setItemSlot(EquipmentSlot.MAINHAND, item);
+                    case "offhand" -> this.setItemSlot(EquipmentSlot.OFFHAND, item);
+                    case "head" -> this.setItemSlot(EquipmentSlot.HEAD, item);
+                    case "chest" -> this.setItemSlot(EquipmentSlot.CHEST, item);
+                    case "leg" -> this.setItemSlot(EquipmentSlot.LEGS, item);
+                    case "feet" -> this.setItemSlot(EquipmentSlot.FEET, item);
+                }
+            }
+        }
     }
 
     public void setTargetpos(Vec3 newpos){
@@ -107,38 +174,38 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         this.speed = speed;
     }
 
+    public boolean canTickLod(Minecraft client) {
+        if (client.player != null) {
+            short distance = (short) (1 + Math.pow(1.025, client.player.distanceTo(this)) * 2);
+            return client.player.tickCount % distance == 0;
+        }
+        return false;
+    }
+
     @Override
     public void travel(Vec3 travel) {
-        if (TargetUtil.getTarget(this) == null) {
-            Minecraft client = Minecraft.getInstance();
-            if (JsonInteractionsReader.isSpeaking.get(this) != null) {
+            if (JsonInteractionsReader.isSpeaking.get(this) != null && TargetUtil.getTarget(this) == null) {
                 travel = new Vec3(0, 0, 0);
             }
-            else if (client.player != null) {
-                AABB renderingarea = MathUtils.createAABBByLookingAngle(client.gameRenderer.getMainCamera().getPosition(), client.gameRenderer.getMainCamera().getLookVector(), 75);
-                if (renderingarea.contains(this.position())) {
-                    short distance = (short) (Math.pow(1.025, client.player.distanceTo(this)) * 2);
-                    if (client.player.tickCount % distance == 0) {
-                            JsonGoalsReader.onEntTick(this);
-                            deserializePassiveSkills();
-                             if (this.targetpos != null) {
-                                if (this.distanceToSqr(targetpos) >= this.moveRadius) {
-                                    PathNavigation navigator = this.getNavigation();
-                                    Path path = navigator.createPath(this.targetpos.x, this.targetpos.y, this.targetpos.z, 0);
-                                    navigator.moveTo(path, speed);
-                                }
-                                else {
-                                    this.targetpos = null;
-                                    this.moveRadius = 1;
-                                    this.speed = 1;
-                                    if (this.pathpositions != null) {
-                                        this.pathcounter++;
-                                    }
-                                }
-                            } else if (this.pathpositions != null) {
-                                deserializePaths();
+            else if (canTickLod(Minecraft.getInstance())) {
+                JsonGoalsReader.onEntTick(this);
+                deserializePassiveSkills();
+                if (TargetUtil.getTarget(this) == null) {
+                    if (this.targetpos != null) {
+                        if (this.distanceToSqr(targetpos) >= this.moveRadius) {
+                            PathNavigation navigator = this.getNavigation();
+                            Path path = navigator.createPath(this.targetpos.x, this.targetpos.y, this.targetpos.z, 0);
+                            navigator.moveTo(path, speed);
+                        } else {
+                            this.targetpos = null;
+                            this.moveRadius = 1;
+                            this.speed = 1;
+                            if (this.pathpositions != null) {
+                                this.pathcounter++;
                             }
                         }
+                    } else if (this.pathpositions != null) {
+                        deserializePaths();
                     }
                 }
         }
@@ -160,38 +227,42 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         }
     }
 
-    public void deserializePassiveSkills(){
-        if (this.skills.contains("path_sneak")){
-            deserializePathSneak();
+    public void deserializePassiveSkills() {
+        if (this.skills.contains("open_door") && shouldOpenDoor() != null) {
+            shouldOpenDoor().setOpen(this, this.level(), this.level().getBlockState(getBlockPosAhead()), getBlockPosAhead(), true);
         }
-        if (this.skills.contains("path_roll")){
-            deserializePathRoll();
-        }
-        if (this.skills.contains("open_door")){
-            deserializeOpenDoor();
+        else if (this.skills.contains("path_sneak") && shouldPathSneak()) {
+            Entity target = TargetUtil.getTarget(this);
+            AnimUtils.cancelMotion(this);
+            AnimUtils.playAnim(this, AnimationsRegister.MOB_SNEAK, 0.1f);
+            AnimUtils.resizeBoundingBox(this, 0.5f, 1.8f);
+            TargetUtil.setTarget(this, null);
+            TimerUtil.schedule(()->{
+                this.refreshDimensions();
+                if (target != null){
+                    TargetUtil.setTarget(this, target);
+                }
+            }, 1, TimeUnit.SECONDS);
         }
     }
 
-    public void deserializePathRoll(){
-            BlockPos posAhead = getBlockPosAhead();
-            BlockPos checkPos = posAhead.above((int) this.getEyeHeight());
-            if (!(level().getBlockState(checkPos).getBlock() instanceof AirBlock) && level().getBlockState(checkPos.below()).getBlock() instanceof AirBlock) {
-                AnimUtils.playAnim(this, WOMAnimations.KNIGHT_ROLL_FORWARD, 0);
-            }
-    }
-
-    public void deserializePathSneak(){
-       if (!(this.level().getBlockState(getBlockPosAhead().offset(0, (int) this.getBbHeight(), 0)).getBlock() instanceof AirBlock) && this.level().getBlockState(getBlockPosAhead().offset(0, (int) this.getBbHeight(), 0).below()).getBlock() instanceof AirBlock){
-            AnimUtils.playAnimchangingBox(this, "pride:biped/skill/mob_sneak", 0.1f, this.getBbWidth(), this.getBbHeight() * 0.8f, 2000);
-       }
-    }
-
-    public void deserializeOpenDoor(){
-        if (this.level().getBlockState(getBlockPosAhead()).getBlock() instanceof DoorBlock door){
-            if (!door.isOpen(this.level().getBlockState(getBlockPosAhead()))){
-                door.setOpen(this, this.level(), this.level().getBlockState(getBlockPosAhead()), getBlockPosAhead(), true);
+    public DoorBlock shouldOpenDoor(){
+        if (this.level().getBlockState(getBlockPosAhead()).getBlock() instanceof DoorBlock door) {
+            if(!door.isOpen(this.level().getBlockState(getBlockPosAhead()))){
+                return door;
             }
         }
+        return null;
+    }
+
+    public boolean shouldPathSneak() {
+        return !(this.level().getBlockState(getBlockPosAhead().offset(0, (int) this.getBbHeight(), 0)).getBlock() instanceof AirBlock) && this.level().getBlockState(getBlockPosAhead().offset(0, (int) this.getBbHeight(), 0).below()).getBlock() instanceof AirBlock;
+    }
+
+    public boolean shouldPathRoll() {
+        BlockPos posAhead = getBlockPosAhead();
+        BlockPos checkPos = posAhead.above((int) this.getEyeHeight());
+        return !(level().getBlockState(checkPos).getBlock() instanceof AirBlock) && level().getBlockState(checkPos.below()).getBlock() instanceof AirBlock;
     }
 
     public BlockPos getBlockPosAhead(){
@@ -209,6 +280,10 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     protected SoundEvent getSwimSplashSound() {
         return SoundEvents.HOSTILE_SPLASH;
+    }
+
+    public SoundSource getSoundSource() {
+        return SoundSource.HOSTILE;
     }
 
     protected SoundEvent getHurtSound(DamageSource p_33034_) {

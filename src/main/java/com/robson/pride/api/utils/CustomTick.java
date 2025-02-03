@@ -1,13 +1,7 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.ai.goals.JsonGoalsReader;
-import com.robson.pride.api.ai.goals.PassiveSkillsReader;
-import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.mechanics.MusicCore;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.AABB;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;

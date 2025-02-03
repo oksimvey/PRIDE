@@ -25,9 +25,11 @@ public class JsonInteractionsReader {
 
     public static void onInteraction(Entity target, Entity sourceent) {
         if (target != null && sourceent != null) {
+            if (TargetUtil.getTarget(target) == null){
             ListTag tag = PrideMobPatchReloader.DIALOGUES.get(target.getType());
             if (tag != null) {
                 deserializeInteractions(target, sourceent, tag);
+            }
             }
         }
     }

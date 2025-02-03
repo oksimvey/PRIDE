@@ -3,6 +3,7 @@ package com.robson.pride.events;
 import com.robson.pride.api.utils.CustomTick;
 import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.progression.NewCap;
+import com.robson.pride.progression.PlayerAttributeSetup;
 import com.robson.pride.progression.ProgressionGUIRender;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
@@ -26,8 +27,10 @@ public class PlayerSetup {
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         Player player = event.getEntity();
         if (player != null) {
+            PlayerAttributeSetup.setupPlayerAttributes(player);
             CustomTick.startRespawnTick(player);
             playerCommonSetup(player);
+            player.setHealth(player.getMaxHealth());
         }
     }
 

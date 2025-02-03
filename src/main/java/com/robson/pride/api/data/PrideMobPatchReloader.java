@@ -82,6 +82,7 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
     public static Map<EntityType<?>, ListTag> TARGETS = Maps.newHashMap();
     public static Map<EntityType<?>, ListTag> GOALS = Maps.newHashMap();
     public static Map<EntityType<?>, ListTag> SKILLS = Maps.newHashMap();
+    public static Map<EntityType<?>, ListTag> EQUIPMENTS = Maps.newHashMap();
 
     public PrideMobPatchReloader() {
         super(GSON, "pride_mobpatch");
@@ -95,6 +96,7 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         GOALS.clear();
         TARGETS.clear();
         SKILLS.clear();
+        EQUIPMENTS.clear();
         return super.prepare(resourceManager, profileIn);
     }
 
@@ -132,6 +134,9 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
                 }
                 if (tag.contains("skills")){
                     SKILLS.put(entityType, tag.getList("skills", 8));
+                }
+                if (tag.contains("equipment")){
+                    EQUIPMENTS.put(entityType, tag.getList("equipment", 10));
                 }
                 if (EpicFightMod.isPhysicalClient()) {
                     ClientEngine.getInstance().renderEngine.registerCustomEntityRenderer(entityType, tag.contains("preset") ? tag.getString("preset") : tag.getString("renderer"), tag);
