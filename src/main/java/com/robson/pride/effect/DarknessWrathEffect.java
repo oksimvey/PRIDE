@@ -5,14 +5,13 @@ import com.robson.pride.api.utils.ParticleUtils;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Armatures;
 
-public class DarknessWrathEffect extends MobEffect {
+public class DarknessWrathEffect extends PrideEffectBase {
 
     public DarknessWrathEffect() {
         super(MobEffectCategory.NEUTRAL, 0x57CDFD);
@@ -22,7 +21,8 @@ public class DarknessWrathEffect extends MobEffect {
     public void applyEffectTick(LivingEntity living, int amplifier) {
     }
 
-    public static void tick(LivingEntity ent){
+    @Override
+    public void pridetick(LivingEntity ent){
         if (ent != null){
             float heightfactor = ent.getBbHeight() / 1.8f;
             Vec3 lEye = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, new Vec3f(-0.11f * heightfactor, 0.175f * heightfactor, -0.3f * heightfactor), Armatures.BIPED.head);

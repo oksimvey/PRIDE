@@ -1,9 +1,6 @@
 package com.robson.pride.registries;
 
-import com.robson.pride.effect.DarknessWrathEffect;
-import com.robson.pride.effect.DivineProtectionEffect;
-import com.robson.pride.effect.HypnotizedEffect;
-import com.robson.pride.effect.WetEffect;
+import com.robson.pride.effect.*;
 import com.robson.pride.main.Pride;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.registries.DeferredRegister;
@@ -18,5 +15,6 @@ public class EffectRegister {
     public static final RegistryObject<MobEffect> WET = MOB_EFFECTS.register("wet", WetEffect::new);
     public static final RegistryObject<MobEffect> HYPNOTIZED = MOB_EFFECTS.register("hypnotized", HypnotizedEffect::new);
     public static final RegistryObject<MobEffect> DARKNESS_WRATH = MOB_EFFECTS.register("darkness_wrath", DarknessWrathEffect::new);
+    public static final RegistryObject<MobEffect> KILLER_AURA = MOB_EFFECTS.register("killer_aura", KillerAuraEffect::new);
 
 }

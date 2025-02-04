@@ -1,10 +1,7 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.client.RenderingCore;
-import com.robson.pride.api.mechanics.Stealth;
 import com.robson.pride.api.utils.ItemStackUtils;
-import com.robson.pride.api.utils.TargetUtil;
-import com.robson.pride.registries.ParticleRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -16,11 +13,10 @@ import reascer.wom.gameasset.WOMAnimations;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.api.client.animation.ClientAnimator;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 @Mod.EventBusSubscriber
 public class onClientTick {
-    private static int tickcount = 0;
 
     @SubscribeEvent
     public static void onTick(TickEvent.ClientTickEvent event) {
@@ -33,29 +29,12 @@ public class onClientTick {
         }
     }
 
-    public static void playerAnim(Player player) {
-        if (player != null) {
-            PlayerPatch playerPatch = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
-            if (playerPatch != null) {
-                if (playerPatch.getAnimator() instanceof ClientAnimator aniamtor) {
-                    if (aniamtor.currentCompositeMotion() == LivingMotions.IDLE) {
-                        if (tickcount == 0) {
-                            aniamtor.playAnimation(WOMAnimations.SOLAR_OBSCURIDAD_IDLE, 0.1f);
-                        }
-                        tickcount++;
-                        if (tickcount == 20) {
-                            tickcount = 0;
-                        }
-                    }
-                    if (aniamtor.currentCompositeMotion() == LivingMotions.WALK) {
-                        if (tickcount == 0) {
-                            aniamtor.playAnimation(WOMAnimations.SOLAR_OBSCURIDAD_WALK, 0.1f);
-                        }
-                        if (tickcount == 20) {
-                            tickcount = 0;
-                        }
-                        tickcount++;
-                    }
+    public static void changeLivingMotion(Entity ent) {
+        if (ent != null) {
+            LivingEntityPatch entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (entityPatch != null) {
+                if (entityPatch.getAnimator() instanceof ClientAnimator animator) {
+                    animator.addLivingAnimation(LivingMotions.IDLE, WOMAnimations.SOLAR_OBSCURIDAD_IDLE);
                 }
             }
         }

@@ -61,7 +61,6 @@ public class ParticleTracking {
                     CompoundTag collider = colliders.getCompound(new Random().nextInt(colliders.size()));
                     if (collider.contains("minX") && collider.contains("maxX") && collider.contains("minY") && collider.contains("maxY") && collider.contains("minZ") && collider.contains("maxZ")) {
                         return new Vec3f((float) (((new Random()).nextFloat() + collider.getDouble("minX")) * collider.getDouble("maxX")), (float) (((new Random()).nextFloat() + collider.getDouble("minY")) * collider.getDouble("maxY") + (collider.getDouble("maxY") / 10)), (float) (-((new Random()).nextFloat() * (collider.getDouble("maxZ") * ent.getBbHeight() / 1.8F)) + collider.getDouble("minZ")));
-
                     }
                 }
             }

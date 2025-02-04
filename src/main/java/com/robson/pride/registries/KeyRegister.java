@@ -15,6 +15,7 @@ public class KeyRegister {
     public static KeyMapping keyActionJump;
     public static KeyMapping keyActionSwapHand;
     public static KeyMapping keyActionRecharge;
+    public static KeyMapping keyActionAura;
 
     private static boolean wasPressedSpecial = false;
     private static boolean wasPressedSecondary = false;
@@ -22,6 +23,7 @@ public class KeyRegister {
     private static boolean wasPressedJump = false;
     private static boolean wasPressedSwapHand = false;
     private static boolean wasPressedRecharge = false;
+    private static boolean wasPressedAura = false;
 
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         keyActionSpecial = new KeyMapping("key.pride.special", InputConstants.Type.MOUSE, 0, "key.categories.misc");
@@ -30,6 +32,7 @@ public class KeyRegister {
         keyActionJump = new KeyMapping("key.pride.jump", InputConstants.Type.KEYSYM, InputConstants.KEY_SPACE, "key.categories.misc");
         keyActionSwapHand = new KeyMapping("key.pride.swaphand", InputConstants.Type.KEYSYM, InputConstants.KEY_F, "key.categories.misc");
         keyActionRecharge = new KeyMapping("key.pride.recharge", InputConstants.Type.KEYSYM, InputConstants.KEY_R, "key.categories.misc");
+        keyActionAura = new KeyMapping("key.pride.aura", InputConstants.Type.KEYSYM, InputConstants.KEY_Z, "key.categories.misc");
 
         event.register(keyActionSpecial);
         event.register(keyActionSecondary);
@@ -37,6 +40,7 @@ public class KeyRegister {
         event.register(keyActionJump);
         event.register(keyActionSwapHand);
         event.register(keyActionRecharge);
+        event.register(keyActionAura);
     }
 
     public static void setupClient(FMLClientSetupEvent event) {
@@ -45,13 +49,13 @@ public class KeyRegister {
 
     private static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.START) return;
-
         checkKeyAction(keyActionSpecial, wasPressedSpecial, "special");
         checkKeyAction(keyActionSecondary, wasPressedSecondary, "menu");
         checkKeyAction(keyActionTertiary, wasPressedTertiary, "dodge");
         checkKeyAction(keyActionJump, wasPressedJump, "jump");
         checkKeyAction(keyActionSwapHand, wasPressedSwapHand, "swaphand");
         checkKeyAction(keyActionRecharge, wasPressedRecharge, "recharge");
+        checkKeyAction(keyActionAura, wasPressedAura, "aura");
     }
 
     private static void checkKeyAction(KeyMapping key, boolean wasPressed, String actionName) {
@@ -60,7 +64,6 @@ public class KeyRegister {
         if (isCurrentlyPressed && !wasPressed) {
             PacketRegister.sendToServer(new KeyActionPacket(actionName, 0));
         }
-
         if (key == keyActionSpecial) {
             wasPressedSpecial = isCurrentlyPressed;
         } else if (key == keyActionSecondary) {
@@ -73,6 +76,9 @@ public class KeyRegister {
             wasPressedSwapHand = isCurrentlyPressed;
         } else if (key == keyActionRecharge) {
             wasPressedRecharge = isCurrentlyPressed;
+        }
+        else if (key == keyActionAura){
+            wasPressedAura = isCurrentlyPressed;
         }
     }
 }

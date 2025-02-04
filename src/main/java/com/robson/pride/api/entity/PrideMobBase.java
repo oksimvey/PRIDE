@@ -1,6 +1,5 @@
 package com.robson.pride.api.entity;
 
-import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.ai.goals.JsonGoalsReader;
 import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
 import com.robson.pride.api.data.PrideMobPatchReloader;
@@ -38,8 +37,6 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -189,14 +186,15 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
             }
             else if (canTickLod(Minecraft.getInstance())) {
                 JsonGoalsReader.onEntTick(this);
-                deserializePassiveSkills();
                 if (TargetUtil.getTarget(this) == null) {
+                    deserializePassiveSkills();
                     if (this.targetpos != null) {
                         if (this.distanceToSqr(targetpos) >= this.moveRadius) {
                             PathNavigation navigator = this.getNavigation();
                             Path path = navigator.createPath(this.targetpos.x, this.targetpos.y, this.targetpos.z, 0);
                             navigator.moveTo(path, speed);
-                        } else {
+                        }
+                        else {
                             this.targetpos = null;
                             this.moveRadius = 1;
                             this.speed = 1;

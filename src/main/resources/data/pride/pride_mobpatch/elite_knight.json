@@ -220,7 +220,7 @@
           "behaviors": [
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate": "pride:passiveskill"}, {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "epicfight:biped/combat/longsword_auto1",
               "play_speed": 1.2
@@ -228,7 +228,7 @@
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate": "pride:passiveskill"},  {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "epicfight:biped/combat/longsword_auto2",
               "play_speed": 1.2
@@ -236,7 +236,7 @@
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate": "pride:passiveskill"},  {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "epicfight:biped/combat/longsword_auto3",
               "play_speed": 1.2
@@ -244,7 +244,7 @@
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"},{"predicate": "random_chance", "chance": 0.75}, {"predicate":"within_distance", "min": 0.0, "max": 10.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate": "pride:passiveskill"},   {"predicate":"within_eye_height"},{"predicate": "random_chance", "chance": 0.75}, {"predicate":"within_distance", "min": 0.0, "max": 10.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
 
               "animation": "epicfight:biped/combat/longsword_dash",
@@ -265,7 +265,7 @@
           "behaviors": [
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate": "pride:passiveskill"},   {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "epicfight:biped/combat/longsword_auto1",
               "play_speed": 1.2
@@ -273,21 +273,21 @@
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate": "pride:passiveskill"},   {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "epicfight:biped/combat/longsword_auto3",
               "play_speed": 1.2
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate": "pride:passiveskill"},    {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "epicfight:biped/combat/longsword_auto1",
               "play_speed": 1.2
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate": "pride:passiveskill"},   {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "epicfight:biped/combat/longsword_auto3",
               "play_speed": 1.2
@@ -301,21 +301,21 @@
           "behaviors": [
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate": "pride:passiveskill"},    {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "epicfight:biped/combat/sword_auto1",
               "play_speed": 0.8
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate": "pride:passiveskill"},   {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "wom:biped/combat/herrscher_auto_1",
               "play_speed": 0.7
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate": "pride:passiveskill"},   {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "wom:biped/combat/herrscher_auto_3",
               "convert_time": 0.25, "command_list": [
@@ -335,7 +335,7 @@
           "behaviors": [
             {
               "conditions": [
-                {"predicate":"indestructible:using_item", "edible": true}	, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate": "pride:passiveskill"},    {"predicate":"indestructible:using_item", "edible": true}	, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "epicfight:biped/combat/sword_auto3",
               "convert_time": 0.25, "command_list": [
@@ -348,13 +348,13 @@
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate": "pride:passiveskill"},    {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "epicfight:biped/skill/roll_backward"
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {"predicate": "pride:passiveskill"},    {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "pride:biped/skill/mob_eat_mainhand",
               "convert_time": 0.25, "command_list": [
@@ -449,7 +449,7 @@
                 {
                   "predicate": "within_eye_height"
                 },
-                {"predicate": "health", "health": 0.9, "comparator": "greater_ratio"},
+                {"predicate": "pride:passiveskill"},   {"predicate": "health", "health": 0.9, "comparator": "greater_ratio"},
                 {
                   "predicate": "within_distance",
                   "min": 5.0,

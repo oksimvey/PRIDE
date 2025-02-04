@@ -81,7 +81,7 @@
           "behaviors": [
             {
               "conditions": [
-                {"predicate": "pride:targettryingperilous", "invert": true}, {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                  {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "epicfight:biped/combat/tachi_auto1"
 
@@ -106,14 +106,14 @@
             },
             {
               "conditions": [
-                {"predicate": "pride:targettryingperilous", "invert": true}, {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                  {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "epicfight:biped/combat/tachi_auto3"
 
             },
             {
               "conditions": [
-                {"predicate": "pride:targettryingperilous", "invert": true}, {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                  {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
               "animation": "wom:biped/combat/solar_auto_3",
               "command_list": [
@@ -130,29 +130,11 @@
 
             {
               "conditions": [
-                {"predicate": "pride:targettryingperilous", "invert": true}, {"predicate": "pride:targetistargetingself", "invert": true},  {"predicate":"pride:angle_difference", "min": -45, "max": 45, "invert": true}
+                  {"predicate": "pride:targetistargetingself", "invert": true},  {"predicate":"pride:angle_difference", "min": -45, "max": 45, "invert": true}
               ],
               "wander": 30,
               "x_axis": 10,
               "z_axis": 3
-            }
-          ]
-        },
-        {
-          "weight": 100,
-          "canBeInterrupted": true,
-          "looping": false,
-          "behaviors":[
-
-            {
-              "conditions": [
-                {"predicate": "pride:targettryingperilous", "invert": false}
-              ],
-              "animation": "epicfight:biped/combat/tachi_auto1",
-              "convert": 10,
-              "command_list": [
-                {"time":0, "command":"pride @s mikiri Dodge 1500", "execute_at_target":false}
-              ]
             }
           ]
         },

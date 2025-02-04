@@ -5,7 +5,6 @@ import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.KeyRegister;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.client.events.engine.ControllEngine;
 

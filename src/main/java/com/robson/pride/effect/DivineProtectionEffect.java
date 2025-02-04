@@ -14,9 +14,9 @@ import yesman.epicfight.gameasset.Armatures;
 
 import java.util.Random;
 
-import static com.robson.pride.api.utils.ArmatureUtils.getJointWithTranslation;
+import static com.robson.pride.api.utils.ArmatureUtils.*;
 
-public class DivineProtectionEffect extends MobEffect {
+public class DivineProtectionEffect extends PrideEffectBase {
 
     private static final Vec3f WING_OFFSET = new Vec3f(0.0F, 0.0F, 0.15F);
     private static final float WING_LENGTH = 1.2F;
@@ -27,7 +27,8 @@ public class DivineProtectionEffect extends MobEffect {
         super(MobEffectCategory.NEUTRAL, 0x57CDFD);
     }
 
-    public static void tick(LivingEntity ent) {
+    @Override
+    public void pridetick(LivingEntity ent) {
         if (ent != null) {
             int particlesPerWing = 20;
             float animationSpeed = 0.05F;
@@ -36,6 +37,9 @@ public class DivineProtectionEffect extends MobEffect {
                 for (int i = 0; i < particlesPerWing; i++) {
                     float progress = (float) i / particlesPerWing;
                     Vec3f wingPoint = calculateWingPoint(progress, side, time, animationSpeed);
+                    if (ent.getPersistentData().getBoolean("resurrecting")){
+                        wingPoint.add(0, 0, -1.5f);
+                    }
                     Vec3 pos = getJointWithTranslation(
                             Minecraft.getInstance().player,
                             ent,

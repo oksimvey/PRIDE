@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.player.Player;
 import reascer.wom.animation.attacks.BasicMultipleAttackAnimation;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.property.AnimationEvent;
@@ -103,7 +104,7 @@ public class AnimUtils {
         }
     }
 
-    public static byte getDodgeType(ServerPlayer player) {
+    public static byte getDodgeType(Player player) {
         if (Minecraft.getInstance().options.keyUp.isDown()) {
             return 1;
         }

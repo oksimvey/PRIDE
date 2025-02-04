@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 public class onQPress {
 
-    public static void checkDodgeType(ServerPlayer player) {
+    public static void checkDodgeType(Player player) {
         if (Minecraft.getInstance().player != null) {
             float EquipLoad = (AttributeUtils.getAttributeValue(player, "epicfight:weight") / AttributeUtils.getAttributeValue(player, "pride:max_weight"));
             if (Minecraft.getInstance().options.keyUp.isDown()) {
@@ -49,7 +49,7 @@ public class onQPress {
         }
     }
 
-    public static void onStep(ServerPlayer player, float equipLoad) {
+    public static void onStep(Player player, float equipLoad) {
         if (StaminaUtils.getStamina(player) >= 3) {
             player.getPersistentData().putBoolean("isDodging", true);
             TimerUtil.schedule(() -> player.getPersistentData().putBoolean("isDodging", false), 200, TimeUnit.MILLISECONDS);
@@ -88,7 +88,7 @@ public class onQPress {
         }
     }
 
-    public static void onRoll(ServerPlayer player) {
+    public static void onRoll(Player player) {
         if (StaminaUtils.getStamina(player) >= 4) {
             StaminaUtils.consumeStamina(player, 4);
             player.getPersistentData().putBoolean("isDodging", true);

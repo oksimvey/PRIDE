@@ -2,7 +2,7 @@ package com.robson.pride.api.ai;
 
 import com.robson.pride.api.ai.conditions.AngleDifference;
 import com.robson.pride.api.ai.conditions.IsTargetTargetSelf;
-import com.robson.pride.api.ai.conditions.TargetIsTryingPerilousAttack;
+import com.robson.pride.api.ai.conditions.PassiveSkillDeserialize;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -26,8 +26,8 @@ public class DataConditions {
         AngleDiff = CONDITIONS.register((new ResourceLocation("pride", "angle_difference")).getPath(), () -> {
             return AngleDifference::new;
         });
-        TargetTryingPerilous = CONDITIONS.register((new ResourceLocation("pride", "targettryingperilous")).getPath(), () -> {
-            return TargetIsTryingPerilousAttack::new;
+        TargetTryingPerilous = CONDITIONS.register((new ResourceLocation("pride", "passiveskill")).getPath(), () -> {
+            return PassiveSkillDeserialize::new;
         });
     }
 }

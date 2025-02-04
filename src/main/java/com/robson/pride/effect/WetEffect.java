@@ -11,7 +11,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.UUID;
 
-public class WetEffect extends MobEffect {
+public class WetEffect extends PrideEffectBase {
     public static final UUID MOVEMENT_SPEED_MODIFIER_UUID = UUID.fromString("CE9DBC2A-EE3F-43F5-9DF7-F7F1EE4915A9");
 
     public WetEffect() {
@@ -24,7 +24,8 @@ public class WetEffect extends MobEffect {
          living.clearFire();
     }
 
-    public static void clientTick(LivingEntity living) {
+    @Override
+    public void pridetick(LivingEntity living) {
         if (living != null){
             double radius = living.getBbWidth() / 4;
             Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.FALLING_WATER, -radius + Math.random() * (radius + radius) + living.getX(), (-living.getBbHeight() * 0.5) + Math.random() * ((living.getBbHeight())) + living.getY(), -radius + Math.random() * (radius + radius) + living.getZ(), 0, -0.17, 0);

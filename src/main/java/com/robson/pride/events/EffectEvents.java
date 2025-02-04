@@ -24,8 +24,10 @@ public class EffectEvents {
         if (event.getEffect() instanceof DivineProtectionEffect){
             if (event.getEntity() != null){
                 if (event.getEntity() instanceof Player player){
-                    player.getAbilities().mayfly = false;
                     player.getAbilities().flying = false;
+                    if (!player.isCreative()) {
+                        player.getAbilities().mayfly = false;
+                    }
                 }
             }
         }

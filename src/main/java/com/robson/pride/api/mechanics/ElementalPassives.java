@@ -48,6 +48,7 @@ public class ElementalPassives {
                 }
             }
             switch (element) {
+
                 case "Darkness" -> darknessPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:darkness_power")));
 
                 case "Light" -> lightPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:light_power")));
@@ -99,17 +100,22 @@ public class ElementalPassives {
     public static void lightPassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent != null) {
             PlaySoundUtils.playSound(ent, EpicFightSounds.LASER_BLAST.get(), 1, 100);
-
+            if (dmgent instanceof LivingEntity living){
+                living.addEffect(new MobEffectInstance(EffectRegister.DIVINE_PROTECTION.get(), 99999, 1));
+            }
         }
     }
 
     public static void divineResurrection(LivingEntity living){
         if (living != null) {
+            living.getPersistentData().putBoolean("resurrecting", true);
             living.setHealth(living.getMaxHealth());
             AnimUtils.playAnim(living, AnimationsRegister.DIVINE_RESURRECTION, 0.25f);
             TimerUtil.schedule(() -> {
                 if (living != null) {
                     living.removeEffect(EffectRegister.DIVINE_PROTECTION.get());
+                    living.getPersistentData().putBoolean("resurrecting", false);
+                    living.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 5));
                 }
             }, 3, TimeUnit.SECONDS);
         }

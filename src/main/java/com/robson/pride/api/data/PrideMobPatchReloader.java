@@ -15,7 +15,7 @@ import com.nameless.indestructible.data.AdvancedMobpatchReloader;
 import com.nameless.indestructible.gameasset.GuardAnimations;
 import com.nameless.indestructible.main.Indestructible;
 import com.nameless.indestructible.network.SPDatapackSync;
-import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -25,6 +25,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
+import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -47,6 +48,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.api.client.animation.ClientAnimator;
 import yesman.epicfight.api.client.model.Meshes;
 import yesman.epicfight.api.data.reloader.MobPatchReloadListener;
 import yesman.epicfight.api.model.Armature;
@@ -463,7 +465,6 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
                     advancedCustomHumanoidMobPatch.setPhase(phase);
                 }
             }
-
         };
     }
 
@@ -478,7 +479,6 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
                     advancedCustomHumanoidMobPatch.setPhase(phase);
                 }
             }
-
         };
     }
 
@@ -497,14 +497,12 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
 
     private static List<CommandEvent.HitEvent> deserializeHitCommandList(ListTag args) {
         List<CommandEvent.HitEvent> list = Lists.newArrayList();
-
         for(int k = 0; k < args.size(); ++k) {
             CompoundTag command = args.getCompound(k);
             boolean execute_at_target = command.contains("execute_at_target") && command.getBoolean("execute_at_target");
             CommandEvent.HitEvent event = HitEvent.CreateHitCommandEvent(command.getString("command"), execute_at_target);
             list.add(event);
         }
-
         return list;
     }
 
