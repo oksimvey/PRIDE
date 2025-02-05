@@ -1,5 +1,6 @@
 package com.robson.pride.entities.forest.hunter;
 
+import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.utils.EquipUtils;
 import com.robson.pride.entities.pre_hardmode.japanese.boss.shogun.Shogun;
 import com.robson.pride.entities.pre_hardmode.japanese.mob.ronin.Ronin;
@@ -18,34 +19,14 @@ import net.minecraft.world.level.ServerLevelAccessor;
 
 import javax.annotation.Nullable;
 
-public class Hunter extends Monster {
+public class Hunter extends PrideMobBase {
 
     public Hunter(EntityType<? extends Hunter> type, Level world) {
-        super(type, world);
+        super(type, world, (byte)0);
 
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             this.setDropChance(slot, 0);
         }
-    }
-
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity attackTarget) {
-                return this.mob.getBbWidth() * this.mob.getBbHeight();
-            }
-
-            @Override
-            protected void checkAndPerformAttack(LivingEntity pEnemy, double pDistToEnemySqr) {
-                double eyeHeightDistToEnemySqr = this.mob.distanceToSqr(pEnemy.getX(), pEnemy.getY() - this.mob.getEyeHeight() + pEnemy.getEyeHeight(), pEnemy.getZ());
-                super.checkAndPerformAttack(pEnemy, Math.min(pDistToEnemySqr, eyeHeightDistToEnemySqr * 0.8D));
-            }
-        });
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
 
     public static AttributeSupplier.Builder registerAttributes() {
@@ -60,15 +41,6 @@ public class Hunter extends Monster {
     @Override
     public float getStepHeight() {
         return 1.2F;
-    }
-
-    @Nullable
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-        SpawnGroupData data = super.finalizeSpawn(accessor, difficulty, reason, spawnDataIn, dataTag);
-        EquipUtils.equipMainHandByString(this, "pride:mob_bow");
-        EquipUtils.equipOffHandByString(this, "pride:mob_bow");
-        return data;
     }
 
     @Override

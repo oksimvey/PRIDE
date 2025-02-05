@@ -103,14 +103,14 @@ public class ProgressionUtils {
 
     public static int[] addXpBase( int lvl, int xp, int maxxp, int amount) {
         xp = xp + amount;
-        if (xp >= maxxp) {
+        while (xp >= maxxp) {
             xp = xp - maxxp;
             lvl = lvl + 1;
             maxxp = setMaxXp(lvl);
             if (lvl >= 100) {
                 lvl = 100;
                 xp = 0;
-                maxxp = 0;
+                maxxp = 100;
             }
         }
         return new int[]{lvl, xp, maxxp};

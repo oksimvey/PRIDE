@@ -1,8 +1,13 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
+import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.api.entity.PrideMobBase;
+import com.robson.pride.api.utils.CommandUtils;
 import com.robson.pride.api.utils.TargetUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

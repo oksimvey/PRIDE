@@ -1,0 +1,26 @@
+{
+  "attributes":
+  {
+    "common":
+    {
+      "weight": 50
+    }
+  },
+  "colliders": [
+    {
+      "minX": -0.75,
+      "maxX": 0.5,
+      "minY": -0.5,
+      "maxY": 0.8,
+      "minZ": -0.15,
+      "maxZ": 2.6
+    }
+  ],
+  "requiredStrength": 50,
+  "requiredDexterity": 20,
+  "scaleStrength": "S",
+  "scaleDexterity": "C",
+  "element": "Sun",
+  "skill": "Longsword Skill",
+  "type": "pride:pride_longsword"
+}

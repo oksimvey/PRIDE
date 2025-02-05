@@ -1,6 +1,5 @@
 package com.robson.pride.api.client;
 
-
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.api.utils.MathUtils;

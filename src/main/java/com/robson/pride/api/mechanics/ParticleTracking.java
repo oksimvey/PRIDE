@@ -53,7 +53,7 @@ public class ParticleTracking {
     }
 
     public static Vec3f getAABBForImbuement(ItemStack item, Entity ent) {
-        if (item != null) {
+        if (item != null && ent != null) {
             CompoundTag tags = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem());
             if (tags != null) {
                 if (tags.contains("colliders")) {

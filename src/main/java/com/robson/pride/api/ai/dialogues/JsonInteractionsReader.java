@@ -25,11 +25,14 @@ public class JsonInteractionsReader {
 
     public static void onInteraction(Entity target, Entity sourceent) {
         if (target != null && sourceent != null) {
-            if (TargetUtil.getTarget(target) == null){
-            ListTag tag = PrideMobPatchReloader.DIALOGUES.get(target.getType());
-            if (tag != null) {
-                deserializeInteractions(target, sourceent, tag);
-            }
+            if (TargetUtil.getTarget(target) == null) {
+                CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(target.getType());
+                if (tagmap != null) {
+                    ListTag tag = tagmap.getList("interaction_behaviors", 10);
+                    if (tag != null) {
+                        deserializeInteractions(target, sourceent, tag);
+                    }
+                }
             }
         }
     }

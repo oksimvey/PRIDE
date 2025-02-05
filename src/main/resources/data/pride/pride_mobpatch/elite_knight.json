@@ -65,6 +65,7 @@
     "knockdown": "epicfight:biped/combat/knockdown",
     "fall": "epicfight:biped/living/landing"
   },
+  "textures": ["pride:textures/entities/knight/knight1.png"],
   "skills": ["open_door", "path_sneak", "path_roll"],
   "targets": ["minecraft:zombie", "pride:hunter"],
   "equipment": [

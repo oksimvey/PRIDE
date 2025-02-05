@@ -1,7 +1,6 @@
 package com.robson.pride.api.data;
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -25,15 +24,12 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.data.conditions.Condition;
 import yesman.epicfight.data.conditions.EpicFightConditions;
 import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.main.EpicFightMod;
-import yesman.epicfight.network.server.SPDatapackSync;
 import yesman.epicfight.world.capabilities.item.ArmorCapability;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
@@ -46,7 +42,7 @@ import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListener {
     public static final String DIRECTORY = "pride_capabilities";
     private static final Gson GSON = (new GsonBuilder()).create();
-    private static final Map<Item, CompoundTag> CAPABILITY_ARMOR_DATA_MAP = Maps.newHashMap();
+    public static final Map<Item, CompoundTag> CAPABILITY_ARMOR_DATA_MAP = Maps.newHashMap();
     public static Map<Item, CompoundTag> CAPABILITY_WEAPON_DATA_MAP = Maps.newHashMap();
 
     public PrideCapabilityReloadListener() {
@@ -57,7 +53,6 @@ public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListe
     protected Map<ResourceLocation, JsonElement> prepare(ResourceManager resourceManager, ProfilerFiller profileIn) {
         CAPABILITY_ARMOR_DATA_MAP.clear();
         CAPABILITY_WEAPON_DATA_MAP.clear();
-
         return super.prepare(resourceManager, profileIn);
     }
 
@@ -100,18 +95,16 @@ public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListe
                 }
             }
         }
-
         ItemCapabilityProvider.addDefaultItems();
     }
 
     public static CapabilityItem deserializeArmor(Item item, CompoundTag tag) {
-        ArmorCapability.Builder builder = ArmorCapability.builder();
+        ArmorCapability.Builder builder =ArmorCapability.builder();
         if (tag.contains("attributes")) {
             CompoundTag attributes = tag.getCompound("attributes");
             builder.weight(attributes.getDouble("weight")).stunArmor(attributes.getDouble("stun_armor"));
         }
         builder.item(item);
-
         return builder.build();
     }
 
@@ -194,10 +187,6 @@ public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListe
         }
         if (tag.contains("speed_bonus")) {
             modifierMap.put(Attributes.ATTACK_SPEED, EpicFightAttributes.getSpeedBonusModifier(tag.getDouble("speed_bonus")));
-        }
-        if (tag.contains("darkness_power")){
-            modifierMap.put(AttributeRegister.DARKNESS_POWER.get(), new AttributeModifier(UUID.fromString("5975a582-14e0-4d16-b6ef-8cbe2c9593c0"), "epicfight:weapon_modifier", tag.getDouble("weight"), AttributeModifier.Operation.ADDITION));
-
         }
         if (tag.contains("weight")){
             modifierMap.put(EpicFightAttributes.WEIGHT.get(), new AttributeModifier(UUID.fromString("5975a582-14e0-4d16-b6ef-8cbe2c9593c0"), "epicfight:weapon_modifier", tag.getDouble("weight"), AttributeModifier.Operation.ADDITION));

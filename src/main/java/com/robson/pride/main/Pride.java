@@ -5,7 +5,6 @@ import com.nameless.indestructible.network.SPDatapackSync;
 import com.robson.pride.api.ai.DataConditions;
 import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.api.data.PrideMobPatchReloader;
-import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
@@ -69,7 +68,7 @@ public class Pride {
                         .then(Commands.argument("living_entity", EntityArgument.entity())
                                 .then(PerilousCommand.register())
                                 .then(MobEatCommand.register())
-                                .then(MikiriCommand.register())
+                                .then(AddXpCommand.register())
                                 .then(ShootProjectileCommand.register())
                                 .then(SkillExecuteCommand.register())
                                 .then(CastSpellCommand.register())

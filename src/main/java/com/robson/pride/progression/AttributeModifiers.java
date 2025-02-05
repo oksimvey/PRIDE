@@ -1,14 +1,26 @@
 package com.robson.pride.progression;
 
+import com.google.common.collect.Multimap;
 import com.robson.pride.api.data.PrideCapabilityReloadListener;
+import com.robson.pride.api.utils.AttributeUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.registries.WeaponSkillRegister;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
+import org.antlr.v4.runtime.misc.MultiMap;
 
 import java.util.*;
+
+import static com.robson.pride.api.client.CustomTooltips.findComponentArgument;
 
 public class AttributeModifiers {
 
@@ -74,15 +86,15 @@ public class AttributeModifiers {
                 byte modifiers = 0;
                 if (tag.contains("requiredStrength")){
                     modifiers = (byte) (modifiers + 1);
-                    strmodifier = calculateAttributeModifier(player, item, tag,  "Strength");
+                    strmodifier = calculateWeaponAttributeModifier(player, item, tag,  "Strength");
                 }
                 if (tag.contains("requiredDexterity")){
                     modifiers = (byte) (modifiers + 1);
-                    dexmodifier =  calculateAttributeModifier(player, item, tag,  "Dexterity");
+                    dexmodifier =  calculateWeaponAttributeModifier(player, item, tag,  "Dexterity");
                 }
                 if (tag.contains("requiredMind") || item.getOrCreateTag().contains("requiredMind")){
                     modifiers = (byte) (modifiers + 1);
-                    mindmofier =  calculateAttributeModifier(player, item, tag,  "Mind");
+                    mindmofier =  calculateWeaponAttributeModifier(player, item, tag,  "Mind");
                 }
                 float agroup = mindmofier + dexmodifier + strmodifier;
                 float finalmodifier = agroup  / modifiers;
@@ -92,7 +104,7 @@ public class AttributeModifiers {
         return 0;
     }
 
-    public static float calculateAttributeModifier(Player player, ItemStack item, CompoundTag tag, String attribute) {
+    public static float calculateWeaponAttributeModifier(Player player, ItemStack item, CompoundTag tag, String attribute) {
         if (player != null && item != null && tag != null) {
             CompoundTag playertag = ProgressionGUIRender.playertags.get(player);
             if (playertag != null) {
@@ -108,6 +120,27 @@ public class AttributeModifiers {
             }
         }
         return 0;
+    }
+
+    public static String getModifierBySlot(EquipmentSlot slot){
+        return switch (slot){
+            case FEET -> "eaa09522-0b9a-43cd-b199-e58ec94140b7";
+            case LEGS -> "46bd5631-c8b6-4375-92cd-f7b77dcb5c29";
+            case CHEST -> "932db49e-7acf-4d6d-9ad5-c1101da03617";
+            default -> "afd5deb9-2ef3-4dd2-94b4-cb3744f75f64";
+        };
+    }
+
+    public static int calculateArmorModifier(ItemStack item, CompoundTag tag, int defaultarmor){
+       if (item != null && tag != null){
+           if (tag.contains("attributes")){
+               CompoundTag attributes = tag.getCompound("attributes");
+               if (attributes.contains("armor")){
+                   return attributes.getInt("armor") + defaultarmor;
+               }
+           }
+       }
+       return 0;
     }
 
     public static float getIncrementByScale(String scale){

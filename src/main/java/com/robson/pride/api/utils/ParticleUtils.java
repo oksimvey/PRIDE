@@ -75,7 +75,7 @@ public class ParticleUtils {
                         amount = 5;
                     }
                     if (entitypatch.getEntityState().attacking()) {
-                        amount = amount * 5;
+                        amount *= 5;
                     }
                     if (entitypatch != null) {
                         for (int i = 0; i < amount; i++) {

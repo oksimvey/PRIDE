@@ -1,14 +1,16 @@
 package com.robson.pride.progression;
 
-import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.registries.WeaponSkillRegister;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class NewCap {
+
+    private static List<String> playerSkills = Arrays.asList("Mikiri Counter", "Spell Counter");
 
     public static void setupVariables(CompoundTag oldtag, CompoundTag newtag) {
         newtag.putInt("StrengthLvl", oldtag.getInt("StrengthLvl"));
@@ -27,18 +29,11 @@ public class NewCap {
         newtag.putInt("EnduranceMaxXp", oldtag.getInt("EnduranceMaxXp"));
         newtag.putInt("MindMaxXp", oldtag.getInt("MindMaxXp"));
         newtag.putString("Element", oldtag.getString("Element"));
-        for (EntityType<?> entityType : PrideMobPatchReloader.QUESTS.keySet()){
-            ListTag quests = PrideMobPatchReloader.QUESTS.get(entityType);
-            if (quests != null){
-                for (int i = 0; i < quests.size(); ++i){
-                    String quest = quests.getString(i);
-                    if (oldtag.contains(quest)){
-                        if (oldtag.getBoolean(quest)){
-                            newtag.putBoolean(quest, true);
-                        }
-                    }
-                }
-            }
+        if (oldtag.contains("pride_skills")) {
+            newtag.put("pride_skills", oldtag.getList("pride_skills", 8));
+        }
+        if (oldtag.contains("pride_quests")) {
+            newtag.put("pride_quests", oldtag.getList("pride_quests", 8));
         }
     }
 

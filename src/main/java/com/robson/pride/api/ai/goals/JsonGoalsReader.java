@@ -17,21 +17,30 @@ public class JsonGoalsReader {
 
     public static void onEntTick(PrideMobBase prideMobBase) {
         if (prideMobBase != null) {
-            ListTag goals = PrideMobPatchReloader.GOALS.get(prideMobBase.getType());
-            if (goals != null){
-                deserializeGoals(prideMobBase, goals);
+            CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(prideMobBase.getType());
+            if (tagmap != null) {
+                ListTag goals = tagmap.getList("goals", 10);
+                if (goals != null) {
+                    deserializeGoals(prideMobBase, goals);
+                }
             }
         }
     }
 
     public static void deserializeTargetGoals(PrideMobBase prideMobBase) {
         if (prideMobBase != null) {
-            ListTag targets = PrideMobPatchReloader.TARGETS.get(prideMobBase.getType());
-            for (int i = 0; i < targets.size(); ++i){
-                prideMobBase.targets.add(targets.getString(i));
+            CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(prideMobBase.getType());
+            if (tagmap != null) {
+                ListTag targets = tagmap.getList("targets", 8);
+                if (targets != null) {
+                    for (int i = 0; i < targets.size(); ++i) {
+                        prideMobBase.targets.add(targets.getString(i));
+                    }
+                }
             }
         }
     }
+
 
     public static void deserializeGoals(PrideMobBase prideMobBase, ListTag goals) {
         if (prideMobBase != null && goals != null) {

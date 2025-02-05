@@ -41,19 +41,21 @@ import net.minecraftforge.common.ForgeHooks;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
-    private byte variation = 0;
+    private byte variation;
 
     private byte maxvariations;
 
     public List<String> targets = new ArrayList<>();
 
     public List<String> skills = new ArrayList<>();
+
+    public List<String> textures = new ArrayList<>();
 
     private ListTag pathpositions;
 
@@ -72,12 +74,26 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         this.setPersistenceRequired();
         JsonGoalsReader.deserializeTargetGoals(this);
         deserializePassiveSkillsJson();
+       deserializeTextures();
+    }
+
+    public void deserializeTextures(){
+        CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
+        if (tagmap != null) {
+            ListTag targets = tagmap.getList("textures", 8);
+            for (int i = 0; i < targets.size(); ++i) {
+                this.textures.add(targets.getString(i));
+            }
+        }
     }
 
     public void deserializePassiveSkillsJson() {
-        ListTag targets = PrideMobPatchReloader.SKILLS.get(this.getType());
-        for (int i = 0; i < targets.size(); ++i){
-            this.skills.add(targets.getString(i));
+        CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
+        if (tagmap != null) {
+            ListTag targets = tagmap.getList("skills", 8);
+            for (int i = 0; i < targets.size(); ++i) {
+                this.skills.add(targets.getString(i));
+            }
         }
     }
 
@@ -98,9 +114,7 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(accessor, difficulty, reason, spawnDataIn, dataTag);
-        if (this.maxvariations > 0){
-            this.variation = (byte) ThreadLocalRandom.current().nextInt(this.maxvariations + 1);
-        }
+        this.variation = (byte) new Random().nextInt(this.maxvariations + 1);
         equipAllSlotsToDefault();
         return data;
     }
@@ -115,16 +129,19 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         return this.variation;
     }
 
-    public void equipAllSlotsToDefault(){
-        ListTag equipments = PrideMobPatchReloader.EQUIPMENTS.get(this.getType());
-        if (equipments != null){
-            for (int i = 0; i < equipments.size(); ++i){
-                CompoundTag equipment = equipments.getCompound(i);
-                if (equipment.contains("variations")){
-                    ListTag variations = equipment.getList("variations", 3);
-                    for (int j = 0; j < variations.size(); ++j){
-                        if (this.variation == variations.getInt(j)){
-                            deserializeEquipment(equipment);
+    public void equipAllSlotsToDefault() {
+        CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
+        if (tagmap != null) {
+            ListTag equipments = tagmap.getList("equipment", 10);
+            if (equipments != null) {
+                for (int i = 0; i < equipments.size(); ++i) {
+                    CompoundTag equipment = equipments.getCompound(i);
+                    if (equipment.contains("variations")) {
+                        ListTag variations = equipment.getList("variations", 3);
+                        for (int j = 0; j < variations.size(); ++j) {
+                            if (this.variation == variations.getInt(j)) {
+                                deserializeEquipment(equipment);
+                            }
                         }
                     }
                 }
@@ -202,7 +219,8 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
                                 this.pathcounter++;
                             }
                         }
-                    } else if (this.pathpositions != null) {
+                    }
+                    else if (this.pathpositions != null) {
                         deserializePaths();
                     }
                 }

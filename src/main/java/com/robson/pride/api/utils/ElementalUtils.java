@@ -5,7 +5,9 @@ import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.ParticleRegister;
+import io.redspace.ironsspellbooks.IronsSpellbooks;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
+import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -118,38 +120,26 @@ public class ElementalUtils {
         LocalPlayer player = Minecraft.getInstance().player;
         if (level != null) {
             switch (element) {
-                case "Darkness" -> {
-                    if (aura) {
-                        level.playSound(player, ent, SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, volume, 1);
-                    }
-                }
-                case "Light" -> {
-                    level.playSound(player, ent, SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, volume, 1);
-                }
-                case "Thunder" -> {
+                case "Darkness" -> level.playSound(player, ent, SoundEvents.PARROT_IMITATE_WITHER, SoundSource.NEUTRAL, volume, 1);
 
-                }
-                case "Sun" -> {
+                case "Light" -> level.playSound(player, ent, SoundRegistry.CLOUD_OF_REGEN_LOOP.get(), SoundSource.NEUTRAL, volume, 1);
 
-                }
-                case "Moon" -> {
+                case "Thunder" -> level.playSound(player, ent, SoundRegistry.ELECTROCUTE_LOOP.get(), SoundSource.NEUTRAL, volume, 1);
 
-                }
-                case "Blood" -> {
+                case "Sun" -> level.playSound(player, ent, SoundRegistry.FIRE_BREATH_LOOP.get(), SoundSource.NEUTRAL, volume, 1);
 
-                }
-                case "Wind" -> {
+                case "Moon" -> level.playSound(player, ent, SoundRegistry.TELEKINESIS_LOOP.get(), SoundSource.NEUTRAL, volume, 1);
 
-                }
-                case "Nature" -> {
+                case "Blood" -> level.playSound(player, ent, SoundRegistry.BLOOD_NEEDLE_IMPACT.get(), SoundSource.NEUTRAL, volume, 1);
 
-                }
-                case "Ice" -> {
+                case "Wind" -> level.playSound(player, ent, SoundRegistry.GUST_CHARGE.get(), SoundSource.NEUTRAL, volume, 1);
 
-                }
-                case "Water" -> {
+                case "Nature" -> level.playSound(player, ent, SoundRegistry.POISON_SPLASH_BEGIN.get(), SoundSource.NEUTRAL, volume, 1);
 
-                }
+                case "Ice" -> level.playSound(player, ent, SoundRegistry.CONE_OF_COLD_LOOP.get(), SoundSource.NEUTRAL, volume, 1);
+
+                case "Water" -> level.playSound(player, ent, SoundEvents.DROWNED_SWIM, SoundSource.NEUTRAL, volume, 1);
+
             }
         }
     }

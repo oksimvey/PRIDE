@@ -48,7 +48,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.types.StaticAnimation;
-import yesman.epicfight.api.client.animation.ClientAnimator;
 import yesman.epicfight.api.client.model.Meshes;
 import yesman.epicfight.api.data.reloader.MobPatchReloadListener;
 import yesman.epicfight.api.model.Armature;
@@ -77,14 +76,8 @@ import yesman.epicfight.world.entity.ai.goal.CombatBehaviors.BehaviorSeries;
 
 public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
     private static final Gson GSON = (new GsonBuilder()).create();
-    private static final Map<EntityType<?>, CompoundTag> TAGMAP = Maps.newHashMap();
+    public static final Map<EntityType<?>, CompoundTag> MOB_TAGS = Maps.newHashMap();
     public static final Map<EntityType<?>, MobPatchReloadListener.AbstractMobPatchProvider> ADVANCED_MOB_PATCH_PROVIDERS = Maps.newHashMap();
-    public static Map<EntityType<?>, ListTag> DIALOGUES = Maps.newHashMap();
-    public static Map<EntityType<?>, ListTag> QUESTS = Maps.newHashMap();
-    public static Map<EntityType<?>, ListTag> TARGETS = Maps.newHashMap();
-    public static Map<EntityType<?>, ListTag> GOALS = Maps.newHashMap();
-    public static Map<EntityType<?>, ListTag> SKILLS = Maps.newHashMap();
-    public static Map<EntityType<?>, ListTag> EQUIPMENTS = Maps.newHashMap();
 
     public PrideMobPatchReloader() {
         super(GSON, "pride_mobpatch");
@@ -92,13 +85,7 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
 
     protected Map<ResourceLocation, JsonElement> prepare(ResourceManager resourceManager, ProfilerFiller profileIn) {
         ADVANCED_MOB_PATCH_PROVIDERS.clear();
-        TAGMAP.clear();
-        DIALOGUES.clear();
-        QUESTS.clear();
-        GOALS.clear();
-        TARGETS.clear();
-        SKILLS.clear();
-        EQUIPMENTS.clear();
+        MOB_TAGS.clear();
         return super.prepare(resourceManager, profileIn);
     }
 
@@ -121,25 +108,7 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
 
                 ADVANCED_MOB_PATCH_PROVIDERS.put(entityType, deserializeMobPatchProvider(entityType, tag, false, resourceManagerIn));
                 EntityPatchProvider.putCustomEntityPatch(entityType, (entity) -> () -> ((MobPatchReloadListener.AbstractMobPatchProvider)ADVANCED_MOB_PATCH_PROVIDERS.get(entity.getType())).get(entity));
-                TAGMAP.put(entityType, filterClientData(tag));
-                if (tag.contains("interaction_behaviors")){
-                    DIALOGUES.put(entityType, tag.getList("interaction_behaviors",10));
-                }
-                if (tag.contains("quests")){
-                    QUESTS.put(entityType, tag.getList("quests", 8));
-                }
-                if (tag.contains("targets")){
-                    TARGETS.put(entityType, tag.getList("targets", 8));
-                }
-                if (tag.contains("goals")){
-                    GOALS.put(entityType, tag.getList("goals", 10));
-                }
-                if (tag.contains("skills")){
-                    SKILLS.put(entityType, tag.getList("skills", 8));
-                }
-                if (tag.contains("equipment")){
-                    EQUIPMENTS.put(entityType, tag.getList("equipment", 10));
-                }
+                MOB_TAGS.put(entityType, filterClientData(tag));
                 if (EpicFightMod.isPhysicalClient()) {
                     ClientEngine.getInstance().renderEngine.registerCustomEntityRenderer(entityType, tag.contains("preset") ? tag.getString("preset") : tag.getString("renderer"), tag);
                 }
@@ -213,6 +182,27 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         extract.put("faction", original.get("faction"));
         extract.put("default_livingmotions", original.get("default_livingmotions"));
         extract.put("attributes", original.get("attributes"));
+        if (original.contains("interaction_behaviors")){
+            extract.put("interaction_behaviors", original.getList("interaction_behaviors", 10));
+        }
+        if (original.contains("custom_music")){
+            extract.put("custom_music", original.get("custom_music"));
+        }
+        if (original.contains("textures")){
+            extract.put("textures", original.getList("textures", 8));
+        }
+        if (original.contains("targets")){
+            extract.put("targets", original.getList("targets", 8));
+        }
+        if (original.contains("goals")){
+            extract.put("goals", original.getList("goals", 10));
+        }
+        if (original.contains("skills")){
+            extract.put("skills", original.getList("skills", 8));
+        }
+        if (original.contains("equipment")){
+            extract.put("equipment", original.getList("equipment", 10));
+        }
         if (original.contains("boss_bar")) {
             extract.put("boss_bar", original.get("boss_bar"));
             if (original.contains("custom_name")) {
@@ -228,7 +218,7 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
     }
 
     public static Stream<CompoundTag> getDataStream() {
-        Stream<CompoundTag> tagStream = TAGMAP.entrySet().stream().map((entry) -> {
+        Stream<CompoundTag> tagStream = MOB_TAGS.entrySet().stream().map((entry) -> {
             ((CompoundTag)entry.getValue()).putString("id", ForgeRegistries.ENTITY_TYPES.getKey((EntityType)entry.getKey()).toString());
             return (CompoundTag)entry.getValue();
         });
@@ -236,7 +226,7 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
     }
 
     public static int getTagCount() {
-        return TAGMAP.size();
+        return MOB_TAGS.size();
     }
 
     @OnlyIn(Dist.CLIENT)

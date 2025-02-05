@@ -32,6 +32,7 @@
     "chase": "epicfight:biped/living/walk",
     "death": "epicfight:biped/living/death"
   },
+  "textures": ["pride:textures/entities/japanese/isshin.png"],
   "humanoid_weapon_motions": [
     {
       "weapon_categories": [

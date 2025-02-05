@@ -1,5 +1,6 @@
 package com.robson.pride.entities.pre_hardmode.japanese.boss.shogun;
 
+import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.utils.EquipUtils;
 import com.robson.pride.entities.forest.eliteknight.EliteKnight;
 import net.minecraft.nbt.CompoundTag;
@@ -17,37 +18,15 @@ import net.minecraft.world.level.ServerLevelAccessor;
 
 import javax.annotation.Nullable;
 
-public class Shogun extends Monster {
+public class Shogun extends PrideMobBase {
     public Entity target = this.getTarget();
 
     public Shogun(EntityType<? extends Shogun> type, Level world) {
-        super(type, world);
+        super(type, world, (byte) 0);
 
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             this.setDropChance(slot, 0);
         }
-    }
-
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity attackTarget) {
-                return this.mob.getBbWidth() * this.mob.getBbHeight();
-            }
-
-            @Override
-            protected void checkAndPerformAttack(LivingEntity pEnemy, double pDistToEnemySqr) {
-                double eyeHeightDistToEnemySqr = this.mob.distanceToSqr(pEnemy.getX(), pEnemy.getY() - this.mob.getEyeHeight() + pEnemy.getEyeHeight(), pEnemy.getZ());
-                super.checkAndPerformAttack(pEnemy, Math.min(pDistToEnemySqr, eyeHeightDistToEnemySqr * 0.8D));
-            }
-        });
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, EliteKnight.class, true));
     }
 
     public static AttributeSupplier.Builder registerAttributes() {
@@ -63,15 +42,6 @@ public class Shogun extends Monster {
     @Override
     public float getStepHeight() {
         return 1.2F;
-    }
-
-    @Nullable
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-        SpawnGroupData data = super.finalizeSpawn(accessor, difficulty, reason, spawnDataIn, dataTag);
-        EquipUtils.equipMainHandByString(this, "epicfight:netherite_tachi");
-
-        return data;
     }
 
     @Override

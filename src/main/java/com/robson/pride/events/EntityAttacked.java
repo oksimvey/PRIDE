@@ -111,7 +111,7 @@ public class EntityAttacked {
     @SubscribeEvent
     public static void hurtEnt(LivingHurtEvent event) {
         if (event.getSource().getDirectEntity() != null && event.getSource().getEntity() != null) {
-            if (event.getSource().getEntity() instanceof AbstractArrow  ) {
+            if (event.getSource().getDirectEntity() instanceof AbstractArrow  ) {
                 event.setAmount(event.getAmount() + AttributeUtils.getAttributeValue(event.getSource().getEntity(), "pride:arrow_power"));
             }
             if (event.getSource().getDirectEntity() instanceof Player player) {
