@@ -125,7 +125,6 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         if (EpicFightMod.isPhysicalClient()) {
             Meshes.getOrCreateAnimatedMesh(Minecraft.getInstance().getResourceManager(), modelLocation, HumanoidMesh::new);
         }
-
         Armature armature = Armatures.getOrCreateArmature(resourceManager, armatureLocation, HumanoidArmature::new);
         Armatures.registerEntityTypeArmature(entityType, armature);
         provider.hasBossBar = tag.contains("boss_bar") && tag.getBoolean("boss_bar");
@@ -186,7 +185,7 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
             extract.put("interaction_behaviors", original.getList("interaction_behaviors", 10));
         }
         if (original.contains("custom_music")){
-            extract.put("custom_music", original.get("custom_music"));
+            extract.putString("custom_music", original.getString("custom_music"));
         }
         if (original.contains("textures")){
             extract.put("textures", original.getList("textures", 8));
@@ -203,12 +202,12 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         if (original.contains("equipment")){
             extract.put("equipment", original.getList("equipment", 10));
         }
+            extract.putByte("variations", original.contains("variations")? original.getByte("variations") : 1);
         if (original.contains("boss_bar")) {
             extract.put("boss_bar", original.get("boss_bar"));
             if (original.contains("custom_name")) {
                 extract.put("custom_name", original.get("custom_name"));
             }
-
             if (original.contains("custom_texture")) {
                 extract.put("custom_texture", original.get("custom_texture"));
             }
@@ -229,24 +228,10 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         return MOB_TAGS.size();
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public static void processServerPacket(SPDatapackSync packet) {
-        for(CompoundTag tag : packet.getTags()) {
-            EntityType<?> entityType = (EntityType)ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(tag.getString("id")));
-            ADVANCED_MOB_PATCH_PROVIDERS.put(entityType, deserializeMobPatchProvider(entityType, tag, true, Minecraft.getInstance().getResourceManager()));
-            EntityPatchProvider.putCustomEntityPatch(entityType, (entity) -> () -> ((MobPatchReloadListener.AbstractMobPatchProvider)ADVANCED_MOB_PATCH_PROVIDERS.get(entity.getType())).get(entity));
-            Minecraft mc = Minecraft.getInstance();
-            ResourceLocation armatureLocation = new ResourceLocation(tag.getString("armature"));
-            Armature armature = Armatures.getOrCreateArmature(mc.getResourceManager(), armatureLocation, HumanoidArmature::new);
-            Armatures.registerEntityTypeArmature(entityType, armature);
-            ClientEngine.getInstance().renderEngine.registerCustomEntityRenderer(entityType, tag.getString("renderer"), tag);
-        }
-
-    }
-
     public static Map<Attribute, Double> deserializeAdvancedAttributes(CompoundTag tag) {
         Map<Attribute, Double> attributes = Maps.newHashMap();
         attributes.put((Attribute)EpicFightAttributes.WEIGHT.get(), tag.contains("weight") ? tag.getDouble("weight") : (double)40.0F);
+        attributes.put((Attribute)Attributes.MAX_HEALTH, tag.contains("health") ? tag.getDouble("health") : (double)10.0F);
         attributes.put((Attribute)EpicFightAttributes.IMPACT.get(), tag.contains("impact") ? tag.getDouble("impact") : (double)0.5F);
         attributes.put((Attribute)EpicFightAttributes.ARMOR_NEGATION.get(), tag.contains("armor_negation") ? tag.getDouble("armor_negation") : (double)0.0F);
         attributes.put((Attribute)EpicFightAttributes.MAX_STAMINA.get(), tag.contains("max_stamina") ? tag.getDouble("max_stamina") : (double)15.0F);

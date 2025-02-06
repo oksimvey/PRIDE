@@ -29,4 +29,5 @@ public class ManaUtils {
     public static void consumeMana(LivingEntity ent, float amount) {
         setMana(ent, (getMana(ent) - amount));
     }
+
 }

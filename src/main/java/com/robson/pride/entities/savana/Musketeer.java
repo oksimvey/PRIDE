@@ -6,6 +6,6 @@ import net.minecraft.world.level.Level;
 
 public class Musketeer extends PrideMobBase {
     protected Musketeer(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_, byte maxvariations) {
-        super(p_33002_, p_33003_, maxvariations);
+        super(p_33002_, p_33003_);
     }
 }

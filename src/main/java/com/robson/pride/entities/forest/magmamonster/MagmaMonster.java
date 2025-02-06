@@ -11,7 +11,7 @@ public class MagmaMonster extends PrideMobBase {
 
 
     public MagmaMonster(EntityType<? extends MagmaMonster> type, Level world) {
-        super(type, world, (byte) 0);
+        super(type, world);
     }
 
     public static AttributeSupplier.Builder registerAttributes() {

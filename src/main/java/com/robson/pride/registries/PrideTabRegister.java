@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.robson.pride.registries.EntityRegister.ENTITIES;
+import static com.robson.pride.registries.EntityRegister.SPECIAL_ENTITIES;
 import static com.robson.pride.registries.WeaponSkillRegister.*;
 
 
@@ -80,6 +81,13 @@ public class PrideTabRegister {
             .icon(() -> new ItemStack(ItemsRegister.SPAWN_EGG.get()))
             .displayItems((enabledFeatures, entries) -> {
                 ENTITIES.getEntries().forEach(entry -> {
+                    ItemStack item = new ItemStack(ItemsRegister.SPAWN_EGG.get());
+                    assert entry.getKey() != null;
+                    String entity = entry.getId().toString();
+                    item.getOrCreateTag().putString("spawn_egg", entity);
+                    entries.accept(item);
+                });
+                SPECIAL_ENTITIES.getEntries().forEach(entry -> {
                     ItemStack item = new ItemStack(ItemsRegister.SPAWN_EGG.get());
                     assert entry.getKey() != null;
                     String entity = entry.getId().toString();

@@ -11,7 +11,7 @@ public class EliteKnight extends PrideMobBase {
 
 
     public EliteKnight(EntityType<? extends EliteKnight> type, Level world) {
-        super(type, world, (byte) 0);
+        super(type, world);
 
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             this.setDropChance(slot, 0);

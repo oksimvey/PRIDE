@@ -5,12 +5,7 @@ import com.robson.pride.registries.WeaponSkillRegister;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class NewCap {
-
-    private static List<String> playerSkills = Arrays.asList("Mikiri Counter", "Spell Counter");
 
     public static void setupVariables(CompoundTag oldtag, CompoundTag newtag) {
         newtag.putInt("StrengthLvl", oldtag.getInt("StrengthLvl"));

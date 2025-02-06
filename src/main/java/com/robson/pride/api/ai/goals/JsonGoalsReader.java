@@ -27,21 +27,6 @@ public class JsonGoalsReader {
         }
     }
 
-    public static void deserializeTargetGoals(PrideMobBase prideMobBase) {
-        if (prideMobBase != null) {
-            CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(prideMobBase.getType());
-            if (tagmap != null) {
-                ListTag targets = tagmap.getList("targets", 8);
-                if (targets != null) {
-                    for (int i = 0; i < targets.size(); ++i) {
-                        prideMobBase.targets.add(targets.getString(i));
-                    }
-                }
-            }
-        }
-    }
-
-
     public static void deserializeGoals(PrideMobBase prideMobBase, ListTag goals) {
         if (prideMobBase != null && goals != null) {
             for (int i = 0; i < goals.size(); ++i) {

@@ -22,7 +22,8 @@
     "stun_shield_regan_delay": 30,
     "stamina_lose_multiply": 0,
     "guard_radius": 5,
-    "attack_radius": 1.5
+    "attack_radius": 1.5,
+    "health": 100
   },
   "default_livingmotions": {
     "idle": "epicfight:biped/living/idle",
@@ -103,7 +104,8 @@
               "x": 220,
               "y": 26,
               "z": 296,
-              "speed": 2
+              "speed": 2,
+              "radius": 10
             }
           ]
         }

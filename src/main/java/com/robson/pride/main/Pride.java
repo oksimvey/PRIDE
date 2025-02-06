@@ -45,6 +45,7 @@ public class Pride {
         MinecraftForge.EVENT_BUS.addListener(this::addReloadListnerEvent);
         ItemsRegister.REGISTRY.register(bus);
         EntityRegister.ENTITIES.register(bus);
+        EntityRegister.SPECIAL_ENTITIES.register(bus);
         MinecraftForge.EVENT_BUS.addListener(this::onDatapackSync);
         AttributeRegister.register(bus);
         GUIRegister.REGISTRY.register(bus);
@@ -72,6 +73,7 @@ public class Pride {
                                 .then(ShootProjectileCommand.register())
                                 .then(SkillExecuteCommand.register())
                                 .then(CastSpellCommand.register())
+                                .then(ResetLevelCommand.register())
                                 .then(DialogueCommand.register())
                                 .then(SetElementCommand.register())));
     }

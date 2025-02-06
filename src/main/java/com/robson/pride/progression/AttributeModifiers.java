@@ -3,6 +3,7 @@ package com.robson.pride.progression;
 import com.google.common.collect.Multimap;
 import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.api.utils.AttributeUtils;
+import com.robson.pride.api.utils.ClientPlayerTagsAcessor;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.registries.WeaponSkillRegister;
 import net.minecraft.ChatFormatting;
@@ -106,7 +107,7 @@ public class AttributeModifiers {
 
     public static float calculateWeaponAttributeModifier(Player player, ItemStack item, CompoundTag tag, String attribute) {
         if (player != null && item != null && tag != null) {
-            CompoundTag playertag = ProgressionGUIRender.playertags.get(player);
+            CompoundTag playertag =  ClientPlayerTagsAcessor.playerTags.get(player);
             if (playertag != null) {
                 int lvl = playertag.getInt(attribute + "Lvl");
                 float required = (float) tag.getDouble("required" + attribute);

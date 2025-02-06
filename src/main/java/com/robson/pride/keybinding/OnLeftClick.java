@@ -64,8 +64,6 @@ public class OnLeftClick {
             if (target.getPersistentData().getBoolean("isVulnerable")) {
                 AnimUtils.playAnim(ent, AnimationsRegister.EXECUTE, 0);
                 LocalPlayer player = Minecraft.getInstance().player;
-                if (ent == player) {
-                }
             }
         }, 5, TimeUnit.MILLISECONDS);
     }

@@ -1,28 +1,16 @@
 package com.robson.pride.entities.forest.hunter;
 
 import com.robson.pride.api.entity.PrideMobBase;
-import com.robson.pride.api.utils.EquipUtils;
-import com.robson.pride.entities.pre_hardmode.japanese.boss.shogun.Shogun;
-import com.robson.pride.entities.pre_hardmode.japanese.mob.ronin.Ronin;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
-
-import javax.annotation.Nullable;
 
 public class Hunter extends PrideMobBase {
 
     public Hunter(EntityType<? extends Hunter> type, Level world) {
-        super(type, world, (byte)0);
+        super(type, world);
 
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             this.setDropChance(slot, 0);

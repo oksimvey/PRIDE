@@ -9,12 +9,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -45,11 +50,12 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
+import static com.robson.pride.api.ai.dialogues.JsonInteractionsReader.isSpeaking;
+
 public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
-    private byte variation;
-
-    private byte maxvariations;
+    private static final EntityDataAccessor<Byte> VARIANT =
+            SynchedEntityData.defineId(PrideMobBase.class, EntityDataSerializers.BYTE);
 
     public List<String> targets = new ArrayList<>();
 
@@ -67,15 +73,49 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     private byte pathcounter = 0;
 
-    protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_, byte maxvariations) {
+    protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
         this.xpReward = 5;
-        this.maxvariations = maxvariations;
         this.setPersistenceRequired();
-        JsonGoalsReader.deserializeTargetGoals(this);
+        deserializeTargetGoals();
         deserializePassiveSkillsJson();
-       deserializeTextures();
+        deserializeTextures();
     }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.entityData.set(VARIANT, tag.getByte("variant"));
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putByte("variant", this.getTypeVariant());
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(VARIANT, (byte) 0);
+    }
+
+    public byte getTypeVariant() {
+        return this.entityData.get(VARIANT);
+    }
+
+    public void deserializeTargetGoals() {
+        CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
+        if (tagmap != null) {
+            ListTag targets = tagmap.getList("targets", 8);
+            if (targets != null) {
+                for (int i = 0; i < targets.size(); ++i) {
+                    this.targets.add(targets.getString(i));
+                }
+            }
+        }
+    }
+
 
     public void deserializeTextures(){
         CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
@@ -114,9 +154,19 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(accessor, difficulty, reason, spawnDataIn, dataTag);
-        this.variation = (byte) new Random().nextInt(this.maxvariations + 1);
+        this.entityData.set(VARIANT, (byte) new Random().nextInt(getMaxVariations()));
         equipAllSlotsToDefault();
         return data;
+    }
+
+    public byte getMaxVariations(){
+        if (PrideMobPatchReloader.MOB_TAGS.get(this.getType()) != null){
+            byte variations = PrideMobPatchReloader.MOB_TAGS.get(this.getType()).getByte("variations");
+            if (variations > 0){
+                return variations;
+            }
+        }
+        return 1;
     }
 
     @Override
@@ -125,9 +175,16 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         equipAllSlotsToDefault();
     }
 
-    public byte getVariation(){
-        return this.variation;
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand){
+        super.mobInteract(player, hand);
+        if (TargetUtil.getTarget(this) == null && isSpeaking.get(this) == null){
+            JsonInteractionsReader.onInteraction(this, player);
+            return InteractionResult.SUCCESS;
+        }
+        return InteractionResult.FAIL;
     }
+
 
     public void equipAllSlotsToDefault() {
         CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
@@ -139,7 +196,7 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
                     if (equipment.contains("variations")) {
                         ListTag variations = equipment.getList("variations", 3);
                         for (int j = 0; j < variations.size(); ++j) {
-                            if (this.variation == variations.getInt(j)) {
+                            if (getTypeVariant() == variations.getInt(j)) {
                                 deserializeEquipment(equipment);
                             }
                         }
@@ -198,7 +255,7 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     @Override
     public void travel(Vec3 travel) {
-            if (JsonInteractionsReader.isSpeaking.get(this) != null && TargetUtil.getTarget(this) == null) {
+            if (isSpeaking.get(this) != null && TargetUtil.getTarget(this) == null) {
                 travel = new Vec3(0, 0, 0);
             }
             else if (canTickLod(Minecraft.getInstance())) {

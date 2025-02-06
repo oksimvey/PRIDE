@@ -2,6 +2,7 @@ package com.robson.pride.progression;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.robson.pride.api.utils.AttributeUtils;
+import com.robson.pride.api.utils.ClientPlayerTagsAcessor;
 import com.robson.pride.api.utils.ProgressionUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -16,18 +17,11 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI> {
-    private final static HashMap<String, Object> guistate = ProgressionGUI.guistate;
-    private final Level world;
-    private final int x, y, z;
+
     private final Player player;
-    public static ConcurrentHashMap<Player, CompoundTag> playertags = new ConcurrentHashMap<>();
 
     public ProgressionGUIRender(ProgressionGUI container, Inventory inventory, Component text) {
         super(container, inventory, text);
-        this.world = container.world;
-        this.x = container.x;
-        this.y = container.y;
-        this.z = container.z;
         this.player = container.entity;
         this.imageWidth = 257;
         this.imageHeight = 192;
@@ -73,7 +67,7 @@ public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         if (player != null) {
-            CompoundTag variables = playertags.get(player);
+            CompoundTag variables = ClientPlayerTagsAcessor.playerTags.get(player);
             guiGraphics.drawString(this.font,
                     ("Strength Level:" + variables.getInt("StrengthLvl")), 118, 14, -1, false);
             guiGraphics.drawString(this.font,

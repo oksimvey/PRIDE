@@ -1,10 +1,9 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.utils.CustomTick;
+import com.robson.pride.api.utils.ClientPlayerTagsAcessor;
 import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.progression.NewCap;
 import com.robson.pride.progression.PlayerAttributeSetup;
-import com.robson.pride.progression.ProgressionGUIRender;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -18,8 +17,8 @@ public class PlayerSetup {
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getEntity();
         if (player != null) {
-            CustomTick.startTick(player);
             playerCommonSetup(player);
+            ClientPlayerTagsAcessor.playerTags.put(player, player.getPersistentData());
         }
     }
 
@@ -28,9 +27,7 @@ public class PlayerSetup {
         Player player = event.getEntity();
         if (player != null) {
             PlayerAttributeSetup.setupPlayerAttributes(player);
-            CustomTick.startRespawnTick(player);
             playerCommonSetup(player);
-            player.setHealth(player.getMaxHealth());
         }
     }
 
@@ -38,7 +35,7 @@ public class PlayerSetup {
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         Player player = event.getEntity();
         if (player != null) {
-            CustomTick.stopTick(player);
+
         }
     }
 
@@ -55,7 +52,6 @@ public class PlayerSetup {
             CompoundTag tag = player.getPersistentData();
             StaminaUtils.resetStamina(player);
             player.getPersistentData().putBoolean("isParrying", false);
-            ProgressionGUIRender.playertags.put(player, tag);
             if (!NewCap.haveVariables(tag)) {
                 NewCap.startVariables(player, tag);
             }

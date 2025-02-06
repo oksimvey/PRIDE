@@ -3,10 +3,8 @@
   "armature": "epicfight:entity/biped",
   "renderer": "zombie",
   "isHumanoid": true,
-  "faction": "undead",
-  "boss_bar": false,
-  "custom_texture": "indestructible:textures/gui/boss_bar.png",
-  "custom_name": "xxx.xxx.xxx",
+  "faction": "neutral",
+  "variations": 2,
   "attributes": {
     "impact": 2.5,
     "armor_negation": 5.0,
@@ -67,6 +65,18 @@
     "neutralize": "epicfight:biped/skill/guard_break2"
   },
   "textures": ["pride:textures/entities/japanese/ronin1.png", "pride:textures/entities/japanese/ronin2.png"],
+  "equipment": [
+    {
+      "variations": [0],
+      "slot": "mainhand",
+      "item": "epicfight:uchigatana"
+    },
+    {
+      "variations": [1],
+      "slot": "mainhand",
+      "item": "epicfight:netherite_tachi"
+    }
+  ],
   "combat_behavior": [
     {
       "weapon_categories": ["uchigatana","tachi"],
