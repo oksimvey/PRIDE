@@ -17,6 +17,7 @@
     }
   ],
   "element": "Water",
+  "isWeapon": true,
   "requiredStrength": 10,
   "requiredDexterity": 15,
   "requiredMind": 18,

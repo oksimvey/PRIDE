@@ -16,6 +16,7 @@
       "maxZ": 1.5
     }
   ],
+  "isWeapon": true,
   "requiredStrength": 10,
   "requiredDexterity": 5,
   "scaleStrength": "A",

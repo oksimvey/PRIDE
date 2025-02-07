@@ -62,7 +62,7 @@ public class KeyRegister {
         boolean isCurrentlyPressed = key.isDown();
 
         if (isCurrentlyPressed && !wasPressed) {
-            PacketRegister.sendToServer(new KeyActionPacket(actionName, 0));
+            PacketRegister.sendKeyToServer(new KeyActionPacket(actionName, 0));
         }
         if (key == keyActionSpecial) {
             wasPressedSpecial = isCurrentlyPressed;

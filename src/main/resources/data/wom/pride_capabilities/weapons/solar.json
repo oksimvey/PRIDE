@@ -17,6 +17,7 @@
     }
   ],
   "requiredStrength": 50,
+  "isWeapon": true,
   "requiredDexterity": 20,
   "scaleStrength": "S",
   "scaleDexterity": "C",

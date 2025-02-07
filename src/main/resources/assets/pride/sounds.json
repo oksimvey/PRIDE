@@ -69,5 +69,29 @@
         "stream": false
       }
     ]
+  },
+  "male_2_duel": {
+    "sounds": [
+      {
+        "name": "pride:npcs/male2_duel",
+        "stream": false
+      }
+    ]
+  },
+  "male_2_duel_accept": {
+    "sounds": [
+      {
+        "name": "pride:npcs/male2_duel_accept",
+        "stream": false
+      }
+    ]
+  },
+  "male_2_duel_reject": {
+    "sounds": [
+      {
+        "name": "pride:npcs/male2_duel_reject",
+        "stream": false
+      }
+    ]
   }
 }

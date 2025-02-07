@@ -4,17 +4,29 @@ import com.robson.pride.api.ai.goals.JsonGoalsReader;
 import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.particles.StringParticle;
+import com.robson.pride.progression.ProgressionGUI;
 import com.robson.pride.registries.DialogueConditionsRegister;
+import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -79,6 +91,7 @@ public class JsonInteractionsReader {
                 CompoundTag dialogue = tag.getCompound(i);
                 ClientLevel level = Minecraft.getInstance().level;
                 LocalPlayer player = Minecraft.getInstance().player;
+                Particle stringparticle = null;
                 if (dialogue.contains("actions")) {
                     JsonGoalsReader.deserializeActions(ent, dialogue.getList("actions", 10), (byte) 0);
                 }
@@ -101,7 +114,7 @@ public class JsonInteractionsReader {
                         level.playSound(player, ent, holder.get(), SoundSource.NEUTRAL, volume, 1);
                     }
                     if (ent.distanceTo(player) < ent.getBbHeight() * volumemultiplier) {
-                        ParticleUtils.spawnStringParticle(ent, dialogue.getString("subtitle"), StringParticle.StringParticleTypes.WHITE, duration / 50 - 1);
+                        stringparticle = ParticleUtils.spawnStringParticle(ent, dialogue.getString("subtitle"), StringParticle.StringParticleTypes.WHITE, duration / 50 - 1);
                     }
                     TimerUtil.schedule(() -> {
                         if (ent != null) {
@@ -114,6 +127,41 @@ public class JsonInteractionsReader {
                             if (sourceent != null) {
                                 ListTag answers = dialogue.getList("answers", 10);
                                 deserializeInteractions(sourceent, ent, answers);
+                            }
+                        }
+                    }, duration, TimeUnit.MILLISECONDS);
+                }
+                if (dialogue.contains("is_question")){
+                    if (sourceent instanceof Player player1){
+                        deserializeQuestions(ent, player1, dialogue, stringparticle);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void deserializeQuestions(Entity ent, Player player, CompoundTag dialogue, Particle stringparticle){
+        if (ent != null && player != null && dialogue != null){
+            if (dialogue.contains("true_answer") && dialogue.contains("false_answer") && dialogue.contains("duration")){
+                CompoundTag trueanswer = dialogue.getCompound("true_answer");
+                CompoundTag falseanswer = dialogue.getCompound("false_answer");
+                int duration = dialogue.getInt("duration");
+                if (trueanswer.contains("display") && falseanswer.contains("display") && trueanswer.contains("dialogues") && falseanswer.contains("dialogues")){
+                    player.getPersistentData().putString("pride_true_answer", trueanswer.getString("display"));
+                    player.getPersistentData().putString("pride_false_answer", falseanswer.getString("display"));
+                    player.getPersistentData().put("pride_true_answer_dialogues", trueanswer.getList("dialogues", 10));
+                    player.getPersistentData().put("pride_false_answer_dialogues", falseanswer.getList("dialogues", 10));
+                    Minecraft client = Minecraft.getInstance();
+                    AnswerGUI gui = new AnswerGUI(player, ent, stringparticle, client);
+                    client.setScreen(gui);
+                    TimerUtil.schedule(()->{
+                        if (player != null && client.level != null){
+                            player.getPersistentData().remove("pride_true_answer");
+                            player.getPersistentData().remove("pride_false_answer");
+                            player.getPersistentData().remove("pride_true_answer_dialogues");
+                            player.getPersistentData().remove("pride_false_answer_dialogues");
+                            if (gui != null){
+                                gui.onClose();
                             }
                         }
                     }, duration, TimeUnit.MILLISECONDS);

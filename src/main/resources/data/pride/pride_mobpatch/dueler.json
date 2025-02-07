@@ -1,0 +1,248 @@
+{
+  "model": "epicfight:entity/biped",
+  "armature": "epicfight:entity/biped",
+  "renderer": "zombie",
+  "isHumanoid": true,
+  "faction": "neutral",
+  "boss_bar": false,
+  "custom_texture": "indestructible:textures/gui/boss_bar.png",
+  "custom_name": "",
+  "attributes": {
+    "impact": 1.0,
+    "armor_negation": 0,
+    "max_strikes": 3,
+    "chasing_speed": 1,
+    "scale": 1.1,
+    "max_stamina": 20,
+    "stamina_regan_multiply": 0.75,
+    "stamina_regan_delay": 2000,
+    "has_stun_reduction": true,
+    "max_stun_shield": 100,
+    "stun_shield_regan_multiply": 100,
+    "stun_shield_regan_delay": 30,
+    "stamina_lose_multiply": 0,
+    "guard_radius": 5,
+    "attack_radius": 1.5,
+    "health": 100
+  },
+  "default_livingmotions": {
+    "idle": "epicfight:biped/living/idle",
+    "walk": "epicfight:biped/living/walk",
+    "chase": "epicfight:biped/living/walk",
+    "death": "epicfight:biped/living/death"
+  },
+  "humanoid_weapon_motions": [
+    {
+      "weapon_categories": ["axe", "hoe", "pickaxe", "shovel", "sword"],
+      "style":"common",
+      "livingmotions": {
+        "chase": "epicfight:biped/living/hold_longsword",
+        "walk": "epicfight:biped/living/walk"
+      }
+    },
+    {
+      "weapon_categories": ["longsword"],
+      "style":"common",
+      "livingmotions": {
+        "chase": "epicfight:biped/living/hold_longsword",
+        "walk": "epicfight:biped/living/hold_longsword"
+      }
+    }
+  ],
+  "custom_guard_motion": [
+    {
+      "weapon_categories": ["longsword","tachi","sword", "rapier"],
+      "style":"common",
+      "guard": "refm:biped/skill/guard_rapier",
+      "stamina_cost_multiply": 3,
+      "can_block_projectile" : false,
+      "parry_cost_multiply": 1.0,
+      "parry_animation":[]
+    }
+  ],
+  "stun_animations": {
+    "short": "epicfight:biped/combat/hit_short",
+    "long": "epicfight:biped/combat/hit_long",
+    "knockdown": "epicfight:biped/combat/knockdown",
+    "fall": "epicfight:biped/living/landing"
+  },
+  "textures": ["pride:textures/entities/savana/dueler1.png"],
+  "skills": ["open_door", "path_sneak", "path_roll"],
+  "equipment": [
+    {
+      "variations": [0],
+      "slot": "mainhand",
+      "item": "refm:iron_rapier"
+    }
+  ],
+  "interaction_behaviors": [
+    {
+      "conditions": [
+        {
+          "predicate": "isRaining",
+          "invert": true
+        }
+      ],
+      "dialogues": [
+        {
+          "subtitle": "You seem like a strong guy",
+          "duration": 2000,
+          "sound": "pride:male_2_duel"
+        },
+        {
+          "subtitle": "Would you accept a duel?",
+          "duration": 10000,
+          "is_question": true,
+          "true_answer": {
+            "display": "Of course!",
+            "dialogues": [
+              {
+                "subtitle": "Let's start my friend!",
+                "duration": 1500,
+                "sound": "pride:male_2_duel_accept",
+                "actions": [
+                  {
+                    "action": "set_target",
+                    "entity_types": ["minecraft:player"],
+                    "range": 20
+                  }
+                ]
+              }
+            ]
+          },
+          "false_answer": {
+            "display": "Nah",
+            "dialogues": [
+              {
+                "subtitle": "You are really a coward",
+                "duration": 1500,
+                "sound": "pride:male_2_duel_reject"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "combat_behavior": [
+    {
+      "weapon_categories": ["rapier"],
+      "style": "common",
+      "behavior_series": [
+        {
+          "weight": 1.5,
+          "canBeInterrupted": false,
+          "looping": false,
+          "behaviors": [
+            {
+              "conditions": [
+                {"predicate": "pride:passiveskill"}, {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "refm:biped/combat/rapier_auto1"
+
+            },
+            {
+              "conditions": [
+                {"predicate": "pride:passiveskill"},  {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "refm:biped/combat/rapier_auto2"
+
+            },
+            {
+              "conditions": [
+                {"predicate": "pride:passiveskill"},  {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "refm:biped/combat/rapier_auto3"
+            },
+            {
+              "conditions": [
+                {"predicate": "pride:passiveskill"},   {"predicate":"within_eye_height"},{"predicate": "random_chance", "chance": 0.75}, {"predicate":"within_distance", "min": 0.0, "max": 10.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+
+              "animation": "refm:biped/combat/rapier_dash",
+              "command_list": [
+                {
+                  "time": 0,
+                  "command": "pride @s perilous sweep 1000",
+                  "execute_at_target": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "weight": 1.5,
+          "canBeInterrupted": false,
+          "looping": false,
+          "cooldown": 10,
+          "behaviors": [
+            {
+              "conditions": [
+                {
+                  "predicate": "within_eye_height"
+                },
+                {"predicate": "pride:passiveskill"},   {"predicate": "health", "health": 0.9, "comparator": "greater_ratio"},
+                {
+                  "predicate": "within_distance",
+                  "min": 5.0,
+                  "max": 9.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
+              ],
+              "animation": "wom:biped/skill/bull_charge",
+              "command_list": [
+                {
+                  "time": 0,
+                  "command": "pride @s perilous total 1500",
+                  "execute_at_target": false
+                }
+              ]
+            },
+            {
+              "conditions": [
+                {
+                  "predicate": "within_distance",
+                  "min": 0.0,
+                  "max": 5.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
+              ],
+              "animation": "wom:biped/combat/herrscher_ausrottung"
+            }
+          ]
+        },
+        {
+          "weight": 100,
+          "canBeInterrupted": false,
+          "looping": false,
+          "behaviors": [
+            {
+              "conditions": [
+                {"predicate":"indestructible:attack_level", "min": 1, "max": 1}
+              ],
+              "guard": 5,
+              "parry": true,
+              "counter_chance": 0,
+              "stun_immunity_time": 30,
+              "specific_guard_motion":{
+                "guard": "refm:biped/skill/guard_rapier",
+                "stamina_cost_multiply": 0.0,
+                "can_block_projectile" : true,
+                "parry_cost_multiply": 0.0,
+                "parry_animation":["epicfight:biped/skill/guard_sword_hit_active1", "epicfight:biped/skill/guard_sword_hit_active2"]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

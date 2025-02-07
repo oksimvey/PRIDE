@@ -116,7 +116,6 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         }
     }
 
-
     public void deserializeTextures(){
         CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
         if (tagmap != null) {
@@ -173,14 +172,23 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
     public void setTarget(@Nullable LivingEntity p_21544_) {
         super.setTarget(p_21544_);
         equipAllSlotsToDefault();
+        if (p_21544_ instanceof Player player){
+            deserializeMusics(player);
+        }
+    }
+
+    public void deserializeMusics(Player player){
+
     }
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand){
-        super.mobInteract(player, hand);
-        if (TargetUtil.getTarget(this) == null && isSpeaking.get(this) == null){
+        if (!this.level().isClientSide) {
+            if (TargetUtil.getTarget(this) != null || isSpeaking.get(this) != null) {
+                return InteractionResult.FAIL;
+            }
+            super.mobInteract(player, hand);
             JsonInteractionsReader.onInteraction(this, player);
-            return InteractionResult.SUCCESS;
         }
         return InteractionResult.FAIL;
     }

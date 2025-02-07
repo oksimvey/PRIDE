@@ -14,12 +14,12 @@ public class PacketRegister {
             s -> true
     );
 
-    public static void register() {
+    public static void register(){
         int id = 0;
         CHANNEL.registerMessage(id++, KeyActionPacket.class, KeyActionPacket::encode, KeyActionPacket::decode, KeyActionPacket::handle);
     }
 
-    public static void sendToServer(KeyActionPacket packet) {
+    public static void sendKeyToServer(KeyActionPacket packet) {
         CHANNEL.sendToServer(packet);
     }
 }

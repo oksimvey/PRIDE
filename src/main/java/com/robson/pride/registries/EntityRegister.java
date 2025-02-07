@@ -5,6 +5,7 @@ import com.robson.pride.entities.forest.magmamonster.MagmaMonster;
 import com.robson.pride.entities.japanese.boss.shogun.Shogun;
 import com.robson.pride.entities.japanese.mob.ronin.Ronin;
 import com.robson.pride.entities.forest.eliteknight.EliteKnight;
+import com.robson.pride.entities.savana.Dueler;
 import com.robson.pride.entities.special.CloneEntity;
 import com.robson.pride.entities.special.Shooter;
 import com.robson.pride.main.Pride;
@@ -33,6 +34,7 @@ public class EntityRegister {
     public static final RegistryObject<EntityType<Hunter>> HUNTER = make(false, new ResourceLocation("hunter"), Hunter::new, MobCategory.MONSTER, 0.8f, 1.8f);
     public static final RegistryObject<EntityType<Shooter>> SHOOTER = make(true, new ResourceLocation("shooter"), Shooter::new, MobCategory.MONSTER, 0.25f, 0.25f);
     public static final RegistryObject<EntityType<MagmaMonster>> MAGMA_MONSTER = make(false, new ResourceLocation("magma_monster"), MagmaMonster::new, MobCategory.MONSTER, 1, 2.5f);
+    public static final RegistryObject<EntityType<Dueler>> DUELER = make(false, new ResourceLocation("dueler"), Dueler::new, MobCategory.MONSTER, 0.8f, 2f);
 
     private static <E extends Entity> RegistryObject<EntityType<E>> make(boolean special, ResourceLocation id, EntityType.EntityFactory<E> factory, MobCategory classification, float width, float height) {
         return make(special, id, factory, classification, width, height, false);
@@ -72,5 +74,6 @@ public class EntityRegister {
         event.put(HUNTER.get(), Hunter.registerAttributes().build());
         event.put(MAGMA_MONSTER.get(), MagmaMonster.registerAttributes().build());
         event.put(SHOOTER.get(), Shooter.registerAttributes().build());
+        event.put(DUELER.get(), Dueler.registerAttributes().build());
     }
 }

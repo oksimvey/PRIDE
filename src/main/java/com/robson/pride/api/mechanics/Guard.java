@@ -3,7 +3,6 @@ package com.robson.pride.api.mechanics;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
-import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import com.robson.pride.registries.AnimationsRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -59,15 +58,19 @@ public class Guard {
     }
 
     public static void checkParry(Entity ent, Entity ddmgent, LivingAttackEvent event) {
-        if (ent instanceof ServerPlayer player) {
+        if (ent instanceof Player player) {
             if (ent.getPersistentData().getBoolean("isParrying")) {
                 Parry.onParry(ent, ddmgent);
-                onAnyBlock(player, event, true);
                 ProgressionUtils.addXp(player, "Endurance", (int) event.getAmount() * 2);
+                if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)){
+                    onAnyBlock(player, event, true);
+                }
             } else {
                 onGuard(ent, ddmgent, event);
-                onAnyBlock(player, event, false);
                 ProgressionUtils.addXp(player, "Endurance", (int) event.getAmount());
+                if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)){
+                    onAnyBlock(player, event, false);
+                }
             }
         } else {
             AdvancedCustomHumanoidMobPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
@@ -138,7 +141,7 @@ public class Guard {
         return toggle ? Animations.SWORD_GUARD_ACTIVE_HIT1 : Animations.SWORD_GUARD_ACTIVE_HIT2;
     }
 
-    public static void onAnyBlock(ServerPlayer serveerPlayer, LivingAttackEvent event, boolean isparry) {
+    public static void onAnyBlock(Player serveerPlayer, LivingAttackEvent event, boolean isparry) {
         if (serveerPlayer != null) {
             float scale = 1.5f;
             StaticAnimation motion = getGuardHitMotion(serveerPlayer);

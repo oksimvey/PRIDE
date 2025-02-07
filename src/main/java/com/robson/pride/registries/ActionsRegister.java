@@ -16,5 +16,6 @@ public class ActionsRegister {
         actions.put("command", new PerformCommand());
         actions.put("interact", new InteractAction());
         actions.put("find_entity", new FindEntityAction());
+        actions.put("set_target", new SetTargetAction());
     }
 }
