@@ -4,29 +4,19 @@ import com.robson.pride.api.ai.goals.JsonGoalsReader;
 import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.particles.StringParticle;
-import com.robson.pride.progression.ProgressionGUI;
 import com.robson.pride.registries.DialogueConditionsRegister;
-import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.network.NetworkHooks;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -34,6 +24,8 @@ import java.util.concurrent.TimeUnit;
 public class JsonInteractionsReader {
 
     public static ConcurrentHashMap<Entity, Boolean> isSpeaking = new ConcurrentHashMap<>();
+
+    public static ConcurrentHashMap<Player, AnswerGUI> isAnswering = new ConcurrentHashMap<>();
 
     public static void onInteraction(Entity target, Entity sourceent) {
         if (target != null && sourceent != null) {
@@ -152,17 +144,11 @@ public class JsonInteractionsReader {
                     player.getPersistentData().put("pride_true_answer_dialogues", trueanswer.getList("dialogues", 10));
                     player.getPersistentData().put("pride_false_answer_dialogues", falseanswer.getList("dialogues", 10));
                     Minecraft client = Minecraft.getInstance();
-                    AnswerGUI gui = new AnswerGUI(player, ent, stringparticle, client);
-                    client.setScreen(gui);
+                    TimerUtil.schedule(()->isAnswering.put(player, new AnswerGUI(player, ent, stringparticle, player.getPersistentData(), client)), duration / 5, TimeUnit.MILLISECONDS);
                     TimerUtil.schedule(()->{
-                        if (player != null && client.level != null){
-                            player.getPersistentData().remove("pride_true_answer");
-                            player.getPersistentData().remove("pride_false_answer");
-                            player.getPersistentData().remove("pride_true_answer_dialogues");
-                            player.getPersistentData().remove("pride_false_answer_dialogues");
-                            if (gui != null){
-                                gui.onClose();
-                            }
+                        if (player != null && client.level != null && isAnswering.get(player) != null){
+                                isAnswering.get(player).onClose();
+                                isAnswering.get(player).onAnswer();
                         }
                     }, duration, TimeUnit.MILLISECONDS);
                 }

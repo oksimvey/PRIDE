@@ -1,6 +1,7 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.client.RenderingCore;
+import com.robson.pride.api.mechanics.MusicCore;
 import com.robson.pride.api.utils.ItemStackUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
@@ -23,6 +24,8 @@ public class onClientTick {
         if (Minecraft.getInstance().player != null) {
             RenderingCore.renderCore();
             Player player = Minecraft.getInstance().player;
+            if (player.tickCount % 5 == 0){
+            }
             if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND) && player.isUsingItem()) {
                 player.setSprinting(false);
             }

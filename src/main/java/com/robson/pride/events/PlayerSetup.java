@@ -1,9 +1,11 @@
 package com.robson.pride.events;
 
+import com.robson.pride.api.mechanics.MusicCore;
 import com.robson.pride.api.utils.ClientPlayerTagsAcessor;
 import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.progression.NewCap;
 import com.robson.pride.progression.PlayerAttributeSetup;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -19,6 +21,8 @@ public class PlayerSetup {
         if (player != null) {
             playerCommonSetup(player);
             ClientPlayerTagsAcessor.playerTags.put(player, player.getPersistentData());
+            Minecraft client = Minecraft.getInstance();
+            MusicCore.musicManagerMap.put(player, client.getMusicManager());
         }
     }
 

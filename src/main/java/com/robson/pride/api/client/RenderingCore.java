@@ -16,6 +16,7 @@ public class RenderingCore {
 
     public static void renderCore() {
         Minecraft client = Minecraft.getInstance();
+        RenderScreens.renderPlayerScreens(client);
         if (client.player != null) {
             entityRenderer(client.player);
             for (Entity ent : client.player.level().getEntities(client.player, MathUtils.createAABBByLookingAngle(client.gameRenderer.getMainCamera().getPosition(), client.gameRenderer.getMainCamera().getLookVector(), 50))){

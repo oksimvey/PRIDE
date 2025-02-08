@@ -30,6 +30,13 @@
       }
     ]
   },
+  "dueler": {
+    "sounds": [
+      {
+        "name": "pride:musics/dueler"
+      }
+    ]
+  },
   "male_1_hello": {
     "sounds": [
       {

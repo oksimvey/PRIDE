@@ -3,15 +3,20 @@ package com.robson.pride.api.entity;
 import com.robson.pride.api.ai.goals.JsonGoalsReader;
 import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
 import com.robson.pride.api.data.PrideMobPatchReloader;
+import com.robson.pride.api.mechanics.MusicCore;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.AnimationsRegister;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -30,6 +35,7 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -42,6 +48,7 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
+import yesman.epicfight.api.animation.AnimationProvider;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -73,6 +80,11 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     private byte pathcounter = 0;
 
+    private LivingEntity target;
+
+    private Music mobMusic;
+
+
     protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
         this.xpReward = 5;
@@ -80,6 +92,7 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         deserializeTargetGoals();
         deserializePassiveSkillsJson();
         deserializeTextures();
+        deserializeMusics();
     }
 
     @Override
@@ -172,19 +185,72 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
     public void setTarget(@Nullable LivingEntity p_21544_) {
         super.setTarget(p_21544_);
         equipAllSlotsToDefault();
+        this.target = p_21544_;
         if (p_21544_ instanceof Player player){
-            deserializeMusics(player);
+            MusicManager musicManager = MusicCore.musicManagerMap.get(player);
+            if (musicManager != null){
+                if (!musicManager.isPlayingMusic(this.mobMusic)){
+                    musicManager.startPlaying(this.mobMusic);
+                }
+            }
+            stopTargetCheck(player);
+        }
+        else if (p_21544_ instanceof Animal animal){
+            deserializeAnimalFight(animal, (byte) 0);
         }
     }
 
-    public void deserializeMusics(Player player){
+    public void deserializeAnimalFight(Animal animal, byte animation){
+        if (animal != null){
+            if (this.target == animal && animal.isAlive()){
+               if (this.distanceTo(animal) < this.getBbHeight() * 3){
+                   List<AnimationProvider<?>> motions = ItemStackUtils.getWeaponMotions(this.getMainHandItem());
+                   if (motions != null){
+                       if (animation > motions.size()){
+                           animation = 0;
+                       }
+                       AnimUtils.playAnim(this, motions.get(animation).get(), 0);
+                       animation += 1;
+                   }
+               }
+                byte finalAnimation = animation;
+                TimerUtil.schedule(()-> deserializeAnimalFight(animal, finalAnimation), 1, TimeUnit.SECONDS);
+            }
+        }
+    }
 
+    public void stopTargetCheck(Player player){
+        if (player != null){
+            if (this.target  == player){
+                TimerUtil.schedule(()-> stopTargetCheck(player), 1, TimeUnit.SECONDS);
+            }
+            else deserializeMusicsStop(player);
+        }
+    }
+
+    public void deserializeMusics(){
+        CompoundTag tags = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
+        if (tags != null) {
+            if (tags.contains("custom_music")) {
+                Holder<SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation(tags.getString("custom_music"))));
+                this.mobMusic = new Music(holder, 1, 1, true);
+            }
+        }
+    }
+
+    public void deserializeMusicsStop(Player player){
+        if (player != null){
+            MusicManager musicManager = MusicCore.musicManagerMap.get(player);
+            if (musicManager != null){
+                musicManager.stopPlaying();
+            }
+        }
     }
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand){
         if (!this.level().isClientSide) {
-            if (TargetUtil.getTarget(this) != null || isSpeaking.get(this) != null) {
+            if (this.target != null || isSpeaking.get(this) != null) {
                 return InteractionResult.FAIL;
             }
             super.mobInteract(player, hand);
@@ -193,6 +259,13 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         return InteractionResult.FAIL;
     }
 
+    @Override
+    public void die(DamageSource damageSource){
+        if (this.target instanceof Player player) {
+            deserializeMusicsStop(player);
+        }
+        super.die(damageSource);
+    }
 
     public void equipAllSlotsToDefault() {
         CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
@@ -263,12 +336,12 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     @Override
     public void travel(Vec3 travel) {
-            if (isSpeaking.get(this) != null && TargetUtil.getTarget(this) == null) {
+            if (isSpeaking.get(this) != null && this.target == null) {
                 travel = new Vec3(0, 0, 0);
             }
             else if (canTickLod(Minecraft.getInstance())) {
                 JsonGoalsReader.onEntTick(this);
-                if (TargetUtil.getTarget(this) == null) {
+                if (this.target == null) {
                     deserializePassiveSkills();
                     if (this.targetpos != null) {
                         if (this.distanceToSqr(targetpos) >= this.moveRadius) {
@@ -432,4 +505,3 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         }
     }
 }
-

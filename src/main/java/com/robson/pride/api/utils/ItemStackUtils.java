@@ -2,17 +2,23 @@ package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.epicfight.styles.PrideStyles;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import yesman.epicfight.api.animation.AnimationProvider;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
+import yesman.epicfight.world.capabilities.item.WeaponCapability;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
+
+import java.util.List;
 
 public class ItemStackUtils {
 
@@ -23,6 +29,18 @@ public class ItemStackUtils {
         if (livingEntityPatch != null) {
             if (livingEntityPatch.getHoldingItemCapability(hand) != null) {
                 return livingEntityPatch.getHoldingItemCapability(hand).getWeaponCategory();
+            }
+        }
+        return null;
+    }
+
+    public static List<AnimationProvider<?>> getWeaponMotions(ItemStack weapon){
+        if (weapon != null && Minecraft.getInstance().player != null){
+            CapabilityItem capabilityItem = EpicFightCapabilities.getItemStackCapability(weapon);
+            if (capabilityItem != null){
+                if (capabilityItem instanceof WeaponCapability weaponCapability){
+                    return weaponCapability.getAutoAttckMotion(EpicFightCapabilities.getEntityPatch(Minecraft.getInstance().player, PlayerPatch.class));
+                }
             }
         }
         return null;
@@ -86,6 +104,7 @@ public class ItemStackUtils {
         }
         return false;
     }
+
 
     public static boolean checkShield(Entity ent, InteractionHand hand) {
         if (ent != null) {

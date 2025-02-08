@@ -7,6 +7,7 @@
   "boss_bar": false,
   "custom_texture": "indestructible:textures/gui/boss_bar.png",
   "custom_name": "",
+"custom_music": "pride:dueler",
   "attributes": {
     "impact": 1.0,
     "armor_negation": 0,
