@@ -3,11 +3,9 @@ package com.robson.pride.api.entity;
 import com.robson.pride.api.ai.goals.JsonGoalsReader;
 import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
 import com.robson.pride.api.data.PrideMobPatchReloader;
-import com.robson.pride.api.mechanics.MusicCore;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.AnimationsRegister;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -49,6 +47,7 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 import yesman.epicfight.api.animation.AnimationProvider;
+import yesman.epicfight.api.animation.types.StaticAnimation;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -80,10 +79,9 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     private byte pathcounter = 0;
 
-    private LivingEntity target;
+    public LivingEntity target;
 
     private Music mobMusic;
-
 
     protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
@@ -186,18 +184,17 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         super.setTarget(p_21544_);
         equipAllSlotsToDefault();
         this.target = p_21544_;
-        if (p_21544_ instanceof Player player){
-            MusicManager musicManager = MusicCore.musicManagerMap.get(player);
-            if (musicManager != null){
-                if (!musicManager.isPlayingMusic(this.mobMusic)){
-                    musicManager.startPlaying(this.mobMusic);
-                }
-            }
-            stopTargetCheck(player);
-        }
-        else if (p_21544_ instanceof Animal animal){
+        if (p_21544_ instanceof Animal animal){
             deserializeAnimalFight(animal, (byte) 0);
         }
+    }
+
+    public Music getMobMusic(){
+        return this.mobMusic;
+    }
+
+    public byte getMusicPriority(){
+        return 1;
     }
 
     public void deserializeAnimalFight(Animal animal, byte animation){
@@ -209,22 +206,15 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
                        if (animation > motions.size()){
                            animation = 0;
                        }
-                       AnimUtils.playAnim(this, motions.get(animation).get(), 0);
+                       StaticAnimation animationtoplay = motions.get(animation).get();
+                       AnimUtils.playAnim(this, animationtoplay, 0);
                        animation += 1;
+                       byte finalAnimation = animation;
+                       int delay = AnimUtils.getAnimationDurationInMilliseconds(this, animationtoplay);
+                       TimerUtil.schedule(()-> deserializeAnimalFight(animal, finalAnimation), delay, TimeUnit.MILLISECONDS);
                    }
                }
-                byte finalAnimation = animation;
-                TimerUtil.schedule(()-> deserializeAnimalFight(animal, finalAnimation), 1, TimeUnit.SECONDS);
             }
-        }
-    }
-
-    public void stopTargetCheck(Player player){
-        if (player != null){
-            if (this.target  == player){
-                TimerUtil.schedule(()-> stopTargetCheck(player), 1, TimeUnit.SECONDS);
-            }
-            else deserializeMusicsStop(player);
         }
     }
 
@@ -234,15 +224,6 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
             if (tags.contains("custom_music")) {
                 Holder<SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation(tags.getString("custom_music"))));
                 this.mobMusic = new Music(holder, 1, 1, true);
-            }
-        }
-    }
-
-    public void deserializeMusicsStop(Player player){
-        if (player != null){
-            MusicManager musicManager = MusicCore.musicManagerMap.get(player);
-            if (musicManager != null){
-                musicManager.stopPlaying();
             }
         }
     }
@@ -257,14 +238,6 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
             JsonInteractionsReader.onInteraction(this, player);
         }
         return InteractionResult.FAIL;
-    }
-
-    @Override
-    public void die(DamageSource damageSource){
-        if (this.target instanceof Player player) {
-            deserializeMusicsStop(player);
-        }
-        super.die(damageSource);
     }
 
     public void equipAllSlotsToDefault() {
@@ -306,6 +279,13 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         }
     }
 
+    @Override
+    public void die(DamageSource damageSource){
+        this.refreshDimensions();
+        AnimUtils.cancelMotion(this);
+        super.die(damageSource);
+    }
+
     public void setTargetpos(Vec3 newpos){
         this.targetpos = newpos;
     }
@@ -336,32 +316,34 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     @Override
     public void travel(Vec3 travel) {
-            if (isSpeaking.get(this) != null && this.target == null) {
+        if (this.target == null) {
+            if (isSpeaking.get(this) != null) {
                 travel = new Vec3(0, 0, 0);
             }
             else if (canTickLod(Minecraft.getInstance())) {
                 JsonGoalsReader.onEntTick(this);
-                if (this.target == null) {
-                    deserializePassiveSkills();
-                    if (this.targetpos != null) {
-                        if (this.distanceToSqr(targetpos) >= this.moveRadius) {
-                            PathNavigation navigator = this.getNavigation();
-                            Path path = navigator.createPath(this.targetpos.x, this.targetpos.y, this.targetpos.z, 0);
-                            navigator.moveTo(path, speed);
-                        }
-                        else {
-                            this.targetpos = null;
-                            this.moveRadius = 1;
-                            this.speed = 1;
-                            if (this.pathpositions != null) {
+                deserializePassiveSkills();
+                if (this.targetpos != null) {
+                    if (this.distanceToSqr(targetpos) >= this.moveRadius) {
+                        PathNavigation navigator = this.getNavigation();
+                        Path path = navigator.createPath(this.targetpos.x, this.targetpos.y, this.targetpos.z, 0);
+                        navigator.moveTo(path, speed);
+                    }
+                    else {
+                        this.targetpos = null;
+                        this.moveRadius = 1;
+                        this.speed = 1;
+                        if (this.pathpositions != null) {
+                            if (this.pathcounter < this.pathpositions.size() - 1) {
                                 this.pathcounter++;
                             }
                         }
                     }
-                    else if (this.pathpositions != null) {
-                        deserializePaths();
-                    }
                 }
+                else if (this.pathpositions != null) {
+                    deserializePaths();
+                }
+            }
         }
         super.travel(travel);
     }

@@ -43,25 +43,17 @@ public class EntityAttacked {
                     MikiriCounter.onArrowMikiri(ent, arrow, event);
                 }
             }
-            if (ddmgent != null) {
-                if (ddmgent.getPersistentData().getBoolean("canrobmainhand")) {
-                    Eating.robTargetItem(ddmgent, ent, InteractionHand.MAIN_HAND);
-                }
-                if (ddmgent.getPersistentData().getBoolean("canroboffhand")) {
-                    Eating.robTargetItem(ddmgent, ent, InteractionHand.OFF_HAND);
-                }
-            }
-            if (Objects.equals(ddmgent.getPersistentData().getString("Perilous"), "") || Objects.equals(ddmgent.getPersistentData().getString("Perilous"), null)) {
-                Guard.checkGuard(ent, ddmgent, event);
-            }
-
             GuardBreak.checkForGuardBreak(ent, ddmgent);
             if (ent.getPersistentData().getBoolean("isVulnerable")) {
                 GuardBreak.onVulnerableDamage(ent, event);
             }
+            if (PerilousAttack.checkPerilous(ent)){
+                event.setCanceled(true);
+            }
             if (PerilousAttack.checkPerilous(ddmgent)) {
                 PerilousAttack.onPerilous(ent, ddmgent, event);
             }
+            else Guard.checkGuard(ent, ddmgent, event);
             if (ddmgent instanceof ServerPlayer player && event.getAmount() > 0) {
                 ProgressionUtils.addXp(player, "Strength", (int) event.getAmount());
             }

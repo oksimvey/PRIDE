@@ -254,7 +254,7 @@
               "command_list": [
                 {
                   "time": 0,
-                  "command": "pride @s perilous pierce_one_hand 1000",
+                  "command": "pride @s perilous pierce_one_hand",
                   "execute_at_target": false
                 }
               ]
@@ -324,7 +324,7 @@
               "convert_time": 0.25, "command_list": [
               {
                 "time": 0,
-                "command": "pride @s perilous sweep 1500",
+                "command": "pride @s perilous sweep",
                 "execute_at_target": false
               }
             ]
@@ -468,7 +468,7 @@
               "command_list": [
                 {
                   "time": 0,
-                  "command": "pride @s perilous total 1500",
+                  "command": "pride @s perilous total",
                   "execute_at_target": false
                 },
                 {

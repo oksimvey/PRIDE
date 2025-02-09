@@ -1,11 +1,10 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.mechanics.MusicCore;
+import com.robson.pride.api.musiccore.MusicTick;
 import com.robson.pride.api.utils.ClientPlayerTagsAcessor;
 import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.progression.NewCap;
 import com.robson.pride.progression.PlayerAttributeSetup;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -19,10 +18,10 @@ public class PlayerSetup {
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getEntity();
         if (player != null) {
+            player.getPersistentData().putBoolean("isParrying", false);
             playerCommonSetup(player);
+            MusicTick.startTick(player);
             ClientPlayerTagsAcessor.playerTags.put(player, player.getPersistentData());
-            Minecraft client = Minecraft.getInstance();
-            MusicCore.musicManagerMap.put(player, client.getMusicManager());
         }
     }
 
@@ -30,6 +29,7 @@ public class PlayerSetup {
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         Player player = event.getEntity();
         if (player != null) {
+            MusicTick.startRespawnTick(player);
             PlayerAttributeSetup.setupPlayerAttributes(player);
             playerCommonSetup(player);
         }
@@ -39,7 +39,7 @@ public class PlayerSetup {
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         Player player = event.getEntity();
         if (player != null) {
-
+            MusicTick.stopTick(player);
         }
     }
 
@@ -55,7 +55,6 @@ public class PlayerSetup {
         if (player != null) {
             CompoundTag tag = player.getPersistentData();
             StaminaUtils.resetStamina(player);
-            player.getPersistentData().putBoolean("isParrying", false);
             if (!NewCap.haveVariables(tag)) {
                 NewCap.startVariables(player, tag);
             }

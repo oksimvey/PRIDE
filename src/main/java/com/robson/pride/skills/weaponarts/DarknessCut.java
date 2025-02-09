@@ -44,7 +44,6 @@ public class DarknessCut extends WeaponSkillBase {
         if (ent != null) {
             StaticAnimation animation = Animations.TACHI_AUTO3;
             AnimUtils.playAnim(ent, animation, 0);
-            PerilousAttack.setPerilous(ent, "total", 1500);
             TimerUtil.schedule(() -> {
                 int id = MathUtils.getRandomInt(999999999);
                 String skill = "darkness_slash";

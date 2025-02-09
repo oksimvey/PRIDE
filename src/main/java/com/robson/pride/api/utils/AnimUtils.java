@@ -2,23 +2,21 @@ package com.robson.pride.api.utils;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.player.Player;
-import reascer.wom.animation.attacks.BasicMultipleAttackAnimation;
 import yesman.epicfight.api.animation.AnimationManager;
-import yesman.epicfight.api.animation.property.AnimationEvent;
-import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.*;
-import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.network.server.SPPlayAnimation;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.damagesource.StunType;
 
 import java.util.concurrent.TimeUnit;
+
+import static com.robson.pride.api.mechanics.PerilousAttack.perilousParticle;
+import static com.robson.pride.api.mechanics.PerilousAttack.playPerilous;
 
 public class AnimUtils {
 
@@ -39,20 +37,38 @@ public class AnimUtils {
         }, 10, TimeUnit.MILLISECONDS);
     }
 
+    public static void playAnimWithPerilous(Entity ent, StaticAnimation animation, String perilous, float convert){
+        AnimUtils.playAnim(ent, animation, convert);
+        addPerilousToAnim(ent, animation, perilous);
+    }
 
-    public static StaticAnimation addPerilousToAnim(StaticAnimation animation, String perilous) {
-        return animation.addEvents(AnimationEvent.TimeStampedEvent.create(0, (entitypatch, self, params) -> {
-                    if (entitypatch.getOriginal() != null) {
-                        CommandUtils.executeonEntity(entitypatch.getOriginal(),   "say start");
-                        entitypatch.getOriginal().getPersistentData().putString("Perilous", perilous);
-                    }
-                }, AnimationEvent.Side.SERVER),
-                AnimationEvent.TimeStampedEvent.create(animation.getTotalTime(), (entitypatch, self, params) -> {
-                    if (entitypatch.getOriginal() != null) {
-                        CommandUtils.executeonEntity(entitypatch.getOriginal(),   "say end");
-                        entitypatch.getOriginal().getPersistentData().remove("Perilous");
-                    }
-                }, AnimationEvent.Side.SERVER));
+    public static void addPerilousToAnim(Entity ent, StaticAnimation animation, String perilous) {
+        if (ent != null && animation != null) {
+            int animationduration = getAnimationDurationInMilliseconds(ent, animation);
+            ent.getPersistentData().putString("Perilous", perilous);
+            Entity target = TargetUtil.getTarget(ent);
+            if (target instanceof Player) {
+                playPerilous(target);
+                perilousParticle(target);
+
+            }
+            TimerUtil.schedule(() -> {
+                if (ent != null) {
+                    ent.getPersistentData().remove("Perilous");
+                }
+            }, animationduration, TimeUnit.MILLISECONDS);
+        }
+    }
+
+    public static int getAnimationDurationInMilliseconds(Entity ent, StaticAnimation animation){
+        if (ent != null && animation != null) {
+            LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (livingEntityPatch != null) {
+                float duration = animation.getTotalTime() / animation.getPlaySpeed(livingEntityPatch, animation);
+                return (int) (duration * 600);
+            }
+        }
+        return 0;
     }
 
     public static StaticAnimation getCurrentAnimation(Entity ent){
@@ -66,19 +82,6 @@ public class AnimUtils {
             }
         }
         return null;
-    }
-
-    public static float getCurrentAnimationDuration(Entity ent){
-        if (ent != null){
-            LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-            if (livingEntityPatch != null){
-                DynamicAnimation var5 = livingEntityPatch.getAnimator().getPlayerFor((DynamicAnimation)null).getAnimation();
-                if (var5 != null) {
-                    return var5.getTotalTime();
-                }
-            }
-        }
-        return 0;
     }
 
     public static InteractionHand getAttackingHand(Entity ent) {

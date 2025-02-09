@@ -29,20 +29,6 @@ public class ArmatureUtils {
         return null;
     }
 
-    public static float getDynamicXOffset(float pitch){
-        float lookingup = 0.2f;
-        float lookingdown = -1.12f;
-        float lookingstraight = -0.72f;
-        return pitch <= 0 ? lookingup + (pitch + 90) / 90 * (-0.92f) : lookingstraight + (pitch / 90) * (lookingdown + 0.72f);
-    }
-
-    public static float getDynamicYOffset(float pitch){
-        float lookingup = 0.1f;
-        float lookingdown = -0.52f;
-        float lookingstraight = 0.52f;
-        return pitch <= 0 ? lookingup + (pitch + 90) / 90 * (-0.42f) : lookingstraight + (pitch / 90) * (lookingdown + 0.52f);
-    }
-
     public static Vec3 getJoinPosition(LocalPlayer renderer, Entity ent, Joint joint) {
         if (renderer != null && ent != null) {
             if (renderer.level().isClientSide) {

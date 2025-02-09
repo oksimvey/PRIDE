@@ -168,7 +168,7 @@
               "command_list": [
                 {
                   "time": 0,
-                  "command": "pride @s perilous pierce_two_hand 1500",
+                  "command": "pride @s perilous pierce_two_hand",
                   "execute_at_target": false
                 }
               ]

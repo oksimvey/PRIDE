@@ -1,6 +1,5 @@
 package com.robson.pride.skills.weaponskills;
 
-import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.AnimUtils;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +14,7 @@ public class LongSwordWeaponSkill extends WeaponSkillBase {
     @Override
     public void twohandExecute(LivingEntity ent) {
         if (ent != null) {
-            AnimUtils.playAnim(ent, AnimUtils.addPerilousToAnim(Animations.TACHI_DASH, "pierce_two_hand"), 0);
+          AnimUtils.playAnimWithPerilous(ent, Animations.TACHI_DASH, "pierce_two_hand", 0);
         }
     }
 

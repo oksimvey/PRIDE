@@ -14,7 +14,6 @@ public class TargetUtil {
         LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
         if (livingEntityPatch != null) {
             return livingEntityPatch.getTarget();
-
         }
         return null;
     }

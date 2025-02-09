@@ -46,17 +46,6 @@ public class PerilousAttack {
         }
     }
 
-    public static void setPerilous(Entity ent, String PerilousType, int PerilousTime) {
-        ent.getPersistentData().putString("Perilous", PerilousType);
-        Entity target = TargetUtil.getTarget(ent);
-        if (target instanceof Player) {
-            playPerilous(target);
-            perilousParticle(target);
-
-        }
-        disablePerilous(ent, PerilousTime);
-    }
-
     public static void playPerilous(Entity ent) {
         LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
         if (livingEntityPatch != null) {

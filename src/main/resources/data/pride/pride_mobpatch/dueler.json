@@ -8,6 +8,7 @@
   "custom_texture": "indestructible:textures/gui/boss_bar.png",
   "custom_name": "",
 "custom_music": "pride:dueler",
+
   "attributes": {
     "impact": 1.0,
     "armor_negation": 0,
@@ -164,7 +165,7 @@
               "command_list": [
                 {
                   "time": 0,
-                  "command": "pride @s perilous sweep 1000",
+                  "command": "pride @s perilous sweep",
                   "execute_at_target": false
                 }
               ]
@@ -198,7 +199,7 @@
               "command_list": [
                 {
                   "time": 0,
-                  "command": "pride @s perilous total 1500",
+                  "command": "pride @s perilous total",
                   "execute_at_target": false
                 }
               ]

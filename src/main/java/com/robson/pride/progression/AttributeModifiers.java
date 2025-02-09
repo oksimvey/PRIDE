@@ -98,7 +98,7 @@ public class AttributeModifiers {
                     mindmofier =  calculateWeaponAttributeModifier(player, item, tag,  "Mind");
                 }
                 float agroup = mindmofier + dexmodifier + strmodifier;
-                float finalmodifier = agroup  / modifiers;
+                float finalmodifier = agroup  / modifiers / 2;
                 return defaultmodifier * finalmodifier;
             }
         }
