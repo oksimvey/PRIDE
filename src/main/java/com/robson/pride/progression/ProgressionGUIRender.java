@@ -85,7 +85,7 @@ public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI
                     ("Mind Level:" + variables.getInt("MindLvl")), 98, 121, -1, false);
             guiGraphics.drawString(this.font,
 
-                    ("Total Level:" + ProgressionUtils.getTotalLevel(variables) + "        Weight:"), 47, 167, -1, false);
+                    ("Total Level:" + ProgressionUtils.getTotalLevel(player) + "        Weight:"), 47, 167, -1, false);
             guiGraphics.drawString(this.font,
 
                     ("XP:" + variables.getInt("StrengthXp") + "/" + variables.getInt("StrengthMaxXp")), 62, 28, -1, false);

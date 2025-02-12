@@ -13,7 +13,7 @@ public class SpellUtils {
         if (ent != null) {
             MagicData magicData = MagicData.getPlayerMagicData(ent);
             if (magicData != null) {
-                spell.onCast(ent.level(), spelllvl, ent, CastSource.COMMAND, magicData);
+                spell.onCast(ent.level(), spelllvl, ent, CastSource.NONE, magicData);
                 spell.onServerCastComplete(ent.level(), spelllvl, ent, magicData, false);
             }
         }

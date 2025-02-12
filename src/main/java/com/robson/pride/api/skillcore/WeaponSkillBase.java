@@ -1,16 +1,11 @@
 package com.robson.pride.api.skillcore;
 
-import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.api.utils.ManaUtils;
 import com.robson.pride.api.utils.StaminaUtils;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.robson.pride.api.utils.ProgressionUtils.haveReqs;
 

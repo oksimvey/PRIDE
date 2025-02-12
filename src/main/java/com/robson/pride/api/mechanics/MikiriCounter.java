@@ -102,7 +102,10 @@ public class MikiriCounter {
             teleportProjectileToEntityHand(event.getEntity(), entity);
             TimerUtil.schedule(() -> {
                 entity.remove(Entity.RemovalReason.DISCARDED);
-                SpellUtils.castMikiriSpell(event.getEntity(), spell, 3);
+                if (event.getEntity() instanceof Player) {
+                    SpellUtils.castMikiriSpell(event.getEntity(), spell, 3);
+                }
+                else SpellUtils.castSpell(event.getEntity(), spell, 3, 0);
             }, 450, TimeUnit.MILLISECONDS);
             AnimUtils.playAnim(event.getEntity(), AnimationsRegister.PROJECTILE_COUNTER, 0);
         }
@@ -116,6 +119,20 @@ public class MikiriCounter {
                 TimerUtil.schedule(() -> teleportProjectileToEntityHand(owner, projectile), 50, TimeUnit.MILLISECONDS);
             }
         }
+    }
+
+    public static boolean canMobMikiri(Entity ent, Entity ddmgent, String periloustype){
+        if (ent != null && ddmgent != null) {
+            if (ent instanceof Player){
+                return switch(periloustype){
+                    case "Dodge"-> ent.getPersistentData().getBoolean("mikiri_dodge");
+                    case "Jump" -> ent.getPersistentData().getBoolean("mikiri_sweep");
+                    default -> false;
+                };
+            }
+            return ProgressionUtils.getTotalLevel(ent) >= MathUtils.getRandomInt(ProgressionUtils.getTotalLevel(ddmgent));
+        }
+        return false;
     }
 
     public static boolean isDodgeCounterableSpell(Entity spell) {

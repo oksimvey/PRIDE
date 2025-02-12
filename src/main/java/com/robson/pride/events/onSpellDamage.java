@@ -6,9 +6,9 @@ import com.robson.pride.api.utils.ProgressionUtils;
 import com.robson.pride.registries.EffectRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -20,11 +20,11 @@ public class onSpellDamage {
         if (event.getEntity() != null && event.getSpellDamageSource().spell() != null) {
             Entity ent = event.getEntity();
             AbstractSpell spell = event.getSpellDamageSource().spell();
-            if (event.getSpellDamageSource().getEntity() instanceof ServerPlayer player && event.getAmount() > 0) {
+            if (event.getSpellDamageSource().getEntity() instanceof Player player && event.getAmount() > 0) {
                 ProgressionUtils.addXp(player, "Mind", (int) event.getAmount());
             }
             if (MikiriCounter.isDodgeCounterableSpell(event.getSpellDamageSource().getDirectEntity())) {
-                if (ent.getPersistentData().getBoolean("mikiri_dodge")) {
+                if (MikiriCounter.canMobMikiri(ent, event.getSpellDamageSource().getEntity(), "Dodge")) {
                     MikiriCounter.onSpellMikiri(event, spell);
                 }
                 if(ent instanceof LivingEntity living){
@@ -34,7 +34,7 @@ public class onSpellDamage {
                 }
             }
             if (MikiriCounter.isJumpCounterableSpell(event.getSpellDamageSource().spell())) {
-                if (ent.getPersistentData().getBoolean("mikiri_sweep")) {
+                if (MikiriCounter.canMobMikiri(ent, event.getSpellDamageSource().getEntity(), "Jump")) {
                     event.setCanceled(true);
                 }
             }

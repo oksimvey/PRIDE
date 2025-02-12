@@ -4,6 +4,7 @@
   "renderer": "zombie",
   "isHumanoid": true,
   "faction": "neutral",
+  "level": 50,
   "boss_bar": false,
   "custom_texture": "indestructible:textures/gui/boss_bar.png",
   "custom_name": "",

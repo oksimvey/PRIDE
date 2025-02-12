@@ -6,8 +6,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import yesman.epicfight.api.utils.ExtendableEnum;
-import yesman.epicfight.api.utils.ExtendableEnumManager;
 
 import static com.robson.pride.registries.WeaponSkillRegister.WeaponSkills;
 

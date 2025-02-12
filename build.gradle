@@ -115,8 +115,6 @@ repositories {
     mavenCentral()
     maven { url = "https://cursemaven.com" }
 }
-
-
 dependencies {
     // Specify the version of Minecraft to use.
     // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.

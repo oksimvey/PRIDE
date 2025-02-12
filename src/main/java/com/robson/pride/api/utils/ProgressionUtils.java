@@ -1,8 +1,10 @@
 package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.PrideCapabilityReloadListener;
+import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.progression.PlayerAttributeSetup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -17,8 +19,29 @@ public class ProgressionUtils {
         return load;
     }
 
-    public static int getTotalLevel(CompoundTag tag) {
-        return (tag.getInt("StrengthLvl") + tag.getInt("DexterityLvl") + tag.getInt("VigorLvl") + tag.getInt("EnduranceLvl") + tag.getInt("MindLvl")) / 5;
+    public static boolean hasSkill(Entity ent, String skill){
+        if (ent != null){
+            if (ent instanceof Player){
+
+            }
+            else if (ent instanceof PrideMobBase prideMobBase){
+
+            }
+        }
+        return false;
+    }
+
+    public static int getTotalLevel(Entity ent) {
+        if (ent != null) {
+            if (ent instanceof Player player) {
+                CompoundTag tag = ClientPlayerTagsAcessor.playerTags.get(player);
+                return (tag.getInt("StrengthLvl") + tag.getInt("DexterityLvl") + tag.getInt("VigorLvl") + tag.getInt("EnduranceLvl") + tag.getInt("MindLvl")) / 5;
+            }
+            else if (ent instanceof PrideMobBase prideMobBase){
+                return prideMobBase.getLevel();
+            }
+        }
+        return 0;
     }
 
     public static void addXp(Player player, String stat, int amount) {

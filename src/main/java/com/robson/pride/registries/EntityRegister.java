@@ -1,5 +1,6 @@
 package com.robson.pride.registries;
 
+import com.robson.pride.entities.forest.FireDragon;
 import com.robson.pride.entities.forest.hunter.Hunter;
 import com.robson.pride.entities.forest.magmamonster.MagmaMonster;
 import com.robson.pride.entities.japanese.boss.shogun.Shogun;
@@ -27,6 +28,7 @@ public class EntityRegister {
 
     public static final DeferredRegister<EntityType<?>> SPECIAL_ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Pride.MODID);
 
+    public static final RegistryObject<EntityType<FireDragon>> FIRE_DRAGON = make(false, new ResourceLocation("fire_dragon"), FireDragon::new, MobCategory.MONSTER, 5, 3);
     public static final RegistryObject<EntityType<Ronin>> RONIN = make(false, new ResourceLocation("ronin"), Ronin::new, MobCategory.MONSTER, 0.8F, 2.25F);
     public static final RegistryObject<EntityType<Shogun>> SHOGUN = make(false, new ResourceLocation("shogun"), Shogun::new, MobCategory.MONSTER, 1, 2.5F);
     public static final RegistryObject<EntityType<EliteKnight>> ELITE_KNIGHT = make(false, new ResourceLocation("elite_knight"), EliteKnight::new, MobCategory.MONSTER, 0.9F, 2.25f);
@@ -75,5 +77,6 @@ public class EntityRegister {
         event.put(MAGMA_MONSTER.get(), MagmaMonster.registerAttributes().build());
         event.put(SHOOTER.get(), Shooter.registerAttributes().build());
         event.put(DUELER.get(), Dueler.registerAttributes().build());
+        event.put(FIRE_DRAGON.get(), FireDragon.registerAttributes().build());
     }
 }

@@ -14,7 +14,6 @@ import com.nameless.indestructible.api.animation.types.CommandEvent.TimeStampedE
 import com.nameless.indestructible.data.AdvancedMobpatchReloader;
 import com.nameless.indestructible.gameasset.GuardAnimations;
 import com.nameless.indestructible.main.Indestructible;
-import com.nameless.indestructible.network.SPDatapackSync;
 
 import java.util.HashSet;
 import java.util.List;
@@ -42,12 +41,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.api.client.model.AnimatedMesh;
 import yesman.epicfight.api.client.model.Meshes;
 import yesman.epicfight.api.data.reloader.MobPatchReloadListener;
 import yesman.epicfight.api.model.Armature;
@@ -61,10 +59,7 @@ import yesman.epicfight.model.armature.HumanoidArmature;
 import yesman.epicfight.network.server.SPPlayAnimation;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.particle.HitParticleType;
-import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
-import yesman.epicfight.world.capabilities.entitypatch.Faction;
-import yesman.epicfight.world.capabilities.entitypatch.HumanoidMobPatch;
-import yesman.epicfight.world.capabilities.entitypatch.MobPatch;
+import yesman.epicfight.world.capabilities.entitypatch.*;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 import yesman.epicfight.world.capabilities.provider.EntityPatchProvider;
@@ -105,16 +100,14 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
                 } catch (CommandSyntaxException e) {
                     e.printStackTrace();
                 }
-
                 ADVANCED_MOB_PATCH_PROVIDERS.put(entityType, deserializeMobPatchProvider(entityType, tag, false, resourceManagerIn));
-                EntityPatchProvider.putCustomEntityPatch(entityType, (entity) -> () -> ((MobPatchReloadListener.AbstractMobPatchProvider)ADVANCED_MOB_PATCH_PROVIDERS.get(entity.getType())).get(entity));
+                EntityPatchProvider.putCustomEntityPatch(entityType, (entity) -> () -> ((MobPatchReloadListener.AbstractMobPatchProvider) ADVANCED_MOB_PATCH_PROVIDERS.get(entity.getType())).get(entity));
                 MOB_TAGS.put(entityType, filterClientData(tag));
                 if (EpicFightMod.isPhysicalClient()) {
                     ClientEngine.getInstance().renderEngine.registerCustomEntityRenderer(entityType, tag.contains("preset") ? tag.getString("preset") : tag.getString("renderer"), tag);
                 }
             }
         }
-
     }
 
     public static PrideMobPatchReloader.PrideMobPatchProvider deserializeMobPatchProvider(EntityType<?> entityType, CompoundTag tag, boolean clientSide, ResourceManager resourceManager) {
@@ -122,15 +115,14 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         provider.attributeValues = deserializeAdvancedAttributes(tag.getCompound("attributes"));
         ResourceLocation modelLocation = new ResourceLocation(tag.getString("model"));
         ResourceLocation armatureLocation = new ResourceLocation(tag.getString("armature"));
+        boolean humanoid = tag.getBoolean("isHumanoid");
         if (EpicFightMod.isPhysicalClient()) {
-            Meshes.getOrCreateAnimatedMesh(Minecraft.getInstance().getResourceManager(), modelLocation, HumanoidMesh::new);
+            Meshes.getOrCreateAnimatedMesh(Minecraft.getInstance().getResourceManager(), modelLocation, humanoid ? AnimatedMesh::new : HumanoidMesh::new);
         }
-        Armature armature = Armatures.getOrCreateArmature(resourceManager, armatureLocation, HumanoidArmature::new);
+        Armature armature = Armatures.getOrCreateArmature(resourceManager, armatureLocation, humanoid ? Armature::new : HumanoidArmature::new);
         Armatures.registerEntityTypeArmature(entityType, armature);
         provider.hasBossBar = tag.contains("boss_bar") && tag.getBoolean("boss_bar");
         provider.name = tag.contains("boss_bar") && tag.contains("custom_name") ? tag.getString("custom_name") : null;
-        provider.music = tag.contains("custom_music")  ? ResourceLocation.tryParse(tag.getString("custom_music")) : null;
-        provider.musicPriority = tag.contains("music_priority") ? tag.getInt("music_priority") : 0;
         provider.bossBar = tag.contains("boss_bar") && tag.contains("custom_texture") ? ResourceLocation.tryParse(tag.getString("custom_texture")) : null;
         provider.defaultAnimations = MobPatchReloadListener.deserializeDefaultAnimations(tag.getCompound("default_livingmotions"));
         provider.faction = Faction.valueOf(tag.getString("faction").toUpperCase(Locale.ROOT));
@@ -183,6 +175,9 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         extract.put("attributes", original.get("attributes"));
         if (original.contains("interaction_behaviors")){
             extract.put("interaction_behaviors", original.getList("interaction_behaviors", 10));
+        }
+        if (original.contains("level")){
+            extract.putByte("level", original.getByte("level"));
         }
         if (original.contains("custom_music")){
             extract.putString("custom_music", original.getString("custom_music"));
@@ -526,8 +521,6 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         protected SoundEvent swingSound;
         protected SoundEvent hitSound;
         protected HitParticleType hitParticle;
-        protected ResourceLocation music;
-        protected int musicPriority;
 
         public PrideMobPatchProvider() {
             this.swingSound = (SoundEvent)EpicFightSounds.WHOOSH.get();
@@ -629,12 +622,6 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
 
         public HitParticleType getHitParticle() {
             return this.hitParticle;
-        }
-        public ResourceLocation getMusic(){
-            return this.music;
-        }
-        public Integer getMusicPriority(){
-            return this.getMusicPriority();
         }
     }
 }

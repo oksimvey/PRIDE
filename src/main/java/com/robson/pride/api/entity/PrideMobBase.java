@@ -83,14 +83,61 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     private Music mobMusic;
 
+    private byte level;
+
     protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
         this.xpReward = 5;
         this.setPersistenceRequired();
-        deserializeTargetGoals();
-        deserializePassiveSkillsJson();
-        deserializeTextures();
-        deserializeMusics();
+        deserializeConstructorJsons();
+    }
+
+    private void deserializeConstructorJsons() {
+        CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
+        if (tagmap != null) {
+            deserializeTargetGoals(tagmap);
+            deserializePassiveSkillsJson(tagmap);
+            deserializeTextures(tagmap);
+            deserializeMusics(tagmap);
+            deserializeLevel(tagmap);
+        }
+    }
+
+    public void deserializeTargetGoals(CompoundTag tagmap) {
+        ListTag targets = tagmap.getList("targets", 8);
+        if (targets != null) {
+            for (int i = 0; i < targets.size(); ++i) {
+                this.targets.add(targets.getString(i));
+            }
+        }
+    }
+
+    public void deserializeTextures(CompoundTag tagmap){
+        ListTag targets = tagmap.getList("textures", 8);
+        for (int i = 0; i < targets.size(); ++i) {
+            this.textures.add(targets.getString(i));
+        }
+    }
+
+    public void deserializePassiveSkillsJson(CompoundTag tagmap) {
+        ListTag targets = tagmap.getList("skills", 8);
+        for (int i = 0; i < targets.size(); ++i) {
+            this.skills.add(targets.getString(i));
+        }
+    }
+
+    public void deserializeMusics(CompoundTag tags){
+        if (tags.contains("custom_music")) {
+            Holder<SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation(tags.getString("custom_music"))));
+            this.mobMusic = new Music(holder, 1, 1, true);
+        }
+    }
+
+    private void deserializeLevel(CompoundTag tagmap) {
+        if (tagmap.contains("level")) {
+            this.level = tagmap.getByte("level");
+        }
+        else this.level = 1;
     }
 
     @Override
@@ -115,37 +162,10 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         return this.entityData.get(VARIANT);
     }
 
-    public void deserializeTargetGoals() {
-        CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
-        if (tagmap != null) {
-            ListTag targets = tagmap.getList("targets", 8);
-            if (targets != null) {
-                for (int i = 0; i < targets.size(); ++i) {
-                    this.targets.add(targets.getString(i));
-                }
-            }
-        }
+    public byte getLevel(){
+        return this.level;
     }
 
-    public void deserializeTextures(){
-        CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
-        if (tagmap != null) {
-            ListTag targets = tagmap.getList("textures", 8);
-            for (int i = 0; i < targets.size(); ++i) {
-                this.textures.add(targets.getString(i));
-            }
-        }
-    }
-
-    public void deserializePassiveSkillsJson() {
-        CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
-        if (tagmap != null) {
-            ListTag targets = tagmap.getList("skills", 8);
-            for (int i = 0; i < targets.size(); ++i) {
-                this.skills.add(targets.getString(i));
-            }
-        }
-    }
 
     @Override
     protected void registerGoals() {
@@ -214,16 +234,6 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
                        TimerUtil.schedule(()-> deserializeAnimalFight(animal, finalAnimation), delay, TimeUnit.MILLISECONDS);
                    }
                }
-            }
-        }
-    }
-
-    public void deserializeMusics(){
-        CompoundTag tags = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
-        if (tags != null) {
-            if (tags.contains("custom_music")) {
-                Holder<SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation(tags.getString("custom_music"))));
-                this.mobMusic = new Music(holder, 1, 1, true);
             }
         }
     }

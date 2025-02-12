@@ -2,9 +2,9 @@ package com.robson.pride.api.mechanics;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.utils.PlaySoundUtils;
-import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.registries.ParticleRegister;
+import jdk.dynalink.Operation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.entity.Entity;
@@ -17,11 +17,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BinaryOperator;
 
 public class PerilousAttack {
 
     public static List<String> periloustypes = Arrays.asList("pierce_two_hand", "pierce_dual_wield", "pierce_one_hand", "sweep", "total");
-
 
     public static boolean checkPerilous(Entity ent) {
         if (ent != null) {
@@ -32,15 +32,17 @@ public class PerilousAttack {
 
     public static void onPerilous(Entity ent, Entity ddmgent, LivingAttackEvent event) {
         String Perilous = ddmgent.getPersistentData().getString("Perilous");
-        if (Objects.equals(Perilous, "total")) {
-            PerilousSucess(ent, event);
-        } else if (Objects.equals(Perilous, "pierce_two_hand") || Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand")) {
-            if (ent.getPersistentData().getBoolean("mikiri_dodge")) {
+        if (Objects.equals(Perilous, "pierce_two_hand") || Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand")) {
+            if (MikiriCounter.canMobMikiri(ent, ddmgent, "Dodge")) {
                 MikiriCounter.onPierceMikiri(ent, ddmgent, Perilous);
                 event.setCanceled(true);
             } else PerilousSucess(ent, event);
-        } else if (Objects.equals(Perilous, "sweep") && ent.getPersistentData().getBoolean("mikiri_sweep")) {
-            event.setCanceled(true);
+        } else if (Perilous.equals("sweep")) {
+            if (MikiriCounter.canMobMikiri(ent, ddmgent, "Jump")) {
+                event.setCanceled(true);
+            } else {
+                PerilousSucess(ent, event);
+            }
         } else {
             PerilousSucess(ent, event);
         }
@@ -51,10 +53,6 @@ public class PerilousAttack {
         if (livingEntityPatch != null) {
             PlaySoundUtils.playSoundByString(livingEntityPatch.getTarget(), "pride:perilous", 3, 1);
         }
-    }
-
-    public static void disablePerilous(Entity ent, int delay) {
-        TimerUtil.schedule(() -> ent.getPersistentData().putString("Perilous", ""), delay, TimeUnit.MILLISECONDS);
     }
 
     public static void perilousParticle(Entity player) {
@@ -87,7 +85,8 @@ public class PerilousAttack {
     public static void PerilousSucess(Entity ent, LivingAttackEvent event) {
         if (ent instanceof Player player) {
             player.stopUsingItem();
-        } else {
+        }
+        else {
             AdvancedCustomHumanoidMobPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
             if (livingEntityPatch != null) {
                 livingEntityPatch.setParry(false);
