@@ -1,10 +1,11 @@
 package com.robson.pride.api.entity;
 
+import com.nameless.indestructible.world.ai.goal.AdvancedChasingGoal;
+import com.nameless.indestructible.world.ai.goal.AdvancedCombatGoal;
 import com.robson.pride.api.ai.goals.JsonGoalsReader;
 import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
 import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.api.utils.*;
-import com.robson.pride.registries.AnimationsRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -30,6 +31,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -42,10 +44,13 @@ import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
+import org.jetbrains.annotations.NotNull;
+import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.AnimationProvider;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 
@@ -55,6 +60,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.robson.pride.api.ai.dialogues.JsonInteractionsReader.isSpeaking;
 
@@ -65,9 +71,9 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     public List<String> targets = new ArrayList<>();
 
-    public List<String> skills = new ArrayList<>();
-
     public List<String> textures = new ArrayList<>();
+
+    private CompoundTag skillmotions = new CompoundTag();
 
     private ListTag pathpositions;
 
@@ -85,6 +91,8 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     private byte level;
 
+    private boolean changingGoals = false;
+
     protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
         this.xpReward = 5;
@@ -96,19 +104,17 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
         if (tagmap != null) {
             deserializeTargetGoals(tagmap);
-            deserializePassiveSkillsJson(tagmap);
             deserializeTextures(tagmap);
             deserializeMusics(tagmap);
             deserializeLevel(tagmap);
+            deserializeSkillMotions(tagmap);
         }
     }
 
     public void deserializeTargetGoals(CompoundTag tagmap) {
         ListTag targets = tagmap.getList("targets", 8);
-        if (targets != null) {
-            for (int i = 0; i < targets.size(); ++i) {
-                this.targets.add(targets.getString(i));
-            }
+        for (int i = 0; i < targets.size(); ++i) {
+            this.targets.add(targets.getString(i));
         }
     }
 
@@ -116,13 +122,6 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         ListTag targets = tagmap.getList("textures", 8);
         for (int i = 0; i < targets.size(); ++i) {
             this.textures.add(targets.getString(i));
-        }
-    }
-
-    public void deserializePassiveSkillsJson(CompoundTag tagmap) {
-        ListTag targets = tagmap.getList("skills", 8);
-        for (int i = 0; i < targets.size(); ++i) {
-            this.skills.add(targets.getString(i));
         }
     }
 
@@ -134,10 +133,25 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
     }
 
     private void deserializeLevel(CompoundTag tagmap) {
-        if (tagmap.contains("level")) {
-            this.level = tagmap.getByte("level");
+        this.level = tagmap.contains("level") ? tagmap.getByte("level") :  1;
+    }
+
+    private void deserializeSkillMotions(CompoundTag tagmap){
+        if (tagmap.contains("skills")){
+            this.skillmotions = tagmap.getCompound("skills");
         }
-        else this.level = 1;
+    }
+
+    public boolean hasSkill(String skill){
+        return this.skillmotions.contains(skill);
+    }
+
+    public StaticAnimation getSkillMotion(String skill){
+        if (skill.equals("divine_reflexes")){
+            ListTag motions = this.skillmotions.getList(skill, 8);
+            return AnimationManager.getInstance().byKeyOrThrow(motions.getString(new Random().nextInt(motions.size()) + 1));
+        }
+        return AnimationManager.getInstance().byKeyOrThrow(this.skillmotions.getString(skill));
     }
 
     @Override
@@ -358,6 +372,18 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         super.travel(travel);
     }
 
+    private void removeGoalsForPath(int duration){
+        this.changingGoals = true;
+        List<WrappedGoal> runningGoals = this.goalSelector.getRunningGoals().toList();
+        runningGoals.forEach(wrappedGoal -> this.goalSelector.removeGoal(wrappedGoal.getGoal()));
+        TimerUtil.schedule(()-> {
+            this.changingGoals = false;
+            runningGoals.forEach(wrappedGoal ->
+                    this.goalSelector.addGoal(wrappedGoal.getPriority(), wrappedGoal.getGoal())
+            );
+        }, duration, TimeUnit.MILLISECONDS);
+    }
+
     private void deserializePaths() {
         if (this.pathcounter < this.pathpositions.size()) {
             CompoundTag path = this.pathpositions.getCompound(this.pathcounter);
@@ -374,21 +400,14 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
     }
 
     public void deserializePassiveSkills() {
-        if (this.skills.contains("open_door") && shouldOpenDoor() != null) {
+        if (this.hasSkill("open_door") && shouldOpenDoor() != null) {
             shouldOpenDoor().setOpen(this, this.level(), this.level().getBlockState(getBlockPosAhead()), getBlockPosAhead(), true);
         }
-        else if (this.skills.contains("path_sneak") && shouldPathSneak()) {
-            Entity target = TargetUtil.getTarget(this);
+        else if (this.hasSkill("path_sneak") && shouldPathSneak()) {
             AnimUtils.cancelMotion(this);
-            AnimUtils.playAnim(this, AnimationsRegister.MOB_SNEAK, 0.1f);
+            AnimUtils.playAnim(this, getSkillMotion("path_sneak"), 0.1f);
             AnimUtils.resizeBoundingBox(this, 0.5f, 1.8f);
-            TargetUtil.setTarget(this, null);
-            TimerUtil.schedule(()->{
-                this.refreshDimensions();
-                if (target != null){
-                    TargetUtil.setTarget(this, target);
-                }
-            }, 1, TimeUnit.SECONDS);
+            TimerUtil.schedule(this::refreshDimensions, 1, TimeUnit.SECONDS);
         }
     }
 

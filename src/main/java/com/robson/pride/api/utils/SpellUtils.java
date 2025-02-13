@@ -7,8 +7,6 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class SpellUtils {
 
-
-
     public static void castSpell(LivingEntity ent, AbstractSpell spell, int spelllvl, int castduration) {
         if (ent != null) {
             MagicData magicData = MagicData.getPlayerMagicData(ent);
@@ -18,6 +16,7 @@ public class SpellUtils {
             }
         }
     }
+
     public static void castMikiriSpell(LivingEntity ent, AbstractSpell spell, int spelllvl){
         if (ent != null){
             MagicData magicData = MagicData.getPlayerMagicData(ent);

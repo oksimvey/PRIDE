@@ -13,10 +13,6 @@ import java.util.List;
 public class IsTargetTargetSelf implements Condition<LivingEntityPatch<?>> {
     private boolean invert;
 
-    public IsTargetTargetSelf(boolean invert) {
-        this.invert = invert;
-    }
-
     public IsTargetTargetSelf() {
     }
 
