@@ -1,9 +1,8 @@
 package com.robson.pride.api.entity;
 
-import com.nameless.indestructible.world.ai.goal.AdvancedChasingGoal;
-import com.nameless.indestructible.world.ai.goal.AdvancedCombatGoal;
 import com.robson.pride.api.ai.goals.JsonGoalsReader;
 import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
+import com.robson.pride.api.ai.goals.PrideCombatBehavior;
 import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.api.utils.*;
 import net.minecraft.client.Minecraft;
@@ -15,6 +14,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -31,11 +31,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -44,23 +42,20 @@ import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.DoorBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
-import org.jetbrains.annotations.NotNull;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.AnimationProvider;
 import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static com.robson.pride.api.ai.dialogues.JsonInteractionsReader.isSpeaking;
 
@@ -91,13 +86,12 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     private byte level;
 
-    private boolean changingGoals = false;
-
     protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
         this.xpReward = 5;
         this.setPersistenceRequired();
         deserializeConstructorJsons();
+        PrideMobPatchReloader.PrideMobPatchProvider provider = (PrideMobPatchReloader.PrideMobPatchProvider) PrideMobPatchReloader.ADVANCED_MOB_PATCH_PROVIDERS.get(this.getType());
     }
 
     private void deserializeConstructorJsons() {
@@ -218,8 +212,29 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         super.setTarget(p_21544_);
         equipAllSlotsToDefault();
         this.target = p_21544_;
-        if (p_21544_ instanceof Animal animal){
-            deserializeAnimalFight(animal, (byte) 0);
+        if (p_21544_ != null && EpicFightCapabilities.getEntityPatch(p_21544_, LivingEntityPatch.class) == null){
+           deserializeFight(p_21544_, (byte) 0);
+        }
+    }
+
+    public void deserializeFight(LivingEntity target, byte animation){
+        if (target != null){
+            if (this.target == target && target.isAlive()){
+                if (this.distanceTo(target) < this.getBbHeight() * 3){
+                    List<AnimationProvider<?>> motions = ItemStackUtils.getWeaponMotions(this.getMainHandItem());
+                    if (motions != null){
+                        if (animation > motions.size()){
+                            animation = 0;
+                        }
+                        StaticAnimation animationtoplay = motions.get(animation).get();
+                        AnimUtils.playAnim(this, animationtoplay, 0);
+                        animation += 1;
+                        byte finalAnimation = animation;
+                        int delay = AnimUtils.getAnimationDurationInMilliseconds(this, animationtoplay);
+                        TimerUtil.schedule(()-> deserializeFight(target, finalAnimation), delay, TimeUnit.MILLISECONDS);
+                    }
+                }
+            }
         }
     }
 
@@ -229,27 +244,6 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     public byte getMusicPriority(){
         return 1;
-    }
-
-    public void deserializeAnimalFight(Animal animal, byte animation){
-        if (animal != null){
-            if (this.target == animal && animal.isAlive()){
-               if (this.distanceTo(animal) < this.getBbHeight() * 3){
-                   List<AnimationProvider<?>> motions = ItemStackUtils.getWeaponMotions(this.getMainHandItem());
-                   if (motions != null){
-                       if (animation > motions.size()){
-                           animation = 0;
-                       }
-                       StaticAnimation animationtoplay = motions.get(animation).get();
-                       AnimUtils.playAnim(this, animationtoplay, 0);
-                       animation += 1;
-                       byte finalAnimation = animation;
-                       int delay = AnimUtils.getAnimationDurationInMilliseconds(this, animationtoplay);
-                       TimerUtil.schedule(()-> deserializeAnimalFight(animal, finalAnimation), delay, TimeUnit.MILLISECONDS);
-                   }
-               }
-            }
-        }
     }
 
     @Override
@@ -370,18 +364,6 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
             }
         }
         super.travel(travel);
-    }
-
-    private void removeGoalsForPath(int duration){
-        this.changingGoals = true;
-        List<WrappedGoal> runningGoals = this.goalSelector.getRunningGoals().toList();
-        runningGoals.forEach(wrappedGoal -> this.goalSelector.removeGoal(wrappedGoal.getGoal()));
-        TimerUtil.schedule(()-> {
-            this.changingGoals = false;
-            runningGoals.forEach(wrappedGoal ->
-                    this.goalSelector.addGoal(wrappedGoal.getPriority(), wrappedGoal.getGoal())
-            );
-        }, duration, TimeUnit.MILLISECONDS);
     }
 
     private void deserializePaths() {

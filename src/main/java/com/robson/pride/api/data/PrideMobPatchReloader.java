@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
+import com.robson.pride.api.entity.PrideMobPatch;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -70,6 +71,7 @@ import yesman.epicfight.world.entity.ai.goal.CombatBehaviors.Behavior;
 import yesman.epicfight.world.entity.ai.goal.CombatBehaviors.BehaviorSeries;
 
 public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
+
     private static final Gson GSON = (new GsonBuilder()).create();
     public static final Map<EntityType<?>, CompoundTag> MOB_TAGS = Maps.newHashMap();
     public static final Map<EntityType<?>, MobPatchReloadListener.AbstractMobPatchProvider> ADVANCED_MOB_PATCH_PROVIDERS = Maps.newHashMap();
@@ -247,6 +249,7 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
             ListTag categories = combatBehavior.getList("weapon_categories", 8);
             Style style = (Style)Style.ENUM_MANAGER.get(combatBehavior.getString("style"));
             CombatBehaviors.Builder<HumanoidMobPatch<?>> builder = deserializeAdvancedBehaviorsBuilder(combatBehavior.getList("behavior_series", 10));
+
 
             for(int j = 0; j < categories.size(); ++j) {
                 WeaponCategory category = (WeaponCategory)WeaponCategory.ENUM_MANAGER.get(categories.getString(j));
@@ -529,7 +532,7 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         }
 
         public EntityPatch<?> get(Entity entity) {
-            return new AdvancedCustomHumanoidMobPatch(this.faction, this);
+            return new PrideMobPatch(this.faction, this);
         }
 
         public Map<WeaponCategory, Map<Style, Set<Pair<LivingMotion, StaticAnimation>>>> getHumanoidWeaponMotions() {

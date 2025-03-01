@@ -1,9 +1,10 @@
 package com.robson.pride.api.utils;
 
-import net.minecraft.commands.CommandSource;
-import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.commands.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraftforge.client.ClientCommandHandler;
 
 public class CommandUtils {
 
@@ -14,6 +15,11 @@ public class CommandUtils {
                         ent.getName().getString(), ent.getDisplayName(), ent.level().getServer(), ent), command);
             }
         }
+    }
+
+    public static boolean executeOnClient(LocalPlayer player, String command) {
+        ClientCommandHandler.runCommand(command);
+        return true;
     }
 }
 

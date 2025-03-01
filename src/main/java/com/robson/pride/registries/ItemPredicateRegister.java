@@ -45,18 +45,6 @@ public class ItemPredicateRegister {
                 }
                 return 9;
             });
-
-            ItemPropertyFunction PULLING = (((itemStack, clientLevel, livingEntity, i) -> {
-                if (livingEntity != null){
-               if (AnimationsRegister.pullLvl.get(livingEntity) != null) {
-                   if (AnimationsRegister.pullLvl.get(livingEntity) != 0) {
-                       return AnimationsRegister.pullLvl.get(livingEntity);
-                   }
-               }
-               }
-                return 0;
-            }));
-            ItemProperties.register(ItemsRegister.MOB_BOW.get(), new ResourceLocation("pride:pulling"), PULLING);
             ItemProperties.register(ItemsRegister.ELEMENTAL_GEM.get(), new ResourceLocation("pride:element"), ELEMENTAL_GEM);
         });
     }

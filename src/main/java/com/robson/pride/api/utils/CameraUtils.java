@@ -1,6 +1,5 @@
 package com.robson.pride.api.utils;
 
-import com.github.exopandora.shouldersurfing.api.callback.ITargetCameraOffsetCallback;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -10,7 +9,7 @@ import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 
 import java.util.concurrent.TimeUnit;
 
-public class CameraUtils implements ITargetCameraOffsetCallback {
+public class CameraUtils{
 
     public static void unlockCamera(LocalPlayer ent, byte duration) {
         LocalPlayerPatch player = EpicFightCapabilities.getEntityPatch(ent, LocalPlayerPatch.class);

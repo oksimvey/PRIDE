@@ -26,11 +26,6 @@ public class Eating {
                 itemStack = targetl.getOffhandItem();
                 targetl.getOffhandItem().setCount(targetl.getOffhandItem().getCount() - 1);
             }
-            if (itemStack != null) {
-                if (living instanceof Player player) {
-                } else
-                    ent.getPersistentData().putString("itemtoequip", String.valueOf(BuiltInRegistries.ITEM.getKey(itemStack.getItem())));
-            }
         }
     }
 

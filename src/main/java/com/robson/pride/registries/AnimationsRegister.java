@@ -86,9 +86,9 @@ public class AnimationsRegister {
     private static void build() {
 
         HumanoidArmature biped = Armatures.BIPED;
-        
+
         DIVINE_RESURRECTION = (new LongHitAnimation(0.25f, "biped/skill/divine_resurrection", biped));
-        MOB_SNEAK = (new MovementAnimation(0.15f, true,"biped/skill/mob_sneak", biped));
+        MOB_SNEAK = (new MovementAnimation(0.15f, true, "biped/skill/mob_sneak", biped));
         MOB_AIM = (new LongHitAnimation(0.25f, "biped/combat/mob_aim", biped)).addEvents(AnimationEvent.TimeStampedEvent.create(0F, MOB_AIM_NBTS, AnimationEvent.Side.SERVER));
         MOB_SHOOT = (new LongHitAnimation(0, "biped/combat/mob_shoot", biped));
         INFERNAL_AUTO_1 = (new BasicAttackAnimation(0.1F, 0.3F, 0.4F, 0.5F, null, biped.toolL, "biped/combat/infernal_auto_1", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.0F)).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.4F);
@@ -216,26 +216,12 @@ public class AnimationsRegister {
     public static final AnimationEvent.AnimationEventConsumer MOB_AIM_NBTS = (entitypatch, animation, params) -> {
         Entity ent = entitypatch.getOriginal();
         if (ent instanceof LivingEntity livingEntity) {
+            livingEntity.startUsingItem(InteractionHand.MAIN_HAND);
             TimerUtil.schedule(() -> {
                 if (livingEntity != null) {
-                    pullLvl.put(livingEntity, (byte) 1);
-                    TimerUtil.schedule(() -> {
-                        if (livingEntity != null) {
-                            pullLvl.put(livingEntity, (byte) 2);
-                            TimerUtil.schedule(() -> {
-                                if (livingEntity != null) {
-                                    pullLvl.put(livingEntity, (byte) 3);
-                                    TimerUtil.schedule(() -> {
-                                        if (livingEntity != null) {
-                                            pullLvl.remove(livingEntity);
-                                        }
-                                    }, 200, TimeUnit.MILLISECONDS);
-                                }
-                            }, 200, TimeUnit.MILLISECONDS);
-                        }
-                    }, 200, TimeUnit.MILLISECONDS);
+                    livingEntity.stopUsingItem();
                 }
-            }, 200, TimeUnit.MILLISECONDS);
+            }, 800, TimeUnit.MILLISECONDS);
         }
     };
 }

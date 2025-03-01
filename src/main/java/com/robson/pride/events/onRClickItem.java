@@ -4,7 +4,9 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.robson.pride.api.mechanics.Parry;
+import com.robson.pride.api.utils.CommandUtils;
 import com.robson.pride.api.utils.ItemStackUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.world.InteractionHand;
@@ -21,6 +23,7 @@ public class onRClickItem {
     public static void onRClick(PlayerInteractEvent.RightClickItem event) {
         if (event.getEntity() != null) {
             Player player = event.getEntity();
+            CommandUtils.executeonEntity(player, "say " + Minecraft.getInstance().gameRenderer.getMainCamera().getYRot());
             if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)) {
                 player.startUsingItem(InteractionHand.MAIN_HAND);
                 Parry.ParryWindow(player);

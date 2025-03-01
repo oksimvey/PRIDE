@@ -1,7 +1,6 @@
 package com.robson.pride.keybinding;
 
-import com.github.exopandora.shouldersurfing.api.client.ShoulderSurfing;
-import com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl;
+import com.github.leawind.thirdperson.api.client.event.ThirdPersonCameraSetupEvent;
 import com.robson.pride.api.mechanics.MikiriCounter;
 import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.api.utils.*;
@@ -54,11 +53,6 @@ public class onQPress {
             player.getPersistentData().putBoolean("isDodging", true);
             TimerUtil.schedule(() -> player.getPersistentData().putBoolean("isDodging", false), 200, TimeUnit.MILLISECONDS);
             StaminaUtils.consumeStamina(player, 3);
-            ShoulderSurfingImpl instance = (ShoulderSurfingImpl) ShoulderSurfing.getInstance();
-            if (instance.getClientConfig().isCameraDecoupled()) {
-                instance.toggleCameraCoupling();
-                TimerUtil.schedule(instance::toggleCameraCoupling, 50, TimeUnit.MILLISECONDS);
-            }
             byte dodgetype = AnimUtils.getDodgeType(player);
             String anim = "step_backward";
             if (dodgetype == 1) {
@@ -93,11 +87,6 @@ public class onQPress {
             StaminaUtils.consumeStamina(player, 4);
             player.getPersistentData().putBoolean("isDodging", true);
             TimerUtil.schedule(() -> player.getPersistentData().putBoolean("isDodging", false), 300, TimeUnit.MILLISECONDS);
-            ShoulderSurfingImpl instance = (ShoulderSurfingImpl) ShoulderSurfing.getInstance();
-            if (instance.getClientConfig().isCameraDecoupled()) {
-                instance.toggleCameraCoupling();
-                TimerUtil.schedule(instance::toggleCameraCoupling, 50, TimeUnit.MILLISECONDS);
-            }
             byte dodgetype = AnimUtils.getDodgeType(player);
             String anim = "epicfight:biped/skill/roll_backward";
             if (dodgetype == 1) {
@@ -118,9 +107,11 @@ public class onQPress {
             if (ent != null) {
                 if (PerilousAttack.checkPerilous(ent)) {
                     return true;
-                } else if (ent instanceof Projectile arrow) {
+                }
+                else if (ent instanceof Projectile arrow) {
                     return arrow.getOwner() != player;
-                } else if (MikiriCounter.isDodgeCounterableSpell(ent)) {
+                }
+                else if (MikiriCounter.isDodgeCounterableSpell(ent)) {
                     return true;
                 }
             }

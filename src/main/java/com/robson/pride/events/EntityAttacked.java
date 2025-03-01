@@ -5,7 +5,6 @@ import com.robson.pride.api.utils.*;
 import com.robson.pride.entities.special.Shooter;
 import com.robson.pride.progression.AttributeModifiers;
 import com.robson.pride.registries.EffectRegister;
-import com.robson.pride.skills.special.AirSlamSkill;
 import com.robson.pride.skills.special.CloneSkill;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -14,7 +13,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -22,7 +20,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Mod.EventBusSubscriber
@@ -68,9 +65,6 @@ public class EntityAttacked {
         if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
             Entity ent = event.getEntity();
             Entity ddmgent = event.getSource().getDirectEntity();
-            if (ddmgent.getPersistentData().getBoolean("Airslam")) {
-                AirSlamSkill.onAirSlamDMG(ddmgent, ent);
-            }
             ddmgent.setDeltaMovement(ddmgent.getDeltaMovement().x, 0, ddmgent.getDeltaMovement().z);
             ent.setDeltaMovement(ent.getDeltaMovement().x, 0, ent.getDeltaMovement().z);
             if (ddmgent instanceof LivingEntity liv) {

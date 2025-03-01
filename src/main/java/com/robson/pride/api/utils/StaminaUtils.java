@@ -15,7 +15,8 @@ public class StaminaUtils {
                 if (playerPatch != null) {
                     return playerPatch.getStamina();
                 }
-            } else {
+            }
+            else {
                 AdvancedCustomHumanoidMobPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
                 if (mobPatch != null) {
                     return mobPatch.getStamina();
@@ -32,7 +33,8 @@ public class StaminaUtils {
                 if (playerPatch != null) {
                     return playerPatch.getMaxStamina();
                 }
-            } else {
+            }
+            else {
                 AdvancedCustomHumanoidMobPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
                 if (mobPatch != null) {
                     return mobPatch.getMaxStamina();

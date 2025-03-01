@@ -104,8 +104,9 @@ public class MikiriCounter {
                 entity.remove(Entity.RemovalReason.DISCARDED);
                 if (event.getEntity() instanceof Player) {
                     SpellUtils.castMikiriSpell(event.getEntity(), spell, 3);
+                    return;
                 }
-                else SpellUtils.castSpell(event.getEntity(), spell, 3, 0);
+                SpellUtils.castSpell(event.getEntity(), spell, 3, 0);
             }, 450, TimeUnit.MILLISECONDS);
             AnimUtils.playAnim(event.getEntity(), AnimationsRegister.PROJECTILE_COUNTER, 0);
         }

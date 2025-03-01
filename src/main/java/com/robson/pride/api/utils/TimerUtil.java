@@ -12,7 +12,4 @@ public class TimerUtil {
         Timer.schedule(task, delay, unit);
     }
 
-    public static void shutdown() {
-        Timer.shutdown();
-    }
 }

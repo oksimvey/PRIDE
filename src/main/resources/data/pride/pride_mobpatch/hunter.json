@@ -70,10 +70,17 @@
     {"command":"effect give @s pride:guard_break 2 1 true", "stun_type": "neutralize", "execute_at_target":false}
   ],
   "textures": ["pride:textures/entities/hunter/hunter1.png"],
+  "equipment": [
+    {
+      "variations": [0],
+      "slot": "mainhand",
+      "item": "minecraft:bow"
+    }
+  ],
   "combat_behavior": [
     {
       "weapon_categories": [
-        "sword"
+        "ranged"
       ],
       "style": "common",
       "behavior_series": [

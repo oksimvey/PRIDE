@@ -3,7 +3,6 @@ package com.robson.pride.api.utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,9 +10,9 @@ public class CutsceneUtils {
 
     public static void cutsceneStart(LocalPlayer ent, byte duration, String mode) {
         if (ent != null) {
-            ent.connection.sendCommand("say cam clear");
-            ent.connection.sendCommand("cam mode " + mode);
-            TimerUtil.schedule(() -> ent.connection.sendCommand("cam start " + duration + "s"), 10, TimeUnit.MILLISECONDS);
+            CommandUtils.executeOnClient(ent,"cam clear");
+            CommandUtils.executeOnClient(ent,"cam mode " + mode);
+            TimerUtil.schedule(() -> CommandUtils.executeOnClient(ent, "cam start " + duration + "s"), 10, TimeUnit.MILLISECONDS);
             CameraUtils.unlockCamera(Minecraft.getInstance().player, duration);
             if (!(Minecraft.getInstance().options.getCameraType().isFirstPerson())) {
                 CameraUtils.putonFirstPerson(ent, duration);
@@ -22,7 +21,7 @@ public class CutsceneUtils {
     }
 
     public static void addPoint(LocalPlayer ent, String pointpos) {
-        ent.connection.sendCommand("cam add " + pointpos);
+        CommandUtils.executeOnClient(ent, "cam add " + pointpos);
     }
 
     public static void executionCutscene(LocalPlayer ent, Entity target) {
