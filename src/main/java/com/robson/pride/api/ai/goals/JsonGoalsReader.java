@@ -45,7 +45,6 @@ public class JsonGoalsReader {
     }
 
     public static void deserializeOnEntityDeathGoals(PrideMobBase prideMobBase){
-
     }
 
     public static void deserializeOnEntityAttackedGoals(){}

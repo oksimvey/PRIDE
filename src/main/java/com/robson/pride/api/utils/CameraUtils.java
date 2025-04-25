@@ -1,15 +1,20 @@
 package com.robson.pride.api.utils;
 
+import com.github.leawind.thirdperson.ThirdPerson;
+import com.github.leawind.thirdperson.api.client.event.ThirdPersonCameraSetupEvent;
+import com.github.leawind.thirdperson.core.CameraAgent;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 
 import java.util.concurrent.TimeUnit;
 
 public class CameraUtils{
+
 
     public static void unlockCamera(LocalPlayer ent, byte duration) {
         LocalPlayerPatch player = EpicFightCapabilities.getEntityPatch(ent, LocalPlayerPatch.class);

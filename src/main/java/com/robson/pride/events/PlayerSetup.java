@@ -1,8 +1,8 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.musiccore.MusicTick;
-import com.robson.pride.api.utils.ClientPlayerTagsAcessor;
 import com.robson.pride.api.utils.StaminaUtils;
+import com.robson.pride.api.utils.TagsUtils;
 import com.robson.pride.progression.NewCap;
 import com.robson.pride.progression.PlayerAttributeSetup;
 import net.minecraft.nbt.CompoundTag;
@@ -21,7 +21,7 @@ public class PlayerSetup {
             player.getPersistentData().putBoolean("isParrying", false);
             playerCommonSetup(player);
             MusicTick.startTick(player);
-            ClientPlayerTagsAcessor.playerTags.put(player, player.getPersistentData());
+            TagsUtils.ClientPlayerTagsAcessor.playerTags.put(player, player.getPersistentData());
         }
     }
 

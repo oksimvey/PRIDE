@@ -1,7 +1,7 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.mechanics.MikiriCounter;
-import com.robson.pride.api.utils.ClientPlayerTagsAcessor;
+import com.robson.pride.api.utils.TagsUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -17,7 +17,7 @@ public class onJump {
         if (event.getEntity() != null) {
             if (event.getEntity() instanceof Player player) {
                     MikiriCounter.setMikiri(player, "Jump", 0, 350);
-                    CompoundTag playertags = ClientPlayerTagsAcessor.playerTags.get(player);
+                    CompoundTag playertags = TagsUtils.ClientPlayerTagsAcessor.playerTags.get(player);
                     if (playertags != null) {
                         int dexlevel = playertags.getInt("DexterityLvl");
                         player.addDeltaMovement(new Vec3(0, dexlevel / 1000f, 0));

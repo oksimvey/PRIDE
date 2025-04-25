@@ -18,7 +18,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.Joint;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.api.animation.types.StaticAnimation;
@@ -37,8 +36,6 @@ import yesman.epicfight.world.damagesource.EpicFightDamageType;
 import java.util.Objects;
 
 public class Guard {
-
-    private static boolean toggle = false;
 
     public static void checkGuard(Entity ent, Entity ddmgent, LivingAttackEvent event) {
         if (ent instanceof ServerPlayer player) {
@@ -121,15 +118,11 @@ public class Guard {
     }
 
     public static StaticAnimation getParryMotion(Player player) {
+        boolean toggle = false;
         if (player != null) {
+            toggle = TagsUtils.toggleBoolean(player.getPersistentData(), "parry_toggle");
             Style style = ItemStackUtils.getStyle(player);
-            if (ItemStackUtils.checkShield(player, InteractionHand.MAIN_HAND)) {
-                return AnimationManager.getInstance().byKeyOrThrow("pride:biped/combat/shield_parry1");
-            }
-            else if (ItemStackUtils.checkShield(player, InteractionHand.OFF_HAND)){
-                return AnimationManager.getInstance().byKeyOrThrow("pride:biped/combat/shield_parry2");
-            }
-            else if (style == PrideStyles.DUAL_WIELD) {
+            if (style == PrideStyles.DUAL_WIELD) {
                 toggle = !toggle;
                 return toggle ? Animations.SWORD_GUARD_ACTIVE_HIT2 : Animations.SWORD_GUARD_ACTIVE_HIT3;
             } else if (style == CapabilityItem.Styles.TWO_HAND) {

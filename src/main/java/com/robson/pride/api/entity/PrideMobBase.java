@@ -2,7 +2,6 @@ package com.robson.pride.api.entity;
 
 import com.robson.pride.api.ai.goals.JsonGoalsReader;
 import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
-import com.robson.pride.api.ai.goals.PrideCombatBehavior;
 import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.api.utils.*;
 import net.minecraft.client.Minecraft;
@@ -14,7 +13,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -70,15 +68,15 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     private CompoundTag skillmotions = new CompoundTag();
 
-    private ListTag pathpositions;
+    public ListTag pathpositions;
 
-    private Vec3 targetpos;
+    public Vec3 targetpos;
 
-    private float speed = 1;
+    public float speed = 1;
 
-    private float moveRadius = 1;
+    public float moveRadius = 1;
 
-    private byte pathcounter = 0;
+    public byte pathcounter = 0;
 
     public LivingEntity target;
 
@@ -91,7 +89,6 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         this.xpReward = 5;
         this.setPersistenceRequired();
         deserializeConstructorJsons();
-        PrideMobPatchReloader.PrideMobPatchProvider provider = (PrideMobPatchReloader.PrideMobPatchProvider) PrideMobPatchReloader.ADVANCED_MOB_PATCH_PROVIDERS.get(this.getType());
     }
 
     private void deserializeConstructorJsons() {
@@ -366,7 +363,7 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         super.travel(travel);
     }
 
-    private void deserializePaths() {
+    public void deserializePaths() {
         if (this.pathcounter < this.pathpositions.size()) {
             CompoundTag path = this.pathpositions.getCompound(this.pathcounter);
             if (path.contains("x") && path.contains("y") && path.contains("z")) {

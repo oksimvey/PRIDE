@@ -2,16 +2,21 @@ package com.robson.pride.api.ai.goals;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.entity.PrideMobBase;
+import com.robson.pride.api.utils.TargetUtil;
+import com.robson.pride.api.utils.TimerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.behavior.MoveToTargetSink;
 
+import java.util.concurrent.TimeUnit;
+
 public class PrideChasingBehavior<T extends AdvancedCustomHumanoidMobPatch<?>> extends MoveToTargetSink {
     private final T mobpatch;
     protected final double attackRadiusSqr;
     private final double speed;
+    private LivingEntity target;
 
     public PrideChasingBehavior(T mobpatch, double speedModifier, double attackRadius) {
         super(150, 250);
@@ -34,9 +39,6 @@ public class PrideChasingBehavior<T extends AdvancedCustomHumanoidMobPatch<?>> e
             if (!this.mobpatch.getEntityState().turningLocked()) {
                 mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
             }
-            if (this.mobpatch.getOriginal() instanceof PrideMobBase prideMobBase && prideMobBase.canTickLod(Minecraft.getInstance())){
-                prideMobBase.deserializePassiveSkills();
-            }
             if (!this.mobpatch.getEntityState().movementLocked()) {
                 boolean withDistance = this.attackRadiusSqr > mob.distanceToSqr(target.getX(), target.getY(), target.getZ());
                 if (this.mobpatch.getStrafingTime() > 0) {
@@ -52,7 +54,6 @@ public class PrideChasingBehavior<T extends AdvancedCustomHumanoidMobPatch<?>> e
                 } else {
                     super.tick(level, mob, p_23619_);
                 }
-
             }
         }
     }

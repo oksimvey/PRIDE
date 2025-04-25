@@ -2,8 +2,8 @@ package com.robson.pride.progression;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.robson.pride.api.utils.AttributeUtils;
-import com.robson.pride.api.utils.ClientPlayerTagsAcessor;
 import com.robson.pride.api.utils.ProgressionUtils;
+import com.robson.pride.api.utils.TagsUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -68,7 +68,7 @@ public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         if (player != null) {
-                CompoundTag variables = ClientPlayerTagsAcessor.playerTags.get(player);
+                CompoundTag variables = TagsUtils.ClientPlayerTagsAcessor.playerTags.get(player);
             guiGraphics.drawString(this.font,
                     ("Strength Level:" + variables.getInt("StrengthLvl")), 118, 14, -1, false);
             guiGraphics.drawString(this.font,

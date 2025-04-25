@@ -34,7 +34,7 @@ public class ProgressionUtils {
     public static int getTotalLevel(Entity ent) {
         if (ent != null) {
             if (ent instanceof Player player) {
-                CompoundTag tag = ClientPlayerTagsAcessor.playerTags.get(player);
+                CompoundTag tag = TagsUtils.ClientPlayerTagsAcessor.playerTags.get(player);
                 return (tag.getInt("StrengthLvl") + tag.getInt("DexterityLvl") + tag.getInt("VigorLvl") + tag.getInt("EnduranceLvl") + tag.getInt("MindLvl")) / 5;
             }
             else if (ent instanceof PrideMobBase prideMobBase){

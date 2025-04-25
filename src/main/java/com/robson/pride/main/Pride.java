@@ -1,7 +1,7 @@
 package com.robson.pride.main;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.nameless.indestructible.network.SPDatapackSync;
+import com.nameless.indestructible.server.network.SPCancelBossInfo;
 import com.robson.pride.api.ai.DataConditions;
 import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.api.data.PrideMobPatchReloader;
@@ -60,6 +60,7 @@ public class Pride {
         EffectRegister.MOB_EFFECTS.register(bus);
         DataConditions.CONDITIONS.register(bus);
         PrideTabRegister.register(bus);
+        bus.addListener(this::doCommonStuff);
     }
 
     private void registerCommands(final RegisterCommandsEvent event) {
@@ -83,20 +84,25 @@ public class Pride {
         event.addListener(new PrideMobPatchReloader());
     }
 
+    private void doCommonStuff(FMLCommonSetupEvent event) {
+        EpicFightNetworkManager.INSTANCE.registerMessage(99, com.nameless.indestructible.server.network.SPDatapackSync.class, com.nameless.indestructible.server.network.SPDatapackSync::toBytes, com.nameless.indestructible.server.network.SPDatapackSync::fromBytes, com.nameless.indestructible.server.network.SPDatapackSync::handle);
+        EpicFightNetworkManager.INSTANCE.registerMessage(98, SPCancelBossInfo.class, SPCancelBossInfo::toBytes, SPCancelBossInfo::fromBytes, SPCancelBossInfo::handle);
+    }
+
     private void onDatapackSync(final OnDatapackSyncEvent event) {
         ServerPlayer player = event.getPlayer();
         if (player != null) {
             if (!player.getServer().isSingleplayerOwner(player.getGameProfile())) {
-                SPDatapackSync mobPatchPacket = new SPDatapackSync(PrideMobPatchReloader.getTagCount());
+                com.nameless.indestructible.server.network.SPDatapackSync mobPatchPacket = new com.nameless.indestructible.server.network.SPDatapackSync(PrideMobPatchReloader.getTagCount());
                 PrideMobPatchReloader.getDataStream().forEach(mobPatchPacket::write);
                 EpicFightNetworkManager.sendToPlayer(mobPatchPacket, player);
             }
         } else {
-            event.getPlayerList().getPlayers().forEach((serverPlayer -> {
-                SPDatapackSync mobPatchPacket = new SPDatapackSync(PrideMobPatchReloader.getTagCount());
+            event.getPlayerList().getPlayers().forEach((serverPlayer) -> {
+                com.nameless.indestructible.server.network.SPDatapackSync mobPatchPacket = new com.nameless.indestructible.server.network.SPDatapackSync(PrideMobPatchReloader.getTagCount());
                 PrideMobPatchReloader.getDataStream().forEach(mobPatchPacket::write);
                 EpicFightNetworkManager.sendToPlayer(mobPatchPacket, serverPlayer);
-            }));
+            });
         }
     }
 

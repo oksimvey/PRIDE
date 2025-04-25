@@ -17,9 +17,8 @@ public class CommandUtils {
         }
     }
 
-    public static boolean executeOnClient(LocalPlayer player, String command) {
+    public static void executeOnClient(LocalPlayer player, String command) {
         ClientCommandHandler.runCommand(command);
-        return true;
     }
 }
 

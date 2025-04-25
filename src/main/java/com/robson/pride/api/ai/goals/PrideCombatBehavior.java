@@ -1,5 +1,6 @@
 package com.robson.pride.api.ai.goals;
 
+import com.github.leawind.thirdperson.api.client.event.ThirdPersonCameraSetupEvent;
 import com.nameless.indestructible.mixin.CombatBehaviorsMixin;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.entity.PrideMobBase;
@@ -37,38 +38,6 @@ public class PrideCombatBehavior<T extends MobPatch<?>> extends Behavior<Mob> {
 
     protected boolean canStillUse(ServerLevel levelIn, Mob entityIn, long gameTimeIn) {
         return this.checkExtraStartConditions(levelIn, entityIn) && BehaviorUtils.canSee(entityIn, this.mobpatch.getTarget()) && !this.mobpatch.getEntityState().hurt();
-    }
-
-    protected void tick(ServerLevel worldIn, Mob entityIn, long gameTimeIn) {
-        MobPatch mobPatch = this.mobpatch;
-        if (mobPatch instanceof AdvancedCustomHumanoidMobPatch<?> ACHMobpatch) {
-            boolean inaction = ACHMobpatch.isBlocking() || ACHMobpatch.getInactionTime() > 0;
-            if (this.mobpatch.getTarget() != null) {
-                if (mobPatch.getOriginal() instanceof PrideMobBase prideMobBase && prideMobBase.canTickLod(Minecraft.getInstance())) CommandUtils.executeonEntity(prideMobBase, "say top");
-                EntityState state = this.mobpatch.getEntityState();
-                this.combatBehaviors.tick();
-                if (this.combatBehaviors.hasActivatedMove()) {
-                    if (state.hurt() && state.hurtLevel() >= ACHMobpatch.getHurtResistLevel()) {
-                        ((CombatBehaviorsMixin)this.combatBehaviors).setCurrentBehaviorPointer(-1);
-                        return;
-                    }
-                    if (state.canBasicAttack() && !inaction) {
-                        CombatBehaviors.Behavior<T> result = this.combatBehaviors.tryProceed();
-                        if (result != null) {
-                            ACHMobpatch.resetMotion();
-                            result.execute(this.mobpatch);
-                        }
-                    }
-                }
-                else if (!state.inaction() && !inaction) {
-                    CombatBehaviors.Behavior<T> result = this.combatBehaviors.selectRandomBehaviorSeries();
-                    if (result != null) {
-                        ACHMobpatch.resetMotion();
-                        result.execute(this.mobpatch);
-                    }
-                }
-            }
-        }
     }
 
     protected boolean isValidTarget(LivingEntity attackTarget) {
