@@ -67,7 +67,8 @@
     "short": "epicfight:biped/combat/hit_short",
     "long": "epicfight:biped/combat/hit_long",
     "knockdown": "epicfight:biped/combat/knockdown",
-    "fall": "epicfight:biped/living/landing"
+    "fall": "epicfight:biped/living/landing",
+    "neutralize": "epicfight:biped/skill/guard_break1"
   },
   "textures": ["pride:textures/entities/savana/dueler1.png"],
   "skills": ["open_door", "path_sneak", "path_roll"],

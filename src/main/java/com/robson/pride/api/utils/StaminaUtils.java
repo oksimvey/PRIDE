@@ -1,9 +1,13 @@
 package com.robson.pride.api.utils;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
+import com.nameless.indestructible.world.capability.AdvancedCustomMobPatch;
+import com.nameless.indestructible.world.capability.AdvancedCustomMobPatch;
+import com.robson.pride.api.entity.PrideMobPatch;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 public class StaminaUtils {
@@ -17,9 +21,14 @@ public class StaminaUtils {
                 }
             }
             else {
-                AdvancedCustomHumanoidMobPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
+                LivingEntityPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
                 if (mobPatch != null) {
-                    return mobPatch.getStamina();
+                    if (mobPatch instanceof AdvancedCustomHumanoidMobPatch mobPatch1){
+                        return mobPatch1.getStamina();
+                    }
+                   if (mobPatch instanceof AdvancedCustomMobPatch mobPatch1){
+                       return mobPatch1.getStamina();
+                   }
                 }
             }
         }
@@ -35,9 +44,14 @@ public class StaminaUtils {
                 }
             }
             else {
-                AdvancedCustomHumanoidMobPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
+                LivingEntityPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
                 if (mobPatch != null) {
-                    return mobPatch.getMaxStamina();
+                    if (mobPatch instanceof AdvancedCustomHumanoidMobPatch mobPatch1){
+                        return mobPatch1.getMaxStamina();
+                    }
+                    if (mobPatch instanceof AdvancedCustomMobPatch mobPatch1){
+                        return mobPatch1.getMaxStamina();
+                    }
                 }
             }
         }
@@ -52,9 +66,15 @@ public class StaminaUtils {
                     playerPatch.setStamina(amount);
                 }
             } else {
-                AdvancedCustomHumanoidMobPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
+                LivingEntityPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
                 if (mobPatch != null) {
-                    mobPatch.setStamina(amount);
+                    if (mobPatch instanceof AdvancedCustomHumanoidMobPatch mobPatch1){
+                        mobPatch1.setStamina(amount);
+                        return;
+                    }
+                    if (mobPatch instanceof AdvancedCustomMobPatch mobPatch1){
+                        mobPatch1.setStamina(amount);
+                    }
                 }
             }
         }

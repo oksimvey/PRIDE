@@ -1,6 +1,7 @@
 package com.robson.pride.api.mechanics;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
+import com.nameless.indestructible.world.capability.AdvancedCustomMobPatch;
 import com.robson.pride.api.utils.PlaySoundUtils;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.registries.ParticleRegister;
@@ -87,10 +88,10 @@ public class PerilousAttack {
             player.stopUsingItem();
         }
         else {
-            AdvancedCustomHumanoidMobPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
+            AdvancedCustomMobPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomMobPatch.class);
             if (livingEntityPatch != null) {
-                livingEntityPatch.setParry(false);
                 livingEntityPatch.setBlocking(false);
+                livingEntityPatch.setParried(false);
             }
         }
     }

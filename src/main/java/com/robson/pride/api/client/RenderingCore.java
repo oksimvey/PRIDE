@@ -22,8 +22,9 @@ public class RenderingCore {
         if (client.player != null) {
             entityRenderer(client.player);
             Stealth.renderCriticalParticle(client.player, TargetUtil.getTarget(client.player));
-            for (Entity ent : client.player.level().getEntities(client.player, MathUtils.createAABBByLookingAngle(client.gameRenderer.getMainCamera().getPosition(), client.gameRenderer.getMainCamera().getLookVector(), 50))){
+            for (Entity ent : client.player.level().getEntities(client.player, MathUtils.createAABBAroundEnt(client.player, 50))){
                 if (ent != null) {
+                    
                     if (ent instanceof LivingEntity living) {
                         entityRenderer(living);
                     }

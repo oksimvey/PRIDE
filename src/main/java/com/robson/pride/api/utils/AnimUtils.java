@@ -27,8 +27,8 @@ public class AnimUtils {
                 if (animation != null) {
                     if (livingEntityPatch instanceof AdvancedCustomHumanoidMobPatch<?> AHPatch) {
                         AHPatch.setBlocking(false);
-                        AHPatch.setParry(false);
-                        AHPatch.resetMotion();
+                        AHPatch.setParried(false);
+                        AHPatch.resetActionTick();
                        AHPatch.playAnimationSynchronized(animation, convert, SPPlayAnimation::new);
                     }
                     else livingEntityPatch.playAnimationSynchronized(animation, convert, SPPlayAnimation::new);
@@ -160,7 +160,7 @@ public class AnimUtils {
         LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
         if (livingEntityPatch != null) {
             if (livingEntityPatch instanceof AdvancedCustomHumanoidMobPatch<?> mobPatch){
-                mobPatch.resetMotion();
+                mobPatch.resetActionTick();
             }
             livingEntityPatch.cancelAnyAction();
         }

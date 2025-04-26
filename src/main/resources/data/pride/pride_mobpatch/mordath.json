@@ -1,0 +1,174 @@
+{
+  "model": "epicfight:entity/biped",
+  "armature": "epicfight:entity/biped",
+  "renderer": "zombie",
+  "isHumanoid": true,
+  "faction": "undead",
+  "boss_bar": false,
+  "custom_texture": "indestructible:textures/gui/boss_bar.png",
+  "custom_name": "",
+  "attributes": {
+    "impact": 1.0,
+    "armor_negation": 0,
+    "max_strikes": 3,
+    "chasing_speed": 1,
+    "scale": 1.05,
+    "max_stamina": 20,
+    "stamina_regan_multiply": 0.75,
+    "stamina_regan_delay": 2000,
+    "has_stun_reduction": true,
+    "max_stun_shield": 100,
+    "stun_shield_regan_multiply": 100,
+    "stun_shield_regan_delay": 30,
+    "stamina_lose_multiply": 0,
+    "guard_radius": 5,
+    "attack_radius": 1.5,
+    "health": 100
+  },
+  "default_livingmotions": {
+    "idle": "epicfight:biped/living/idle",
+    "walk": "epicfight:biped/living/walk",
+    "chase": "epicfight:biped/living/walk",
+    "death": "epicfight:biped/living/death"
+  },
+  "humanoid_weapon_motions": [
+    {
+      "weapon_categories": [
+        "axe",
+        "hoe",
+        "pickaxe",
+        "shovel",
+        "sword"
+      ],
+      "style": "common",
+      "livingmotions": {
+        "chase": "epicfight:biped/living/hold_longsword",
+        "walk": "epicfight:biped/living/walk"
+      }
+    },
+    {
+      "weapon_categories": [
+        "longsword"
+      ],
+      "style": "common",
+      "livingmotions": {
+        "chase": "epicfight:biped/living/hold_longsword",
+        "walk": "epicfight:biped/living/hold_longsword"
+      }
+    }
+  ],
+  "custom_guard_motion": [
+    {
+      "weapon_categories": [
+        "longsword",
+        "tachi",
+        "sword"
+      ],
+      "style": "common",
+      "guard": "indestructible:guard/guard_shield",
+      "stamina_cost_multiply": 3,
+      "can_block_projectile": false,
+      "parry_cost_multiply": 1.0,
+      "parry_animation": []
+    }
+  ],
+  "stun_animations": {
+    "short": "epicfight:biped/combat/hit_short",
+    "long": "epicfight:biped/combat/hit_long",
+    "knockdown": "epicfight:biped/combat/knockdown",
+    "fall": "epicfight:biped/living/landing"
+  },
+  "textures": [
+    "pride:textures/entities/gods/mordath.png"
+  ],
+  "skills": {
+    "open_door": true,
+    "path_sneak": "pride:biped/skill/mob_sneak",
+    "path_roll": "wom:biped/skill/dodge_forward"
+  },
+  "equipment": [
+    {
+      "variations": [
+        0
+      ],
+      "slot": "mainhand",
+      "item": "wom:antitheus"
+    },
+    {
+      "variations": [
+        0
+      ],
+      "slot": "head",
+      "item": "irons_spellbooks:cultist_helmet"
+    },
+    {
+      "variations": [
+        0
+      ],
+      "slot": "chest",
+      "item": "irons_spellbooks:cultist_chestplate"
+    },
+    {
+      "variations": [
+        0
+      ],
+      "slot": "leg",
+      "item": "irons_spellbooks:cultist_leggings"
+    },
+    {
+      "variations": [
+        0
+      ],
+      "slot": "feet",
+      "item": "irons_spellbooks:cultist_boots"
+    }
+  ],
+  "combat_behavior": [
+    {
+      "weapon_categories": [
+        "pride_longsword"
+      ],
+      "style": "shield_offhand",
+      "behavior_series": [
+        {
+          "weight": 100,
+          "canBeInterrupted": false,
+          "looping": false,
+          "behaviors": [
+            {
+              "conditions": [
+                {
+                  "predicate": "pride:not_stuck",
+                  "invert": true
+                },
+                {
+                  "predicate": "indestructible:using_item",
+                  "edible": true
+                },
+                {
+                  "predicate": "within_distance",
+                  "min": 0.0,
+                  "max": 5.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
+              ],
+              "animation": "pride:biped/skill/mob_sneak",
+              "convert_time": 0.25,
+              "command_list": [
+                {
+                  "time": 0,
+                  "command": "pride @s mob deserialize_path",
+                  "execute_at_target": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

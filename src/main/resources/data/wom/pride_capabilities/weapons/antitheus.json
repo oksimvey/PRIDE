@@ -1,0 +1,27 @@
+{
+  "attributes":
+  {
+    "common":
+    {
+      "weight": 20
+    }
+  },
+  "colliders": [
+    {
+      "minX": -0.75,
+      "maxX": 0.5,
+      "minY": -0.75,
+      "maxY": 0.5,
+      "minZ": 2,
+      "maxZ": 6
+    }
+  ],
+  "requiredStrength": 20,
+  "isWeapon": true,
+  "requiredDexterity": 50,
+  "scaleStrength": "C",
+  "scaleDexterity": "S",
+  "element": "Darkness",
+  "skill": "Longsword Skill",
+  "type": "pride:pride_scythe"
+}

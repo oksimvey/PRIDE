@@ -48,7 +48,7 @@ public class PlayerSetup {
         event.getOriginal().revive();
         CompoundTag originaltag = event.getOriginal().getPersistentData();
         CompoundTag clonetag = event.getEntity().getPersistentData();
-        NewCap.setupVariables(originaltag, clonetag);
+        NewCap.setupVariables( originaltag, clonetag);
     }
 
     public static void playerCommonSetup(Player player) {

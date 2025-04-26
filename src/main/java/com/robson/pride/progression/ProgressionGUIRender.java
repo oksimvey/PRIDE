@@ -73,6 +73,9 @@ public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI
                     ("Strength Level:" + variables.getInt("StrengthLvl")), 118, 14, -1, false);
             guiGraphics.drawString(this.font,
 
+                    ("Money:" + variables.getLong("pride_money")), 118, 25, -1, false);
+            guiGraphics.drawString(this.font,
+
                     ("Dexterity Level:" + variables.getInt("DexterityLvl")), 119, 42, -1, false);
             guiGraphics.drawString(this.font,
 

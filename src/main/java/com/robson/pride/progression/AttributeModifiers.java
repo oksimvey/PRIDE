@@ -99,6 +99,9 @@ public class AttributeModifiers {
                 }
                 float agroup = mindmofier + dexmodifier + strmodifier;
                 float finalmodifier = agroup  / modifiers / 2;
+                if (defaultmodifier * finalmodifier < -defaultmodifier * 0.95){
+                    return -defaultmodifier * 0.95f;
+                }
                 return defaultmodifier * finalmodifier;
             }
         }

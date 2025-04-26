@@ -1,13 +1,14 @@
 package com.robson.pride.progression;
 
 import com.robson.pride.api.utils.ElementalUtils;
+import com.robson.pride.api.utils.TagsUtils;
 import com.robson.pride.registries.WeaponSkillRegister;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 
 public class NewCap {
 
-    public static void setupVariables(CompoundTag oldtag, CompoundTag newtag) {
+    public static void setupVariables( CompoundTag oldtag, CompoundTag newtag) {
         newtag.putInt("StrengthLvl", oldtag.getInt("StrengthLvl"));
         newtag.putInt("DexterityLvl", oldtag.getInt("DexterityLvl"));
         newtag.putInt("VigorLvl", oldtag.getInt("VigorLvl"));
@@ -29,6 +30,9 @@ public class NewCap {
         }
         if (oldtag.contains("pride_quests")) {
             newtag.put("pride_quests", oldtag.getList("pride_quests", 8));
+        }
+        if (oldtag.contains("pride_money")){
+            newtag.putLong("pride_money", oldtag.getLong("pride_money"));
         }
     }
 

@@ -123,7 +123,7 @@ dependencies {
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     implementation fg.deobf("curse.maven:epic-fight-mod-405076:5856683")
-    implementation fg.deobf("curse.maven:epic-fight-indestructible-915201:5717023")
+    implementation fg.deobf("curse.maven:epic-fight-indestructible-915201:6451998")
     implementation fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:5838009")
     implementation fg.deobf("curse.maven:leawind-third-person-930880:5961735")
     implementation fg.deobf("curse.maven:weapons-of-miracles-epicfight-918614:5889471")

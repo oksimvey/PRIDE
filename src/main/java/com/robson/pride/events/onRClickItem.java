@@ -1,13 +1,9 @@
 package com.robson.pride.events;
 
-import com.github.leawind.thirdperson.ThirdPerson;
-import com.github.leawind.thirdperson.api.client.event.ThirdPersonCameraSetupEvent;
 import com.robson.pride.api.mechanics.Parry;
-import com.robson.pride.api.utils.CameraUtils;
 import com.robson.pride.api.utils.ItemStackUtils;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -26,6 +22,7 @@ public class onRClickItem {
             if (ItemStackUtils.checkShield(player, InteractionHand.MAIN_HAND) || ItemStackUtils.checkShield(player, InteractionHand.OFF_HAND)){
                 Parry.ParryWindow(player);
             }
+            player.getPersistentData().putLong("pride_money", player.getPersistentData().getLong("pride_money") + 100);
         }
     }
 }

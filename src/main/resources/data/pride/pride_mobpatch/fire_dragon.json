@@ -1,6 +1,6 @@
 {
-  "model": "epicfight:entity/biped",
-  "armature": "epicfight:entity/biped",
+  "model": "epicfight:entity/dragon",
+  "armature": "epicfight:entity/dragon",
   "renderer": "epicfight:custom",
   "isHumanoid": false,
   "faction": "neutral",
@@ -23,29 +23,11 @@
     "attack_radius": 1.5
   },
   "default_livingmotions": {
-    "idle": "epicfight:biped/living/idle",
-    "walk": "epicfight:biped/living/walk",
-    "chase": "epicfight:biped/living/walk",
-    "death": "epicfight:biped/living/death"
+    "idle": "epicfight:dragon/idle",
+    "walk": "epicfight:dragon/walk",
+    "chase": "epicfight:dragon/walk",
+    "death": "epicfight:dragon/death"
   },
-  "humanoid_weapon_motions": [
-    {
-      "weapon_categories": ["axe", "hoe", "pickaxe", "shovel", "sword"],
-      "style":"common",
-      "livingmotions": {
-        "chase": "epicfight:biped/living/hold_longsword",
-        "walk": "epicfight:biped/living/walk"
-      }
-    },
-    {
-      "weapon_categories": ["longsword"],
-      "style":"common",
-      "livingmotions": {
-        "chase": "epicfight:biped/living/hold_longsword",
-        "walk": "epicfight:biped/living/hold_longsword"
-      }
-    }
-  ],
   "custom_guard_motion": [
     {
       "weapon_categories": ["longsword","tachi","sword"],
@@ -58,16 +40,16 @@
     }
   ],
   "stun_animations": {
-    "short": "epicfight:biped/combat/hit_short",
-    "long": "epicfight:biped/combat/hit_long",
-    "knockdown": "epicfight:biped/combat/knockdown",
-    "fall": "epicfight:biped/living/landing",
-    "neutralize": "epicfight:biped/skill/guard_break2"
+    "short": "epicfight:dragon/neutralized",
+    "long": "epicfight:dragon/neutralized",
+    "knockdown": "epicfight:dragon/neutralized",
+    "fall": "epicfight:dragon/neutralized",
+    "neutralize": "epicfight:dragon/neutralized"
   },
   "textures": ["pride:textures/entities/special/fire_dragon.png"],
   "combat_behavior": [
     {
-      "weapon_categories": ["uchigatana","tachi"],
+      "weapon_categories": ["common"],
       "style": "common",
       "behavior_series": [
         {
@@ -79,8 +61,33 @@
               "conditions": [
                 {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
-              "animation": "epicfight:biped/combat/tachi_auto1"
-
+              "animation": "epicfight:dragon/attack1"
+            }
+          ]
+        },
+        {
+          "weight": 1.5,
+          "canBeInterrupted": false,
+          "looping": false,
+          "behaviors": [
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "epicfight:dragon/attack2"
+            }
+          ]
+        },
+        {
+          "weight": 1.5,
+          "canBeInterrupted": false,
+          "looping": false,
+          "behaviors": [
+            {
+              "conditions": [
+                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+              ],
+              "animation": "epicfight:dragon/attack3"
             }
           ]
         }

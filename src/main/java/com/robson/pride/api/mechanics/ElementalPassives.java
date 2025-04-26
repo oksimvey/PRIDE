@@ -4,6 +4,7 @@ import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.particles.StringParticle;
+import com.robson.pride.progression.AttributeModifiers;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.WeaponSkillRegister;
@@ -16,6 +17,7 @@ import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -47,27 +49,38 @@ public class ElementalPassives {
                     }
                 }
             }
+            float damage = event.getAmount();
+            InteractionHand hand = ItemStackUtils.checkAttackingHand(dmgent);
+            if (hand != null && dmgent instanceof Player dmgent1) {
+                float extradamage = 0;
+                if (hand == InteractionHand.MAIN_HAND) {
+                    extradamage = AttributeModifiers.calculateModifier(dmgent1, dmgent1.getMainHandItem(), event.getAmount());
+                } else if (hand == InteractionHand.OFF_HAND) {
+                    extradamage = AttributeModifiers.calculateModifier(dmgent1, dmgent1.getOffhandItem(), event.getAmount());
+                }
+                damage += extradamage;
+            }
             switch (element) {
 
-                case "Darkness" -> darknessPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:darkness_power")));
+                case "Darkness" -> darknessPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:darkness_power")));
 
-                case "Light" -> lightPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:light_power")));
+                case "Light" -> lightPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:light_power")));
 
-                case "Thunder" -> thunderPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:thunder_power")), MathUtils.getRandomInt(999999999));
+                case "Thunder" -> thunderPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:thunder_power")), MathUtils.getRandomInt(999999999));
 
-                case "Sun" -> sunPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:sun_power")));
+                case "Sun" -> sunPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:sun_power")));
 
-                case "Moon" -> moonPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:moon_power")));
+                case "Moon" -> moonPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:moon_power")));
 
-                case "Blood" -> bloodPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:blood_power")));
+                case "Blood" -> bloodPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:blood_power")));
 
-                case "Wind" -> windPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:wind_power")));
+                case "Wind" -> windPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:wind_power")));
 
-                case "Nature" -> naturePassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:nature_power")));
+                case "Nature" -> naturePassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:nature_power")));
 
-                case "Ice" -> icePassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:ice_power")));
+                case "Ice" -> icePassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:ice_power")));
 
-                case "Water" -> waterPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(event.getAmount(), AttributeUtils.getAttributeValue(dmgent, "pride:water_power")));
+                case "Water" -> waterPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:water_power")));
             }
         }
     }
