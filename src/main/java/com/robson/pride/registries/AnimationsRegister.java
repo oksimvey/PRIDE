@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.stringtemplate.v4.ST;
 import reascer.wom.animation.attacks.SpecialAttackAnimation;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
@@ -16,6 +17,7 @@ import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.api.forgeevent.AnimationRegistryEvent;
 import yesman.epicfight.api.utils.TimePairList;
 import yesman.epicfight.api.utils.math.ValueModifier;
+import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.gameasset.ColliderPreset;
@@ -23,8 +25,10 @@ import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.model.armature.HumanoidArmature;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
+import yesman.epicfight.world.damagesource.EpicFightDamageType;
 import yesman.epicfight.world.damagesource.StunType;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class AnimationsRegister {
@@ -84,6 +88,19 @@ public class AnimationsRegister {
     public static StaticAnimation SWORD_ONEHAND_AUTO2;
     public static StaticAnimation SWORD_ONEHAND_AUTO3;
     public static StaticAnimation SWORD_ONEHAND_AUTO4;
+    public static StaticAnimation MAUL_HOLD;
+    public static StaticAnimation SPEAR_ONEHAND;
+    public static StaticAnimation DUAL_GS_IDLE;
+    public static StaticAnimation DUAL_GS_WALK;
+    public static StaticAnimation DUAL_GS_RUN;
+    public static StaticAnimation DUAL_GREATSWORD_AUTO1;
+    public static StaticAnimation DUAL_GREATSWORD_AUTO2;
+    public static StaticAnimation DUAL_GREATSWORD_AUTO3;
+    public static StaticAnimation DUAL_GREATSWORD_AUTO4;
+    public static StaticAnimation DUAL_GREATSWORD_DASH;
+    public static StaticAnimation DUAL_GREATSWORD_AIRSLASH;
+    public static StaticAnimation DUAL_GREATSWORD_SKILL;
+    public static StaticAnimation LION_CLOW;
 
     @SubscribeEvent
     public static void registerAnimations(AnimationRegistryEvent event) {
@@ -93,7 +110,19 @@ public class AnimationsRegister {
     private static void build() {
 
         HumanoidArmature biped = Armatures.BIPED;
-
+        DUAL_GREATSWORD_AUTO1 = (new BasicAttackAnimation(0.25F, "biped/combat/colossalsword/greatsword_dual_auto_1", biped, new AttackAnimation.Phase[]{new AttackAnimation.Phase(0.0F, 0.2F, 0.4F, 0.45F, 0.45F, InteractionHand.OFF_HAND, biped.toolL, (Collider)null), (new AttackAnimation.Phase(0.45F, 0.5F, 0.7F, 0.8F, Float.MAX_VALUE, biped.toolR, (Collider)null)).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD)})).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.7F)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.7F), 1).addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, Animations.ReusableSources.CONSTANT_ONE);
+        DUAL_GREATSWORD_AUTO2 = (new BasicAttackAnimation(0.15F, 0.35F, 0.85F, 0.85F, null, biped.toolR, "biped/combat/colossalsword/greatsword_dual_auto_2", biped)).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.FALL).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.5F)).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(0.8F)).addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, Animations.ReusableSources.CONSTANT_ONE).addEvents(new AnimationEvent.TimeStampedEvent[]{AnimationEvent.TimeStampedEvent.create(0.85F, Animations.ReusableSources.FRACTURE_GROUND_SIMPLE, AnimationEvent.Side.CLIENT).params(new Object[]{new Vec3f(0.0F, -1.0F, 2.0F), Armatures.BIPED.rootJoint, (double)1.5F, 0.55F})});
+        DUAL_GREATSWORD_AUTO3 = (new BasicAttackAnimation(0.15F, "biped/combat/colossalsword/greatsword_dual_auto_3", biped, new AttackAnimation.Phase[]{(new AttackAnimation.Phase(0.0F, 0.2F, 0.4F, 0.45F, 0.45F, biped.toolR, (Collider)null)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.6F)), (new AttackAnimation.Phase(0.45F, 0.55F, 0.7F, 0.9F, Float.MAX_VALUE, InteractionHand.OFF_HAND, biped.toolL, (Collider)null)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.0F)).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.HOLD)})).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.setter(3.5F)).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(1.5F), 1).addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, Animations.ReusableSources.CONSTANT_ONE).addEvents(new AnimationEvent.TimeStampedEvent[]{AnimationEvent.TimeStampedEvent.create(0.8F, Animations.ReusableSources.FRACTURE_GROUND_SIMPLE, AnimationEvent.Side.CLIENT).params(new Object[]{new Vec3f(0.0F, -0.0F, -2.0F), Armatures.BIPED.rootJoint, 1.15, 0.55F})});
+        DUAL_GREATSWORD_AUTO4 = (new BasicAttackAnimation(0.1F, 0.8F, 1.0F, 1.25F, InteractionHand.OFF_HAND, null, biped.rootJoint, "biped/combat/colossalsword/greatsword_dual_auto_4", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.8F)).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.LONG).addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, Animations.ReusableSources.CONSTANT_ONE);
+        DUAL_GREATSWORD_DASH = (new BasicAttackAnimation(0.05F, 0.1F, 0.4F, 0.4F, null, biped.rootJoint, "biped/combat/colossalsword/greatsword_dual_dash", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.2F)).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(1.5F)).addProperty(AnimationProperty.AttackPhaseProperty.PARTICLE, EpicFightParticles.HIT_BLUNT).addProperty(AnimationProperty.AttackPhaseProperty.HIT_SOUND, (SoundEvent)EpicFightSounds.BLUNT_HIT.get()).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.LONG).addProperty(AnimationProperty.AttackAnimationProperty.FIXED_MOVE_DISTANCE, false).addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, Animations.ReusableSources.CONSTANT_ONE);
+        DUAL_GREATSWORD_AIRSLASH = (new BasicAttackAnimation(0.05F, 0.25F, 0.4F, 0.45F, InteractionHand.OFF_HAND, null, biped.rootJoint, "biped/combat/colossalsword/greatsword_dual_airslash", biped)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.25F)).addProperty(AnimationProperty.AttackPhaseProperty.SOURCE_TAG, Set.of(EpicFightDamageType.FINISHER)).addProperty(AnimationProperty.ActionAnimationProperty.CANCELABLE_MOVE, false).addProperty(AnimationProperty.ActionAnimationProperty.NO_GRAVITY_TIME, TimePairList.create(new float[]{0.0F, 0.2F})).addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, Animations.ReusableSources.CONSTANT_ONE);
+        DUAL_GREATSWORD_SKILL = (new AttackAnimation(0.15F, "biped/combat/colossalsword/greatsword_dual_earthquake", biped, new AttackAnimation.Phase[]{(new AttackAnimation.Phase(0.0F, 1.1F, 1.1F, 1.25F, 1.25F, biped.toolR, null)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.5F)), (new AttackAnimation.Phase(1.25F, 1.3F, 1.4F, 1.5F, Float.MAX_VALUE, biped.rootJoint, null)).addProperty(AnimationProperty.AttackPhaseProperty.STUN_TYPE, StunType.KNOCKDOWN).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.5F))})).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(2.0F), 1).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.05F).addEvents(new AnimationEvent.TimeStampedEvent[]{AnimationEvent.TimeStampedEvent.create(1.3F, Animations.ReusableSources.FRACTURE_GROUND_SIMPLE, AnimationEvent.Side.CLIENT).params(new Object[]{new Vec3f(0.0F, -0.24F, -2.0F), Armatures.BIPED.rootJoint, 2.55, 0.55F})});
+        LION_CLOW = (new AttackAnimation(0.15F, "biped/combat/colossalsword/lion_clow", biped, new AttackAnimation.Phase[]{(new AttackAnimation.Phase(0.0F, 2.1F, 2.4F, 2.45F, 2.45F, biped.toolR, null)).addProperty(AnimationProperty.AttackPhaseProperty.IMPACT_MODIFIER, ValueModifier.multiplier(2.0F)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(1.2F))})).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.05F).addProperty(AnimationProperty.ActionAnimationProperty.MOVE_VERTICAL, true).addProperty(AnimationProperty.ActionAnimationProperty.STOP_MOVEMENT, true).addState(EntityState.MOVEMENT_LOCKED, true).addEvents(new AnimationEvent.TimeStampedEvent[]{AnimationEvent.TimeStampedEvent.create(2.3F, Animations.ReusableSources.FRACTURE_GROUND_SIMPLE, AnimationEvent.Side.CLIENT).params(new Object[]{new Vec3f(0.0F, -0.24F, -2.0F), Armatures.BIPED.rootJoint, 2.55, 0.55F})});
+        DUAL_GS_IDLE = new StaticAnimation(true, "pride:biped/combat/colossalsword/greatsword_dual_idle", biped);
+        DUAL_GS_WALK = new MovementAnimation(true, "pride:biped/combat/colossalsword/greatsword_dual_walk", biped);
+        DUAL_GS_RUN = new MovementAnimation(true, "pride:biped/combat/colossalsword/greatsword_dual_run", biped);
+        SPEAR_ONEHAND = new BasicAttackAnimation(0.16F, 0.1F, 0.2F, 0.45F, (Collider)null, biped.toolR, "biped/combat/maul/spear_onehand_auto", biped);
+        MAUL_HOLD = new StaticAnimation(true, "pride:biped/combat/maul/hold_maul", biped);
         GREATSWORD_HOLD = (new StaticAnimation(true, "pride:biped/combat/greatsword/greatsword_dual_idle", biped));
         GREATSWORD_RUN = (new MovementAnimation(true, "pride:biped/combat/greatsword/greatsword_dual_run", biped));
         SHORTSWORD_DUAL_AUTO1 = (new BasicAttackAnimation(0.08F, 0.1F, 0.2F, 0.3F, (Collider)null, biped.toolR, "biped/combat/shortsword/sword_dual_auto1", biped)).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.6F).newTimePair(0.0F, 0.2F).addStateRemoveOld(EntityState.CAN_BASIC_ATTACK, false);

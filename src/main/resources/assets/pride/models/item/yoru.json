@@ -1,0 +1,6 @@
+{
+  "parent": "prominent:item/yoru",
+  "textures": {
+    "layer0": "prominent:item/transmog/yoru"
+  }
+}

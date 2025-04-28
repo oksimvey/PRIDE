@@ -4,6 +4,7 @@ import com.robson.pride.api.skillcore.WeaponArtItem;
 import com.robson.pride.item.materials.ElementalGem;
 import com.robson.pride.item.spawnegg.SpawnEggBase;
 import com.robson.pride.item.weapons.IronScythe;
+import com.robson.pride.item.weapons.Yoru;
 import com.robson.pride.main.Pride;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
@@ -16,6 +17,7 @@ public class ItemsRegister {
     public static final RegistryObject<Item> EuropeanLongsword = REGISTRY.register("european_longsword", com.robson.pride.item.weapons.EuropeanLongsword::new);
     public static final RegistryObject<Item> IRON_SCYTHE = REGISTRY.register("iron_scythe", IronScythe::new);
     public static final RegistryObject<Item> KICK_BOX = REGISTRY.register("kickbox", com.robson.pride.item.fightstyles.KickBoxItem::new);
+    public static final RegistryObject<Item> YORU = REGISTRY.register("yoru", Yoru::new);
     public static final RegistryObject<Item> ELEMENTAL_GEM = REGISTRY.register("elemental_gem",
             () -> new ElementalGem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> WEAPON_ART = REGISTRY.register("weapon_art",
