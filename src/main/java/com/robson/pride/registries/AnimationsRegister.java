@@ -6,12 +6,9 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import reascer.wom.animation.attacks.SpecialAttackAnimation;
-import reascer.wom.gameasset.WOMAnimations;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.*;
@@ -28,7 +25,6 @@ import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 import yesman.epicfight.world.damagesource.StunType;
 
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class AnimationsRegister {
@@ -75,8 +71,19 @@ public class AnimationsRegister {
     public static StaticAnimation MOB_SHOOT;
     public static StaticAnimation MOB_SNEAK;
     public static StaticAnimation DIVINE_RESURRECTION;
-
-    public static ConcurrentHashMap<LivingEntity, Byte> pullLvl = new ConcurrentHashMap<>();
+    public static StaticAnimation SHORTSWORD_AUTO1;
+    public static StaticAnimation SHORTSWORD_AUTO2;
+    public static StaticAnimation SHORTSWORD_AUTO3;
+    public static StaticAnimation SHORTSWORD_AUTO4;
+    public static StaticAnimation SHORTSWORD_DUAL_AUTO1;
+    public static StaticAnimation SHORTSWORD_DUAL_AUTO2;
+    public static StaticAnimation SHORTSWORD_DUAL_AUTO3;
+    public static StaticAnimation GREATSWORD_HOLD;
+    public static StaticAnimation GREATSWORD_RUN;
+    public static StaticAnimation SWORD_ONEHAND_AUTO1;
+    public static StaticAnimation SWORD_ONEHAND_AUTO2;
+    public static StaticAnimation SWORD_ONEHAND_AUTO3;
+    public static StaticAnimation SWORD_ONEHAND_AUTO4;
 
     @SubscribeEvent
     public static void registerAnimations(AnimationRegistryEvent event) {
@@ -87,6 +94,19 @@ public class AnimationsRegister {
 
         HumanoidArmature biped = Armatures.BIPED;
 
+        GREATSWORD_HOLD = (new StaticAnimation(true, "pride:biped/combat/greatsword/greatsword_dual_idle", biped));
+        GREATSWORD_RUN = (new MovementAnimation(true, "pride:biped/combat/greatsword/greatsword_dual_run", biped));
+        SHORTSWORD_DUAL_AUTO1 = (new BasicAttackAnimation(0.08F, 0.1F, 0.2F, 0.3F, (Collider)null, biped.toolR, "biped/combat/shortsword/sword_dual_auto1", biped)).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.6F).newTimePair(0.0F, 0.2F).addStateRemoveOld(EntityState.CAN_BASIC_ATTACK, false);
+        SHORTSWORD_DUAL_AUTO2 = (new BasicAttackAnimation(0.1F, 0.1F, 0.2F, 0.3F, InteractionHand.OFF_HAND, (Collider)null, biped.toolL, "biped/combat/shortsword/sword_dual_auto2", biped)).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.6F).newTimePair(0.0F, 0.2F).addStateRemoveOld(EntityState.CAN_BASIC_ATTACK, false);
+        SHORTSWORD_DUAL_AUTO3 = (new BasicAttackAnimation(0.1F, "biped/combat/shortsword/sword_dual_auto3", biped, new AttackAnimation.Phase[]{new AttackAnimation.Phase(0.0F, 0.25F, 0.25F, 0.35F, 0.6F, Float.MAX_VALUE, InteractionHand.MAIN_HAND, new AttackAnimation.JointColliderPair[]{AttackAnimation.JointColliderPair.of(biped.toolR, (Collider)null), AttackAnimation.JointColliderPair.of(biped.toolL, (Collider)null)})})).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.6F);
+        SHORTSWORD_AUTO1 = (new BasicAttackAnimation(0.1F, 0.1F, 0.2F, 0.3F, (Collider)null, biped.toolR, "biped/combat/shortsword/tachi_twohand_auto_1", biped)).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.5F);
+        SHORTSWORD_AUTO2 = (new BasicAttackAnimation(0.1F, 0.1F, 0.2F, 0.3F, (Collider)null, biped.toolR, "biped/combat/shortsword/tachi_twohand_auto_2", biped)).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.5F);
+        SHORTSWORD_AUTO3 = (new BasicAttackAnimation(0.1F, 0.1F, 0.2F, 0.45F, (Collider)null, biped.toolR, "biped/combat/shortsword/tachi_twohand_auto_3", biped)).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.5F).addProperty(AnimationProperty.ActionAnimationProperty.STOP_MOVEMENT, true);
+        SHORTSWORD_AUTO4 = (new BasicAttackAnimation(0.1F, 0.2F, 0.3F, 0.65F, (Collider)null, biped.toolR, "biped/combat/shortsword/tachi_twohand_auto_4", biped)).addProperty(AnimationProperty.AttackAnimationProperty.BASIS_ATTACK_SPEED, 1.5F).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.adder(1.25F));
+        SWORD_ONEHAND_AUTO1 = (new BasicAttackAnimation(0.15F, 0.15F, 0.4F, 0.4F, (Collider)null, biped.toolR, "biped/combat/greatsword/sword_onehand_auto_1", biped)).addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, Animations.ReusableSources.CONSTANT_ONE);
+        SWORD_ONEHAND_AUTO2 = (new BasicAttackAnimation(0.15F, 0.15F, 0.25F, 0.4F, (Collider)null, biped.toolR, "biped/combat/greatsword/sword_onehand_auto_2", biped)).addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, Animations.ReusableSources.CONSTANT_ONE);
+        SWORD_ONEHAND_AUTO3 = (new BasicAttackAnimation(0.12F, 0.1F, 0.42F, 0.45F, (Collider)null, biped.toolR, "biped/combat/greatsword/sword_onehand_auto_3", biped)).addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, Animations.ReusableSources.CONSTANT_ONE);
+        SWORD_ONEHAND_AUTO4 = (new BasicAttackAnimation(0.1F, 0.15F, 0.35F, 0.6F, (Collider)null, biped.toolR, "biped/combat/greatsword/sword_onehand_auto_4", biped)).addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, Animations.ReusableSources.CONSTANT_ONE);
         DIVINE_RESURRECTION = (new LongHitAnimation(0.25f, "biped/skill/divine_resurrection", biped));
         MOB_SNEAK = (new MovementAnimation(0.15f, true, "biped/skill/mob_sneak", biped));
         MOB_AIM = (new LongHitAnimation(0.25f, "biped/combat/mob_aim", biped)).addEvents(AnimationEvent.TimeStampedEvent.create(0F, MOB_AIM_NBTS, AnimationEvent.Side.SERVER));

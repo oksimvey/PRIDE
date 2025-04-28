@@ -16,14 +16,7 @@ public class Stealth {
     }
 
     public static boolean canBackStab(Entity viewer, Entity target) {
-        if (viewer != null && target != null) {
-            Vec3 lookVec = viewer.getLookAngle();
-            Vec3 toTarget = target.position().subtract(viewer.position());
-            if (toTarget.lengthSqr() < 1e-7) return false;
-            Vec3 toTargetNorm = toTarget.normalize();
-            double dot = lookVec.dot(toTargetNorm);
-            return dot <= 0;
-        }
+
         return false;
     }
 }

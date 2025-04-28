@@ -22,9 +22,9 @@ public class RenderingCore {
         if (client.player != null) {
             entityRenderer(client.player);
             Stealth.renderCriticalParticle(client.player, TargetUtil.getTarget(client.player));
+            AutoBattleMode.autoSwitch(client.player);
             for (Entity ent : client.player.level().getEntities(client.player, MathUtils.createAABBAroundEnt(client.player, 50))){
                 if (ent != null) {
-                    
                     if (ent instanceof LivingEntity living) {
                         entityRenderer(living);
                     }

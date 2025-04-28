@@ -6,7 +6,11 @@ public enum PrideStyles implements Style {
 
     DUAL_WIELD(true),
     SHIELD_OFFHAND(true),
-    GUN_OFFHAND(true);
+    GUN_OFFHAND(true),
+    ONE_HAND_V2(false),
+    TWO_HAND_V2(false),
+    SHIELD_OFFHAND_V2(true),
+    DUAL_WIELD_V2(true);
     final boolean canUseOffhand;
     final int id;
 

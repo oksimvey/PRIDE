@@ -16,6 +16,10 @@ public class KeyRegister {
     public static KeyMapping keyActionSwapHand;
     public static KeyMapping keyActionRecharge;
     public static KeyMapping keyActionAura;
+    public static KeyMapping keyActionImbuement;
+    public static KeyMapping keyActionImmunity;
+    public static KeyMapping keyActionAwakening;
+    public static KeyMapping keyActionMobility;
 
     private static boolean wasPressedSpecial = false;
     private static boolean wasPressedSecondary = false;
@@ -24,6 +28,10 @@ public class KeyRegister {
     private static boolean wasPressedSwapHand = false;
     private static boolean wasPressedRecharge = false;
     private static boolean wasPressedAura = false;
+    private static boolean wasPressedImbuement = false;
+    private static boolean wasPressedImmunity = false;
+    private static boolean wasPressedAwakening = false;
+    private static boolean wasPressedMobility = false;
 
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         keyActionSpecial = new KeyMapping("key.pride.special", InputConstants.Type.MOUSE, 0, "key.categories.misc");
@@ -32,8 +40,11 @@ public class KeyRegister {
         keyActionJump = new KeyMapping("key.pride.jump", InputConstants.Type.KEYSYM, InputConstants.KEY_SPACE, "key.categories.misc");
         keyActionSwapHand = new KeyMapping("key.pride.swaphand", InputConstants.Type.KEYSYM, InputConstants.KEY_F, "key.categories.misc");
         keyActionRecharge = new KeyMapping("key.pride.recharge", InputConstants.Type.KEYSYM, InputConstants.KEY_R, "key.categories.misc");
-        keyActionAura = new KeyMapping("key.pride.aura", InputConstants.Type.KEYSYM, InputConstants.KEY_Z, "key.categories.misc");
-
+        keyActionAura = new KeyMapping("key.pride.aura", InputConstants.Type.KEYSYM, InputConstants.KEY_X, "key.categories.misc");
+        keyActionImbuement = new KeyMapping("key.pride.imbuement", InputConstants.Type.KEYSYM, InputConstants.KEY_Z, "key.categories.misc");
+        keyActionImmunity = new KeyMapping("key.pride.immunity", InputConstants.Type.KEYSYM, InputConstants.KEY_C, "key.categories.misc");
+        keyActionAwakening = new KeyMapping("key.pride.awakening", InputConstants.Type.KEYSYM, InputConstants.KEY_V, "key.categories.misc");
+        keyActionMobility = new KeyMapping("key.pride.mobility", InputConstants.Type.KEYSYM, InputConstants.KEY_F, "key.categories.misc");
         event.register(keyActionSpecial);
         event.register(keyActionSecondary);
         event.register(keyActionTertiary);
@@ -41,6 +52,10 @@ public class KeyRegister {
         event.register(keyActionSwapHand);
         event.register(keyActionRecharge);
         event.register(keyActionAura);
+        event.register(keyActionImbuement);
+        event.register(keyActionImmunity);
+        event.register(keyActionAwakening);
+        event.register(keyActionMobility);
     }
 
     public static void setupClient(FMLClientSetupEvent event) {
@@ -56,17 +71,21 @@ public class KeyRegister {
         checkKeyAction(keyActionSwapHand, wasPressedSwapHand, "swaphand");
         checkKeyAction(keyActionRecharge, wasPressedRecharge, "recharge");
         checkKeyAction(keyActionAura, wasPressedAura, "aura");
+        checkKeyAction(keyActionImbuement, wasPressedImbuement, "imbuement");
+        checkKeyAction(keyActionImmunity, wasPressedImmunity, "immunity");
+        checkKeyAction(keyActionAwakening, wasPressedAwakening, "awakening");
+        checkKeyAction(keyActionMobility, wasPressedMobility, "mobility");
     }
 
     private static void checkKeyAction(KeyMapping key, boolean wasPressed, String actionName) {
         boolean isCurrentlyPressed = key.isDown();
-
         if (isCurrentlyPressed && !wasPressed) {
             PacketRegister.sendKeyToServer(new KeyActionPacket(actionName, 0));
         }
         if (key == keyActionSpecial) {
             wasPressedSpecial = isCurrentlyPressed;
-        } else if (key == keyActionSecondary) {
+        }
+        else if (key == keyActionSecondary) {
             wasPressedSecondary = isCurrentlyPressed;
         } else if (key == keyActionTertiary) {
             wasPressedTertiary = isCurrentlyPressed;
@@ -79,6 +98,18 @@ public class KeyRegister {
         }
         else if (key == keyActionAura){
             wasPressedAura = isCurrentlyPressed;
+        }
+        else if (key == keyActionImbuement){
+            wasPressedImbuement = isCurrentlyPressed;
+        }
+        else if (key == keyActionImmunity){
+            wasPressedImmunity = isCurrentlyPressed;
+        }
+        else if (key == keyActionAwakening){
+            wasPressedAwakening = isCurrentlyPressed;
+        }
+        else if (key == keyActionMobility){
+            wasPressedMobility = isCurrentlyPressed;
         }
     }
 }

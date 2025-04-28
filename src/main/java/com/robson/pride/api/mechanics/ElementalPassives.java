@@ -113,9 +113,6 @@ public class ElementalPassives {
     public static void lightPassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent != null) {
             PlaySoundUtils.playSound(ent, EpicFightSounds.LASER_BLAST.get(), 1, 100);
-            if (dmgent instanceof LivingEntity living){
-                living.addEffect(new MobEffectInstance(EffectRegister.DIVINE_PROTECTION.get(), 99999, 1));
-            }
         }
     }
 

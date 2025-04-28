@@ -1,0 +1,27 @@
+{
+  "attributes":
+  {
+    "common":
+    {
+      "weight": 50
+    }
+  },
+  "colliders": [
+    {
+      "minX": -0.75,
+      "maxX": 0.5,
+      "minY": -0.5,
+      "maxY": 0.8,
+      "minZ": -0.25,
+      "maxZ": 3
+    }
+  ],
+  "requiredStrength": 50,
+  "isWeapon": true,
+  "requiredDexterity": 20,
+  "scaleStrength": "S",
+  "scaleDexterity": "C",
+  "element": "Blood",
+  "skill": "Longsword Skill",
+  "type": "pride:pride_greatsword"
+}

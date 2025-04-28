@@ -7,11 +7,17 @@ import yesman.epicfight.world.capabilities.item.WeaponCategory;
 import java.util.function.Function;
 
 public enum WeaponCategoriesEnum implements WeaponCategory, Function<Item, CapabilityItem.Builder> {
+    PRIDE_SHORTSWORD(),
     PRIDE_LONGSWORD(),
     PRIDE_GREATSWORD(),
     PRIDE_COLOSSALSWORD(),
     PRIDE_GUN(),
-    PRIDE_FIGHTNING_STYLE(),
+    PRIDE_AXE(),
+    PRIDE_GREATAXE(),
+    PRIDE_RAPIER(),
+    PRIDE_KATANA(),
+    PRIDE_SPEAR(),
+    PRIDE_STAFF(),
     PRIDE_SCYTHE();
     final int id;
 

@@ -1,27 +1,19 @@
 package com.robson.pride.keybinding;
 
-import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.progression.ProgressionGUI;
-import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.skills.special.KillerAuraSkill;
 import com.robson.pride.skills.special.RechargeSkill;
 import io.netty.buffer.Unpooled;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkHooks;
-import reascer.wom.gameasset.WOMAnimations;
-import yesman.epicfight.client.events.engine.ControllEngine;
-import yesman.epicfight.client.input.EpicFightKeyMappings;
 
 import java.util.function.Supplier;
 
