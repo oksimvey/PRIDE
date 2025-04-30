@@ -17,7 +17,6 @@ public enum WeaponCategoriesEnum implements WeaponCategory, Function<Item, Capab
     PRIDE_RAPIER(),
     PRIDE_KATANA(),
     PRIDE_SPEAR(),
-    PRIDE_STAFF(),
     PRIDE_SCYTHE();
     final int id;
 

@@ -34,6 +34,16 @@ public class PrideTabRegister {
             .icon(() -> new ItemStack(ItemsRegister.EuropeanLongsword.get()))
             .displayItems((enabledFeatures, entries) -> {
                 entries.accept(ItemsRegister.EuropeanLongsword.get());
+                entries.accept(ItemsRegister.BATTLE_AXE.get());
+                entries.accept(ItemsRegister.COLOSSAL_BLADE.get());
+                entries.accept(ItemsRegister.DAGGER.get());
+                entries.accept(ItemsRegister.ESTOC.get());
+                entries.accept(ItemsRegister.HALBERD.get());
+                entries.accept(ItemsRegister.HALBERD.get());
+                entries.accept(ItemsRegister.KATANA.get());
+                entries.accept(ItemsRegister.SABER.get());
+                entries.accept(ItemsRegister.SCYTHE.get());
+                entries.accept(ItemsRegister.SPEAR.get());
             })
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
             .build());

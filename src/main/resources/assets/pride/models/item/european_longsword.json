@@ -1,6 +1,6 @@
 {
-  "parent": "epicfight:item/longsword",
+  "parent": "prominent:item/longsword",
   "textures": {
-    "layer0": "pride:item/european_longsword"
+    "layer0": "prominent:item/transmog/longsword"
   }
 }

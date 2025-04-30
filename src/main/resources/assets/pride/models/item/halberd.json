@@ -1,0 +1,6 @@
+{
+  "parent": "pride:halberd",
+  "textures": {
+    "layer0": "pride:item/halberd"
+  }
+}

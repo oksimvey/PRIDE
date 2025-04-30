@@ -1,0 +1,26 @@
+{
+  "attributes":
+  {
+    "common":
+    {
+      "weight": 10
+    }
+  },
+  "colliders": [
+    {
+      "minX": -0.5,
+      "maxX": 0.2,
+      "minY": -0.5,
+      "maxY": 0.8,
+      "minZ": -0.15,
+      "maxZ": 1.5
+    }
+  ],
+  "isWeapon": true,
+  "requiredStrength": 10,
+  "requiredDexterity": 5,
+  "scaleStrength": "A",
+  "scaleDexterity": "C",
+  "skill": "Longsword Skill",
+  "type": "pride:pride_spear"
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "pride:dagger",
+  "textures": {
+    "layer0": "pride:item/dagger"
+  }
+}

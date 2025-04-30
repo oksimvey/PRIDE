@@ -5,8 +5,8 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 
-public class IronScythe extends SwordItem {
-    public IronScythe() {
+public class Katana extends SwordItem {
+    public Katana() {
         super(new Tier() {
             public int getUses() {
                 return 100;
@@ -36,4 +36,3 @@ public class IronScythe extends SwordItem {
         }, 1, -3f, new Item.Properties());
     }
 }
-

@@ -1,0 +1,6 @@
+{
+  "parent": "pride:battle_axe",
+  "textures": {
+    "layer0": "pride:item/battle_axe"
+  }
+}

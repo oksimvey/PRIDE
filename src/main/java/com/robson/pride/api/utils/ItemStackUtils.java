@@ -25,20 +25,20 @@ import java.util.List;
 
 public class ItemStackUtils {
 
-    public static Style getStyle(LivingEntityPatch ent, WeaponCategory weaponCategory, boolean hasv2){
+    public static Style getStyle(LivingEntityPatch ent, WeaponCategory weaponCategory){
         if (ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == CapabilityItem.WeaponCategories.SHIELD) {
-            return hasv2 ? PrideStyles.SHIELD_OFFHAND_V2 : PrideStyles.SHIELD_OFFHAND;
+            return PrideStyles.SHIELD_OFFHAND;
         }
         else if (ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == weaponCategory) {
-            return hasv2 ? PrideStyles.DUAL_WIELD_V2 : PrideStyles.DUAL_WIELD;
+            return PrideStyles.DUAL_WIELD;
         }
         else if (ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_GUN && ControllEngine.isKeyDown(EpicFightKeyMappings.GUARD) && ControllEngine.isKeyDown(EpicFightKeyMappings.ATTACK)) {
             return CapabilityItem.Styles.RANGED;
         }
         else if (ent.getOriginal() instanceof LivingEntity lent && lent.getMainHandItem().getTag() != null && lent.getMainHandItem().getTag().getBoolean("two_handed") && ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == CapabilityItem.WeaponCategories.FIST) {
-            return hasv2 ? PrideStyles.TWO_HAND_V2 : CapabilityItem.Styles.TWO_HAND;
+            return CapabilityItem.Styles.TWO_HAND;
         }
-        return hasv2 ? PrideStyles.ONE_HAND_V2 : CapabilityItem.Styles.ONE_HAND;
+        return CapabilityItem.Styles.ONE_HAND;
     }
 
     public static WeaponCategory getWeaponCategory(Entity ent, InteractionHand hand) {
