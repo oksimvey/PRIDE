@@ -13,7 +13,6 @@ public enum WeaponCategoriesEnum implements WeaponCategory, Function<Item, Capab
     PRIDE_COLOSSALSWORD(),
     PRIDE_GUN(),
     PRIDE_AXE(),
-    PRIDE_GREATAXE(),
     PRIDE_RAPIER(),
     PRIDE_KATANA(),
     PRIDE_SPEAR(),

@@ -15,7 +15,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 public class CustomTooltips {
 
     public static void deserializeWeaponTooltip(ItemStack item, CompoundTag tag, ItemTooltipEvent event){
-        if (item != null && event != null && tag != null){
+        if (item != null && event != null && tag != null && item.getTag() != null){
             byte index = 5;
             for (int i = 0; i < event.getToolTip().size(); i++) {
                 Component line = event.getToolTip().get(i);

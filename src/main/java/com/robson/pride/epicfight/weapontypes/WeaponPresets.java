@@ -5,15 +5,20 @@ import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.main.Pride;
 import com.robson.pride.registries.AnimationsRegister;
-import diego.efds.gameasset.DualSpearsAnimations;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.yonchi.refm.gameasset.RapierAnimations;
 import reascer.wom.gameasset.WOMAnimations;
+import reascer.wom.gameasset.WOMSkills;
 import reascer.wom.gameasset.WOMWeaponColliders;
-import reascer.wom.skill.WOMSkillDataKeys;
+import reascer.wom.world.capabilities.item.WOMWeaponCategories;
 import yesman.epicfight.api.animation.LivingMotions;
+import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.forgeevent.WeaponCapabilityPresetRegistryEvent;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.ColliderPreset;
@@ -21,6 +26,7 @@ import yesman.epicfight.gameasset.EpicFightSkills;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.skill.SkillDataKey;
+import yesman.epicfight.skill.SkillDataKeys;
 import yesman.epicfight.skill.SkillSlots;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
@@ -81,7 +87,6 @@ public class WeaponPresets {
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.BLOCK, Animations.SWORD_DUAL_GUARD)
             .weaponCombinationPredicator((entitypatch) -> EpicFightCapabilities.getItemStackCapability(entitypatch.getOriginal().getOffhandItem()).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_LONGSWORD);
 
-
     public static final Function<Item, CapabilityItem.Builder> PRIDE_GREATSWORD = (item) -> WeaponCapability.builder().category(WeaponCategoriesEnum.PRIDE_GREATSWORD)
             .styleProvider(livingEntityPatch -> ItemStackUtils.getStyle(livingEntityPatch, WeaponCategoriesEnum.PRIDE_GREATSWORD))
             .collider(ColliderPreset.GREATSWORD)
@@ -105,7 +110,6 @@ public class WeaponPresets {
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.RUN, AnimationsRegister.GREATSWORD_RUN)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.BLOCK, Animations.SWORD_DUAL_GUARD)
             .weaponCombinationPredicator((entitypatch) -> EpicFightCapabilities.getItemStackCapability(entitypatch.getOriginal().getOffhandItem()).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_GREATSWORD);
-
 
     public static final Function<Item, CapabilityItem.Builder> PRIDE_COLOSSALSWORD = (item) -> WeaponCapability.builder().category(WeaponCategoriesEnum.PRIDE_COLOSSALSWORD)
             .styleProvider(livingEntityPatch -> ItemStackUtils.getStyle(livingEntityPatch, WeaponCategoriesEnum.PRIDE_COLOSSALSWORD))
@@ -141,7 +145,7 @@ public class WeaponPresets {
             .newStyleCombo(PrideStyles.SHIELD_OFFHAND, DualAxesAnimations.AXE_AUTO_1, DualAxesAnimations.AXE_AUTO_2, WOMAnimations.GESETZ_AUTO_1, Animations.SWORD_AIR_SLASH)
             .newStyleCombo(PrideStyles.DUAL_WIELD, DualAxesAnimations.AXE_DUAL_AUTO_1, DualAxesAnimations.AXE_DUAL_AUTO_2, DualAxesAnimations.AXE_DUAL_AUTO_3, DualAxesAnimations.AXE_DUAL_DASH, AnimationsRegister.DUAL_GREATSWORD_AIRSLASH)
             .newStyleCombo(Styles.MOUNT, Animations.SWORD_MOUNT_ATTACK)
-            .livingMotionModifier(Styles.COMMON, LivingMotions.IDLE, DualAxesAnimations.AXE_IDLE)
+            .livingMotionModifier(Styles.COMMON, LivingMotions.IDLE, Animations.BIPED_HOLD_LONGSWORD)
             .livingMotionModifier(Styles.COMMON, LivingMotions.WALK, Animations.BIPED_WALK_LONGSWORD)
             .livingMotionModifier(Styles.COMMON, LivingMotions.RUN, Animations.BIPED_RUN_LONGSWORD)
             .livingMotionModifier(Styles.ONE_HAND, LivingMotions.BLOCK, Animations.SWORD_GUARD)
@@ -155,42 +159,43 @@ public class WeaponPresets {
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.BLOCK, Animations.SWORD_DUAL_GUARD)
             .weaponCombinationPredicator((entitypatch) -> EpicFightCapabilities.getItemStackCapability(entitypatch.getOriginal().getOffhandItem()).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_AXE);
 
-
-    public static final Function<Item, CapabilityItem.Builder> PRIDE_GREATAXE = (item) -> WeaponCapability.builder().category(WeaponCategoriesEnum.PRIDE_GREATAXE)
-            .styleProvider(livingEntityPatch -> ItemStackUtils.getStyle(livingEntityPatch, WeaponCategoriesEnum.PRIDE_GREATAXE))
-            .collider(ColliderPreset.GREATSWORD)
+    public static final Function<Item, CapabilityItem.Builder> PRIDE_RAPIER = (item) -> WeaponCapability.builder().category(WeaponCategoriesEnum.PRIDE_RAPIER)
+            .styleProvider(livingEntityPatch -> ItemStackUtils.getStyle(livingEntityPatch, WeaponCategoriesEnum.PRIDE_RAPIER))
+            .collider(ColliderPreset.SPEAR)
             .hitSound(EpicFightSounds.BLADE_HIT.get())
             .hitParticle(EpicFightParticles.HIT_BLADE.get())
-            .newStyleCombo(Styles.ONE_HAND, AnimationsRegister.SWORD_ONEHAND_AUTO1, AnimationsRegister.SWORD_ONEHAND_AUTO2, AnimationsRegister.SWORD_ONEHAND_AUTO3, AnimationsRegister.SWORD_ONEHAND_AUTO4, Animations.BIPED_MOB_ONEHAND1, Animations.SWORD_AIR_SLASH)
-            .newStyleCombo(Styles.TWO_HAND, AnimationsRegister.GS_AUTO1, AnimationsRegister.GS_AUTO2, AnimationsRegister.GS_AUTO3, Animations.BIPED_MOB_LONGSWORD2, Animations.LONGSWORD_AIR_SLASH)
-            .newStyleCombo(PrideStyles.SHIELD_OFFHAND, AnimationsRegister.SWORD_ONEHAND_AUTO1, AnimationsRegister.SWORD_ONEHAND_AUTO2, AnimationsRegister.SWORD_ONEHAND_AUTO3, AnimationsRegister.SWORD_ONEHAND_AUTO4, WOMAnimations.GESETZ_AUTO_1, Animations.SWORD_AIR_SLASH)
-            .newStyleCombo(PrideStyles.DUAL_WIELD, AnimationsRegister.DUAL_TACHI_AUTO1, AnimationsRegister.DUAL_TACHI_AUTO2, AnimationsRegister.DUAL_TACHI_AUTO3, AnimationsRegister.DUAL_TACHI_AUTO4, Animations.SWORD_DUAL_DASH, Animations.SWORD_DUAL_AIR_SLASH)
-            .newStyleCombo(Styles.MOUNT, Animations.SWORD_MOUNT_ATTACK)
-            .livingMotionModifier(Styles.COMMON, LivingMotions.IDLE, AnimationsRegister.GREATSWORD_HOLD)
-            .livingMotionModifier(Styles.COMMON, LivingMotions.WALK, AnimationsRegister.GREATSWORD_HOLD)
-            .livingMotionModifier(Styles.COMMON, LivingMotions.RUN, Animations.BIPED_RUN_LONGSWORD)
+            .newStyleCombo(Styles.ONE_HAND, RapierAnimations.RAPIER_AUTO1, RapierAnimations.RAPIER_AUTO2, RapierAnimations.RAPIER_AUTO3, Animations.BIPED_MOB_ONEHAND1, Animations.SWORD_AIR_SLASH)
+            .newStyleCombo(Styles.TWO_HAND, Animations.TACHI_DASH, Animations.BIPED_MOB_SPEAR_TWOHAND3, Animations.BIPED_MOB_LONGSWORD2, Animations.LONGSWORD_AIR_SLASH)
+            .newStyleCombo(PrideStyles.SHIELD_OFFHAND, AnimationsRegister.SPEAR_ONEHAND, WOMAnimations.GESETZ_AUTO_1, Animations.SWORD_AIR_SLASH)
+            .newStyleCombo(PrideStyles.DUAL_WIELD, Animations.DAGGER_DUAL_AUTO1, AnimationsRegister.DUAL_TACHI_AUTO2, Animations.DAGGER_DUAL_AUTO4, Animations.SWORD_DUAL_DASH, Animations.SWORD_DUAL_AIR_SLASH)
+            .newStyleCombo(Styles.MOUNT, Animations.SPEAR_MOUNT_ATTACK)
+            .livingMotionModifier(Styles.COMMON, LivingMotions.IDLE, RapierAnimations.BIPED_HOLD_RAPIER)
+            .livingMotionModifier(Styles.COMMON, LivingMotions.WALK, RapierAnimations.BIPED_WALK_RAPIER)
+            .livingMotionModifier(Styles.COMMON, LivingMotions.RUN, RapierAnimations.BIPED_RUN_RAPIER)
+            .livingMotionModifier(PrideStyles.SHIELD_OFFHAND, LivingMotions.IDLE, Animations.BIPED_HOLD_SPEAR)
+            .livingMotionModifier(PrideStyles.SHIELD_OFFHAND, LivingMotions.WALK, Animations.BIPED_WALK_SPEAR)
+            .livingMotionModifier(PrideStyles.SHIELD_OFFHAND, LivingMotions.RUN, Animations.BIPED_RUN_SPEAR)
             .livingMotionModifier(Styles.ONE_HAND, LivingMotions.BLOCK, Animations.SWORD_GUARD)
-            .livingMotionModifier(Styles.TWO_HAND, LivingMotions.IDLE, AnimationsRegister.HOLD_GREATSWORD)
-            .livingMotionModifier(Styles.TWO_HAND, LivingMotions.WALK, AnimationsRegister.HOLD_GREATSWORD)
-            .livingMotionModifier(Styles.TWO_HAND, LivingMotions.RUN, Animations.BIPED_RUN_LONGSWORD)
+            .livingMotionModifier(Styles.TWO_HAND, LivingMotions.IDLE, WOMAnimations.RUINE_IDLE)
+            .livingMotionModifier(Styles.TWO_HAND, LivingMotions.WALK, WOMAnimations.RUINE_WALK)
+            .livingMotionModifier(Styles.TWO_HAND, LivingMotions.RUN, WOMAnimations.RUINE_RUN)
             .livingMotionModifier(Styles.TWO_HAND, LivingMotions.BLOCK, Animations.LONGSWORD_GUARD)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.IDLE, Animations.BIPED_HOLD_DUAL_WEAPON)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.WALK, Animations.BIPED_HOLD_DUAL_WEAPON)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.RUN, Animations.BIPED_RUN_DUAL)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.BLOCK, Animations.SWORD_DUAL_GUARD)
-            .weaponCombinationPredicator((entitypatch) -> EpicFightCapabilities.getItemStackCapability(entitypatch.getOriginal().getOffhandItem()).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_GREATAXE);
-
+            .weaponCombinationPredicator((entitypatch) -> EpicFightCapabilities.getItemStackCapability(entitypatch.getOriginal().getOffhandItem()).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_RAPIER);
 
     public static final Function<Item, CapabilityItem.Builder> PRIDE_SPEAR = (item) -> WeaponCapability.builder().category(WeaponCategoriesEnum.PRIDE_SPEAR)
             .styleProvider(livingEntityPatch -> ItemStackUtils.getStyle(livingEntityPatch, WeaponCategoriesEnum.PRIDE_SPEAR))
             .collider(ColliderPreset.SPEAR)
             .hitSound(EpicFightSounds.BLADE_HIT.get())
             .hitParticle(EpicFightParticles.HIT_BLADE.get())
-            .newStyleCombo(Styles.ONE_HAND, WOMAnimations.HERRSCHER_AUTO_3, AnimationsRegister.SWORD_ONEHAND_AUTO3, AnimationsRegister.SPEAR_ONEHAND, Animations.BIPED_MOB_ONEHAND1, Animations.SWORD_AIR_SLASH)
+            .newStyleCombo(Styles.ONE_HAND, AnimationsRegister.SWORD_ONEHAND_AUTO1, AnimationsRegister.SWORD_ONEHAND_AUTO2, AnimationsRegister.SWORD_ONEHAND_AUTO3, AnimationsRegister.SWORD_ONEHAND_AUTO4, Animations.BIPED_MOB_ONEHAND1, Animations.SWORD_AIR_SLASH)
             .newStyleCombo(Styles.TWO_HAND, Animations.SPEAR_TWOHAND_AUTO1, Animations.SPEAR_TWOHAND_AUTO2, Animations.BIPED_MOB_LONGSWORD2, Animations.LONGSWORD_AIR_SLASH)
-            .newStyleCombo(PrideStyles.SHIELD_OFFHAND,WOMAnimations.HERRSCHER_AUTO_3, AnimationsRegister.SWORD_ONEHAND_AUTO3, AnimationsRegister.SPEAR_ONEHAND, WOMAnimations.GESETZ_AUTO_1, Animations.SWORD_AIR_SLASH)
-            .newStyleCombo(PrideStyles.DUAL_WIELD, DualSpearsAnimations.SPEAR_DUAL_AUTO_1, DualSpearsAnimations.SPEAR_DUAL_AUTO_2, DualSpearsAnimations.SPEAR_DUAL_AUTO_3, Animations.SWORD_DUAL_DASH, Animations.SWORD_DUAL_AIR_SLASH)
-            .newStyleCombo(Styles.MOUNT, Animations.SPEAR_MOUNT_ATTACK)
+            .newStyleCombo(PrideStyles.SHIELD_OFFHAND,AnimationsRegister.SWORD_ONEHAND_AUTO1, AnimationsRegister.SWORD_ONEHAND_AUTO2, AnimationsRegister.SWORD_ONEHAND_AUTO3, AnimationsRegister.SWORD_ONEHAND_AUTO4, WOMAnimations.GESETZ_AUTO_1, Animations.SWORD_AIR_SLASH)
+            .newStyleCombo(PrideStyles.DUAL_WIELD, Animations.BIPED_MOB_SPEAR_TWOHAND1, Animations.BIPED_MOB_SPEAR_TWOHAND2, AnimationsRegister.DUAL_TACHI_AUTO2, Animations.SWORD_DUAL_DASH, Animations.SWORD_DUAL_AIR_SLASH)
+            .newStyleCombo(Styles.MOUNT, Animations.SWORD_MOUNT_ATTACK)
             .livingMotionModifier(Styles.COMMON, LivingMotions.IDLE, Animations.BIPED_HOLD_SPEAR)
             .livingMotionModifier(Styles.COMMON, LivingMotions.WALK, Animations.BIPED_HOLD_SPEAR)
             .livingMotionModifier(Styles.COMMON, LivingMotions.RUN, Animations.BIPED_RUN_SPEAR)
@@ -199,37 +204,51 @@ public class WeaponPresets {
             .livingMotionModifier(Styles.TWO_HAND, LivingMotions.WALK, AnimationsRegister.MAUL_HOLD)
             .livingMotionModifier(Styles.TWO_HAND, LivingMotions.RUN, Animations.BIPED_RUN_LONGSWORD)
             .livingMotionModifier(Styles.TWO_HAND, LivingMotions.BLOCK, Animations.LONGSWORD_GUARD)
-            .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.IDLE, DualSpearsAnimations.SPEAR_DUAL_IDLE)
-            .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.WALK, DualSpearsAnimations.SPEAR_DUAL_WALK)
-            .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.RUN, DualSpearsAnimations.SPEAR_DUAL_RUN)
+            .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.IDLE, Animations.BIPED_HOLD_DUAL_WEAPON)
+            .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.WALK, Animations.BIPED_HOLD_DUAL_WEAPON)
+            .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.RUN, Animations.BIPED_RUN_DUAL)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.BLOCK, Animations.SWORD_DUAL_GUARD)
             .weaponCombinationPredicator((entitypatch) -> EpicFightCapabilities.getItemStackCapability(entitypatch.getOriginal().getOffhandItem()).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_SPEAR);
 
 
-
-
-    public static final Function<Item, CapabilityItem.Builder> PRIDE_GUN = (item -> (CapabilityItem.Builder) WeaponCapability.builder().category(WeaponCategoriesEnum.PRIDE_GUN)
-            .zoomInType(CapabilityItem.ZoomInType.CUSTOM)
-            .styleProvider(livingEntityPatch -> ItemStackUtils.getStyle(livingEntityPatch, WeaponCategoriesEnum.PRIDE_GUN))
-            .collider(ColliderPreset.FIST)
-            .hitSound(EpicFightSounds.BLUNT_HIT.get())
-            .hitParticle(EpicFightParticles.HIT_BLUNT.get())
-            .newStyleCombo(Styles.ONE_HAND, WOMAnimations.ENDERBLASTER_ONEHAND_SHOOT)
-            .newStyleCombo(Styles.TWO_HAND, Animations.BIPED_CROSSBOW_SHOT)
-            .livingMotionModifier(Styles.COMMON, LivingMotions.IDLE, WOMAnimations.ENDERBLASTER_ONEHAND_IDLE)
-            .livingMotionModifier(Styles.COMMON, LivingMotions.WALK, WOMAnimations.ENDERBLASTER_ONEHAND_WALK)
-            .livingMotionModifier(Styles.COMMON, LivingMotions.RUN, WOMAnimations.ENDERBLASTER_ONEHAND_RUN)
-            .livingMotionModifier(Styles.COMMON, LivingMotions.BLOCK, WOMAnimations.ENDERBLASTER_ONEHAND_AIMING)
-            .livingMotionModifier(Styles.TWO_HAND, LivingMotions.IDLE, Animations.BIPED_HOLD_CROSSBOW)
-            .livingMotionModifier(Styles.TWO_HAND, LivingMotions.WALK, Animations.BIPED_HOLD_CROSSBOW)
-            .livingMotionModifier(Styles.TWO_HAND, LivingMotions.RUN, Animations.BIPED_HOLD_CROSSBOW)
-            .livingMotionModifier(Styles.TWO_HAND, LivingMotions.BLOCK, Animations.BIPED_CROSSBOW_AIM));
-
-
-    public static final Function<Item, CapabilityItem.Builder> PRIDE_KATANA = (item) -> WeaponCapability.builder().category(CapabilityItem.WeaponCategories.UCHIGATANA)
+    public static final Function<Item, CapabilityItem.Builder> PRIDE_GUN = (item) -> {
+        CapabilityItem.Builder builder = WeaponCapability.builder()
+                .zoomInType(CapabilityItem
+                        .ZoomInType.CUSTOM)
+                .category(WeaponCategoriesEnum.PRIDE_GUN)
+                .styleProvider(livingEntityPatch -> ItemStackUtils.getStyle(livingEntityPatch, WeaponCategoriesEnum.PRIDE_GUN))
+                .hitSound((SoundEvent)EpicFightSounds.BLADE_HIT.get())
+                .collider(WOMWeaponColliders.PUNCH)
+                .newStyleCombo(Styles.ONE_HAND, WOMAnimations.ENDERBLASTER_ONEHAND_AUTO_1, WOMAnimations.ENDERBLASTER_ONEHAND_AUTO_2, WOMAnimations.ENDERBLASTER_ONEHAND_AUTO_3, WOMAnimations.ENDERBLASTER_ONEHAND_AUTO_4, WOMAnimations.ENDERBLASTER_ONEHAND_DASH, WOMAnimations.ENDERBLASTER_ONEHAND_JUMPKICK)
+                .newStyleCombo(PrideStyles.DUAL_WIELD, WOMAnimations.ENDERBLASTER_TWOHAND_AUTO_1, WOMAnimations.ENDERBLASTER_TWOHAND_AUTO_2, WOMAnimations.ENDERBLASTER_TWOHAND_AUTO_3, WOMAnimations.ENDERBLASTER_TWOHAND_AUTO_4, WOMAnimations.ENDERBLASTER_ONEHAND_DASH, WOMAnimations.ENDERBLASTER_TWOHAND_TISHNAW)
+                .newStyleCombo(Styles.MOUNT, Animations.SWORD_MOUNT_ATTACK)
+                .comboCancel((style) -> false)
+                .livingMotionModifier(Styles.ONE_HAND, LivingMotions.IDLE, WOMAnimations.ENDERBLASTER_ONEHAND_IDLE)
+                .livingMotionModifier(Styles.ONE_HAND, LivingMotions.WALK, WOMAnimations.ENDERBLASTER_ONEHAND_WALK)
+                .livingMotionModifier(Styles.ONE_HAND, LivingMotions.CHASE, WOMAnimations.ENDERBLASTER_ONEHAND_RUN)
+                .livingMotionModifier(Styles.ONE_HAND, LivingMotions.RUN, WOMAnimations.ENDERBLASTER_ONEHAND_RUN)
+                .livingMotionModifier(Styles.ONE_HAND, LivingMotions.SWIM, Animations.BIPED_SWIM)
+                .livingMotionModifier(Styles.ONE_HAND, LivingMotions.BLOCK, WOMAnimations.ENDERBLASTER_ONEHAND_AIMING)
+                .livingMotionModifier(Styles.TWO_HAND, LivingMotions.IDLE, Animations.BIPED_HOLD_CROSSBOW)
+                .livingMotionModifier(Styles.TWO_HAND, LivingMotions.WALK, Animations.BIPED_HOLD_CROSSBOW)
+                .livingMotionModifier(Styles.TWO_HAND, LivingMotions.CHASE, WOMAnimations.ENDERBLASTER_ONEHAND_RUN)
+                .livingMotionModifier(Styles.TWO_HAND, LivingMotions.RUN, WOMAnimations.ENDERBLASTER_ONEHAND_RUN)
+                .livingMotionModifier(Styles.TWO_HAND, LivingMotions.SWIM, Animations.BIPED_SWIM)
+                .livingMotionModifier(Styles.TWO_HAND, LivingMotions.BLOCK, Animations.BIPED_CROSSBOW_AIM)
+                .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.IDLE, WOMAnimations.ENDERBLASTER_TWOHAND_IDLE)
+                .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.WALK, WOMAnimations.ENDERBLASTER_TWOHAND_WALK)
+                .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.CHASE, WOMAnimations.ENDERBLASTER_ONEHAND_RUN)
+                .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.RUN, WOMAnimations.ENDERBLASTER_ONEHAND_RUN)
+                .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.SWIM, Animations.BIPED_SWIM)
+                .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.BLOCK, WOMAnimations.ENDERBLASTER_TWOHAND_AIMING)
+                .weaponCombinationPredicator((entitypatch) -> EpicFightCapabilities.getItemStackCapability(((LivingEntity)entitypatch.getOriginal())
+                        .getOffhandItem()).getWeaponCollider() == WOMWeaponColliders.PUNCH);
+        return builder;
+    };
+    public static final Function<Item, CapabilityItem.Builder> PRIDE_KATANA = (item) -> WeaponCapability.builder().category(WeaponCategoriesEnum.PRIDE_KATANA)
             .styleProvider(livingEntityPatch -> {
-                if (livingEntityPatch instanceof PlayerPatch playerpatch && playerpatch.getSkill(SkillSlots.WEAPON_PASSIVE).getDataManager().hasData((SkillDataKey) WOMSkillDataKeys.SHEATH.get()) && (Boolean)playerpatch.getSkill(SkillSlots.WEAPON_PASSIVE).getDataManager().getDataValue((SkillDataKey)WOMSkillDataKeys.SHEATH.get())) {
-                    return Styles.SHEATH;
+                if (livingEntityPatch instanceof  PlayerPatch playerpatch && playerpatch.getSkill(SkillSlots.WEAPON_PASSIVE).getDataManager().hasData((SkillDataKey) SkillDataKeys.SHEATH.get()) && (Boolean)playerpatch.getSkill(SkillSlots.WEAPON_PASSIVE).getDataManager().getDataValue((SkillDataKey)SkillDataKeys.SHEATH.get())) {
+                    if (ItemStackUtils.getWeaponCategory(playerpatch.getOriginal(), InteractionHand.OFF_HAND) != WeaponCategoriesEnum.PRIDE_KATANA) return Styles.SHEATH;
                 }
                 return ItemStackUtils.getStyle(livingEntityPatch, WeaponCategoriesEnum.PRIDE_KATANA);
             })
@@ -239,7 +258,7 @@ public class WeaponPresets {
             .hitParticle(EpicFightParticles.HIT_BLADE.get())
             .newStyleCombo(Styles.SHEATH, Animations.UCHIGATANA_SHEATHING_AUTO, Animations.UCHIGATANA_SHEATHING_DASH, Animations.UCHIGATANA_SHEATHING_AUTO)
             .newStyleCombo(Styles.ONE_HAND, Animations.UCHIGATANA_AUTO1, Animations.UCHIGATANA_AUTO2, Animations.UCHIGATANA_AUTO3, Animations.BIPED_MOB_ONEHAND1, Animations.SWORD_AIR_SLASH)
-            .newStyleCombo(Styles.TWO_HAND, Animations.TACHI_AUTO1, Animations.TACHI_AUTO2, Animations.TACHI_AUTO3, Animations.BIPED_MOB_LONGSWORD2, Animations.LONGSWORD_AIR_SLASH)
+            .newStyleCombo(Styles.TWO_HAND, AnimationsRegister.GREAT_TACHI_AUTO1, AnimationsRegister.GREAT_TACHI_AUTO2, AnimationsRegister.GREAT_TACHI_AUTO3, AnimationsRegister.GREAT_TACHI_AUTO4, Animations.BIPED_MOB_LONGSWORD2, Animations.LONGSWORD_AIR_SLASH)
             .newStyleCombo(PrideStyles.SHIELD_OFFHAND, Animations.UCHIGATANA_AUTO1, Animations.UCHIGATANA_AUTO2, Animations.UCHIGATANA_AUTO3, WOMAnimations.GESETZ_AUTO_1, Animations.SWORD_AIR_SLASH)
             .newStyleCombo(PrideStyles.DUAL_WIELD, AnimationsRegister.DUAL_TACHI_AUTO1, AnimationsRegister.DUAL_TACHI_AUTO2, AnimationsRegister.DUAL_TACHI_AUTO3, AnimationsRegister.DUAL_TACHI_AUTO4, Animations.SWORD_DUAL_DASH, Animations.SWORD_DUAL_AIR_SLASH)
             .newStyleCombo(Styles.MOUNT, Animations.SWORD_MOUNT_ATTACK)
@@ -254,22 +273,22 @@ public class WeaponPresets {
             .livingMotionModifier(Styles.TWO_HAND, LivingMotions.WALK, AnimationsRegister.KATANA_IDLE)
             .livingMotionModifier(Styles.TWO_HAND, LivingMotions.RUN, WOMAnimations.RUINE_RUN)
             .livingMotionModifier(Styles.TWO_HAND, LivingMotions.BLOCK, Animations.LONGSWORD_GUARD)
-            .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.IDLE, Animations.BIPED_HOLD_DUAL_WEAPON)
+            .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.IDLE, WOMAnimations.RUINE_BOOSTED_IDLE)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.WALK, Animations.BIPED_HOLD_DUAL_WEAPON)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.RUN, Animations.BIPED_RUN_DUAL)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.BLOCK, Animations.SWORD_DUAL_GUARD)
             .weaponCombinationPredicator((entitypatch) -> EpicFightCapabilities.getItemStackCapability(entitypatch.getOriginal().getOffhandItem()).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_KATANA);
 
-
     public static final Function<Item, CapabilityItem.Builder> PRIDE_SCYTHE = (item) -> WeaponCapability.builder().category(WeaponCategoriesEnum.PRIDE_SCYTHE)
             .styleProvider(livingEntityPatch -> ItemStackUtils.getStyle(livingEntityPatch, WeaponCategoriesEnum.PRIDE_SCYTHE))
-            .collider(WOMWeaponColliders.SOLAR)
+            .collider(ColliderPreset.GREATSWORD)
+            .zoomInType(CapabilityItem.ZoomInType.NONE)
             .hitSound(EpicFightSounds.BLADE_HIT.get())
             .hitParticle(EpicFightParticles.HIT_BLADE.get())
             .newStyleCombo(Styles.ONE_HAND, WOMAnimations.ANTITHEUS_AUTO_1, WOMAnimations.ANTITHEUS_AUTO_2, WOMAnimations.ANTITHEUS_AUTO_3, WOMAnimations.ANTITHEUS_AUTO_4, Animations.BIPED_MOB_ONEHAND1, Animations.SWORD_AIR_SLASH)
             .newStyleCombo(Styles.TWO_HAND, WOMAnimations.RUINE_AUTO_1, WOMAnimations.RUINE_AUTO_2, WOMAnimations.RUINE_AUTO_3, Animations.BIPED_MOB_LONGSWORD2, Animations.LONGSWORD_AIR_SLASH)
             .newStyleCombo(PrideStyles.SHIELD_OFFHAND, WOMAnimations.ANTITHEUS_AUTO_1, WOMAnimations.ANTITHEUS_AUTO_2, WOMAnimations.ANTITHEUS_AUTO_3, WOMAnimations.ANTITHEUS_AUTO_4, WOMAnimations.GESETZ_AUTO_1, Animations.SWORD_AIR_SLASH)
-            .newStyleCombo(PrideStyles.DUAL_WIELD, AnimationsRegister.DUAL_TACHI_AUTO1, AnimationsRegister.DUAL_TACHI_AUTO2, AnimationsRegister.DUAL_TACHI_AUTO3, AnimationsRegister.DUAL_TACHI_AUTO4, Animations.SWORD_DUAL_DASH, Animations.SWORD_DUAL_AIR_SLASH)
+            .newStyleCombo(PrideStyles.DUAL_WIELD, AnimationsRegister.DUAL_SCYTHE_AUTO1, AnimationsRegister.DUAL_SCYTHE_AUTO2, AnimationsRegister.DUAL_SCYTHE_AUTO3, AnimationsRegister.DUAL_SCYTHE_AUTO4, Animations.SWORD_DUAL_DASH, Animations.SWORD_DUAL_AIR_SLASH)
             .newStyleCombo(Styles.MOUNT, Animations.SWORD_MOUNT_ATTACK)
             .livingMotionModifier(Styles.COMMON, LivingMotions.IDLE, WOMAnimations.AGONY_IDLE)
             .livingMotionModifier(Styles.COMMON, LivingMotions.WALK, WOMAnimations.ANTITHEUS_WALK)
@@ -292,11 +311,11 @@ public class WeaponPresets {
         event.getTypeEntry().put(new ResourceLocation(Pride.MODID, "pride_axe"), PRIDE_AXE);
         event.getTypeEntry().put(new ResourceLocation(Pride.MOD_ID, "pride_colossalsword"), PRIDE_COLOSSALSWORD);
         event.getTypeEntry().put(new ResourceLocation(Pride.MOD_ID, "pride_scythe"), PRIDE_SCYTHE);
-        event.getTypeEntry().put(new ResourceLocation(Pride.MOD_ID, "pride_greataxe"), PRIDE_GREATAXE);
         event.getTypeEntry().put(new ResourceLocation(Pride.MOD_ID, "pride_katana"), PRIDE_KATANA);
         event.getTypeEntry().put(new ResourceLocation(Pride.MOD_ID, "pride_shortsword"), PRIDE_SHORTSWORD);
         event.getTypeEntry().put(new ResourceLocation(Pride.MOD_ID, "pride_greatsword"), PRIDE_GREATSWORD);
         event.getTypeEntry().put(new ResourceLocation(Pride.MOD_ID, "pride_spear"), PRIDE_SPEAR);
+        event.getTypeEntry().put(new ResourceLocation(Pride.MOD_ID, "pride_rapier"), PRIDE_RAPIER);
     }
 }
 

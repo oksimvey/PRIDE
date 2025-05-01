@@ -3,7 +3,8 @@
   {
     "common":
     {
-      "weight": 10
+      "weight": 10,
+      "speed_bonus": 1
     }
   },
   "colliders": [
@@ -22,5 +23,5 @@
   "scaleStrength": "A",
   "scaleDexterity": "C",
   "skill": "Longsword Skill",
-  "type": "pride:pride_longsword"
+  "type": "pride:pride_rapier"
 }
