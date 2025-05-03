@@ -1,7 +1,6 @@
 package com.robson.pride.registries;
 
 import com.robson.pride.api.entity.PrideMobRenderer;
-import com.robson.pride.entities.special.BulletProjectileRenderer;
 import com.robson.pride.entities.special.CloneEntityRenderer;
 import com.robson.pride.entities.special.ShooterRenderer;
 import net.minecraft.world.entity.EntityType;
@@ -18,8 +17,7 @@ public class PrideEntityRendererRegister {
     public static void registerSpecialEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(EntityRegister.SHOOTER.get(), ShooterRenderer::new);
         event.registerEntityRenderer(EntityRegister.CLONE_ENTITY.get(), CloneEntityRenderer::new);
-        event.registerEntityRenderer(EntityRegister.BULLET_PROJECTILE.get(), BulletProjectileRenderer::new);
-        for (RegistryObject<EntityType<?>> entries : EntityRegister.ENTITIES.getEntries()){
+       for (RegistryObject<EntityType<?>> entries : EntityRegister.ENTITIES.getEntries()){
             EntityType type = entries.get();
             event.registerEntityRenderer(type, PrideMobRenderer::new);
         }

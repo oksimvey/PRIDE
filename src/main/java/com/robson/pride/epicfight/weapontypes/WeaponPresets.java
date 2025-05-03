@@ -3,6 +3,7 @@ package com.robson.pride.epicfight.weapontypes;
 import M6FGR.dualaxes.gameassets.DualAxesAnimations;
 import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.epicfight.styles.PrideStyles;
+import com.robson.pride.epicfight.styles.SheatProvider;
 import com.robson.pride.main.Pride;
 import com.robson.pride.registries.AnimationsRegister;
 import net.minecraft.resources.ResourceLocation;
@@ -42,8 +43,6 @@ import java.util.function.Function;
 
 @Mod.EventBusSubscriber(modid = Pride.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class WeaponPresets {
-
-    public static List<LivingEntity> SheatingEntities = new ArrayList<>();
 
     public static final Function<Item, CapabilityItem.Builder> PRIDE_SHORTSWORD = (item) -> WeaponCapability.builder().category(WeaponCategoriesEnum.PRIDE_SHORTSWORD)
             .styleProvider(livingEntityPatch -> ItemStackUtils.getStyle(livingEntityPatch, WeaponCategoriesEnum.PRIDE_SHORTSWORD))
@@ -219,7 +218,7 @@ public class WeaponPresets {
             .livingMotionModifier(Styles.TWO_HAND, LivingMotions.IDLE, AnimationsRegister.MAUL_HOLD)
             .livingMotionModifier(Styles.TWO_HAND, LivingMotions.WALK, AnimationsRegister.MAUL_HOLD)
             .livingMotionModifier(Styles.TWO_HAND, LivingMotions.RUN, Animations.BIPED_RUN_LONGSWORD)
-            .livingMotionModifier(Styles.TWO_HAND, LivingMotions.BLOCK, Animations.LONGSWORD_GUARD)
+            .livingMotionModifier(Styles.TWO_HAND, LivingMotions.BLOCK, Animations.SPEAR_GUARD)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.IDLE, Animations.BIPED_HOLD_DUAL_WEAPON)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.WALK, Animations.BIPED_HOLD_DUAL_WEAPON)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.RUN, Animations.BIPED_RUN_DUAL)
@@ -237,7 +236,7 @@ public class WeaponPresets {
                 .collider(WOMWeaponColliders.PUNCH)
                 .newStyleCombo(Styles.ONE_HAND, AnimationsRegister.ONEHAND_SHOOT, AnimationsRegister.ONEHAND_SHOOT, AnimationsRegister.ONEHAND_SHOOT)
                 .newStyleCombo(PrideStyles.DUAL_WIELD, AnimationsRegister.DUAL_WIELD_SHOOT_RIGHT, AnimationsRegister.DUAL_WIELD_SHOOT_LEFT, AnimationsRegister.DUAL_WIELD_SHOOT_RIGHT, AnimationsRegister.DUAL_WIELD_SHOOT_RIGHT)
-                .newStyleCombo(Styles.MOUNT, Animations.SWORD_MOUNT_ATTACK)
+                .newStyleCombo(Styles.MOUNT, AnimationsRegister.ONEHAND_SHOOT)
                 .comboCancel((style) -> false)
                 .livingMotionModifier(Styles.ONE_HAND, LivingMotions.IDLE, WOMAnimations.ENDERBLASTER_ONEHAND_IDLE)
                 .livingMotionModifier(Styles.ONE_HAND, LivingMotions.WALK, WOMAnimations.ENDERBLASTER_ONEHAND_WALK)
@@ -264,8 +263,8 @@ public class WeaponPresets {
     public static final Function<Item, CapabilityItem.Builder> PRIDE_KATANA = (item) ->
         WeaponCapability.builder().category(WeaponCategoriesEnum.PRIDE_KATANA)
                 .styleProvider(livingEntityPatch -> {
-                    if(SheatingEntities.contains(livingEntityPatch.getOriginal())){
-                        return Styles.SHEATH;
+                    if (SheatProvider.sheatentities.contains(livingEntityPatch.getOriginal())){
+                     return Styles.SHEATH;
                     }
                     return ItemStackUtils.getStyle(livingEntityPatch, WeaponCategoriesEnum.PRIDE_KATANA);
                 })
@@ -317,7 +316,7 @@ public class WeaponPresets {
             .livingMotionModifier(Styles.TWO_HAND, LivingMotions.IDLE, WOMAnimations.RUINE_IDLE)
             .livingMotionModifier(Styles.TWO_HAND, LivingMotions.WALK, WOMAnimations.RUINE_WALK)
             .livingMotionModifier(Styles.TWO_HAND, LivingMotions.RUN, WOMAnimations.RUINE_RUN)
-            .livingMotionModifier(Styles.TWO_HAND, LivingMotions.BLOCK, Animations.LONGSWORD_GUARD)
+            .livingMotionModifier(Styles.TWO_HAND, LivingMotions.BLOCK, Animations.SPEAR_GUARD)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.IDLE, Animations.BIPED_HOLD_DUAL_WEAPON)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.WALK, Animations.BIPED_HOLD_DUAL_WEAPON)
             .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.RUN, Animations.BIPED_RUN_DUAL)

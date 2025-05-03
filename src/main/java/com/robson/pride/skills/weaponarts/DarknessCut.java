@@ -21,6 +21,7 @@ import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.Armatures;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -45,8 +46,6 @@ public class DarknessCut extends WeaponSkillBase {
             StaticAnimation animation = Animations.TACHI_AUTO3;
             AnimUtils.playAnim(ent, animation, 0);
             TimerUtil.schedule(() -> {
-                int id = MathUtils.getRandomInt(999999999);
-                String skill = "darkness_slash";
                 Vec3 lookangle = ent.getLookAngle();
                 ent.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 15, 255));
                 PlaySoundUtils.playSound(ent, SoundRegistry.TELEKINESIS_CAST.get(), 1, 1);
@@ -62,7 +61,7 @@ public class DarknessCut extends WeaponSkillBase {
                             if (particle != null && entko != null) {
                                 particle.setLifetime(200);
                                 particle.scale(1.25f);
-                                checkHit(ent, entko, particle, skill, id);
+                                checkHit(ent, entko, particle, new ArrayList<>());
                             }
                         }
                     }
@@ -71,23 +70,23 @@ public class DarknessCut extends WeaponSkillBase {
         }
     }
 
-    public static void checkHit(Entity dmgent, Entity entko, Particle particle, String skill, int id) {
+    public static void checkHit(Entity dmgent, Entity entko, Particle particle,List<Entity> hitentities) {
         if (particle != null && entko != null && dmgent != null) {
-            if (SkillCore.canHit(dmgent, entko, skill, id)) {
+            if (SkillCore.canHit(dmgent, entko,  hitentities)) {
                 double distance = MathUtils.getTotalDistance(entko.getX() - particle.getPos().x, entko.getY() - particle.getPos().y, entko.getZ() - particle.getPos().z);
                 if (distance < 0.5) {
-                    entko.getPersistentData().putInt(skill, id);
+                    hitentities.add(entko);
                     ElementalPassives.darknessPassive(entko, dmgent, 10);
-                } else
-                    TimerUtil.schedule(() -> loopCheckHit(dmgent, entko, particle, skill, id), 50, TimeUnit.MILLISECONDS);
+                }
+                else
+                    TimerUtil.schedule(() -> loopCheckHit(dmgent, entko, particle, hitentities), 50, TimeUnit.MILLISECONDS);
             }
         }
     }
 
-    public static void loopCheckHit(Entity dmgent, Entity entko, Particle particle, String skill, int id) {
+    public static void loopCheckHit(Entity dmgent, Entity entko, Particle particle, List<Entity> hitentities) {
         if (dmgent != null && entko != null && particle != null) {
-            checkHit(dmgent, entko, particle, skill, id);
+            checkHit(dmgent, entko, particle, hitentities);
         }
     }
-
 }

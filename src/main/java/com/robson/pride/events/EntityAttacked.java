@@ -3,6 +3,7 @@ package com.robson.pride.events;
 import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.entities.special.Shooter;
+import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.progression.AttributeModifiers;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.skills.special.CloneSkill;
@@ -80,7 +81,7 @@ public class EntityAttacked {
                 InteractionHand hand = ItemStackUtils.checkAttackingHand(living);
                 if (hand != null) {
                     if (hand == InteractionHand.MAIN_HAND) {
-                        if (ParticleTracking.shouldRenderParticle(living.getMainHandItem(), living)) {
+                        if (ParticleTracking.shouldRenderParticle(living.getMainHandItem(), living) && ItemStackUtils.getStyle(living) != PrideStyles.GUN_OFFHAND) {
                             ElementalPassives.onElementalDamage(ent, living, living.getMainHandItem(), event);
                         }
                     }

@@ -19,12 +19,9 @@ public class onRClickItem {
                 player.startUsingItem(InteractionHand.MAIN_HAND);
                 Parry.ParryWindow(player);
             }
-            if (ItemStackUtils.checkShield(player, InteractionHand.MAIN_HAND) || ItemStackUtils.checkShield(player, InteractionHand.OFF_HAND)){
+            if (ItemStackUtils.checkShield(player, InteractionHand.MAIN_HAND) || ItemStackUtils.checkShield(player, InteractionHand.OFF_HAND)) {
                 Parry.ParryWindow(player);
             }
-            player.getPersistentData().putBoolean("colossalsword_skill", !player.getPersistentData().getBoolean("colossalsword_skill"));
-            player.getPersistentData().putBoolean("katana_skill", !player.getPersistentData().getBoolean("katana_skill"));
-            player.getPersistentData().putLong("pride_money", player.getPersistentData().getLong("pride_money") + 100);
         }
     }
 }

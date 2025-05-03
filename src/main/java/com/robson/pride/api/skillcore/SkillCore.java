@@ -7,6 +7,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.List;
+
 import static com.robson.pride.registries.WeaponSkillRegister.WeaponSkills;
 
 public class SkillCore {
@@ -39,9 +41,9 @@ public class SkillCore {
         }
     }
 
-    public static boolean canHit(Entity dmgent, Entity target, String skillname, int skillid) {
+    public static boolean canHit(Entity dmgent, Entity target, List<Entity> hitentities) {
         if (dmgent != null && target != null) {
-            return target instanceof LivingEntity && !DamageSources.isFriendlyFireBetween(target, dmgent) && target != dmgent && target.getPersistentData().getInt(skillname) != skillid;
+            return target instanceof LivingEntity && !DamageSources.isFriendlyFireBetween(target, dmgent) && target != dmgent && !hitentities.contains(target);
         }
         return false;
     }

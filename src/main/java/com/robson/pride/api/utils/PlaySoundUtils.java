@@ -32,6 +32,6 @@ public class PlaySoundUtils {
 
     public static void playNonRegisteredSound(Entity ent, String soundid, float volume, float pitch){
         Holder<SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation(soundid)));
-        Minecraft.getInstance().level.playSound(Minecraft.getInstance().player, ent, holder.get(), SoundSource.NEUTRAL, volume, pitch);
+        if( Minecraft.getInstance().level != null) Minecraft.getInstance().level.playSound(Minecraft.getInstance().player, ent, holder.get(), SoundSource.NEUTRAL, volume, pitch);
     }
 }

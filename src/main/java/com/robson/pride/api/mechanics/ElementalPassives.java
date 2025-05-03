@@ -32,6 +32,7 @@ import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.damagesource.StunType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -66,7 +67,7 @@ public class ElementalPassives {
 
                 case "Light" -> lightPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:light_power")));
 
-                case "Thunder" -> thunderPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:thunder_power")), MathUtils.getRandomInt(999999999));
+                case "Thunder" -> thunderPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:thunder_power")), new ArrayList<>());
 
                 case "Sun" -> sunPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:sun_power")));
 
@@ -131,7 +132,7 @@ public class ElementalPassives {
         }
     }
 
-    public static void thunderPassive(Entity ent, Entity dmgent, float power, int id) {
+    public static void thunderPassive(Entity ent, Entity dmgent, float power, List<Entity> hitentities) {
         if (ent != null && dmgent != null) {
             if (!dmgent.level().isClientSide) {
                 MagicManager.spawnParticles(dmgent.level(), ParticleHelper.ELECTRICITY, ent.getX(), ent.getY() + ent.getBbHeight() / 2, ent.getZ(), 10, ent.getBbWidth() / 3, ent.getBbHeight() / 3, ent.getBbWidth() / 3, 0.1, false);
@@ -139,20 +140,20 @@ public class ElementalPassives {
             PlaySoundUtils.playSound(ent, SoundRegistry.LIGHTNING_CAST.get(), 1, 1);
             HealthUtils.hurtEntity(ent, ElementalUtils.getFinalValueForThunderDMG(ent, power / 2), dmgent.damageSources().lightningBolt());
             AnimUtils.playAnim(ent, AnimationsRegister.ELECTROCUTATE, 0);
-            ent.getPersistentData().putInt("zap_id", id);
+            hitentities.add(ent);
             if (!ElementalUtils.isNotInWater(ent, new Vec3(ent.getX(), ent.getY(), ent.getZ()))) {
-                chainThunder(ent, dmgent, power, id);
+                chainThunder(ent, dmgent, power, hitentities);
             }
         }
     }
 
-    public static void chainThunder(Entity ent, Entity dmgent, float power, int id) {
+    public static void chainThunder(Entity ent, Entity dmgent, float power, List<Entity> hitentities) {
         if (ent != null && dmgent != null) {
             AABB aabb = new AABB(ent.getX() - power, ent.getY() - power, ent.getZ() - power, ent.getX() + power, ent.getY() + power, ent.getZ() + power);
             List<Entity> listent = ent.level().getEntities(ent, aabb);
             for (Entity entko : listent) {
                 if (entko != null) {
-                    if (!ElementalUtils.isNotInWater(entko, new Vec3(entko.getX(), entko.getY(), entko.getZ())) && SkillCore.canHit(dmgent, entko, "zap_id", id)) {
+                    if (!ElementalUtils.isNotInWater(entko, new Vec3(entko.getX(), entko.getY(), entko.getZ())) && SkillCore.canHit(dmgent, entko,  hitentities)) {
                         double x1 = ent.getX();
                         double y1 = ent.getY() + ent.getBbHeight() / 2;
                         double z1 = ent.getZ();
@@ -168,7 +169,7 @@ public class ElementalPassives {
                             ParticleUtils.spawnParticleOnServer(ParticleRegistry.ELECTRICITY_PARTICLE.get(), ent.level(), finalx, finaly, finalz, 1, 0, 0, 0, 0);
                             double distance = MathUtils.getTotalDistance(x2 - finalx, y2 - finaly, z2 - finalz);
                             if (distance < 0.1) {
-                                thunderPassive(entko, dmgent, power, id);
+                                thunderPassive(entko, dmgent, power, hitentities);
                                 break;
                             }
                         }

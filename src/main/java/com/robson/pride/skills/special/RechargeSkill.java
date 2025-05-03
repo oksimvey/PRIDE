@@ -3,11 +3,15 @@ package com.robson.pride.skills.special;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.KeyRegister;
+import io.redspace.ironsspellbooks.registries.ParticleRegistry;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.client.events.engine.ControllEngine;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class RechargeSkill {
@@ -23,9 +27,12 @@ public class RechargeSkill {
         if (ent != null) {
             ParticleOptions particle = ElementalUtils.getParticleByElement(ElementalUtils.getElement(ent));
             if (particle != null) {
-                for (int i = 0; i < radius * 1.5; i++) {
-                   ParticleUtils.spawnAuraParticle(particle,(-radius + Math.random() * (radius + radius)) + ent.getX(), ((-radius * 0.5) + Math.random() * ((radius * 1.5) - (-radius * 0.5))) + ent.getY(), (-radius + Math.random() * (radius + radius)) + ent.getZ(), 0,  0, 0);
-                }
+                    List<Vec3> points = ArmatureUtils.getEntityArmatureVecs(Minecraft.getInstance().player, ent, 2, 0.3f);
+                    if (!points.isEmpty()){
+                        for (Vec3 vec3 : points) {
+                            Minecraft.getInstance().particleEngine.createParticle(particle, vec3.x, vec3.y, vec3.z, 0, 0, 0);
+                        }
+                    }
                 rechargeAuraLooper(ent, radius, maxloops, currentloop);
                 if (ent instanceof  Player pla){
                     ManaUtils.addMana(pla, 1);

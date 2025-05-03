@@ -10,6 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import reascer.wom.gameasset.WOMAnimations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,7 +38,7 @@ public class KillerAuraSkill {
                         ElementalPassives.lightPassive(entko, ent, power);
                     }
                     if (Objects.equals(element, "Thunder")) {
-                        ElementalPassives.thunderPassive(entko, ent, power, MathUtils.getRandomInt(999999999));
+                        ElementalPassives.thunderPassive(entko, ent, power, new ArrayList<>());
                     }
                     if (Objects.equals(element, "Sun")) {
                         ElementalPassives.sunPassive(entko, ent, power);

@@ -2,7 +2,10 @@ package com.robson.pride.events;
 
 import com.robson.pride.api.client.RenderingCore;
 import com.robson.pride.api.utils.ItemStackUtils;
+import com.robson.pride.epicfight.styles.SheatProvider;
+import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -22,9 +25,12 @@ public class onClientTick {
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (Minecraft.getInstance().player != null) {
             RenderingCore.renderCore();
-            Player player = Minecraft.getInstance().player;
+            LocalPlayer player = Minecraft.getInstance().player;
             if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND) && player.isUsingItem()) {
                 player.setSprinting(false);
+            }
+            if (ItemStackUtils.getWeaponCategory(player, InteractionHand.MAIN_HAND) == (WeaponCategoriesEnum.PRIDE_KATANA)){
+                SheatProvider.provideSheat(player);
             }
         }
     }

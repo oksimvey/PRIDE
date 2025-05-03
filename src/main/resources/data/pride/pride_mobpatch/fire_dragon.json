@@ -83,7 +83,14 @@
               "conditions": [
                 {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
               ],
-              "animation": "epicfight:dragon/attack3"
+              "animation": "epicfight:dragon/attack4",
+              "command_list": [
+                {
+                  "time": 0,
+                  "command": "pride @s cast fireball 1" ,
+                  "execute_at_target": false
+                }
+              ]
             }
           ]
     }

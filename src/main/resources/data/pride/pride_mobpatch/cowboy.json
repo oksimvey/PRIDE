@@ -69,18 +69,18 @@
   "stun_command_list":[
     {"command":"effect give @s pride:guard_break 2 1 true", "stun_type": "neutralize", "execute_at_target":false}
   ],
-  "textures": ["pride:textures/entities/hunter/hunter1.png"],
+  "textures": ["pride:textures/entities/cowboy/cowboy1.png"],
   "equipment": [
     {
       "variations": [0],
       "slot": "mainhand",
-      "item": "minecraft:bow"
+      "item": "pride:cowboy_revolver"
     }
   ],
   "combat_behavior": [
     {
       "weapon_categories": [
-        "ranged"
+        "pride_gun"
       ],
       "style": "common",
       "behavior_series": [
@@ -90,7 +90,6 @@
           "looping": false,
           "cooldown": 10,
           "behaviors": [
-
             {
               "conditions": [
                 {
@@ -107,14 +106,7 @@
                   "max": 0
                 }
               ],
-              "animation": "pride:biped/combat/mob_shoot",
-              "command_list": [
-                {
-                  "time": 0,
-                  "command": "pride @s shoot arrow 1.5",
-                  "execute_at_target": false
-                }
-              ]
+              "animation": "pride:biped/combat/gun/enderblaster_onehand_shoot"
             }
           ]
         }

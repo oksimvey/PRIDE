@@ -39,7 +39,7 @@ public class Guard {
 
     public static void checkGuard(Entity ent, Entity ddmgent, LivingAttackEvent event) {
         if (ent instanceof ServerPlayer player) {
-            if (player.isUsingItem() && canBlock(ent, ddmgent, event.getSource())) {
+            if (player.isUsingItem() && canBlock(ent, ddmgent, event.getSource()) && ItemStackUtils.getStyle(player) != PrideStyles.GUN_OFFHAND) {
                 checkParry(ent, ddmgent, event);
             } else {
                 ProgressionUtils.addXp(player, "Vigor", (int) event.getAmount());
@@ -106,7 +106,7 @@ public class Guard {
                     } else if (anim == Animations.UCHIGATANA_GUARD) {
                         return Animations.UCHIGATANA_GUARD_HIT;
                     } else if (anim == Animations.SPEAR_GUARD) {
-                        return Animations.SPEAR_GUARD;
+                        return Animations.SPEAR_GUARD_HIT;
                     } else if (anim == AnimationsRegister.INFERNAL_GUARD) {
                         return AnimationsRegister.INFERNAL_GUARD_HIT;
                     }

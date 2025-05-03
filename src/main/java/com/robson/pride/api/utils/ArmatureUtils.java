@@ -10,6 +10,10 @@ import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class ArmatureUtils {
 
     public static Vec3 getJointWithTranslation(LocalPlayer renderer, Entity ent, Vec3f translation, Joint joint) {
@@ -43,5 +47,20 @@ public class ArmatureUtils {
             }
         }
         return null;
+    }
+
+    public static List<Vec3> getEntityArmatureVecs(LocalPlayer renderer, Entity ent, int points, float offset){
+        List<Vec3> vec3List = new ArrayList<>();
+        if (ent != null){
+            LivingEntityPatch entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (entityPatch != null){
+                for (int i = 0; i < entityPatch.getArmature().getJointNumber(); i++){
+                    for (int j = 0; j < points; j++){
+                        vec3List.add(getJointWithTranslation(renderer, ent, new Vec3f(((new Random()).nextFloat() - offset) * offset, ((new Random()).nextFloat() - offset) * offset, ((new Random()).nextFloat() - offset) * offset), entityPatch.getArmature().searchJointById(i)));
+                     }
+                }
+            }
+        }
+        return vec3List;
     }
 }
