@@ -32,8 +32,8 @@ public class ItemStackUtils {
         else if (ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == weaponCategory) {
             return PrideStyles.DUAL_WIELD;
         }
-        else if (ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_GUN && ControllEngine.isKeyDown(EpicFightKeyMappings.GUARD) && ControllEngine.isKeyDown(EpicFightKeyMappings.ATTACK)) {
-            return CapabilityItem.Styles.RANGED;
+        else if (ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_GUN && ent.getOriginal() instanceof LivingEntity lent && lent.getMainHandItem().getTag() != null && lent.getMainHandItem().getTag().getBoolean("two_handed")) {
+            return PrideStyles.GUN_OFFHAND;
         }
         else if (ent.getOriginal() instanceof LivingEntity lent && lent.getMainHandItem().getTag() != null && lent.getMainHandItem().getTag().getBoolean("two_handed") && ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == CapabilityItem.WeaponCategories.FIST) {
             return CapabilityItem.Styles.TWO_HAND;

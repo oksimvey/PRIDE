@@ -8,6 +8,7 @@ import com.robson.pride.entities.japanese.boss.shogun.Shogun;
 import com.robson.pride.entities.japanese.mob.ronin.Ronin;
 import com.robson.pride.entities.forest.eliteknight.EliteKnight;
 import com.robson.pride.entities.savana.Dueler;
+import com.robson.pride.entities.special.BulletProjectile;
 import com.robson.pride.entities.special.CloneEntity;
 import com.robson.pride.entities.special.Shooter;
 import com.robson.pride.main.Pride;
@@ -21,6 +22,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import reascer.wom.world.entity.projectile.EnderBullet;
 
 @Mod.EventBusSubscriber(modid = Pride.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EntityRegister {
@@ -39,6 +41,7 @@ public class EntityRegister {
     public static final RegistryObject<EntityType<MagmaMonster>> MAGMA_MONSTER = make(false, new ResourceLocation("magma_monster"), MagmaMonster::new, MobCategory.MONSTER, 1, 2.5f);
     public static final RegistryObject<EntityType<Dueler>> DUELER = make(false, new ResourceLocation("dueler"), Dueler::new, MobCategory.MONSTER, 0.8f, 2f);
     public static final RegistryObject<EntityType<Mordath>> MORDATH = make(false, new ResourceLocation("mordath"), Mordath::new, MobCategory.MONSTER, 0.8f, 2f);
+    public static final RegistryObject<EntityType<BulletProjectile>> BULLET_PROJECTILE = make(true, new ResourceLocation("bullet"), BulletProjectile::new, MobCategory.MONSTER, 0.5f, 0.5f);
 
     private static <E extends Entity> RegistryObject<EntityType<E>> make(boolean special, ResourceLocation id, EntityType.EntityFactory<E> factory, MobCategory classification, float width, float height) {
         return make(special, id, factory, classification, width, height, false);

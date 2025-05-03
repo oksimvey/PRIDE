@@ -48,10 +48,6 @@
   },
   "textures": ["pride:textures/entities/special/fire_dragon.png"],
   "combat_behavior": [
-    {
-      "weapon_categories": ["common"],
-      "style": "common",
-      "behavior_series": [
         {
           "weight": 1.5,
           "canBeInterrupted": false,
@@ -90,8 +86,6 @@
               "animation": "epicfight:dragon/attack3"
             }
           ]
-        }
-      ]
     }
   ]
 }

@@ -8,13 +8,20 @@ import com.robson.pride.api.utils.ParticleUtils;
 import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.effect.PrideEffectBase;
 import com.robson.pride.epicfight.styles.PrideStyles;
+import com.robson.pride.epicfight.weapontypes.WeaponPresets;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
+import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
 import yesman.epicfight.gameasset.Armatures;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 
 public class RenderingCore {
+
+    public static byte tickcount = 0;
 
     public static void renderCore() {
         Minecraft client = Minecraft.getInstance();

@@ -1,6 +1,8 @@
 package com.robson.pride.api.utils;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
+import com.robson.pride.item.materials.Bullet;
+import com.robson.pride.registries.ItemsRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -35,6 +37,16 @@ public class AnimUtils {
                 }
             }
         }, 10, TimeUnit.MILLISECONDS);
+    }
+
+    public static boolean allowShoot(Entity ent){
+        if (ent != null){
+            if (ent instanceof Player player){
+                return player.isCreative() || player.getInventory().contains(ItemsRegister.BULLET.get().getDefaultInstance());
+            }
+            return true;
+        }
+        return false;
     }
 
     public static void playAnimWithPerilous(Entity ent, StaticAnimation animation, String perilous, float convert){

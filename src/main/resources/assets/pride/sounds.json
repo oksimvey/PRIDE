@@ -7,6 +7,22 @@
       }
     ]
   },
+  "dry_fire": {
+    "sounds": [
+      {
+        "name": "pride:battle/dry",
+        "stream": false
+      }
+    ]
+  },
+  "shoot": {
+    "sounds": [
+      {
+        "name": "pride:battle/shoot",
+        "stream": false
+      }
+    ]
+  },
   "perilous": {
     "sounds": [
       {
