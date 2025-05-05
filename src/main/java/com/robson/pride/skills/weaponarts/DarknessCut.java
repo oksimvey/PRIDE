@@ -61,32 +61,12 @@ public class DarknessCut extends WeaponSkillBase {
                             if (particle != null && entko != null) {
                                 particle.setLifetime(200);
                                 particle.scale(1.25f);
-                                checkHit(ent, entko, particle, new ArrayList<>());
+                                SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, ()-> ElementalPassives.darknessPassive(entko, ent, 10));
                             }
                         }
                     }
                 }
             }, 300, TimeUnit.MILLISECONDS);
-        }
-    }
-
-    public static void checkHit(Entity dmgent, Entity entko, Particle particle,List<Entity> hitentities) {
-        if (particle != null && entko != null && dmgent != null) {
-            if (SkillCore.canHit(dmgent, entko,  hitentities)) {
-                double distance = MathUtils.getTotalDistance(entko.getX() - particle.getPos().x, entko.getY() - particle.getPos().y, entko.getZ() - particle.getPos().z);
-                if (distance < 0.5) {
-                    hitentities.add(entko);
-                    ElementalPassives.darknessPassive(entko, dmgent, 10);
-                }
-                else
-                    TimerUtil.schedule(() -> loopCheckHit(dmgent, entko, particle, hitentities), 50, TimeUnit.MILLISECONDS);
-            }
-        }
-    }
-
-    public static void loopCheckHit(Entity dmgent, Entity entko, Particle particle, List<Entity> hitentities) {
-        if (dmgent != null && entko != null && particle != null) {
-            checkHit(dmgent, entko, particle, hitentities);
         }
     }
 }

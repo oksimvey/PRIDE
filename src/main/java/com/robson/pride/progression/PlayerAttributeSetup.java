@@ -47,7 +47,6 @@ public class PlayerAttributeSetup {
         if (player != null){
             AttributeInstance attributeInstance = player.getAttributes().getInstance(AttributeRegistry.MAX_MANA.get());
             attributeInstance.setBaseValue(attributeInstance.getBaseValue() + 1.5 * mindlvl);
-            player.getAttributes().getInstance(AttributeRegistry.MANA_REGEN.get()).setBaseValue(0);
             ManaUtils.addMana(player, 100000);
         }
     }

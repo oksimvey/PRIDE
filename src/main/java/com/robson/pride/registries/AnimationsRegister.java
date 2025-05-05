@@ -1,5 +1,6 @@
 package com.robson.pride.registries;
 
+import com.robson.pride.api.mechanics.ElementalPassives;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.main.Pride;
@@ -305,30 +306,16 @@ public class AnimationsRegister {
         }
     };
 
-    public static void shotBullet(Entity owner, Vec3 jointpos, List<Entity> hitentities){
-        if (owner != null && jointpos != null){
+    public static void shotBullet(Entity owner, Vec3 jointpos, List<Entity> hitentities) {
+        if (owner != null && jointpos != null) {
             Vec3 lookangle = owner.getLookAngle();
-            Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.FIRE_PARTICLE.get(), jointpos.x, jointpos.y, jointpos.z, lookangle.x, lookangle.y, lookangle.z);
-            if (particle != null){
-                for (Entity ent : owner.level().getEntities(owner, new AABB(owner.getX() - 25, owner.getY() -25, owner.getZ() - 25, owner.getX() + 25, owner.getY() + 25, owner.getZ() + 25))){
-                    bulletHit(owner, ent, particle, hitentities);
+            Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.SMOKE, jointpos.x, jointpos.y, jointpos.z, lookangle.x, lookangle.y, lookangle.z);
+            if (particle != null) {
+                for (Entity ent : owner.level().getEntities(owner, new AABB(owner.getX() - 25, owner.getY() - 25, owner.getZ() - 25, owner.getX() + 25, owner.getY() + 25, owner.getZ() + 25))) {
+                    SkillCore.loopParticleHit(owner, ent, particle, new ArrayList<>(), 0.5f, ()-> ElementalPassives.darknessPassive(ent, owner, 10));
                 }
             }
         }
-    }
-
-    public static void bulletHit(Entity owner, Entity entity, Particle particle, List<Entity> hitentities){
-        if (owner != null && entity != null && particle != null){
-            if (SkillCore.canHit(owner, entity, hitentities) && particle.getPos().distanceTo(entity.position()) < 0.5){
-                hitentities.add(entity);
-                entity.hurt(owner.damageSources().generic(), 4);
-            }
-            else loopBulletHit(owner, entity, particle, hitentities);
-        }
-    }
-
-    public static void loopBulletHit(Entity owner, Entity ent, Particle particle, List<Entity> hitentities){
-        TimerUtil.schedule(()-> bulletHit(owner, ent, particle, hitentities), 50, TimeUnit.MILLISECONDS);
     }
 
 

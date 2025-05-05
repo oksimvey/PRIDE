@@ -8,6 +8,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.UUID;
 
@@ -20,12 +21,17 @@ public class WetEffect extends PrideEffectBase {
     }
 
     @Override
+    public void prideServerTick(Player player){
+
+    }
+
+    @Override
     public void applyEffectTick(LivingEntity living, int amplifier) {
          living.clearFire();
     }
 
     @Override
-    public void pridetick(LivingEntity living) {
+    public void prideClientTick(LivingEntity living) {
         if (living != null){
             double radius = living.getBbWidth() / 4;
             Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.FALLING_WATER, -radius + Math.random() * (radius + radius) + living.getX(), (-living.getBbHeight() * 0.5) + Math.random() * ((living.getBbHeight())) + living.getY(), -radius + Math.random() * (radius + radius) + living.getZ(), 0, -0.17, 0);

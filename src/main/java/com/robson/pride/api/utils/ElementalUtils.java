@@ -115,7 +115,7 @@ public class ElementalUtils {
         return ChatFormatting.GRAY;
     }
 
-    public static void playSoundByElement(String element, Entity ent, boolean aura, float volume) {
+    public static void playSoundByElement(String element, Entity ent, float volume) {
         ClientLevel level = Minecraft.getInstance().level;
         LocalPlayer player = Minecraft.getInstance().player;
         if (level != null) {

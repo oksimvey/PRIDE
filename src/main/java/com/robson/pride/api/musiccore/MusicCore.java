@@ -25,6 +25,8 @@ public class MusicCore {
        }
     }
 
+
+
     public static Music deserializeMobMusic(Player player, PrideMusicManager musicManager) {
         if (player != null) {
             for (Entity ent : player.level().getEntities(player, MathUtils.createAABBAroundEnt(player, 50))) {

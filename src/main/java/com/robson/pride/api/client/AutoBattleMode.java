@@ -1,20 +1,16 @@
 package com.robson.pride.api.client;
 
-import com.robson.pride.api.utils.ItemStackUtils;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
-import yesman.epicfight.api.model.Armature;
-import yesman.epicfight.client.gui.screen.config.EpicFightOptionSubScreen;
-import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
-import yesman.epicfight.config.ClientConfig;
-import yesman.epicfight.config.ConfigManager;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 public class AutoBattleMode {
 
-    public static void autoSwitch(LocalPlayer player){
-        ClientConfig config = ConfigManager.INGAME_CONFIG;
-
-                if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND))
-        ;}
+    public static void autoSwitch(PlayerPatch playerPatch) {
+        if (playerPatch != null) {
+            if (!playerPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND).isEmpty()){
+                playerPatch.toMode(PlayerPatch.PlayerMode.BATTLE, true);
+            }
+            else playerPatch.toMode(PlayerPatch.PlayerMode.MINING, true);
+        }
     }
+}

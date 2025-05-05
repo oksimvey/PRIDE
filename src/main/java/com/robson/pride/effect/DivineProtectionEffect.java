@@ -8,6 +8,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Armatures;
@@ -28,7 +29,7 @@ public class DivineProtectionEffect extends PrideEffectBase {
     }
 
     @Override
-    public void pridetick(LivingEntity ent) {
+    public void prideClientTick(LivingEntity ent) {
         if (ent != null) {
             int particlesPerWing = 20;
             float animationSpeed = 0.05F;
@@ -56,6 +57,11 @@ public class DivineProtectionEffect extends PrideEffectBase {
                 }
             }
         }
+    }
+
+    @Override
+    public void prideServerTick(Player player){
+
     }
 
         private static Vec3f calculateWingPoint(float progress, int side, float time, float speed) {

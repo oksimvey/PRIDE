@@ -1,13 +1,17 @@
 package com.robson.pride.api.skillcore;
 
 import com.robson.pride.api.data.PrideCapabilityReloadListener;
+import com.robson.pride.api.utils.MathUtils;
+import com.robson.pride.api.utils.TimerUtil;
 import io.redspace.ironsspellbooks.damage.DamageSources;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.robson.pride.registries.WeaponSkillRegister.WeaponSkills;
 
@@ -38,6 +42,18 @@ public class SkillCore {
         WeaponSkillBase skill = WeaponSkills.get(weaponart);
         if (skill != null){
             skill.tryToExecute(ent);
+        }
+    }
+
+    public static void loopParticleHit(Entity dmgent, Entity target, Particle particle, List<Entity> hitentities, float particleradius, Runnable function){
+        if (dmgent != null && target != null && particle != null && hitentities != null && function != null){
+            if (canHit(dmgent, target, hitentities)){
+                if (MathUtils.getTotalDistance(particle.getPos().x - target.getX(), particle.getPos().y - target.getY(), particle.getPos().z - target.getZ()) < particleradius){
+                    hitentities.add(target);
+                    function.run();
+                }
+                else TimerUtil.schedule(()-> loopParticleHit(dmgent, target, particle, hitentities, particleradius, function), 50, TimeUnit.MILLISECONDS);
+            }
         }
     }
 

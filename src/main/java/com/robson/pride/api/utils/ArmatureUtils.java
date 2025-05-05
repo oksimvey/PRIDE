@@ -12,7 +12,9 @@ import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ArmatureUtils {
 
@@ -49,18 +51,52 @@ public class ArmatureUtils {
         return null;
     }
 
-    public static List<Vec3> getEntityArmatureVecs(LocalPlayer renderer, Entity ent, int points, float offset){
+    public static Joint getNearestJoint(LocalPlayer renderer, Entity ent, Vec3 pos) {
+        ConcurrentHashMap<Joint, Double> jointposmap = new ConcurrentHashMap<>();
+        List<Joint> joints = getArmatureJoints(ent);
+        for (Joint joint : joints){
+            Vec3 jointpos = getJoinPosition(renderer, ent, joint);
+            if (jointpos != null){
+                jointposmap.put(joint, MathUtils.getTotalDistance(jointpos, pos));
+            }
+        }
+        if (!jointposmap.isEmpty()){
+            Joint joint = null;
+            double minValue = Double.MAX_VALUE;
+            for (Map.Entry<Joint, Double> entry : jointposmap.entrySet()) {
+                if (entry.getValue() < minValue) {
+                    minValue = entry.getValue();
+                    joint = entry.getKey();
+                }
+            }
+            return joint;
+        }
+        return null;
+    }
+
+    public static List<Vec3> getEntityArmatureVecsForParticle(LocalPlayer renderer, Entity ent, int points, float offset) {
         List<Vec3> vec3List = new ArrayList<>();
-        if (ent != null){
-            LivingEntityPatch entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-            if (entityPatch != null){
-                for (int i = 0; i < entityPatch.getArmature().getJointNumber(); i++){
-                    for (int j = 0; j < points; j++){
-                        vec3List.add(getJointWithTranslation(renderer, ent, new Vec3f(((new Random()).nextFloat() - offset) * offset, ((new Random()).nextFloat() - offset) * offset, ((new Random()).nextFloat() - offset) * offset), entityPatch.getArmature().searchJointById(i)));
-                     }
+        List<Joint> joints = getArmatureJoints(ent);
+        if (!joints.isEmpty()) {
+            for (Joint joint : joints) {
+                for (int i = 0; i < points; i++) {
+                    vec3List.add(getJointWithTranslation(renderer, ent, new Vec3f(((new Random()).nextFloat() - offset) * offset, ((new Random()).nextFloat() - offset) * offset, ((new Random()).nextFloat() - offset) * offset), joint));
                 }
             }
         }
         return vec3List;
+    }
+
+    public static List<Joint> getArmatureJoints(Entity ent) {
+        List<Joint> joints = new ArrayList<>();
+        if (ent != null) {
+            LivingEntityPatch entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (entityPatch != null) {
+                for (int i = 0; i < entityPatch.getArmature().getJointNumber(); i++) {
+                    joints.add(entityPatch.getArmature().searchJointById(i));
+                }
+            }
+        }
+        return joints;
     }
 }

@@ -14,7 +14,6 @@ public class KeyRegister {
     public static KeyMapping keyActionTertiary;
     public static KeyMapping keyActionJump;
     public static KeyMapping keyActionSwapHand;
-    public static KeyMapping keyActionRecharge;
     public static KeyMapping keyActionAura;
     public static KeyMapping keyActionImbuement;
     public static KeyMapping keyActionImmunity;
@@ -26,7 +25,6 @@ public class KeyRegister {
     private static boolean wasPressedTertiary = false;
     private static boolean wasPressedJump = false;
     private static boolean wasPressedSwapHand = false;
-    private static boolean wasPressedRecharge = false;
     private static boolean wasPressedAura = false;
     private static boolean wasPressedImbuement = false;
     private static boolean wasPressedImmunity = false;
@@ -39,7 +37,6 @@ public class KeyRegister {
         keyActionTertiary = new KeyMapping("key.pride.dodge", InputConstants.Type.KEYSYM, InputConstants.KEY_Q, "key.categories.misc");
         keyActionJump = new KeyMapping("key.pride.jump", InputConstants.Type.KEYSYM, InputConstants.KEY_SPACE, "key.categories.misc");
         keyActionSwapHand = new KeyMapping("key.pride.swaphand", InputConstants.Type.KEYSYM, InputConstants.KEY_F, "key.categories.misc");
-        keyActionRecharge = new KeyMapping("key.pride.recharge", InputConstants.Type.KEYSYM, InputConstants.KEY_R, "key.categories.misc");
         keyActionAura = new KeyMapping("key.pride.aura", InputConstants.Type.KEYSYM, InputConstants.KEY_X, "key.categories.misc");
         keyActionImbuement = new KeyMapping("key.pride.imbuement", InputConstants.Type.KEYSYM, InputConstants.KEY_Z, "key.categories.misc");
         keyActionImmunity = new KeyMapping("key.pride.immunity", InputConstants.Type.KEYSYM, InputConstants.KEY_C, "key.categories.misc");
@@ -50,7 +47,6 @@ public class KeyRegister {
         event.register(keyActionTertiary);
         event.register(keyActionJump);
         event.register(keyActionSwapHand);
-        event.register(keyActionRecharge);
         event.register(keyActionAura);
         event.register(keyActionImbuement);
         event.register(keyActionImmunity);
@@ -69,7 +65,6 @@ public class KeyRegister {
         checkKeyAction(keyActionTertiary, wasPressedTertiary, "dodge");
         checkKeyAction(keyActionJump, wasPressedJump, "jump");
         checkKeyAction(keyActionSwapHand, wasPressedSwapHand, "swaphand");
-        checkKeyAction(keyActionRecharge, wasPressedRecharge, "recharge");
         checkKeyAction(keyActionAura, wasPressedAura, "aura");
         checkKeyAction(keyActionImbuement, wasPressedImbuement, "imbuement");
         checkKeyAction(keyActionImmunity, wasPressedImmunity, "immunity");
@@ -93,8 +88,6 @@ public class KeyRegister {
             wasPressedJump = isCurrentlyPressed;
         } else if (key == keyActionSwapHand) {
             wasPressedSwapHand = isCurrentlyPressed;
-        } else if (key == keyActionRecharge) {
-            wasPressedRecharge = isCurrentlyPressed;
         }
         else if (key == keyActionAura){
             wasPressedAura = isCurrentlyPressed;

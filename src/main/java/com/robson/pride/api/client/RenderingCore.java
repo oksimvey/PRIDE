@@ -8,18 +8,11 @@ import com.robson.pride.api.utils.ParticleUtils;
 import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.effect.PrideEffectBase;
 import com.robson.pride.epicfight.styles.PrideStyles;
-import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
-import com.robson.pride.epicfight.weapontypes.WeaponPresets;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.Vec3;
-import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
 import yesman.epicfight.gameasset.Armatures;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 
 public class RenderingCore {
 
@@ -29,7 +22,6 @@ public class RenderingCore {
         if (client.player != null) {
             entityRenderer(client.player);
             Stealth.renderCriticalParticle(client.player, TargetUtil.getTarget(client.player));
-            AutoBattleMode.autoSwitch(client.player);
             for (Entity ent : client.player.level().getEntities(client.player, MathUtils.createAABBAroundEnt(client.player, 50))){
                 if (ent != null) {
                     if (ent instanceof LivingEntity living) {
@@ -52,7 +44,7 @@ public class RenderingCore {
             }
             for (MobEffectInstance effect : ent.getActiveEffects()){
                 if (effect.getEffect() instanceof PrideEffectBase prideEffect){
-                    prideEffect.pridetick(ent);
+                    prideEffect.prideClientTick(ent);
                 }
             }
         }

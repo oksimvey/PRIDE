@@ -2,6 +2,7 @@ package com.robson.pride.events;
 
 import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
+import com.robson.pride.effect.ImmunityEffect;
 import com.robson.pride.entities.special.Shooter;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.progression.AttributeModifiers;
@@ -68,6 +69,9 @@ public class EntityAttacked {
             Entity ddmgent = event.getSource().getDirectEntity();
             ddmgent.setDeltaMovement(ddmgent.getDeltaMovement().x, 0, ddmgent.getDeltaMovement().z);
             ent.setDeltaMovement(ent.getDeltaMovement().x, 0, ent.getDeltaMovement().z);
+            if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMMUNITY.get())){
+                ImmunityEffect.onDamage(event, ent);
+            }
             if (ddmgent instanceof LivingEntity liv) {
                 if (liv.hasEffect(EffectRegister.HYPNOTIZED.get())) {
                     event.setCanceled(true);

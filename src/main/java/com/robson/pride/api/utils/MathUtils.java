@@ -27,6 +27,10 @@ public class MathUtils {
         return Math.sqrt(Math.pow(deltax, 2) + Math.pow(deltay, 2) + Math.pow(deltaz, 2));
     }
 
+    public static double getTotalDistance(Vec3 vec1, Vec3 vec2) {
+        return getTotalDistance(vec1.x - vec2.x, vec1.y - vec2.y, vec1.z - vec2.z);
+    }
+
     public static float setDecimalsOnFloat(float number, byte decimals){
         int amount = (int) Math.pow(10, decimals);
         int newnumber = (int) (number * amount);
@@ -35,23 +39,5 @@ public class MathUtils {
 
     public static AABB createAABBAroundEnt(Entity ent, float size) {
         return new AABB(ent.getX() + size, ent.getY() + size * 1.5, ent.getZ() + size, ent.getX() - size, ent.getY() - size, ent.getZ() - size);
-    }
-
-    public static AABB createAABBByLookingAngle(Vec3 pos, Vector3f lookangle, double radius) {
-        double length = radius * 2;
-        double yOffset = lookangle.y * radius;
-        return new AABB(pos.x + lookangle.x * radius - (radius * 1.5),
-                pos.y + yOffset - (radius),
-                pos.z + lookangle.z * radius - (radius * 2),
-                pos.x + lookangle.x * length + (radius * 1.5),
-                pos.y + yOffset + (radius),
-                pos.z + lookangle.z * length + (radius * 2));
-    }
-
-    public static float getAngleDifferencee(Entity ent1, Entity ent2) {
-        if (ent1 != null && ent2 != null) {
-            return (float) Math.sqrt(Math.pow(ent1.getYRot(), 2) + Math.pow(ent2.getYRot(), 2));
-        }
-        return 0;
     }
 }

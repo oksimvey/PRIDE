@@ -1,6 +1,6 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.musiccore.MusicTick;
+import com.robson.pride.api.customtick.CustomTickManager;
 import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.api.utils.TagsUtils;
 import com.robson.pride.progression.NewCap;
@@ -20,7 +20,7 @@ public class PlayerSetup {
         if (player != null) {
             player.getPersistentData().putBoolean("isParrying", false);
             playerCommonSetup(player);
-            MusicTick.startTick(player);
+            CustomTickManager.startTick(player);
             TagsUtils.ClientPlayerTagsAcessor.playerTags.put(player, player.getPersistentData());
         }
     }
@@ -29,7 +29,7 @@ public class PlayerSetup {
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         Player player = event.getEntity();
         if (player != null) {
-            MusicTick.startRespawnTick(player);
+            CustomTickManager.startRespawnTick(player);
             PlayerAttributeSetup.setupPlayerAttributes(player);
             playerCommonSetup(player);
         }
@@ -39,7 +39,7 @@ public class PlayerSetup {
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         Player player = event.getEntity();
         if (player != null) {
-            MusicTick.stopTick(player);
+            CustomTickManager.stopTick(player);
         }
     }
 

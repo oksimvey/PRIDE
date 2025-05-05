@@ -1,14 +1,15 @@
 package com.robson.pride.keybinding;
 
 import com.robson.pride.progression.ProgressionGUI;
+import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.skills.special.KillerAuraSkill;
-import com.robson.pride.skills.special.RechargeSkill;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -57,6 +58,12 @@ public class KeyActionPacket {
             OnLeftClick.onLClick(player);
         }
 
+        if (packet.action.equals("immunity")){
+            if (player.hasEffect(EffectRegister.IMMUNITY.get())){
+                player.removeEffect(EffectRegister.IMMUNITY.get());
+            }
+            else player.addEffect(new MobEffectInstance(EffectRegister.IMMUNITY.get(), 999999999));
+        }
         if (packet.action.equals("swaphand")) {
             onFPress.swapHand(player);
         }
@@ -68,10 +75,6 @@ public class KeyActionPacket {
 
         if (packet.action.equals("jump")) {
             onSpacePress.onPress(player);
-        }
-
-        if (packet.action.equals("recharge")) {
-                RechargeSkill.playerRecharge(player, 0);
         }
         if (packet.action.equals("aura")){
             KillerAuraSkill.skillStart(player);
