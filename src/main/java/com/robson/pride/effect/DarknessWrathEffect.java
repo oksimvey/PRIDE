@@ -38,11 +38,6 @@ public class DarknessWrathEffect extends PrideEffectBase {
     }
 
     @Override
-    public void prideServerTick(Player player){
-
-    }
-
-    @Override
     public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;
     }

@@ -21,11 +21,6 @@ public class WetEffect extends PrideEffectBase {
     }
 
     @Override
-    public void prideServerTick(Player player){
-
-    }
-
-    @Override
     public void applyEffectTick(LivingEntity living, int amplifier) {
          living.clearFire();
     }

@@ -59,10 +59,6 @@ public class DivineProtectionEffect extends PrideEffectBase {
         }
     }
 
-    @Override
-    public void prideServerTick(Player player){
-
-    }
 
         private static Vec3f calculateWingPoint(float progress, int side, float time, float speed) {
             float x = side * (WING_OFFSET.x + progress * WING_LENGTH);

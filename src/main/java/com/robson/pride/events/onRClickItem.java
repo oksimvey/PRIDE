@@ -2,6 +2,7 @@ package com.robson.pride.events;
 
 import com.robson.pride.api.mechanics.Parry;
 import com.robson.pride.api.utils.ItemStackUtils;
+import com.robson.pride.epicfight.styles.SheatProvider;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -22,6 +23,7 @@ public class onRClickItem {
             if (ItemStackUtils.checkShield(player, InteractionHand.MAIN_HAND) || ItemStackUtils.checkShield(player, InteractionHand.OFF_HAND)) {
                 Parry.ParryWindow(player);
             }
+            SheatProvider.unsheat(player);
         }
     }
 }

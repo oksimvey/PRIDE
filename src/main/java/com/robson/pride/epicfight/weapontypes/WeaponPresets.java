@@ -263,7 +263,7 @@ public class WeaponPresets {
     public static final Function<Item, CapabilityItem.Builder> PRIDE_KATANA = (item) ->
         WeaponCapability.builder().category(WeaponCategoriesEnum.PRIDE_KATANA)
                 .styleProvider(livingEntityPatch -> {
-                    if (SheatProvider.sheatentities.contains(livingEntityPatch.getOriginal())){
+                    if (livingEntityPatch.getOriginal() instanceof Player player && player.getPersistentData().getBoolean("pride_sheat")){
                      return Styles.SHEATH;
                     }
                     return ItemStackUtils.getStyle(livingEntityPatch, WeaponCategoriesEnum.PRIDE_KATANA);
@@ -279,8 +279,8 @@ public class WeaponPresets {
                 .newStyleCombo(PrideStyles.GUN_OFFHAND, AnimationsRegister.LEFT_SHOOT, AnimationsRegister.LEFT_SHOOT, AnimationsRegister.LEFT_SHOOT)
                 .newStyleCombo(Styles.MOUNT, Animations.SWORD_MOUNT_ATTACK)
                 .livingMotionModifier(Styles.COMMON, LivingMotions.IDLE, Animations.BIPED_HOLD_UCHIGATANA)
-                .livingMotionModifier(Styles.COMMON, LivingMotions.WALK, Animations.BIPED_HOLD_UCHIGATANA)
-                .livingMotionModifier(Styles.COMMON, LivingMotions.RUN, WOMAnimations.ANTITHEUS_RUN)
+                .livingMotionModifier(Styles.COMMON, LivingMotions.WALK, Animations.BIPED_WALK_UCHIGATANA)
+                .livingMotionModifier(Styles.COMMON, LivingMotions.RUN, Animations.BIPED_RUN_UCHIGATANA)
                 .livingMotionModifier(Styles.ONE_HAND, LivingMotions.BLOCK, Animations.SWORD_GUARD)
                 .livingMotionModifier(Styles.SHEATH, LivingMotions.IDLE, Animations.BIPED_HOLD_UCHIGATANA_SHEATHING)
                 .livingMotionModifier(Styles.SHEATH, LivingMotions.WALK, Animations.BIPED_WALK_UCHIGATANA_SHEATHING)
@@ -291,7 +291,7 @@ public class WeaponPresets {
                 .livingMotionModifier(Styles.TWO_HAND, LivingMotions.RUN, WOMAnimations.RUINE_RUN)
                 .livingMotionModifier(Styles.TWO_HAND, LivingMotions.BLOCK, Animations.LONGSWORD_GUARD)
                 .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.IDLE, WOMAnimations.RUINE_BOOSTED_IDLE)
-                .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.WALK, Animations.BIPED_HOLD_DUAL_WEAPON)
+                .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.WALK, WOMAnimations.RUINE_BOOSTED_WALK)
                 .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.RUN, Animations.BIPED_RUN_DUAL)
                 .livingMotionModifier(PrideStyles.DUAL_WIELD, LivingMotions.BLOCK, Animations.SWORD_DUAL_GUARD)
                 .weaponCombinationPredicator((entitypatch) -> EpicFightCapabilities.getItemStackCapability(entitypatch.getOriginal().getOffhandItem()).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_KATANA || EpicFightCapabilities.getItemStackCapability(entitypatch.getOriginal().getOffhandItem()).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_GUN);

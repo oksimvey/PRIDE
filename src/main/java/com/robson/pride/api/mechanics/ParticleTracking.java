@@ -39,7 +39,8 @@ public class ParticleTracking {
                             togglefire.put(ent, false);
                         }
                     }
-                } else return WeaponSkillRegister.elements.contains(element);
+                }
+                else return WeaponSkillRegister.elements.contains(element);
             }
         }
         return false;

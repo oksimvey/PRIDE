@@ -14,20 +14,19 @@ public class ManaUtils {
         return 0;
     }
 
-    public static void setMana(LivingEntity ent, float amount) {
+    public static void setMana(LivingEntity ent, int amount) {
         if (ent != null) {
             if (MagicData.getPlayerMagicData(ent) != null) {
-                MagicData.getPlayerMagicData(ent).setMana(amount);
+                MagicData.getPlayerMagicData(ent).setMana((int) amount);
             }
         }
     }
 
-    public static void addMana(LivingEntity ent, float amount) {
-        setMana(ent, (getMana(ent) + amount));
+    public static void addMana(LivingEntity ent, int amount) {
+        setMana(ent, (int) (getMana(ent) + amount));
     }
 
-    public static void consumeMana(LivingEntity ent, float amount) {
-        setMana(ent, (getMana(ent) - amount));
+    public static void consumeMana(LivingEntity ent, int amount) {
+        setMana(ent, (int) (getMana(ent) - amount));
     }
-
 }

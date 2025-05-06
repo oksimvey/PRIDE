@@ -124,7 +124,7 @@ public class ElementalUtils {
 
                 case "Light" -> level.playSound(player, ent, SoundRegistry.CLOUD_OF_REGEN_LOOP.get(), SoundSource.NEUTRAL, volume, 1);
 
-                case "Thunder" -> level.playSound(player, ent, SoundRegistry.ELECTROCUTE_LOOP.get(), SoundSource.NEUTRAL, volume, 1);
+                case "Thunder" -> level.playSound(player, ent, SoundRegistry.LIGHTNING_WOOSH_01.get(), SoundSource.NEUTRAL, volume, 1);
 
                 case "Sun" -> level.playSound(player, ent, SoundRegistry.FIRE_BREATH_LOOP.get(), SoundSource.NEUTRAL, volume, 1);
 
@@ -231,7 +231,7 @@ public class ElementalUtils {
     public static String getElement(Entity ent) {
         if (ent != null) {
             if (ent instanceof Player player) {
-                return player.getPersistentData().getString("Element");
+                    return TagsUtils.ClientPlayerTagsAcessor.playerTags.get(player).getString("Element");
             }
         }
         return "";

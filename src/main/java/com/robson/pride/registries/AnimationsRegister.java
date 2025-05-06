@@ -11,6 +11,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
@@ -31,7 +32,10 @@ import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.model.armature.HumanoidArmature;
 import yesman.epicfight.particle.EpicFightParticles;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
+import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.EpicFightDamageType;
 import yesman.epicfight.world.damagesource.StunType;
 
@@ -312,7 +316,12 @@ public class AnimationsRegister {
             Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.SMOKE, jointpos.x, jointpos.y, jointpos.z, lookangle.x, lookangle.y, lookangle.z);
             if (particle != null) {
                 for (Entity ent : owner.level().getEntities(owner, new AABB(owner.getX() - 25, owner.getY() - 25, owner.getZ() - 25, owner.getX() + 25, owner.getY() + 25, owner.getZ() + 25))) {
-                    SkillCore.loopParticleHit(owner, ent, particle, new ArrayList<>(), 0.5f, ()-> ElementalPassives.darknessPassive(ent, owner, 10));
+                    SkillCore.loopParticleHit(owner, ent, particle, new ArrayList<>(), 0.5f, ()-> {
+                        LivingEntityPatch entityPatch = EpicFightCapabilities.getEntityPatch(owner, LivingEntityPatch.class);
+                        if (entityPatch != null){
+                            entityPatch.attack(new EpicFightDamageSource(owner.damageSources().generic()), ent, InteractionHand.MAIN_HAND);
+                        }
+                    });
                 }
             }
         }

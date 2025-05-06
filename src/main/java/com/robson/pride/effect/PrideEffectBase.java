@@ -3,7 +3,6 @@ package com.robson.pride.effect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -16,5 +15,4 @@ public abstract class PrideEffectBase extends MobEffect {
     @OnlyIn(Dist.CLIENT)
     public abstract void prideClientTick(LivingEntity ent);
 
-    public abstract void prideServerTick(Player player);
 }

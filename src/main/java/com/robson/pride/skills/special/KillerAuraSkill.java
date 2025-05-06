@@ -19,9 +19,6 @@ public class KillerAuraSkill {
    public static void skillStart(Entity ent){
        if (ent != null){
            AnimUtils.playAnim(ent, WOMAnimations.TORMENT_BERSERK_CONVERT, 0);
-           if (ent instanceof LivingEntity living){
-               living.addEffect(new MobEffectInstance(EffectRegister.KILLER_AURA.get(), 9999999, 1));
-           }
        }
    }
 

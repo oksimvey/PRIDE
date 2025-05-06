@@ -46,6 +46,8 @@ public class PlayerSetup {
     @SubscribeEvent
     public static void clonePlayer(PlayerEvent.Clone event) {
         event.getOriginal().revive();
+        TagsUtils.ClientPlayerTagsAcessor.playerTags.remove(event.getOriginal());
+        TagsUtils.ClientPlayerTagsAcessor.playerTags.put(event.getOriginal(), event.getEntity().getPersistentData());
         CompoundTag originaltag = event.getOriginal().getPersistentData();
         CompoundTag clonetag = event.getEntity().getPersistentData();
         NewCap.setupVariables( originaltag, clonetag);

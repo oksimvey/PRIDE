@@ -4,9 +4,8 @@ import com.robson.pride.api.client.AutoBattleMode;
 import com.robson.pride.api.musiccore.MusicCore;
 import com.robson.pride.api.musiccore.PrideMusicManager;
 import com.robson.pride.api.utils.TimerUtil;
-import com.robson.pride.effect.PrideEffectBase;
+import com.robson.pride.epicfight.styles.SheatProvider;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
@@ -35,15 +34,13 @@ public class CustomTickManager {
         tickcounter.put(player, (byte) (tickcounter.getOrDefault(player, (byte) 0) + 1));
         if (playerMusicManagerThread.get(player) != null && tickcounter.get(player) != null) {
             loopTick(player);
-            for (MobEffectInstance effect : player.getActiveEffects()) {
-                if (effect.getEffect() instanceof PrideEffectBase prideEffect) {
-                    prideEffect.prideServerTick(player);
-                }
-            }
             if (tickcounter.get(player) >= 10) {
-                tickcounter.put(player, (byte) 0);
-                MusicCore.musicCore(player);
-                AutoBattleMode.autoSwitch(EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class));
+                    tickcounter.put(player, (byte) 0);
+                if (!Minecraft.getInstance().isPaused()) {
+                    SheatProvider.provideSheat(player);
+                    MusicCore.musicCore(player);
+                    AutoBattleMode.autoSwitch(EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class));
+                }
             }
         }
     }

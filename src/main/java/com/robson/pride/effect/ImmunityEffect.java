@@ -1,6 +1,7 @@
 package com.robson.pride.effect;
 
 import com.robson.pride.api.utils.*;
+import com.robson.pride.registries.EffectRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.particles.ParticleOptions;
@@ -20,8 +21,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ImmunityEffect extends PrideEffectBase{
 
-    private byte tickcounter = 0;
-
     public ImmunityEffect() {
         super(MobEffectCategory.NEUTRAL, 0x57CDFD);
     }
@@ -32,6 +31,14 @@ public class ImmunityEffect extends PrideEffectBase{
 
     public static void onDamage(LivingAttackEvent event, Entity ent){
         if (event != null && ent != null){
+            if (ent instanceof Player player){
+                if (ManaUtils.getMana(player) < 10){
+                    player.removeEffect(EffectRegister.IMMUNITY.get());
+                    return;
+                }
+                ManaUtils.consumeMana(player, 10);
+            }
+            ElementalUtils.playSoundByElement(ElementalUtils.getElement(ent), ent, 0.5f);
             event.setCanceled(true);
             Joint joint = ArmatureUtils.getNearestJoint(Minecraft.getInstance().player, ent, event.getSource().getSourcePosition().add(0, event.getSource().getEntity().getBbHeight() / 2, 0));
             if (joint != null) {
@@ -39,12 +46,12 @@ public class ImmunityEffect extends PrideEffectBase{
                 float min = -0.25f;
                 Random random = new Random();
                 List<Vec3> positions = new ArrayList<>();
-                for (int i = 0; i < ent.getBbHeight() * 10; i++){
-                    Vec3 pos = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, new Vec3f(random.nextFloat(max - min) + min,
-                             random.nextFloat(max - min) + min,
-                            random.nextFloat(max - min) + min), joint);
-                    if (pos != null){
-                        positions.add(pos);
+                Vec3 jointpos = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, joint);
+                if (jointpos != null) {
+                    for (int i = 0; i < ent.getBbHeight() * 10; i++) {
+                            positions.add(jointpos.add(random.nextFloat(max - min) + min,
+                                    random.nextFloat(max - min) + min,
+                                    random.nextFloat(max - min) + min));
                     }
                 }
                 if (!positions.isEmpty()){
@@ -67,18 +74,6 @@ public class ImmunityEffect extends PrideEffectBase{
             particle.setParticleSpeed(entdelta.x, entdelta.y, entdelta.z);
             particle.setPos(newpos.x, newpos.y, newpos.z);
            TimerUtil.schedule(()-> loopParticleOnEnt(ent, particle, posdifference), 50, TimeUnit.MILLISECONDS);
-        }
-    }
-
-    @Override
-    public void prideServerTick(Player player){
-        tickcounter++;
-        if (tickcounter >= 5){
-            tickcounter = 0;
-            if (ManaUtils.getMana(player) >= 1){
-                ManaUtils.consumeMana(player, 1);
-            }
-            else player.removeEffect(this);
         }
     }
 }

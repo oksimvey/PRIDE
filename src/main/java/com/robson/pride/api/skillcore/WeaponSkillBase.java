@@ -13,10 +13,10 @@ public abstract class WeaponSkillBase {
 
     private String SkillRarity;
     private String SkillElement;
-    private float ManaConsumption;
+    private int ManaConsumption;
     private float StaminaConsumption;
 
-    public WeaponSkillBase(String SkillRarity, String SkillElement, float ManaConsumption, float StaminaConsumption) {
+    public WeaponSkillBase(String SkillRarity, String SkillElement, int ManaConsumption, float StaminaConsumption) {
         this.SkillRarity = SkillRarity;
         this.SkillElement = SkillElement;
         this.StaminaConsumption = StaminaConsumption;

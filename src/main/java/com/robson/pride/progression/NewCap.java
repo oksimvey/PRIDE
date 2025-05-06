@@ -8,7 +8,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class NewCap {
 
-    public static void setupVariables( CompoundTag oldtag, CompoundTag newtag) {
+    public static void setupVariables(CompoundTag oldtag, CompoundTag newtag) {
         newtag.putInt("StrengthLvl", oldtag.getInt("StrengthLvl"));
         newtag.putInt("DexterityLvl", oldtag.getInt("DexterityLvl"));
         newtag.putInt("VigorLvl", oldtag.getInt("VigorLvl"));

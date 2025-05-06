@@ -89,10 +89,10 @@ public class ElementalPassives {
     public static void darknessPassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent != null) {
             if (dmgent instanceof Player p){
-                ManaUtils.addMana(p, power);
+                ManaUtils.addMana(p, (int)power);
             }
             if (ent instanceof LivingEntity living){
-                ManaUtils.consumeMana(living, power);
+                ManaUtils.consumeMana(living, (int)power);
                 living.addEffect(new MobEffectInstance(MobEffects.WITHER, (int) power * 10, 0),living);
             }
         }
