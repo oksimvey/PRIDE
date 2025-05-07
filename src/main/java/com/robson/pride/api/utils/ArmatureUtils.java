@@ -52,7 +52,7 @@ public class ArmatureUtils {
     }
 
     public static Joint getNearestJoint(LocalPlayer renderer, Entity ent, Vec3 pos) {
-        ConcurrentHashMap<Joint, Double> jointposmap = new ConcurrentHashMap<>();
+        ConcurrentHashMap<Joint, Float> jointposmap = new ConcurrentHashMap<>();
         List<Joint> joints = getArmatureJoints(ent);
         for (Joint joint : joints){
             Vec3 jointpos = getJoinPosition(renderer, ent, joint);
@@ -63,7 +63,7 @@ public class ArmatureUtils {
         if (!jointposmap.isEmpty()){
             Joint joint = null;
             double minValue = Double.MAX_VALUE;
-            for (Map.Entry<Joint, Double> entry : jointposmap.entrySet()) {
+            for (Map.Entry<Joint, Float> entry : jointposmap.entrySet()) {
                 if (entry.getValue() < minValue) {
                     minValue = entry.getValue();
                     joint = entry.getKey();

@@ -99,25 +99,23 @@ public class MikiriCounter {
             Entity entity = event.getSpellDamageSource().getDirectEntity().getType().create(event.getEntity().level());
             event.getSpellDamageSource().getDirectEntity().remove(Entity.RemovalReason.DISCARDED);
             event.getEntity().level().addFreshEntity(entity);
-            teleportProjectileToEntityHand(event.getEntity(), entity);
+            Vec3 delta = MathUtils.rotate2DVector(event.getEntity().getLookAngle().scale(0.5), 90);
+            teleportProjectileToEntityHand(event.getEntity(), entity, delta);
             TimerUtil.schedule(() -> {
                 entity.remove(Entity.RemovalReason.DISCARDED);
-                if (event.getEntity() instanceof Player) {
-                    SpellUtils.castMikiriSpell(event.getEntity(), spell, 3);
-                    return;
-                }
-                SpellUtils.castSpell(event.getEntity(), spell, 3, 0);
+                SpellUtils.castSpell(event.getEntity(), spell, 3);
             }, 450, TimeUnit.MILLISECONDS);
             AnimUtils.playAnim(event.getEntity(), AnimationsRegister.PROJECTILE_COUNTER, 0);
         }
     }
 
-    public static void teleportProjectileToEntityHand(Entity owner, Entity projectile) {
-        if (owner != null && projectile != null) {
+    public static void teleportProjectileToEntityHand(Entity owner, Entity projectile, Vec3 delta) {
+        if (owner != null && projectile != null && delta != null) {
+            projectile.setDeltaMovement(delta.x, 0.1, delta.z);
             Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, owner, Armatures.BIPED.handL);
             if (vec3 != null) {
                 projectile.moveTo(vec3);
-                TimerUtil.schedule(() -> teleportProjectileToEntityHand(owner, projectile), 50, TimeUnit.MILLISECONDS);
+                TimerUtil.schedule(() -> teleportProjectileToEntityHand(owner, projectile, delta), 50, TimeUnit.MILLISECONDS);
             }
         }
     }

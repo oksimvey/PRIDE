@@ -66,6 +66,6 @@ public class ParticleTracking {
                 }
             }
         }
-        return new Vec3f(((new Random()).nextFloat() - 0.5F) * 0.2F, ((new Random()).nextFloat() - 0.3F) * 0.8F, ((new Random()).nextFloat() - 0.5F) * 0.2F);
+        return new Vec3f(((new Random()).nextFloat() - 0.5F) * 0.2F, ((new Random()).nextFloat() - 0.3F) * 0.3F, ((new Random()).nextFloat() - 0.5F) * 0.2F);
     }
 }

@@ -7,10 +7,13 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
+import static com.robson.pride.epicfight.styles.SheatProvider.unsheat;
+
 public class onFPress {
 
     public static void swapHand(Player player) {
         if (player != null) {
+            unsheat(player);
             addModifierToStyle(player);
             if (player.getMainHandItem().getTag() != null) {
                 player.getMainHandItem().getTag().putBoolean("two_handed", !player.getMainHandItem().getTag().getBoolean("two_handed"));

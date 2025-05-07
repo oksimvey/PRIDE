@@ -16,5 +16,6 @@ public class EffectRegister {
     public static final RegistryObject<MobEffect> HYPNOTIZED = MOB_EFFECTS.register("hypnotized", HypnotizedEffect::new);
     public static final RegistryObject<MobEffect> DARKNESS_WRATH = MOB_EFFECTS.register("darkness_wrath", DarknessWrathEffect::new);
     public static final RegistryObject<MobEffect> IMMUNITY = MOB_EFFECTS.register("immunity", ImmunityEffect::new);
+    public static final RegistryObject<MobEffect> IMBUEMENT = MOB_EFFECTS.register("imbuement", ImbuementEffect::new);
 
 }

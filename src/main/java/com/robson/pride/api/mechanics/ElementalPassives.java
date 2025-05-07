@@ -218,7 +218,7 @@ public class ElementalPassives {
         if (ent != null && dmgent instanceof LivingEntity living) {
             PlaySoundUtils.playSound(ent, SoundRegistry.NATURE_CAST.get(), 1, 1);
             if (stackablePassiveBase(ent, ElementalUtils.getFinalValueForNatureDMG(ent, power), "root_stacks", StringParticle.StringParticleTypes.RED)) {
-                SpellUtils.castSpell(living, new RootSpell(), 10, 0);
+                SpellUtils.castSpell(living, new RootSpell(), 10);
             }
         }
     }

@@ -1,6 +1,9 @@
 package com.robson.pride.keybinding;
 
+import com.github.leawind.thirdperson.ThirdPerson;
 import com.github.leawind.thirdperson.api.client.event.ThirdPersonCameraSetupEvent;
+import com.github.leawind.thirdperson.config.AbstractConfig;
+import com.github.leawind.thirdperson.config.Config;
 import com.robson.pride.api.mechanics.MikiriCounter;
 import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.api.utils.*;
@@ -14,12 +17,14 @@ import net.minecraft.world.entity.projectile.Projectile;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
+import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
 public class onQPress {
 
     public static void checkDodgeType(Player player) {
         if (Minecraft.getInstance().player != null) {
+            correctCamera();
             float EquipLoad = (AttributeUtils.getAttributeValue(player, "epicfight:weight") / AttributeUtils.getAttributeValue(player, "pride:max_weight"));
             if (Minecraft.getInstance().options.keyUp.isDown()) {
                 MikiriCounter.setMikiri(player, "Dodge", 0, 350);
@@ -50,7 +55,7 @@ public class onQPress {
 
     public static void onStep(Player player, float equipLoad) {
         if (StaminaUtils.getStamina(player) >= 3) {
-            player.getPersistentData().putBoolean("isDodging", true);
+           player.getPersistentData().putBoolean("isDodging", true);
             TimerUtil.schedule(() -> player.getPersistentData().putBoolean("isDodging", false), 200, TimeUnit.MILLISECONDS);
             StaminaUtils.consumeStamina(player, 3);
             byte dodgetype = AnimUtils.getDodgeType(player);
@@ -84,7 +89,7 @@ public class onQPress {
 
     public static void onRoll(Player player) {
         if (StaminaUtils.getStamina(player) >= 4) {
-            StaminaUtils.consumeStamina(player, 4);
+           StaminaUtils.consumeStamina(player, 4);
             player.getPersistentData().putBoolean("isDodging", true);
             TimerUtil.schedule(() -> player.getPersistentData().putBoolean("isDodging", false), 300, TimeUnit.MILLISECONDS);
             byte dodgetype = AnimUtils.getDodgeType(player);
@@ -100,6 +105,12 @@ public class onQPress {
             }
             AnimUtils.playAnimByString(player, anim, 0);
         }
+    }
+
+    public static void correctCamera(){
+        Config config = ThirdPerson.getConfig();
+       config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA;
+        TimerUtil.schedule(()-> config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.INTEREST_POINT, 500, TimeUnit.MILLISECONDS);
     }
 
     public static boolean cantDodgeForward(Player player) {

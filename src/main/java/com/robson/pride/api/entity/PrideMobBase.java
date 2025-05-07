@@ -52,6 +52,7 @@ import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
@@ -61,6 +62,8 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     private static final EntityDataAccessor<Byte> VARIANT =
             SynchedEntityData.defineId(PrideMobBase.class, EntityDataSerializers.BYTE);
+
+    private ConcurrentHashMap<EquipmentSlot, ItemStack> equipmentMap = new ConcurrentHashMap<>();
 
     public List<String> targets = new ArrayList<>();
 
@@ -145,6 +148,17 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         return AnimationManager.getInstance().byKeyOrThrow(this.skillmotions.getString(skill));
     }
 
+    public boolean isEquiped(){
+        if (!this.equipmentMap.isEmpty()) {
+            for (EquipmentSlot slot : this.equipmentMap.keySet()) {
+                if (this.equipmentMap.get(slot) != this.getItemBySlot(slot)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
@@ -207,7 +221,9 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
     @Override
     public void setTarget(@Nullable LivingEntity p_21544_) {
         super.setTarget(p_21544_);
-        equipAllSlotsToDefault();
+        if (!this.isEquiped()) {
+            deserializeEquipment();
+        }
         this.target = p_21544_;
         if (p_21544_ != null && EpicFightCapabilities.getEntityPatch(p_21544_, LivingEntityPatch.class) == null){
            deserializeFight(p_21544_, (byte) 0);
@@ -266,32 +282,37 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
                         ListTag variations = equipment.getList("variations", 3);
                         for (int j = 0; j < variations.size(); ++j) {
                             if (getTypeVariant() == variations.getInt(j)) {
-                                deserializeEquipment(equipment);
+                                if (equipment.contains("slot") && equipment.contains("item")){
+                                    ItemStack item = EquipUtils.locateItem(equipment.getString("item"));
+                                    if (equipment.contains("element")){
+                                        item.getOrCreateTag().putString("passive_element", equipment.getString("element"));
+                                    }
+                                    switch (equipment.getString("slot")){
+                                        case "mainhand" -> this.equipmentMap.put(EquipmentSlot.MAINHAND, item);
+                                        case "offhand" -> this.equipmentMap.put(EquipmentSlot.OFFHAND, item);
+                                        case "head" -> this.equipmentMap.put(EquipmentSlot.HEAD, item);
+                                        case "chest" -> this.equipmentMap.put(EquipmentSlot.CHEST, item);
+                                        case "leg" -> this.equipmentMap.put(EquipmentSlot.LEGS, item);
+                                        case "feet" -> this.equipmentMap.put(EquipmentSlot.FEET, item);
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         }
+        deserializeEquipment();
     }
 
-    public void deserializeEquipment(CompoundTag tag){
-        if (tag != null){
-            if (tag.contains("slot") && tag.contains("item")){
-                ItemStack item = EquipUtils.locateItem(tag.getString("item"));
-                if (tag.contains("element")){
-                    item.getOrCreateTag().putString("passive_element", tag.getString("element"));
-                }
-                switch (tag.getString("slot")){
-                    case "mainhand" -> this.setItemSlot(EquipmentSlot.MAINHAND, item);
-                    case "offhand" -> this.setItemSlot(EquipmentSlot.OFFHAND, item);
-                    case "head" -> this.setItemSlot(EquipmentSlot.HEAD, item);
-                    case "chest" -> this.setItemSlot(EquipmentSlot.CHEST, item);
-                    case "leg" -> this.setItemSlot(EquipmentSlot.LEGS, item);
-                    case "feet" -> this.setItemSlot(EquipmentSlot.FEET, item);
-                }
-            }
-        }
+    public void deserializeEquipment(){
+       if (!this.equipmentMap.isEmpty()){
+           for (EquipmentSlot slot : this.equipmentMap.keySet()){
+               if (this.getItemBySlot(slot) != this.equipmentMap.get(slot)) {
+                   this.setItemSlot(slot, this.equipmentMap.get(slot));
+               }
+           }
+       }
     }
 
     @Override

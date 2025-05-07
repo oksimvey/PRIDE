@@ -1,5 +1,8 @@
 package com.robson.pride.keybinding;
 
+import com.mojang.blaze3d.shaders.Effect;
+import com.robson.pride.api.utils.ElementalUtils;
+import com.robson.pride.effect.ImbuementEffect;
 import com.robson.pride.progression.ProgressionGUI;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.skills.special.KillerAuraSkill;
@@ -78,6 +81,15 @@ public class KeyActionPacket {
         }
         if (packet.action.equals("aura")){
             KillerAuraSkill.skillStart(player);
+        }
+        if (packet.action.equals("imbuement")){
+            if (!player.hasEffect(EffectRegister.IMBUEMENT.get())) {
+                player.addEffect(new MobEffectInstance(EffectRegister.IMBUEMENT.get(), 999999999));
+                if (player.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect){
+                    imbuementEffect.setElement(ElementalUtils.getElement(player));
+                }
+            }
+            else player.removeEffect(EffectRegister.IMBUEMENT.get());
         }
 
             if (packet.action.equals("menu")) {
