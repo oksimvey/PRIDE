@@ -20,6 +20,8 @@ import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
+import static com.robson.pride.api.utils.CameraUtils.correctCamera;
+
 public class onQPress {
 
     public static void checkDodgeType(Player player) {
@@ -105,12 +107,6 @@ public class onQPress {
             }
             AnimUtils.playAnimByString(player, anim, 0);
         }
-    }
-
-    public static void correctCamera(){
-        Config config = ThirdPerson.getConfig();
-       config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA;
-        TimerUtil.schedule(()-> config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.INTEREST_POINT, 500, TimeUnit.MILLISECONDS);
     }
 
     public static boolean cantDodgeForward(Player player) {

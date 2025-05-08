@@ -77,13 +77,32 @@
     {
       "variations": [0],
       "slot": "mainhand",
-      "item": "pride:european_longsword",
-      "element": "Light"
+      "item": "pride:european_longsword"
     },
     {
       "variations": [0],
       "slot": "offhand",
       "item": "minecraft:shield"
+    },
+    {
+      "variations": [0],
+      "slot": "head",
+      "item": "fantasy_armor:hero_helmet"
+    },
+    {
+      "variations": [0],
+      "slot": "chest",
+      "item": "fantasy_armor:hero_chestplate"
+    },
+    {
+      "variations": [0],
+      "slot": "leg",
+      "item": "fantasy_armor:hero_leggings"
+    },
+    {
+      "variations": [0],
+      "slot": "feet",
+      "item": "fantasy_armor:hero_boots"
     }
   ],
   "goals": [

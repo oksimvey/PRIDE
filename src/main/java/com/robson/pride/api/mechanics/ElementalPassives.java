@@ -1,8 +1,8 @@
 package com.robson.pride.api.mechanics;
 
-import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.*;
+import com.robson.pride.effect.ImbuementEffect;
 import com.robson.pride.particles.StringParticle;
 import com.robson.pride.progression.AttributeModifiers;
 import com.robson.pride.registries.AnimationsRegister;
@@ -15,7 +15,6 @@ import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.spells.nature.RootSpell;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -38,53 +37,64 @@ import java.util.concurrent.TimeUnit;
 
 public class ElementalPassives {
 
-
     public static void onElementalDamage(Entity ent, Entity dmgent, ItemStack item, LivingAttackEvent event) {
-        if (ent != null && dmgent != null && item != null) {
-            String element = item.getTag().getString("passive_element");
-            if (!WeaponSkillRegister.elements.contains(element)){
-                if (PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem()) != null){
-                    CompoundTag tag  = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem());
-                    if (tag.contains("element")){
-                        element = tag.getString("element");
+        if (ent != null && dmgent != null  && event.getSource().getDirectEntity() instanceof LivingEntity living) {
+            String element = ElementalUtils.getItemElement(item);
+            if (!WeaponSkillRegister.elements.contains(element)) {
+                if (living.hasEffect(EffectRegister.IMBUEMENT.get())) {
+                    if (living.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect) {
+                        element = imbuementEffect.element;
                     }
                 }
             }
-            float damage = event.getAmount();
-            InteractionHand hand = ItemStackUtils.checkAttackingHand(dmgent);
-            if (hand != null && dmgent instanceof Player dmgent1) {
-                float extradamage = 0;
-                if (hand == InteractionHand.MAIN_HAND) {
-                    extradamage = AttributeModifiers.calculateModifier(dmgent1, dmgent1.getMainHandItem(), event.getAmount());
-                } else if (hand == InteractionHand.OFF_HAND) {
-                    extradamage = AttributeModifiers.calculateModifier(dmgent1, dmgent1.getOffhandItem(), event.getAmount());
-                }
-                damage += extradamage;
+            if (!WeaponSkillRegister.elements.contains(element)) {
+                return;
             }
-            switch (element) {
+                float damage = event.getAmount();
+                InteractionHand hand = ItemStackUtils.checkAttackingHand(dmgent);
+                if (hand != null && dmgent instanceof Player dmgent1) {
+                    float extradamage = 0;
+                    if (hand == InteractionHand.MAIN_HAND) {
+                        extradamage = AttributeModifiers.calculateModifier(dmgent1, dmgent1.getMainHandItem(), event.getAmount());
+                    } else if (hand == InteractionHand.OFF_HAND) {
+                        extradamage = AttributeModifiers.calculateModifier(dmgent1, dmgent1.getOffhandItem(), event.getAmount());
+                    }
+                    damage += extradamage;
+                }
+                switch (element) {
 
-                case "Darkness" -> darknessPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:darkness_power")));
+                    case "Darkness" ->
+                            darknessPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:darkness_power")));
 
-                case "Light" -> lightPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:light_power")));
+                    case "Light" ->
+                            lightPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:light_power")));
 
-                case "Thunder" -> thunderPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:thunder_power")), new ArrayList<>());
+                    case "Thunder" ->
+                            thunderPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:thunder_power")), new ArrayList<>());
 
-                case "Sun" -> sunPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:sun_power")));
+                    case "Sun" ->
+                            sunPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:sun_power")));
 
-                case "Moon" -> moonPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:moon_power")));
+                    case "Moon" ->
+                            moonPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:moon_power")));
 
-                case "Blood" -> bloodPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:blood_power")));
+                    case "Blood" ->
+                            bloodPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:blood_power")));
 
-                case "Wind" -> windPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:wind_power")));
+                    case "Wind" ->
+                            windPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:wind_power")));
 
-                case "Nature" -> naturePassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:nature_power")));
+                    case "Nature" ->
+                            naturePassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:nature_power")));
 
-                case "Ice" -> icePassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:ice_power")));
+                    case "Ice" ->
+                            icePassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:ice_power")));
 
-                case "Water" -> waterPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:water_power")));
+                    case "Water" ->
+                            waterPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:water_power")));
+                }
             }
         }
-    }
 
     public static void darknessPassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent != null) {

@@ -74,14 +74,12 @@ public class ParticleUtils {
                     if (particle == ParticleTypes.SMOKE) {
                         amount = 5;
                     }
-                    if (entitypatch.getEntityState().attacking()) {
-                        amount *= 5;
-                    }
                     if (entitypatch != null) {
                         for (int i = 0; i < amount; i++) {
                             Vec3 vec = ArmatureUtils.getJointWithTranslation(renderer, ent, AABB, joint);
                             if (vec != null) {
-                                renderer.level().addParticle(particle, vec.x, vec.y, vec.z, ((new Random()).nextFloat() - 0.5F) * 0.02F, (double) (((new Random()).nextFloat() - 0.5F) * 0.02F), ((new Random()).nextFloat() - 0.5F) * 0.02F);
+                                Vec3 delta = ent.getDeltaMovement();
+                                renderer.level().addParticle(particle, vec.x, vec.y, vec.z, ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.x, (double) (((new Random()).nextFloat() - 0.5F) * 0.02F), ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.z);
                             }
                             else break;
                         }

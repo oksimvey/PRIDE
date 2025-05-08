@@ -21,7 +21,6 @@ public class RenderingCore {
         RenderScreens.renderPlayerScreens(client);
         if (client.player != null) {
             entityRenderer(client.player);
-            Stealth.renderCriticalParticle(client.player, TargetUtil.getTarget(client.player));
             for (Entity ent : client.player.level().getEntities(client.player, MathUtils.createAABBAroundEnt(client.player, 50))){
                 if (ent != null) {
                     if (ent instanceof LivingEntity living) {
@@ -35,11 +34,11 @@ public class RenderingCore {
     public static void entityRenderer(LivingEntity ent) {
         if (ent != null) {
             if (ParticleTracking.shouldRenderParticle(ent.getMainHandItem(), ent)) {
-                ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR, ParticleTracking.getParticle(ent.getMainHandItem()), ParticleTracking.getAABBForImbuement(ent.getMainHandItem(), ent));
+                ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR, ParticleTracking.getParticle(ent.getMainHandItem(), ent), ParticleTracking.getAABBForImbuement(ent.getMainHandItem(), ent));
             }
             if (ItemStackUtils.getStyle(ent) == PrideStyles.DUAL_WIELD) {
                 if (ParticleTracking.shouldRenderParticle(ent.getOffhandItem(), ent)) {
-                    ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolL, ParticleTracking.getParticle(ent.getOffhandItem()), ParticleTracking.getAABBForImbuement(ent.getOffhandItem(), ent));
+                    ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolL, ParticleTracking.getParticle(ent.getOffhandItem(), ent), ParticleTracking.getAABBForImbuement(ent.getOffhandItem(), ent));
                 }
             }
             for (MobEffectInstance effect : ent.getActiveEffects()){

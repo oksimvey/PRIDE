@@ -3,6 +3,8 @@ package com.robson.pride.api.mechanics;
 import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
+import com.robson.pride.effect.ImbuementEffect;
+import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.WeaponSkillRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleOptions;
@@ -11,6 +13,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.utils.math.Vec3f;
@@ -27,16 +30,13 @@ public class ParticleTracking {
         if (item != null && ent != null) {
             if (item.getTag() != null) {
                 String element = ElementalUtils.getItemElement(item);
-                if (element.equals("Sun")) {
-                    Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR);
-                    if (vec3 != null) {
-                        if (ElementalUtils.isNotInWater(ent, vec3)) {
-                            togglefire.put(ent, true);
-                            return true;
-                        }
-                        else if (togglefire.getOrDefault(ent, false)) {
-                            Minecraft.getInstance().level.playSound(Minecraft.getInstance().player, ent, SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1, 1);
-                            togglefire.put(ent, false);
+                if (WeaponSkillRegister.elements.contains(element)){
+                   return !element.equals("Sun") || shouldRenderSunParticle(ent);
+                }
+                if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMBUEMENT.get())){
+                    if (living.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect){
+                        if (WeaponSkillRegister.elements.contains(imbuementEffect.element)){
+                          return !imbuementEffect.element.equals("Sun") || shouldRenderSunParticle(ent);
                         }
                     }
                 }
@@ -46,9 +46,34 @@ public class ParticleTracking {
         return false;
     }
 
-    public static ParticleOptions getParticle(ItemStack item) {
-        if (item != null) {
-            return ElementalUtils.getParticleByElement(ElementalUtils.getItemElement(item));
+    public static boolean shouldRenderSunParticle(Entity ent){
+        Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR);
+        if (vec3 != null) {
+            if (ElementalUtils.isNotInWater(ent, vec3)) {
+                togglefire.put(ent, true);
+                return true;
+            }
+            if (togglefire.getOrDefault(ent, false)) {
+                Minecraft.getInstance().level.playSound(Minecraft.getInstance().player, ent, SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1, 1);
+                togglefire.put(ent, false);
+            }
+        }
+        return false;
+    }
+
+    public static ParticleOptions getParticle(ItemStack item, LivingEntity ent) {
+        if (item != null && ent != null) {
+            String element = ElementalUtils.getItemElement(item);
+            if (WeaponSkillRegister.elements.contains(element)) {
+                return ElementalUtils.getParticleByElement(element);
+            }
+            if (ent.hasEffect(EffectRegister.IMBUEMENT.get())) {
+                if (ent.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect) {
+                    if (WeaponSkillRegister.elements.contains(imbuementEffect.element)) {
+                        return ElementalUtils.getParticleByElement(imbuementEffect.element);
+                    }
+                }
+            }
         }
         return null;
     }
