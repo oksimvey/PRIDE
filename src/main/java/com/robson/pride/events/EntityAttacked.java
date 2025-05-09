@@ -111,7 +111,8 @@ public class EntityAttacked {
                     float extradamage = 0;
                     if (hand == InteractionHand.MAIN_HAND) {
                         extradamage = AttributeModifiers.calculateModifier(player, player.getMainHandItem(), event.getAmount());
-                    } else if (hand == InteractionHand.OFF_HAND) {
+                    }
+                    else if (hand == InteractionHand.OFF_HAND) {
                         extradamage = AttributeModifiers.calculateModifier(player, player.getOffhandItem(), event.getAmount());
                     }
                     event.setAmount(event.getAmount() + extradamage);

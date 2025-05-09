@@ -42,8 +42,8 @@ public class CameraUtils{
 
     public static void changeCamOffset(float x, float y, float z){
        Config config = ThirdPerson.getConfig();
-       config.normal_offset_x = z;
+       config.normal_max_distance = z;
        config.normal_offset_y = y;
-       config.normal_offset_center = x;
+       config.normal_offset_x = x;
     }
 }

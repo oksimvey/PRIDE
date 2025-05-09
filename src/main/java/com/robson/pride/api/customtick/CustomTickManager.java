@@ -1,5 +1,6 @@
 package com.robson.pride.api.customtick;
 
+import com.robson.pride.api.cam.DynamicCam;
 import com.robson.pride.api.client.AutoBattleMode;
 import com.robson.pride.api.musiccore.MusicCore;
 import com.robson.pride.api.musiccore.PrideMusicManager;
@@ -17,12 +18,9 @@ import static com.robson.pride.api.musiccore.PrideMusicManager.playerMusicManage
 
 public class CustomTickManager {
 
-    public static ConcurrentHashMap<Player, Byte> tickcounter = new ConcurrentHashMap<>();
-
     public static void startTick(Player player) {
         stopTick(player);
-        tickcounter.put(player, (byte) 0);
-        playerMusicManagerThread.put(player, new PrideMusicManager((byte) 0, Minecraft.getInstance().getMusicManager()));
+       playerMusicManagerThread.put(player, new PrideMusicManager((byte) 0, Minecraft.getInstance().getMusicManager()));
         loopTick(player);
     }
 
@@ -31,14 +29,13 @@ public class CustomTickManager {
     }
 
     public static void onTick(Player player) {
-        tickcounter.put(player, (byte) (tickcounter.getOrDefault(player, (byte) 0) + 1));
-        if (playerMusicManagerThread.get(player) != null && tickcounter.get(player) != null) {
+        if (playerMusicManagerThread.get(player) != null) {
             loopTick(player);
-            if (tickcounter.get(player) >= 10) {
-                    tickcounter.put(player, (byte) 0);
+            if (player.tickCount % 10 == 0) {
                 if (!Minecraft.getInstance().isPaused()) {
                     SheatProvider.provideSheat(player);
                     MusicCore.musicCore(player);
+                    DynamicCam.dynamicCamTick(player);
                     AutoBattleMode.autoSwitch(EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class));
                 }
             }

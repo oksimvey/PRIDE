@@ -18,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import org.antlr.v4.runtime.misc.MultiMap;
+import yesman.epicfight.world.capabilities.item.WeaponCapability;
 
 import java.util.*;
 

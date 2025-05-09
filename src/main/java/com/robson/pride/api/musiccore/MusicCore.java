@@ -1,12 +1,19 @@
 package com.robson.pride.api.musiccore;
 
+import com.robson.pride.api.cam.DynamicCam;
 import com.robson.pride.api.entity.PrideMobBase;
+import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.api.utils.MathUtils;
 import com.robson.pride.api.utils.TargetUtil;
+import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.sounds.Music;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
+
+import static com.robson.pride.api.cam.DynamicCam.camoffsetmap;
 
 public class MusicCore {
 
@@ -32,9 +39,11 @@ public class MusicCore {
             for (Entity ent : player.level().getEntities(player, MathUtils.createAABBAroundEnt(player, 50))) {
                 if (ent != null) {
                     if (ent instanceof PrideMobBase prideMobBase) {
-                        if (TargetUtil.getTarget(prideMobBase) == player && prideMobBase.getMusicPriority() >= musicManager.getCurrentMusicPriority()) {
-                            musicManager.setCurrentMusicPriority(prideMobBase.getMusicPriority());
-                            return prideMobBase.getMobMusic();
+                        if (TargetUtil.getTarget(prideMobBase) == player) {
+                            if (prideMobBase.getMusicPriority() > musicManager.getCurrentMusicPriority()) {
+                               musicManager.setCurrentMusicPriority(prideMobBase.getMusicPriority());
+                                return prideMobBase.getMobMusic();
+                            }
                         }
                     }
                 }

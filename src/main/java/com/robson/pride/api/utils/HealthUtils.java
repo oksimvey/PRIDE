@@ -8,11 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 public class HealthUtils {
 
-    public static void HealthReset(LivingEntity ent) {
-        if (ent != null) {
-            ent.setHealth(ent.getMaxHealth());
-        }
-    }
 
     public static void hurtEntity(Entity ent, float amount, DamageSource dmg) {
         TimerUtil.schedule(() -> {
@@ -20,5 +15,9 @@ public class HealthUtils {
                 ent.hurt(dmg, amount);
             }
         }, 10, TimeUnit.MILLISECONDS);
+    }
+
+    public static void dealBlockableDmg(Entity dmgent, Entity ent, float amount){
+
     }
 }
