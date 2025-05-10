@@ -20,6 +20,13 @@ public class DarknessWrathEffect extends PrideEffectBase {
         super(MobEffectCategory.NEUTRAL, 0x57CDFD);
     }
 
+    public void onEffectStart(LivingEntity ent){
+
+    }
+
+    public void onEffectEnd(LivingEntity ent){
+
+    }
     @Override
     public void prideClientTick(LivingEntity ent){
         if (ent != null){

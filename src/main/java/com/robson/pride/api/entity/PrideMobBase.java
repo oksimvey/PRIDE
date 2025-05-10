@@ -102,6 +102,7 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
             deserializeMusics(tagmap);
             deserializeLevel(tagmap);
             deserializeSkillMotions(tagmap);
+            deserializeEquipmentMap(tagmap);
         }
     }
 
@@ -222,7 +223,7 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
     public void setTarget(@Nullable LivingEntity p_21544_) {
         super.setTarget(p_21544_);
         if (!this.isEquiped()) {
-            deserializeEquipment();
+            equipAllSlotsToDefault();
         }
         this.target = p_21544_;
         if (p_21544_ != null && EpicFightCapabilities.getEntityPatch(p_21544_, LivingEntityPatch.class) == null){
@@ -271,10 +272,8 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         return InteractionResult.FAIL;
     }
 
-    public void equipAllSlotsToDefault() {
-        CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
-        if (tagmap != null) {
-            ListTag equipments = tagmap.getList("equipment", 10);
+    public void deserializeEquipmentMap(CompoundTag tagmap) {
+          ListTag equipments = tagmap.getList("equipment", 10);
             if (equipments != null) {
                 for (int i = 0; i < equipments.size(); ++i) {
                     CompoundTag equipment = equipments.getCompound(i);
@@ -282,12 +281,12 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
                         ListTag variations = equipment.getList("variations", 3);
                         for (int j = 0; j < variations.size(); ++j) {
                             if (getTypeVariant() == variations.getInt(j)) {
-                                if (equipment.contains("slot") && equipment.contains("item")){
+                                if (equipment.contains("slot") && equipment.contains("item")) {
                                     ItemStack item = EquipUtils.locateItem(equipment.getString("item"));
-                                    if (equipment.contains("element")){
+                                    if (equipment.contains("element")) {
                                         item.getOrCreateTag().putString("passive_element", equipment.getString("element"));
                                     }
-                                    switch (equipment.getString("slot")){
+                                    switch (equipment.getString("slot")) {
                                         case "mainhand" -> this.equipmentMap.put(EquipmentSlot.MAINHAND, item);
                                         case "offhand" -> this.equipmentMap.put(EquipmentSlot.OFFHAND, item);
                                         case "head" -> this.equipmentMap.put(EquipmentSlot.HEAD, item);
@@ -301,11 +300,10 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
                     }
                 }
             }
-        }
-        deserializeEquipment();
+        equipAllSlotsToDefault();
     }
 
-    public void deserializeEquipment(){
+    public void equipAllSlotsToDefault(){
        if (!this.equipmentMap.isEmpty()){
            for (EquipmentSlot slot : this.equipmentMap.keySet()){
                if (this.getItemBySlot(slot) != this.equipmentMap.get(slot)) {
@@ -342,9 +340,9 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         this.speed = speed;
     }
 
-    public boolean canTickLod(Minecraft client) {
+    public boolean tickLod(Minecraft client, float multiplier) {
         if (client.player != null) {
-            short distance = (short) (1 + Math.pow(1.025, client.player.distanceTo(this)) * 2);
+            short distance = (short) (1 + Math.pow(1.025, client.player.distanceTo(this)) * multiplier);
             return client.player.tickCount % distance == 0;
         }
         return false;
@@ -356,7 +354,7 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
             if (isSpeaking.get(this) != null) {
                 travel = new Vec3(0, 0, 0);
             }
-            else if (canTickLod(Minecraft.getInstance())) {
+            else if (tickLod(Minecraft.getInstance(), 2)) {
                 JsonGoalsReader.onEntTick(this);
                 deserializePassiveSkills();
                 if (this.targetpos != null) {

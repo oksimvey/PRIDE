@@ -14,6 +14,7 @@ public class HypnotizedEffect extends MobEffect {
     public void applyEffectTick(LivingEntity living, int amplifier) {
     }
 
+
     @Override
     public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;

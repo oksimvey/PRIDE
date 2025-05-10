@@ -29,6 +29,14 @@ public class ImmunityEffect extends PrideEffectBase{
     public void prideClientTick(LivingEntity ent){
     }
 
+    public void onEffectStart(LivingEntity ent){
+
+    }
+
+    public void onEffectEnd(LivingEntity ent){
+
+    }
+
     public static void onDamage(LivingAttackEvent event, Entity ent){
         if (event != null && ent != null){
             if (ent instanceof Player player){

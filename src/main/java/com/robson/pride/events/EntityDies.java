@@ -29,7 +29,7 @@ public class EntityDies {
         if (event.isWasDeath()) {
             LivingEntity living = event.getEntity();
             for (Entity entity : living.level().getEntities(living, MathUtils.createAABBAroundEnt(living, 50))){
-                if (entity instanceof Mob mob){
+                if (entity instanceof Mob mob && mob.getHealth() > 0){
                     mob.setHealth(mob.getMaxHealth());
                 }
             }

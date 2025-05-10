@@ -1,12 +1,14 @@
 package com.robson.pride.api.utils;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
+import com.nameless.indestructible.world.capability.AdvancedCustomMobPatch;
 import com.robson.pride.item.materials.Bullet;
 import com.robson.pride.registries.ItemsRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.types.*;
@@ -169,12 +171,15 @@ public class AnimUtils {
     }
 
     public static void cancelMotion(Entity ent) {
-        LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-        if (livingEntityPatch != null) {
-            if (livingEntityPatch instanceof AdvancedCustomHumanoidMobPatch<?> mobPatch){
-                mobPatch.resetActionTick();
+        if (ent instanceof LivingEntity living) {
+            LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (livingEntityPatch != null) {
+                if (livingEntityPatch instanceof AdvancedCustomMobPatch<?> customMobPatch){
+                    customMobPatch.cancelAnyAction();
+                    return;
+                }
+                livingEntityPatch.cancelAnyAction();
             }
-            livingEntityPatch.cancelAnyAction();
         }
     }
 }

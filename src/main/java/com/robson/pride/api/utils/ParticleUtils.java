@@ -9,6 +9,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.common.Mod;
@@ -66,23 +67,20 @@ public class ParticleUtils {
     }
 
     public static void spawnParticleTracked(LocalPlayer renderer, Entity ent, Joint joint, ParticleOptions particle, Vec3f AABB) {
-        if (renderer != null && ent != null && particle != null) {
+        if (renderer != null && ent instanceof LivingEntity living && particle != null) {
             if (renderer.level().isClientSide) {
-                LivingEntityPatch entitypatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-                if (entitypatch != null) {
-                    int amount = 1;
-                    if (particle == ParticleTypes.SMOKE) {
-                        amount = 5;
-                    }
+                int amount = (int) ItemStackUtils.getColliderSize(living.getMainHandItem()) - new Random().nextInt(5);
+                if (amount > 0) {
+                    LivingEntityPatch entitypatch = EpicFightCapabilities.getEntityPatch(living, LivingEntityPatch.class);
                     if (entitypatch != null) {
-                        for (int i = 0; i < amount; i++) {
-                            Vec3 vec = ArmatureUtils.getJointWithTranslation(renderer, ent, AABB, joint);
-                            if (vec != null) {
-                                Vec3 delta = ent.getDeltaMovement();
-                                renderer.level().addParticle(particle, vec.x, vec.y, vec.z, ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.x, (double) (((new Random()).nextFloat() - 0.5F) * 0.02F), ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.z);
+                            for (int i = 0; i < amount; i++) {
+                                Vec3 vec = ArmatureUtils.getJointWithTranslation(renderer, living, AABB, joint);
+                                if (vec != null) {
+                                    Vec3 delta = living.getDeltaMovement();
+                                    renderer.level().addParticle(particle, vec.x, vec.y, vec.z, ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.x, (double) (((new Random()).nextFloat() - 0.5F) * 0.02F), ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.z);
+                                }
+                                else break;
                             }
-                            else break;
-                        }
                     }
                 }
             }

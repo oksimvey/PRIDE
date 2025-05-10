@@ -12,6 +12,10 @@ public abstract class PrideEffectBase extends MobEffect {
         super(p_19451_, p_19452_);
     }
 
+    public abstract void onEffectStart(LivingEntity ent);
+
+    public abstract void onEffectEnd(LivingEntity ent);
+
     @OnlyIn(Dist.CLIENT)
     public abstract void prideClientTick(LivingEntity ent);
 

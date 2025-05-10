@@ -1,11 +1,10 @@
 package com.robson.pride.api.client;
 
+import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.mechanics.ParticleTracking;
-import com.robson.pride.api.mechanics.Stealth;
 import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.api.utils.MathUtils;
 import com.robson.pride.api.utils.ParticleUtils;
-import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.effect.PrideEffectBase;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import net.minecraft.client.Minecraft;
@@ -21,11 +20,9 @@ public class RenderingCore {
         RenderScreens.renderPlayerScreens(client);
         if (client.player != null) {
             entityRenderer(client.player);
-            for (Entity ent : client.player.level().getEntities(client.player, MathUtils.createAABBAroundEnt(client.player, 50))){
-                if (ent != null) {
-                    if (ent instanceof LivingEntity living) {
-                        entityRenderer(living);
-                    }
+            for (Entity ent : client.player.level().getEntities(client.player,  MathUtils.createAABBAroundEnt(client.player, 50))){
+                if (ent instanceof PrideMobBase living && living.tickLod(client, 1) && client.levelRenderer.getFrustum().isVisible(ent.getBoundingBox())) {
+                       entityRenderer(living);
                 }
             }
         }

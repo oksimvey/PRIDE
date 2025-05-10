@@ -24,8 +24,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.ForgeRegistries;
 import yesman.epicfight.api.collider.Collider;
+import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.data.conditions.Condition;
 import yesman.epicfight.data.conditions.EpicFightConditions;
 import yesman.epicfight.gameasset.ColliderPreset;
@@ -44,6 +46,7 @@ public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListe
     private static final Gson GSON = (new GsonBuilder()).create();
     public static final Map<Item, CompoundTag> CAPABILITY_ARMOR_DATA_MAP = Maps.newHashMap();
     public static Map<Item, CompoundTag> CAPABILITY_WEAPON_DATA_MAP = Maps.newHashMap();
+    public static Map<Item, List<AABB>> WEAPON_COLLIDER = Maps.newHashMap();
 
     public PrideCapabilityReloadListener() {
         super(GSON, DIRECTORY);
@@ -110,7 +113,6 @@ public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListe
 
     public static CapabilityItem deserializeWeapon(Item item, CompoundTag tag) {
         CapabilityItem capability;
-
         if (tag.contains("variations")) {
             ListTag jsonArray = tag.getList("variations", 10);
             List<Pair<Condition<ItemStack>, CapabilityItem>> list = Lists.newArrayList();
@@ -150,6 +152,22 @@ public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListe
                         builder.addStyleAttibutes(Style.ENUM_MANAGER.getOrThrow(key), Pair.of(attribute.getKey(), attribute.getValue()));
                     }
                 }
+            }
+            if (tag.contains("colliders")) {
+                ListTag colliders = tag.getList("colliders", 10);
+                List<AABB> colliderlist = new ArrayList<>();
+                for (int i = 0; i < colliders.size(); ++i) {
+                    CompoundTag collider = colliders.getCompound(new Random().nextInt(colliders.size()));
+                    if (collider.contains("minX") && collider.contains("maxX") && collider.contains("minY") && collider.contains("maxY") && collider.contains("minZ") && collider.contains("maxZ")) {
+                        colliderlist.add(new AABB(collider.getDouble("maxX"),
+                                collider.getDouble("maxY"),
+                                collider.getDouble("maxZ"),
+                                collider.getDouble("minX"),
+                                collider.getDouble("minY"),
+                                collider.getDouble("minZ")));
+                    }
+                }
+                WEAPON_COLLIDER.put(item, colliderlist);
             }
 
             if (tag.contains("collider") && builder instanceof WeaponCapability.Builder weaponCapBuilder) {

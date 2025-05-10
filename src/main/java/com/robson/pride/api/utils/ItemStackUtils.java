@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
 import yesman.epicfight.api.animation.AnimationProvider;
 import yesman.epicfight.client.events.engine.ControllEngine;
 import yesman.epicfight.client.input.EpicFightKeyMappings;
@@ -49,6 +50,20 @@ public class ItemStackUtils {
             }
         }
         return null;
+    }
+
+    public static float getColliderSize(ItemStack item){
+        if (item != null){
+            List<AABB> colliders = PrideCapabilityReloadListener.WEAPON_COLLIDER.get(item.getItem());
+            if (colliders != null){
+                float totalsize = 0;
+                for (AABB collider : colliders) {
+                    totalsize += MathUtils.getTotalDistance(collider.maxX - collider.minX, collider.maxY - collider.minY, collider.maxZ - collider.minZ);
+                }
+                return totalsize;
+            }
+        }
+        return 1;
     }
 
     public static List<AnimationProvider<?>> getWeaponMotions(ItemStack weapon){

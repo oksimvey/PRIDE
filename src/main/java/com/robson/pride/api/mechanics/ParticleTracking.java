@@ -15,10 +15,12 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Armatures;
 
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,7 +37,7 @@ public class ParticleTracking {
                 }
                 if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMBUEMENT.get())){
                     if (living.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect){
-                        if (WeaponSkillRegister.elements.contains(imbuementEffect.element)){
+                        if (WeaponSkillRegister.elements.contains(imbuementEffect.element) && imbuementEffect.active){
                           return !imbuementEffect.element.equals("Sun") || shouldRenderSunParticle(ent);
                         }
                     }
@@ -80,15 +82,10 @@ public class ParticleTracking {
 
     public static Vec3f getAABBForImbuement(ItemStack item, Entity ent) {
         if (item != null && ent != null) {
-            CompoundTag tags = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem());
-            if (tags != null) {
-                if (tags.contains("colliders")) {
-                    ListTag colliders = tags.getList("colliders", 10);
-                    CompoundTag collider = colliders.getCompound(new Random().nextInt(colliders.size()));
-                    if (collider.contains("minX") && collider.contains("maxX") && collider.contains("minY") && collider.contains("maxY") && collider.contains("minZ") && collider.contains("maxZ")) {
-                        return new Vec3f((float) (((new Random()).nextFloat() + collider.getDouble("minX")) * collider.getDouble("maxX")), (float) (((new Random()).nextFloat() + collider.getDouble("minY")) * collider.getDouble("maxY") + (collider.getDouble("maxY") / 10)), (float) (-((new Random()).nextFloat() * (collider.getDouble("maxZ") * ent.getBbHeight() / 1.8F)) + collider.getDouble("minZ")));
-                    }
-                }
+            List<AABB> colliders = PrideCapabilityReloadListener.WEAPON_COLLIDER.get(item.getItem());
+            if (colliders != null) {
+                AABB collider = colliders.get(new Random().nextInt(colliders.size()));
+                return new Vec3f((float) (((new Random()).nextFloat() + collider.minX) * collider.maxX), (float) (((new Random()).nextFloat() + collider.minY) * collider.maxY + (collider.maxY / 10)), (float) (-((new Random()).nextFloat() * (collider.maxZ * ent.getBbHeight() / 1.8F)) + collider.minZ));
             }
         }
         return new Vec3f(((new Random()).nextFloat() - 0.5F) * 0.2F, ((new Random()).nextFloat() - 0.3F) * 0.3F, ((new Random()).nextFloat() - 0.5F) * 0.2F);

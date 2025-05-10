@@ -1,12 +1,15 @@
 package com.robson.pride.keybinding;
 
 import com.mojang.blaze3d.shaders.Effect;
+import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.effect.ImbuementEffect;
 import com.robson.pride.progression.ProgressionGUI;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.skills.special.KillerAuraSkill;
 import io.netty.buffer.Unpooled;
+import io.redspace.ironsspellbooks.registries.ParticleRegistry;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -16,6 +19,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -92,6 +96,9 @@ public class KeyActionPacket {
             else player.removeEffect(EffectRegister.IMBUEMENT.get());
         }
 
+        if (packet.action.equals("mobility")) {
+            player.addEffect(new MobEffectInstance(EffectRegister.MOBILITY.get(), 999999999));
+        }
             if (packet.action.equals("menu")) {
                 if (player != null) {
                     BlockPos _bpos = player.getOnPos();

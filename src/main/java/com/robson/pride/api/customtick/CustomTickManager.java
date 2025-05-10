@@ -62,13 +62,7 @@ public class CustomTickManager {
     }
 
     public static void playerTargetingEntitiesCheck(Player player){
-        for (Entity ent : targeting_entities.get(player)){
-            if (ent == null || !ent.isAlive() || TargetUtil.getTarget(ent) != player){
-                List<Entity> targeting = targeting_entities.getOrDefault(player, new ArrayList<>());
-                targeting.remove(ent);
-                targeting_entities.put(player, targeting);
-            }
-        }
+        targeting_entities.get(player).removeIf(ent -> ent == null || !ent.isAlive() || TargetUtil.getTarget(ent) != player);
     }
 
     public static void startRespawnTick(Player player) {

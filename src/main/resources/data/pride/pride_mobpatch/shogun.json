@@ -80,12 +80,19 @@
     "knockdown": "epicfight:biped/combat/knockdown",
     "fall": "epicfight:biped/living/landing"
   },
+  "equipment": [
+    {
+      "variations": [0],
+      "slot": "mainhand",
+      "item": "pride:hoshigiri"
+    }
+  ],
   "combat_behavior": [
     {
       "weapon_categories": [
         "uchigatana",
         "tachi",
-        "sword"
+        "pride_katana"
       ],
       "style": "common",
       "behavior_series": [

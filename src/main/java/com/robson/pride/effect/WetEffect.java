@@ -19,6 +19,13 @@ public class WetEffect extends PrideEffectBase {
         super(MobEffectCategory.HARMFUL, 0x56CBFD);
         this.addAttributeModifier(Attributes.MOVEMENT_SPEED, WetEffect.MOVEMENT_SPEED_MODIFIER_UUID.toString(), -0.10, AttributeModifier.Operation.MULTIPLY_TOTAL);
     }
+    public void onEffectStart(LivingEntity ent){
+
+    }
+
+    public void onEffectEnd(LivingEntity ent){
+
+    }
 
     @Override
     public void applyEffectTick(LivingEntity living, int amplifier) {
