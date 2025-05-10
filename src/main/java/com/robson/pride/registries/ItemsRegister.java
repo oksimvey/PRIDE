@@ -11,6 +11,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Objects;
+
 public class ItemsRegister {
     public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, Pride.MODID);
 
@@ -24,6 +26,11 @@ public class ItemsRegister {
     public static final RegistryObject<Item> SABER = REGISTRY.register("saber", Saber::new);
     public static final RegistryObject<Item> SCYTHE = REGISTRY.register("scythe", Scythe::new);
     public static final RegistryObject<Item> SPEAR = REGISTRY.register("spear", Spear::new);
+    public static final RegistryObject<Item> HOSHIGIRI = REGISTRY.register("hoshigiri", Hoshigiri::new);
+    public static final RegistryObject<Item> PYROSCOURGE = REGISTRY.register("pyroscourge", Pyroscourge::new);
+    public static final RegistryObject<Item> NEPTARION = REGISTRY.register("neptarion", Neptarion::new);
+    public static final RegistryObject<Item> SCARVIELLE = REGISTRY.register("scarvielle", Scarvielle::new);
+    public static final RegistryObject<Item> KURONAMI = REGISTRY.register("kuronami", Kuronami::new);
     public static final RegistryObject<Item> COWBOY_REVOLVER = REGISTRY.register("cowboy_revolver", CowboyRevolver::new);
     public static final RegistryObject<Item> KICK_BOX = REGISTRY.register("kickbox", com.robson.pride.item.fightstyles.KickBoxItem::new);
     public static final RegistryObject<Item> BULLET = REGISTRY.register("bullet",

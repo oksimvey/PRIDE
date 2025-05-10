@@ -143,11 +143,10 @@ public class MathUtils {
             List<Float> y = new ArrayList<>();
             List<Float> z = new ArrayList<>();
             for (Vec3 point : points) {
-                x.add((float) ((Vec3) point).x);
-                y.add((float) ((Vec3) point).y);
-                z.add((float) ((Vec3) point).z);
+                x.add((float) point.x);
+                y.add((float) point.y);
+                z.add((float) point.z);
             }
-
             List<Float> x_a = new ArrayList<>();
             List<Float> x_b = new ArrayList<>();
             List<Float> y_a = new ArrayList<>();

@@ -2,13 +2,11 @@ package com.robson.pride.api.cam;
 
 import com.robson.pride.api.utils.CameraUtils;
 import com.robson.pride.api.utils.TargetUtil;
-import com.robson.pride.api.utils.TimerUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 public class DynamicCam {
 

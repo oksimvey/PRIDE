@@ -1,0 +1,6 @@
+{
+  "parent": "prominent:item/creationsplitter",
+  "textures": {
+    "layer0": "prominent:item/transmog/creationsplitter"
+  }
+}

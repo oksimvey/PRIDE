@@ -15,6 +15,8 @@ public class ImbuementEffect extends PrideEffectBase {
 
     public String element;
 
+    private byte tickcount = 0;
+
     public ImbuementEffect() {
         super(MobEffectCategory.NEUTRAL, 0x57CDFD);
     }
@@ -25,6 +27,9 @@ public class ImbuementEffect extends PrideEffectBase {
 
     @Override
     public void prideClientTick(LivingEntity ent) {
+        if (tickcount < 100) {
+            tickcount++;
+        }
         if (elements.contains(element) && ent.tickCount % ((int) (10 / ent.getBbHeight())) == 0) {
             if (!element.equals("Sun") || ParticleTracking.shouldRenderSunParticle(ent)) {
                 Vec3f vec3f = ParticleTracking.getAABBForImbuement(null, ent);

@@ -36,18 +36,7 @@ public class MusicCore {
 
     public static Music deserializeMobMusic(Player player, PrideMusicManager musicManager) {
         if (player != null) {
-            for (Entity ent : player.level().getEntities(player, MathUtils.createAABBAroundEnt(player, 50))) {
-                if (ent != null) {
-                    if (ent instanceof PrideMobBase prideMobBase) {
-                        if (TargetUtil.getTarget(prideMobBase) == player) {
-                            if (prideMobBase.getMusicPriority() > musicManager.getCurrentMusicPriority()) {
-                               musicManager.setCurrentMusicPriority(prideMobBase.getMusicPriority());
-                                return prideMobBase.getMobMusic();
-                            }
-                        }
-                    }
-                }
-            }
+
         }
         return deserializeBiomeMusic(player);
     }
