@@ -24,8 +24,10 @@ public class CameraUtils{
 
     public static void correctCamera(){
         Config config = ThirdPerson.getConfig();
-        config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA;
-        TimerUtil.schedule(()-> config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.INTEREST_POINT, 500, TimeUnit.MILLISECONDS);
+        if(config.normal_rotate_mode != AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA) {
+            config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA;
+            TimerUtil.schedule(() -> config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.INTEREST_POINT, 500, TimeUnit.MILLISECONDS);
+        }
     }
 
     public static void lockCamera(LocalPlayer ent) {
@@ -37,7 +39,7 @@ public class CameraUtils{
 
     public static void putonFirstPerson(Entity ent, byte duration) {
         Minecraft.getInstance().options.setCameraType(CameraType.FIRST_PERSON);
-        TimerUtil.schedule(() -> Minecraft.getInstance().options.setCameraType(CameraType.THIRD_PERSON_BACK), duration + 1, TimeUnit.SECONDS);
+        TimerUtil.schedule(() -> Minecraft.getInstance().options.setCameraType(CameraType.THIRD_PERSON_BACK), duration, TimeUnit.SECONDS);
     }
 
     public static void changeCamOffset(float x, float y, float z){

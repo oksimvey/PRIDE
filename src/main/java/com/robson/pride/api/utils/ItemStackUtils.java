@@ -58,7 +58,7 @@ public class ItemStackUtils {
             if (colliders != null){
                 float totalsize = 0;
                 for (AABB collider : colliders) {
-                    totalsize += MathUtils.getTotalDistance(collider.maxX - collider.minX, collider.maxY - collider.minY, collider.maxZ - collider.minZ);
+                    totalsize += MathUtils.getTotalDistance(collider.maxX + collider.minX, collider.maxY + collider.minY, collider.maxZ + collider.minZ);
                 }
                 return totalsize;
             }

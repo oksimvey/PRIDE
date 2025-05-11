@@ -1,6 +1,7 @@
 package com.robson.pride.api.utils;
 
 import com.robson.pride.particles.StringParticle;
+import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
@@ -85,6 +86,13 @@ public class ParticleUtils {
                 }
             }
         }
+    }
+
+    public static int getAmountByParticle(ParticleOptions particleOptions){
+        if (particleOptions != null){
+
+        }
+        return 5;
     }
 }
 

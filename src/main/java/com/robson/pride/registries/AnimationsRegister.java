@@ -12,8 +12,10 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,6 +35,7 @@ import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.model.armature.HumanoidArmature;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 import yesman.epicfight.world.damagesource.EpicFightDamageSource;
@@ -313,14 +316,12 @@ public class AnimationsRegister {
     public static void shotBullet(Entity owner, Vec3 jointpos, List<Entity> hitentities) {
         if (owner != null && jointpos != null) {
             Vec3 lookangle = owner.getLookAngle();
-            Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.SMOKE, jointpos.x, jointpos.y, jointpos.z, lookangle.x, lookangle.y, lookangle.z);
+            Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.SMOKE, jointpos.x, jointpos.y - 0.5, jointpos.z, lookangle.x, owner instanceof Player ? lookangle.y : 0, lookangle.z);
             if (particle != null) {
+                particle.setLifetime(20);
                 for (Entity ent : owner.level().getEntities(owner, new AABB(owner.getX() - 25, owner.getY() - 25, owner.getZ() - 25, owner.getX() + 25, owner.getY() + 25, owner.getZ() + 25))) {
-                    SkillCore.loopParticleHit(owner, ent, particle, new ArrayList<>(), 0.5f, ()-> {
-                        LivingEntityPatch entityPatch = EpicFightCapabilities.getEntityPatch(owner, LivingEntityPatch.class);
-                        if (entityPatch != null){
-                            entityPatch.attack(new EpicFightDamageSource(owner.damageSources().generic()), ent, InteractionHand.MAIN_HAND);
-                        }
+                    SkillCore.loopParticleHit(owner, ent, particle, hitentities, 0.5f, ()-> {
+                      HealthUtils.dealBlockableDmg(owner, ent, 5);
                     });
                 }
             }

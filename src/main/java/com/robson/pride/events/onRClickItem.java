@@ -1,8 +1,10 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.mechanics.Parry;
+import com.robson.pride.api.utils.CutsceneUtils;
 import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.epicfight.styles.SheatProvider;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;

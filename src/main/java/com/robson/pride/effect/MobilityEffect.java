@@ -1,11 +1,18 @@
 package com.robson.pride.effect;
 
+import com.robson.pride.api.utils.ArmatureUtils;
+import com.robson.pride.api.utils.ElementalUtils;
+import com.robson.pride.api.utils.PlaySoundUtils;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.KeyRegister;
+import io.redspace.ironsspellbooks.registries.ParticleRegistry;
+import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.BlockUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -16,30 +23,34 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.client.events.engine.ControllEngine;
+import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.TimeUnit;
 
 public class MobilityEffect extends PrideEffectBase {
 
-    private ConcurrentHashMap<BlockPos, BlockState> blockPosBlockConcurrentHashMap = new ConcurrentHashMap<>();
+    private ConcurrentSkipListMap<BlockPos, BlockState> blockPosBlockConcurrentHashMap = new ConcurrentSkipListMap<>();
+
+    private int effecttick;
 
     public MobilityEffect() {
         super(MobEffectCategory.NEUTRAL, 0x57CDFD);
+        this.effecttick = 0;
     }
 
 
     public void onEffectStart(LivingEntity ent){
         if (ent instanceof Player){
+            this.effecttick++;
             serverTick(ent);
             if (!ControllEngine.isKeyDown(KeyRegister.keyActionMobility)){
                 ent.removeEffect(EffectRegister.MOBILITY.get());
-                        return;
+                return;
             }
             TimerUtil.schedule(()-> onEffectStart(ent), 100, TimeUnit.MILLISECONDS);
         }
@@ -49,50 +60,75 @@ public class MobilityEffect extends PrideEffectBase {
         if (ent != null){
             LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (livingEntityPatch != null && livingEntityPatch.currentLivingMotion == LivingMotions.RUN) {
-                if (ent.tickCount % 20 == 0){
-                   restoreBlockPos(ent);
-                }
-                ent.setDeltaMovement(ent.getLookAngle().x, ent.getDeltaMovement().y, ent.getLookAngle().z);
+                ent.setDeltaMovement(ent.getLookAngle().x, 0, ent.getLookAngle().z);
                 Vec3i vec3 = new Vec3i((int) ((int) ent.getLookAngle().scale(1.5).x + ent.getX()), (int) (ent.getY() - 1), (int) ((int) ent.getLookAngle().scale(1.5).z + ent.getZ()));
                 storeBlockPos(ent, vec3);
+                Vec3 legr = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.legR);
+                Vec3 legl = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.legL);
+                float max = 0.25f;
+                float min = -0.25f;
+                Random random = new Random();
+                if (effecttick % 8 == 0) {
+                    Minecraft.getInstance().level.playSound(ent, ent.blockPosition(), SoundRegistry.FROST_STEP.get(), SoundSource.NEUTRAL, 1, 1);
+                }
+                if (legr != null && legl != null) {
+                    for (int i = 0; i < 5; i++) {
+                        Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.SNOWFLAKE_PARTICLE.get(),
+                                random.nextFloat(max - min) + min + legr.x,
+                                random.nextFloat(max - min) + min + legr.y,
+                                random.nextFloat(max - min) + min + legr.z, 0, 0, 0);
+                        Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.SNOWFLAKE_PARTICLE.get(),
+                                random.nextFloat(max - min) + min + legl.x,
+                                random.nextFloat(max - min) + min + legl.y,
+                                random.nextFloat(max - min) + min + legl.z, 0, 0, 0);
+                    }
+                }
             }
         }
     }
 
     public void storeBlockPos(LivingEntity ent, Vec3i center){
         if (ent != null){
+            if (this.effecttick % 5 == 0) {
+                TimerUtil.schedule(() -> {
+                    restoreBlockPos(ent);
+                    PlaySoundUtils.playSound(ent, SoundRegistry.RAY_OF_FROST.get(), 1, 1);
+                }, 1, TimeUnit.SECONDS);
+                return;
+            }
             List<Vec3i> positions = Arrays.asList(center,
                     center.offset(-1, 0, -1),
                     center.offset(-1, 0, 0),
                     center.offset(-1, 0, 1),
                     center.offset(0, 0, -1),
                     center.offset(0, 0, 1),
-            center.offset(1, 0, -1),
+                    center.offset(1, 0, -1),
                     center.offset(1, 0, 0),
                     center.offset(1, 0, 1));
             for (Vec3i pos : positions) {
-                if (!(ent.level().getBlockState(new BlockPos(pos)).getBlock() instanceof AirBlock)) {
+                if (!(ent.level().getBlockState(new BlockPos(pos)).getBlock() instanceof AirBlock) && !blockPosBlockConcurrentHashMap.containsKey(new BlockPos(pos))) {
                     blockPosBlockConcurrentHashMap.put(new BlockPos(pos), ent.level().getBlockState(new BlockPos(pos)));
                 }
             }
-            TimerUtil.schedule(()-> {
-                for (Vec3i pos : positions) {
-                    ent.level().setBlockAndUpdate(new BlockPos(pos), Blocks.ICE.defaultBlockState());
-                }
-            }, 100, TimeUnit.MILLISECONDS);
+           for (BlockPos pos : blockPosBlockConcurrentHashMap.keySet()) {
+               ent.level().setBlockAndUpdate(pos, Blocks.ICE.defaultBlockState());
+           }
         }
     }
+
 
     public void restoreBlockPos(LivingEntity ent){
         if (ent != null && !blockPosBlockConcurrentHashMap.isEmpty()) {
             for (BlockPos blockPos : blockPosBlockConcurrentHashMap.keySet()) {
                 ent.level().setBlockAndUpdate(blockPos, blockPosBlockConcurrentHashMap.get(blockPos));
+                blockPosBlockConcurrentHashMap.remove(blockPos);
             }
         }
     }
 
     public void onEffectEnd(LivingEntity ent){
-        restoreBlockPos(ent);
+        this.effecttick = 0;
+        TimerUtil.schedule(()-> restoreBlockPos(ent), 1500, TimeUnit.MILLISECONDS);
     }
 
     @Override

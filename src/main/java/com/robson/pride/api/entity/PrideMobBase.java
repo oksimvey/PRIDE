@@ -87,6 +87,8 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
 
     private byte level;
 
+    private byte music_priority = 0;
+
     protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
         this.xpReward = 5;
@@ -124,6 +126,9 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
         if (tags.contains("custom_music")) {
             Holder<SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation(tags.getString("custom_music"))));
             this.mobMusic = new Music(holder, 1, 1, true);
+        }
+        if (tags.contains("music_priority")){
+            this.music_priority = tags.getByte("music_priority");
         }
     }
 
@@ -257,7 +262,7 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
     }
 
     public byte getMusicPriority(){
-        return 1;
+        return (byte) (this.music_priority + 1);
     }
 
     @Override

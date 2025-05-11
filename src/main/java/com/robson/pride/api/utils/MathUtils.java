@@ -6,8 +6,11 @@ import it.unimi.dsi.fastutil.doubles.DoubleList;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Vector3f;
 import yesman.epicfight.api.utils.math.Vec3f;
 

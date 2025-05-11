@@ -298,6 +298,9 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         if (original.contains("custom_music")) {
             extract.putString("custom_music", original.getString("custom_music"));
         }
+        if (original.contains("music_priority")){
+            extract.putByte("music_priority", original.getByte("music_priority"));
+        }
         if (original.contains("textures")) {
             extract.put("textures", original.getList("textures", 8));
         }
