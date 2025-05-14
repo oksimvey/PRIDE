@@ -40,6 +40,7 @@ public class PlayerSetup {
         Player player = event.getEntity();
         if (player != null) {
             CustomTickManager.stopTick(player);
+            player.getPersistentData().remove("pride:cooldown_skills");
         }
     }
 

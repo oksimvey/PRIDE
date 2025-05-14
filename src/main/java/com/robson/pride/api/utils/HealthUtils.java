@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 
 public class HealthUtils {
 
-
     public static void hurtEntity(Entity ent, float amount, DamageSource dmg) {
         TimerUtil.schedule(() -> {
             if (ent != null) {
@@ -31,12 +30,11 @@ public class HealthUtils {
             damage.setStunType(StunType.HOLD);
             damage.setImpact(0.5F);
             damage.addRuntimeTag(EpicFightDamageType.WEAPON_INNATE);
-            int prevInvulTime = ent.invulnerableTime;
             ent.invulnerableTime = 0;
             float entity1damage = 5.0F;
             AttackResult attackResult = playerpatch.tryHarm(ent, damage, entity1damage);
             if (attackResult.resultType == AttackResult.ResultType.SUCCESS){
-                ent.hurt(damage, 5);
+                ent.hurt(damage, amount);
             }
 }
     }

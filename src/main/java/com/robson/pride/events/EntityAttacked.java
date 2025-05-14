@@ -1,5 +1,6 @@
 package com.robson.pride.events;
 
+import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.effect.ImmunityEffect;
@@ -12,6 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -32,6 +34,16 @@ public class EntityAttacked {
         if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
             Entity ent = event.getEntity();
             Entity ddmgent = event.getSource().getDirectEntity();
+            if (event.getSource().getEntity() instanceof PrideMobBase prideMobBase && (prideMobBase.getType().equals(ent.getType()) || prideMobBase.allies.contains(EntityType.getKey(ent.getType()).toString()))) {
+                event.setCanceled(true);
+            }
+            else if (ent instanceof PrideMobBase){
+                for (Entity entity : ent.level().getEntities(ent, MathUtils.createAABBAroundEnt(ent, 25))){
+                    if (entity != ent && entity instanceof PrideMobBase prideMobBase){
+                        prideMobBase.deserializeAlliesTargeting(ent, event.getSource().getEntity());
+                    }
+                }
+            }
             if (event.getSource().getEntity() instanceof Shooter shooter) {
                 if (shooter.getOwner() == ent) {
                     event.setCanceled(true);
@@ -69,9 +81,6 @@ public class EntityAttacked {
             Entity ddmgent = event.getSource().getDirectEntity();
             ddmgent.setDeltaMovement(ddmgent.getDeltaMovement().x, 0, ddmgent.getDeltaMovement().z);
             ent.setDeltaMovement(ent.getDeltaMovement().x, 0, ent.getDeltaMovement().z);
-            if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMMUNITY.get())){
-                ImmunityEffect.onDamage(event, ent);
-            }
             if (ddmgent instanceof LivingEntity liv) {
                 if (liv.hasEffect(EffectRegister.HYPNOTIZED.get())) {
                     event.setCanceled(true);
@@ -87,14 +96,19 @@ public class EntityAttacked {
                     if (hand == InteractionHand.MAIN_HAND) {
                         if (ParticleTracking.shouldRenderParticle(living.getMainHandItem(), living) && ItemStackUtils.getStyle(living) != PrideStyles.GUN_OFFHAND) {
                             ElementalPassives.onElementalDamage(ent, living, living.getMainHandItem(), event);
+                            return;
                         }
                     }
                     if (hand == InteractionHand.OFF_HAND) {
                         if (ParticleTracking.shouldRenderParticle(living.getOffhandItem(), living)) {
                             ElementalPassives.onElementalDamage(ent, living, living.getOffhandItem(), event);
+                            return;
                         }
                     }
                 }
+            }
+            if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMMUNITY.get())){
+                ImmunityEffect.onDamage(event, ent);
             }
         }
     }

@@ -112,6 +112,8 @@ public class Pride {
             WeaponSkillRegister.registerWeaponArts();
             DialogueConditionsRegister.register();
             ActionsRegister.register();
+            BiomeMusicRegister.register();
+            StructureRegister.register();
         });
     }
 

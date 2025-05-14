@@ -4,6 +4,7 @@ import com.robson.pride.api.cam.DynamicCam;
 import com.robson.pride.api.client.AutoBattleMode;
 import com.robson.pride.api.musiccore.MusicCore;
 import com.robson.pride.api.musiccore.PrideMusicManager;
+import com.robson.pride.api.skillcore.CooldownManager;
 import com.robson.pride.api.utils.MathUtils;
 import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.api.utils.TimerUtil;
@@ -38,6 +39,7 @@ public class CustomTickManager {
     public static void onTick(Player player) {
         if (playerMusicManagerThread.get(player) != null) {
             loopTick(player);
+            CooldownManager.timeCooldowns(player);
             if (player.tickCount % 10 == 0 && !Minecraft.getInstance().isPaused()) {
                     SheatProvider.provideSheat(player);
                     MusicCore.musicCore(player);

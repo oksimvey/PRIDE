@@ -28,6 +28,7 @@
     "chase": "epicfight:biped/living/walk",
     "death": "epicfight:biped/living/death"
   },
+  "allies": ["pride:shogun"],
   "humanoid_weapon_motions": [
     {
       "weapon_categories": ["axe", "hoe", "pickaxe", "shovel", "sword"],

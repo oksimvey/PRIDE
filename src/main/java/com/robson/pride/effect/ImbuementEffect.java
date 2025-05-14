@@ -1,17 +1,21 @@
 package com.robson.pride.effect;
 
 import com.robson.pride.api.mechanics.ParticleTracking;
+import com.robson.pride.api.skillcore.CooldownManager;
 import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.ParticleUtils;
 import com.robson.pride.api.utils.TimerUtil;
 import com.yukami.epicironcompat.animation.Animation;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.*;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Armatures;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import static com.robson.pride.registries.WeaponSkillRegister.elements;
@@ -43,6 +47,8 @@ public class ImbuementEffect extends PrideEffectBase {
     }
 
     public void onEffectEnd(LivingEntity ent){
+        ElementalUtils.playSoundByElement(this.element, ent, 1);
+        AnimUtils.playAnim(ent, Animation.CASTING_TWO_HAND_TOP, 0.1f);
     }
 
     @Override

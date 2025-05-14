@@ -48,7 +48,7 @@ public class SkillCore {
     public static void loopParticleHit(Entity dmgent, Entity target, Particle particle, List<Entity> hitentities, float particleradius, Runnable function){
         if (dmgent != null && target != null && particle != null && hitentities != null && function != null){
             if (canHit(dmgent, target, hitentities)){
-                if (MathUtils.getTotalDistance(particle.getPos().x - target.getX(), particle.getPos().y - target.getY(), particle.getPos().z - target.getZ()) - target.getBbWidth() / 2 <= particleradius){
+                if (MathUtils.getTotalDistance(particle.getPos().x - target.getX(), particle.getPos().y - target.getY(), particle.getPos().z - target.getZ()) <= particleradius + (target.getBbWidth() / 2)){
                     hitentities.add(target);
                     function.run();
                 }

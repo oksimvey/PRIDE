@@ -2,6 +2,7 @@ package com.robson.pride.progression;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.robson.pride.api.utils.AttributeUtils;
+import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.ProgressionUtils;
 import com.robson.pride.api.utils.TagsUtils;
 import net.minecraft.client.gui.GuiGraphics;
@@ -69,11 +70,18 @@ public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         if (player != null) {
                 CompoundTag variables = TagsUtils.ClientPlayerTagsAcessor.playerTags.get(player);
+                String element = ElementalUtils.getElement(player);
             guiGraphics.drawString(this.font,
                     ("Strength Level:" + variables.getInt("StrengthLvl")), 118, 14, -1, false);
             guiGraphics.drawString(this.font,
 
                     ("Money:" + variables.getLong("pride_money")), 118, 25, -1, false);
+            guiGraphics.drawString(this.font,
+
+                    (element + " Level:" + variables.getLong(element + "Lvl")), 118, 30, -1, false);
+            guiGraphics.drawString(this.font,
+
+                    (element + " XP" + variables.getInt(element + "Xp") + "/" + variables.getInt(element + "MaxXp")), 118, 35, -1, false);
             guiGraphics.drawString(this.font,
 
                     ("Dexterity Level:" + variables.getInt("DexterityLvl")), 119, 42, -1, false);

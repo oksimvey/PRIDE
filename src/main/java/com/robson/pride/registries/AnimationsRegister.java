@@ -18,16 +18,20 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import reascer.wom.animation.attacks.SpecialAttackAnimation;
+import yesman.epicfight.api.animation.Animator;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.*;
+import yesman.epicfight.api.client.animation.ClientAnimator;
 import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.api.forgeevent.AnimationRegistryEvent;
 import yesman.epicfight.api.utils.TimePairList;
 import yesman.epicfight.api.utils.math.ValueModifier;
 import yesman.epicfight.api.utils.math.Vec3f;
+import yesman.epicfight.client.events.engine.RenderEngine;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.gameasset.ColliderPreset;
@@ -320,8 +324,8 @@ public class AnimationsRegister {
             if (particle != null) {
                 particle.setLifetime(20);
                 for (Entity ent : owner.level().getEntities(owner, new AABB(owner.getX() - 25, owner.getY() - 25, owner.getZ() - 25, owner.getX() + 25, owner.getY() + 25, owner.getZ() + 25))) {
-                    SkillCore.loopParticleHit(owner, ent, particle, hitentities, 0.5f, ()-> {
-                      HealthUtils.dealBlockableDmg(owner, ent, 5);
+                    SkillCore.loopParticleHit(owner, ent, particle, hitentities, 0.5f, () -> {
+                        HealthUtils.dealBlockableDmg(owner, ent, 5);
                     });
                 }
             }

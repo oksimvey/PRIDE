@@ -34,6 +34,11 @@ public class NewCap {
         if (oldtag.contains("pride_money")){
             newtag.putLong("pride_money", oldtag.getLong("pride_money"));
         }
+        for (String element : WeaponSkillRegister.elements){
+            newtag.putInt(element + "Xp", oldtag.getInt(element + "Xp"));
+            newtag.putByte(element + "Lvl", oldtag.getByte(element + "Lvl"));
+            newtag.putInt(element + "MaxXp", oldtag.getInt(element + "MaxXp"));
+        }
     }
 
     public static void startVariables(Player player, CompoundTag newtag) {

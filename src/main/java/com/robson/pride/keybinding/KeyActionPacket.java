@@ -1,15 +1,20 @@
 package com.robson.pride.keybinding;
 
 import com.mojang.blaze3d.shaders.Effect;
+import com.robson.pride.api.skillcore.CooldownManager;
+import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
+import com.robson.pride.api.utils.PlaySoundUtils;
 import com.robson.pride.effect.ImbuementEffect;
 import com.robson.pride.progression.ProgressionGUI;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.skills.special.KillerAuraSkill;
+import com.yukami.epicironcompat.animation.Animation;
 import io.netty.buffer.Unpooled;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -88,12 +93,15 @@ public class KeyActionPacket {
         }
         if (packet.action.equals("imbuement")){
             if (!player.hasEffect(EffectRegister.IMBUEMENT.get())) {
-                player.addEffect(new MobEffectInstance(EffectRegister.IMBUEMENT.get(), 999999999));
-                if (player.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect){
-                    imbuementEffect.setElement(ElementalUtils.getElement(player));
+                if (CooldownManager.playerSkillsCooldown.get(player) == null || !CooldownManager.playerSkillsCooldown.get(player).contains("imbuement")) {
+                    MobEffectInstance effect = new MobEffectInstance(EffectRegister.IMBUEMENT.get(), 999999999);
+                    ((ImbuementEffect) (effect.getEffect())).setElement(ElementalUtils.getElement(player));
+                    player.addEffect(effect);
                 }
             }
-            else player.removeEffect(EffectRegister.IMBUEMENT.get());
+            else {
+                player.removeEffect(EffectRegister.IMBUEMENT.get());
+            }
         }
 
         if (packet.action.equals("mobility")) {

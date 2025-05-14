@@ -30,8 +30,10 @@
     "idle": "epicfight:biped/living/idle",
     "walk": "epicfight:biped/living/walk",
     "chase": "epicfight:biped/living/walk",
-    "death": "epicfight:biped/living/death"
+    "death": "epicfight:biped/living/death",
+    "mount": "epicfight:biped/living/mount"
   },
+  "allies": ["pride:ronin"],
   "textures": ["pride:textures/entities/japanese/isshin.png"],
   "humanoid_weapon_motions": [
     {
@@ -78,7 +80,8 @@
     "short": "epicfight:biped/combat/hit_short",
     "long": "epicfight:biped/combat/hit_long",
     "knockdown": "epicfight:biped/combat/knockdown",
-    "fall": "epicfight:biped/living/landing"
+    "fall": "epicfight:biped/living/landing",
+    "neutralize": "epicfight:biped/skill/guard_break2"
   },
   "equipment": [
     {
@@ -88,6 +91,41 @@
     }
   ],
   "combat_behavior": [
+    {
+      "weapon_categories": [
+        "uchigatana",
+        "tachi",
+        "pride_katana"
+      ],
+      "style": "mount",
+      "behavior_series": [
+        {
+          "weight": 1.5,
+          "canBeInterrupted": false,
+          "looping": false,
+          "behaviors": [
+            {
+              "conditions": [
+                {
+                  "predicate": "within_eye_height"
+                },
+                {
+                  "predicate": "within_distance",
+                  "min": 0.0,
+                  "max": 50.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
+              ],
+              "animation": "epicfight:biped/combat/sword_mount_attack"
+            }
+          ]
+        }
+      ]
+    },
     {
       "weapon_categories": [
         "uchigatana",

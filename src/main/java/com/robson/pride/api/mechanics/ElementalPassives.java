@@ -201,7 +201,6 @@ public class ElementalPassives {
         if (ent instanceof LivingEntity living && dmgent != null) {
             PlaySoundUtils.playSound(ent, SoundRegistry.TELEKINESIS_LOOP.get(), 1, 1);
             int effectticks = (int) ElementalUtils.getFinalValueForMoonDMG(ent, power) * 20;
-            living.addEffect(new MobEffectInstance(EffectRegister.HYPNOTIZED.get(), effectticks, 0), living);
         }
     }
 

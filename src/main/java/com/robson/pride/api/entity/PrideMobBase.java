@@ -44,6 +44,7 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.AnimationProvider;
 import yesman.epicfight.api.animation.types.StaticAnimation;
@@ -68,6 +69,8 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
     public List<String> targets = new ArrayList<>();
 
     public List<String> textures = new ArrayList<>();
+
+    public List<String> allies = new ArrayList<>();
 
     private CompoundTag skillmotions = new CompoundTag();
 
@@ -105,6 +108,20 @@ public abstract class PrideMobBase extends PathfinderMob implements Enemy {
             deserializeLevel(tagmap);
             deserializeSkillMotions(tagmap);
             deserializeEquipmentMap(tagmap);
+            deserializeAllies(tagmap);
+        }
+    }
+
+    public void deserializeAlliesTargeting(Entity ent, Entity dmgent){
+        if (ent != null && dmgent != null && (ent.getType().equals(this.getType()) || this.allies.contains(EntityType.getKey(ent.getType()).toString()))){
+            TargetUtil.setTarget(this, dmgent);
+        }
+    }
+
+    public void deserializeAllies(CompoundTag tagmap) {
+        ListTag allies = tagmap.getList("allies", 8);
+        for (int i = 0; i < allies.size(); ++i) {
+            this.allies.add(allies.getString(i));
         }
     }
 

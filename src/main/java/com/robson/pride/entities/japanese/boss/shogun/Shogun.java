@@ -35,7 +35,7 @@ public class Shogun extends PrideMobBase {
 
     @Override
     public double getMyRidingOffset() {
-        return -2.5D;
+        return 0;
     }
 
     @Override

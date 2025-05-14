@@ -307,6 +307,9 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         if (original.contains("targets")) {
             extract.put("targets", original.getList("targets", 8));
         }
+        if (original.contains("allies")) {
+            extract.put("allies", original.getList("allies", 8));
+        }
         if (original.contains("goals")) {
             extract.put("goals", original.getList("goals", 10));
         }
