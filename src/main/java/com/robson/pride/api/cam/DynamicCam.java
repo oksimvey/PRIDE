@@ -13,6 +13,7 @@ import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import yesman.epicfight.api.client.animation.property.TrailInfo;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 import java.util.List;
@@ -44,11 +45,11 @@ public class DynamicCam {
                         targetingEntities += 1;
                     }
                 }
-                if (targetingEntities > 8){
-                    targetingEntities = 8;
+                if (targetingEntities > 5){
+                    targetingEntities = 5;
                 }
-                ymodifier = 0 + (targetingSizeModifier / 20);
-                zmodifier += targetingSizeModifier + targetingEntities / 4f;
+                ymodifier = 0 + (targetingSizeModifier / 20) + (targetingEntities / 100f);
+                zmodifier += targetingSizeModifier + targetingEntities / 5f;
             }
              CameraUtils.changeCamOffset(xmodifier, ymodifier, zmodifier);
         }
