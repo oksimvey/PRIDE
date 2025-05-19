@@ -133,6 +133,9 @@ dependencies {
     implementation fg.deobf("curse.maven:epic-fight-dual-axes-1174112:6421589")
      implementation fg.deobf("curse.maven:epic-fight-mod-rapier-moveset-addon-1036425:6427022")
     implementation fg.deobf("curse.maven:cmdcam-251244:6099081")
+    implementation fg.deobf("curse.maven:puzzles-lib-495476:6387081")
+    implementation fg.deobf("curse.maven:straw-statues-682564:5207884")
+
 
 
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings

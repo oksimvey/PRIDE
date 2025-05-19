@@ -15,6 +15,14 @@
       }
     ]
   },
+  "plains_music": {
+    "sounds": [
+      {
+        "name": "pride:musics/plains",
+        "stream": false
+      }
+    ]
+  },
   "shoot": {
     "sounds": [
       {

@@ -3,6 +3,7 @@ package com.robson.pride.main;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.nameless.indestructible.server.network.SPCancelBossInfo;
 import com.robson.pride.api.ai.DataConditions;
+import com.robson.pride.api.biomesettings.BiomeSettingsManager;
 import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.command.*;
@@ -108,12 +109,12 @@ public class Pride {
 
         private void setupCommon(FMLCommonSetupEvent event) {
             PacketRegister.register();
-        event.enqueueWork(()-> {
+            event.enqueueWork(()-> {
             WeaponSkillRegister.registerWeaponArts();
             DialogueConditionsRegister.register();
             ActionsRegister.register();
-            BiomeMusicRegister.register();
             StructureRegister.register();
+            BiomeSettingsManager.register();
         });
     }
 

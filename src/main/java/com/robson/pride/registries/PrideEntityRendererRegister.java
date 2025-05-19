@@ -17,7 +17,7 @@ public class PrideEntityRendererRegister {
     public static void registerSpecialEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(EntityRegister.SHOOTER.get(), ShooterRenderer::new);
         event.registerEntityRenderer(EntityRegister.CLONE_ENTITY.get(), CloneEntityRenderer::new);
-       for (RegistryObject<EntityType<?>> entries : EntityRegister.ENTITIES.getEntries()){
+     for (RegistryObject<EntityType<?>> entries : EntityRegister.ENTITIES.getEntries()){
             EntityType type = entries.get();
             event.registerEntityRenderer(type, PrideMobRenderer::new);
         }
