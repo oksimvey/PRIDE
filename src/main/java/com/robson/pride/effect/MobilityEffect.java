@@ -61,28 +61,43 @@ public class MobilityEffect extends PrideEffectBase {
 
     public void StepMobility(LivingEntity entity){
         entity.setDeltaMovement(entity.getDeltaMovement().x, 0 + Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector().y, entity.getDeltaMovement().z);
-        List<Vec3> points = ArmatureUtils.getEntityArmatureVecsForParticle(Minecraft.getInstance().player, entity, 5, 0.15f);
-        PlaySoundUtils.playSound(entity, SoundRegistry.LIGHTNING_CAST.get(), 1, 1);
+        CameraUtils.correctCamera();
+        List<Vec3> points = ArmatureUtils.getEntityArmatureVecsForParticle(Minecraft.getInstance().player, entity, 2, 0.1f);
         TimerUtil.schedule(()-> {
         if (!points.isEmpty()){
             for (Vec3 point : points){
                 Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.ELECTRICITY_PARTICLE.get(), point.x, point.y, point.z, 0, 0, 0);
             }
         }
+            CameraUtils.correctCamera();
+            PlaySoundUtils.playSound(entity, SoundRegistry.LIGHTNING_CAST.get(), 1, 1);
+        Vec3 start = entity.position().add(0, entity.getBbHeight() / 1.8f, 0);
+        Vec3 direction = Minecraft.getInstance().gameRenderer.getMainCamera().getEntity().getLookAngle();
             if (Minecraft.getInstance().options.keyUp.isDown()) {
                 AnimUtils.playAnim(entity, AnimationsRegister.STEP_FORWARD, 0.05f);
+                loopLightningTrail(start, direction, (byte) 0);
                 return;
             }
             if (Minecraft.getInstance().options.keyLeft.isDown()) {
                 AnimUtils.playAnim(entity, AnimationsRegister.STEP_LEFT, 0.05f);
+                loopLightningTrail(start, MathUtils.rotate2DVector(direction, -90), (byte) 0);
                 return;
             }
             if (Minecraft.getInstance().options.keyRight.isDown()) {
                 AnimUtils.playAnim(entity, AnimationsRegister.STEP_RIGHT, 0.05f);
+                loopLightningTrail(start, MathUtils.rotate2DVector(direction, 90), (byte) 0);
                 return;
             }
             AnimUtils.playAnim(entity, AnimationsRegister.STEP_BACKWARD, 0.05f);
-        }, 10, TimeUnit.MILLISECONDS);
+            loopLightningTrail(start, MathUtils.rotate2DVector(direction, 180), (byte) 0);
+        }, 100, TimeUnit.MILLISECONDS);
+    }
+
+    public void loopLightningTrail(Vec3 start, Vec3 direction, byte currentloop){
+        if (start != null && direction != null && currentloop < 15){
+            Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.ELECTRICITY_PARTICLE.get(), start.x + (direction.x * currentloop / 2.5), start.y, start.z + (direction.z * currentloop / 2.5), direction.x / (1 + currentloop / 1.5f), 0, direction.z / (1 + currentloop / 1.5f));
+            TimerUtil.schedule(()-> loopLightningTrail(start, direction, (byte) (currentloop + 1)), 50, TimeUnit.MILLISECONDS);
+        }
     }
 
     public void serverTick(LivingEntity ent){

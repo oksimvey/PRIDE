@@ -1,10 +1,9 @@
 package com.robson.pride.registries;
 
 import com.robson.pride.main.Pride;
-import com.robson.pride.particles.StringParticle;
-import com.robson.pride.particles.PerilousParticle;
-import com.robson.pride.particles.RedLightningParticle;
-import com.robson.pride.particles.VulnerableParticle;
+import com.robson.pride.particles.*;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -29,6 +28,5 @@ public class ParticleRegister {
         event.registerSpriteSet(VULNERABLE.get(), VulnerableParticle::provider);
         event.registerSpriteSet(RED_LIGHTNING.get(), RedLightningParticle.Provider::new);
         event.registerSpriteSet(NUMBER_PARTICLE.get(), StringParticle.Provider::new);
-
     }
 }

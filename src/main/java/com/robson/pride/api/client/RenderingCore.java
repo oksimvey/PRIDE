@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import yesman.epicfight.gameasset.Armatures;
 
-public class RenderingCore {
+public class RenderingCore{
 
     public static void renderCore() {
         Minecraft client = Minecraft.getInstance();
