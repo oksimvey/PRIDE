@@ -29,7 +29,6 @@ public class InteractAction extends ActionBase {
                                         }
                                         JsonInteractionsReader.onInteraction(target, ent);
                                         if (ent instanceof PrideMobBase prideMobBase) {
-                                            prideMobBase.setTargetpos(target.position());
                                         }
                                         return;
                                     }

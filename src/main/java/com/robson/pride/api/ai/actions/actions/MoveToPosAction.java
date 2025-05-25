@@ -12,7 +12,7 @@ public class MoveToPosAction extends ActionBase {
         if (ent != null && action != null) {
             if (ent instanceof PrideMobBase mob) {
                 if (action.contains("path")){
-                    mob.setPathpositions(action.getList("path", 10));
+
                 }
             }
         }

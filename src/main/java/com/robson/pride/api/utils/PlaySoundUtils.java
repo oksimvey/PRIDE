@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -33,5 +34,9 @@ public class PlaySoundUtils {
     public static void playNonRegisteredSound(Entity ent, String soundid, float volume, float pitch){
         Holder<SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation(soundid)));
         if( Minecraft.getInstance().level != null) Minecraft.getInstance().level.playSound(Minecraft.getInstance().player, ent, holder.get(), SoundSource.NEUTRAL, volume, pitch);
+    }
+
+    public static Music getMusicByString(String musicid){
+        return new Music(Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation(musicid))), 1, 1, true);
     }
 }

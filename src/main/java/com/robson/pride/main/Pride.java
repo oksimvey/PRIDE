@@ -114,7 +114,7 @@ public class Pride {
             DialogueConditionsRegister.register();
             ActionsRegister.register();
             StructureRegister.register();
-            BiomeSettingsManager.register();
+                BiomeSettingsManager.register();
         });
     }
 

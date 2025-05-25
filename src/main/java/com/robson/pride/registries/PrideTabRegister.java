@@ -44,6 +44,12 @@ public class PrideTabRegister {
                 entries.accept(ItemsRegister.SABER.get());
                 entries.accept(ItemsRegister.SCYTHE.get());
                 entries.accept(ItemsRegister.SPEAR.get());
+                entries.accept(ItemsRegister.COWBOY_REVOLVER.get());
+                entries.accept(ItemsRegister.HOSHIGIRI.get());
+                entries.accept(ItemsRegister.PYROSCOURGE.get());
+                entries.accept(ItemsRegister.NEPTARION.get());
+                entries.accept(ItemsRegister.SCARVIELLE.get());
+                entries.accept(ItemsRegister.KURONAMI.get());
             })
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
             .build());

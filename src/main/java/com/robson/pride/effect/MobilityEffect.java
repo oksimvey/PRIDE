@@ -1,9 +1,7 @@
 package com.robson.pride.effect;
 
-import com.robson.pride.api.utils.ArmatureUtils;
-import com.robson.pride.api.utils.ElementalUtils;
-import com.robson.pride.api.utils.PlaySoundUtils;
-import com.robson.pride.api.utils.TimerUtil;
+import com.robson.pride.api.utils.*;
+import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.KeyRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
@@ -27,6 +25,7 @@ import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
+import javax.swing.text.Element;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -46,6 +45,10 @@ public class MobilityEffect extends PrideEffectBase {
 
     public void onEffectStart(LivingEntity ent){
         if (ent instanceof Player){
+            if (ElementalUtils.getElement(ent).equals("Thunder")){
+                StepMobility(ent);
+                return;
+            }
             this.effecttick++;
             serverTick(ent);
             if (!ControllEngine.isKeyDown(KeyRegister.keyActionMobility)){
@@ -54,6 +57,32 @@ public class MobilityEffect extends PrideEffectBase {
             }
             TimerUtil.schedule(()-> onEffectStart(ent), 100, TimeUnit.MILLISECONDS);
         }
+    }
+
+    public void StepMobility(LivingEntity entity){
+        entity.setDeltaMovement(entity.getDeltaMovement().x, 0 + Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector().y, entity.getDeltaMovement().z);
+        List<Vec3> points = ArmatureUtils.getEntityArmatureVecsForParticle(Minecraft.getInstance().player, entity, 5, 0.15f);
+        PlaySoundUtils.playSound(entity, SoundRegistry.LIGHTNING_CAST.get(), 1, 1);
+        TimerUtil.schedule(()-> {
+        if (!points.isEmpty()){
+            for (Vec3 point : points){
+                Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.ELECTRICITY_PARTICLE.get(), point.x, point.y, point.z, 0, 0, 0);
+            }
+        }
+            if (Minecraft.getInstance().options.keyUp.isDown()) {
+                AnimUtils.playAnim(entity, AnimationsRegister.STEP_FORWARD, 0.05f);
+                return;
+            }
+            if (Minecraft.getInstance().options.keyLeft.isDown()) {
+                AnimUtils.playAnim(entity, AnimationsRegister.STEP_LEFT, 0.05f);
+                return;
+            }
+            if (Minecraft.getInstance().options.keyRight.isDown()) {
+                AnimUtils.playAnim(entity, AnimationsRegister.STEP_RIGHT, 0.05f);
+                return;
+            }
+            AnimUtils.playAnim(entity, AnimationsRegister.STEP_BACKWARD, 0.05f);
+        }, 10, TimeUnit.MILLISECONDS);
     }
 
     public void serverTick(LivingEntity ent){

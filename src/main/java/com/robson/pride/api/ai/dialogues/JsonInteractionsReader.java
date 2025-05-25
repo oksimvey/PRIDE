@@ -1,9 +1,10 @@
 package com.robson.pride.api.ai.dialogues;
 
-import com.robson.pride.api.ai.goals.JsonGoalsReader;
+import com.robson.pride.api.ai.actions.ActionBase;
 import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.particles.StringParticle;
+import com.robson.pride.registries.ActionsRegister;
 import com.robson.pride.registries.DialogueConditionsRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -85,7 +86,7 @@ public class JsonInteractionsReader {
                 LocalPlayer player = Minecraft.getInstance().player;
                 Particle stringparticle = null;
                 if (dialogue.contains("actions")) {
-                    JsonGoalsReader.deserializeActions(ent, dialogue.getList("actions", 10), (byte) 0);
+                    deserializeActions(ent, dialogue.getList("actions", 10), (byte) 0);
                 }
                 if (dialogue.contains("subtitle") && dialogue.contains("duration") && player != null && level != null) {
                     isSpeaking.put(ent, true);
@@ -151,6 +152,23 @@ public class JsonInteractionsReader {
                                 isAnswering.get(player).onAnswer();
                         }
                     }, duration, TimeUnit.MILLISECONDS);
+                }
+            }
+        }
+    }
+
+    public static void deserializeActions(Entity ent, ListTag tag, byte i){
+        if (ent != null && tag != null){
+            if (i < tag.size()){
+                CompoundTag action = tag.getCompound(i);
+                if (action.contains("action")){
+                    ActionBase actionBase = ActionsRegister.actions.get(action.getString("action"));
+                    if (actionBase != null){
+                        actionBase.onActionStart(ent, action);
+                    }
+                    if (action.contains("duration")){
+                        TimerUtil.schedule(()-> deserializeActions(ent, tag, (byte) (i + 1)), action.getInt("duration"), TimeUnit.MILLISECONDS);
+                    }
                 }
             }
         }

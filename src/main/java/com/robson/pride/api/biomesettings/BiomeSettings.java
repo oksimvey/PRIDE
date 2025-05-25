@@ -1,7 +1,6 @@
 package com.robson.pride.api.biomesettings;
 
 import net.minecraft.sounds.Music;
-import net.minecraft.world.level.biome.Biome;
 
 import java.util.List;
 

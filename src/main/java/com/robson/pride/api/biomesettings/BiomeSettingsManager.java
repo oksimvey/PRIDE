@@ -1,26 +1,16 @@
 package com.robson.pride.api.biomesettings;
 
-import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.Music;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
+import com.robson.pride.api.utils.PlaySoundUtils;
+import net.minecraft.world.entity.EntityType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 public class BiomeSettingsManager {
 
-    public static Map<ResourceKey<Biome>, BiomeSettings> biomeMap = new HashMap<>();
+    public static Map<String, BiomeSettings> biomeSettingsMap = new HashMap<>();
 
     public static void register(){
-        biomeMap.put(Biomes.PLAINS,
-                new BiomeSettings(new Music(Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation("pride:plains_music"))), 1, 1, true),
-                        null));
+        biomeSettingsMap.put("minecraft:plains", new BiomeSettings(PlaySoundUtils.getMusicByString("pride:plains_music"),
+                List.of(new EntityTypeSpawnSetting(EntityType.IRON_GOLEM, (byte) 5, (byte) 0))));
     }
 }

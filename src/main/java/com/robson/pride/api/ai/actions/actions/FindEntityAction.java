@@ -3,6 +3,8 @@ package com.robson.pride.api.ai.actions.actions;
 import com.robson.pride.api.ai.actions.ActionBase;
 import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.utils.MathUtils;
+import de.markusbordihn.easynpc.data.objective.ObjectiveDataEntry;
+import de.markusbordihn.easynpc.data.objective.ObjectiveType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.Entity;
@@ -21,7 +23,6 @@ public class FindEntityAction extends ActionBase {
                                 ListTag entitytypes = action.getList("entity_types", 8);
                                 for (int i = 0; i < entitytypes.size(); ++i){
                                     if (EntityType.getKey(target.getType()).toString().equals(entitytypes.getString(i))){
-                                        mobBase.setTargetpos(target.position());
                                         return;
                                     }
                                 }

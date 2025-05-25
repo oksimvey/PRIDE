@@ -5,6 +5,7 @@ import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.main.Pride;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
+import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.particles.ParticleTypes;
@@ -134,6 +135,10 @@ public class AnimationsRegister {
     public static StaticAnimation DUAL_WIELD_SHOOT_RIGHT;
     public static StaticAnimation DUAL_WIELD_SHOOT_LEFT;
     public static StaticAnimation LEFT_SHOOT;
+    public static StaticAnimation STEP_FORWARD;
+    public static StaticAnimation STEP_LEFT;
+    public static StaticAnimation STEP_RIGHT;
+    public static StaticAnimation STEP_BACKWARD;
 
     @SubscribeEvent
     public static void registerAnimations(AnimationRegistryEvent event) {
@@ -143,6 +148,10 @@ public class AnimationsRegister {
     private static void build() {
 
         HumanoidArmature biped = Armatures.BIPED;
+        STEP_FORWARD = new DodgeAnimation(0.1f, "biped/skill/enderstep_forward", 0.5f, 0.5f, biped);
+        STEP_LEFT = new DodgeAnimation(0.1f, "biped/skill/enderstep_left", 0.5f, 0.5f, biped);
+        STEP_RIGHT = new DodgeAnimation(0.1f, "biped/skill/enderstep_right", 0.5f, 0.5f, biped);
+        STEP_BACKWARD = new DodgeAnimation(0.1f, "biped/skill/enderstep_backward", 0.5f, 0.5f, biped);
         ONEHAND_SHOOT = (new BasicAttackAnimation(0.1f, "biped/combat/gun/enderblaster_onehand_shoot", biped, new AttackAnimation.Phase(0F, 0.05F, 0.1F, 0.5F, 0.6f, InteractionHand.MAIN_HAND, biped.toolR, null))).addEvents(AnimationEvent.TimeStampedEvent.create(0.05F, SHOOT_RIGHT, AnimationEvent.Side.SERVER));
         DUAL_WIELD_SHOOT_RIGHT = (new BasicAttackAnimation(0.1f, "biped/combat/gun/enderblaster_twohand_shoot_right", biped, new AttackAnimation.Phase(0F, 0.05F, 0.1F, 0.5F, 0.6f, InteractionHand.MAIN_HAND, biped.toolR, null))).addEvents(AnimationEvent.TimeStampedEvent.create(0.05F, SHOOT_RIGHT, AnimationEvent.Side.BOTH));
         DUAL_WIELD_SHOOT_LEFT = (new BasicAttackAnimation(0.1f, "biped/combat/gun/enderblaster_twohand_shoot_left", biped, new AttackAnimation.Phase(0F, 0.05F, 0.1F, 0.5F, 0.6f, InteractionHand.MAIN_HAND, biped.toolR, null))).addEvents(AnimationEvent.TimeStampedEvent.create(0.05F, SHOOT_RIGHT, AnimationEvent.Side.BOTH));

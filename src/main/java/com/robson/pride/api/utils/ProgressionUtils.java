@@ -38,7 +38,7 @@ public class ProgressionUtils {
                 return (tag.getInt("StrengthLvl") + tag.getInt("DexterityLvl") + tag.getInt("VigorLvl") + tag.getInt("EnduranceLvl") + tag.getInt("MindLvl")) / 5;
             }
             else if (ent instanceof PrideMobBase prideMobBase){
-                return prideMobBase.getLevel();
+                return prideMobBase.getPrideLevel();
             }
         }
         return 0;

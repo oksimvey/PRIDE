@@ -40,6 +40,9 @@ public class CustomTickManager {
         if (playerMusicManagerThread.get(player) != null) {
             loopTick(player);
             CooldownManager.timeCooldowns(player);
+            if (player.tickCount % 200 == 0 && !Minecraft.getInstance().isPaused()){
+                SpawnTick.trySpawn(player);
+            }
             if (player.tickCount % 10 == 0 && !Minecraft.getInstance().isPaused()) {
                     SheatProvider.provideSheat(player);
                     MusicCore.musicCore(player);
