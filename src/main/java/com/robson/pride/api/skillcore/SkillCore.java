@@ -57,6 +57,18 @@ public class SkillCore {
         }
     }
 
+    public static void loopEntityHit(Entity dmgent, Entity target, Entity ent, List<Entity> hitentities, float particleradius, Runnable function){
+        if (dmgent != null && target != null && ent != null && hitentities != null && function != null){
+            if (canHit(dmgent, target, hitentities)){
+                if (MathUtils.getTotalDistance(target.position(), ent.position()) <= particleradius + (target.getBbWidth() / 2)){
+                    hitentities.add(target);
+                    function.run();
+                }
+                else TimerUtil.schedule(()-> loopEntityHit(dmgent, target, ent, hitentities, particleradius, function), 50, TimeUnit.MILLISECONDS);
+            }
+        }
+    }
+
     public static boolean canHit(Entity dmgent, Entity target, List<Entity> hitentities) {
         if (dmgent != null && target != null) {
             return target instanceof LivingEntity && !DamageSources.isFriendlyFireBetween(target, dmgent) && target != dmgent && !hitentities.contains(target);

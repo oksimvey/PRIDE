@@ -70,7 +70,7 @@ public class ParticleUtils {
     public static void spawnParticleTracked(LocalPlayer renderer, Entity ent, Joint joint, ParticleOptions particle, Vec3f AABB) {
         if (renderer != null && ent instanceof LivingEntity living && particle != null) {
             if (renderer.level().isClientSide) {
-                int amount = (int) ItemStackUtils.getColliderSize(living.getMainHandItem()) - new Random().nextInt(5);
+                int amount = (int) ItemStackUtils.getColliderSize(living.getMainHandItem()) - new Random().nextInt(getAmountByParticle(particle));
                 if (amount > 0) {
                     LivingEntityPatch entitypatch = EpicFightCapabilities.getEntityPatch(living, LivingEntityPatch.class);
                     if (entitypatch != null) {
@@ -89,9 +89,9 @@ public class ParticleUtils {
     }
 
     public static int getAmountByParticle(ParticleOptions particleOptions){
-        if (particleOptions != null){
-
-        }
+            if (particleOptions.equals(ParticleRegistry.WISP_PARTICLE)){
+                return 2;
+            }
         return 5;
     }
 }

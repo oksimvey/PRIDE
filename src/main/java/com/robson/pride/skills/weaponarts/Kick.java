@@ -5,7 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class Kick extends WeaponSkillBase {
     public Kick() {
-        super("Common", "Neutral", 4, 1);
+        super("Common", "Neutral", 4, 1, 5000);
     }
 
     @Override

@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class DarknessCut extends WeaponSkillBase {
 
     public DarknessCut() {
-        super("Mythical", "Darkness", 50, 6);
+        super("Mythical", "Darkness", 50, 6, 1000);
     }
 
     @Override

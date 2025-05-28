@@ -1,5 +1,6 @@
 package com.robson.pride.api.skillcore;
 
+import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.api.utils.ManaUtils;
 import com.robson.pride.api.utils.StaminaUtils;
@@ -15,12 +16,14 @@ public abstract class WeaponSkillBase {
     private String SkillElement;
     private int ManaConsumption;
     private float StaminaConsumption;
+    private int duration;
 
-    public WeaponSkillBase(String SkillRarity, String SkillElement, int ManaConsumption, float StaminaConsumption) {
+    public WeaponSkillBase(String SkillRarity, String SkillElement, int ManaConsumption, float StaminaConsumption, int duration) {
         this.SkillRarity = SkillRarity;
         this.SkillElement = SkillElement;
         this.StaminaConsumption = StaminaConsumption;
         this.ManaConsumption = ManaConsumption;
+        this.duration = duration;
     }
 
     public String getSkillRarity() {
@@ -29,6 +32,10 @@ public abstract class WeaponSkillBase {
 
     public String getSkillElement(){
         return this.SkillElement;
+    }
+
+    public int getDuration(){
+        return this.duration;
     }
 
     public void tryToExecute(LivingEntity ent) {

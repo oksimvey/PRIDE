@@ -5,7 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class Tornado extends WeaponSkillBase {
     public Tornado() {
-        super("Rare", "Wind", 25, 5);
+        super("Rare", "Wind", 25, 5, 3000);
     }
 
     @Override

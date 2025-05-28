@@ -85,6 +85,14 @@ public class MathUtils {
         return new AABB(ent.getX() + size, ent.getY() + size * 1.5, ent.getZ() + size, ent.getX() - size, ent.getY() - size, ent.getZ() - size);
     }
 
+    public static Vec3 getVectorForShoot(Vec3 pos1, Vec3 pos2, float scaleFactor){
+        if (pos1 != null && pos2 != null){
+            float finalScale = getTotalDistance(pos1, pos2) * scaleFactor;
+            return new Vec3((pos1.x - pos2.x) / finalScale, (pos1.y - pos2.y) / finalScale, (pos1.y - pos2.y) / finalScale);
+        }
+        return null;
+    }
+
     private static final List<Float> MATRIX_CONSTANTS = new ArrayList<>();
 
     private static void getBezierEquationCoefficients(List<Float> points, List<Float> aList, List<Float> bList) {

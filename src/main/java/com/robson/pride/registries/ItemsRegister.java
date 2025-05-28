@@ -31,6 +31,7 @@ public class ItemsRegister {
     public static final RegistryObject<Item> NEPTARION = REGISTRY.register("neptarion", Neptarion::new);
     public static final RegistryObject<Item> SCARVIELLE = REGISTRY.register("scarvielle", Scarvielle::new);
     public static final RegistryObject<Item> KURONAMI = REGISTRY.register("kuronami", Kuronami::new);
+    public static final RegistryObject<Item> SERAPHIEL = REGISTRY.register("seraphiel", Seraphiel::new);
     public static final RegistryObject<Item> COWBOY_REVOLVER = REGISTRY.register("cowboy_revolver", CowboyRevolver::new);
     public static final RegistryObject<Item> KICK_BOX = REGISTRY.register("kickbox", com.robson.pride.item.fightstyles.KickBoxItem::new);
     public static final RegistryObject<Item> BULLET = REGISTRY.register("bullet",

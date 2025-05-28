@@ -95,7 +95,8 @@ public class MobilityEffect extends PrideEffectBase {
 
     public void loopLightningTrail(Vec3 start, Vec3 direction, byte currentloop){
         if (start != null && direction != null && currentloop < 15){
-            Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.ELECTRICITY_PARTICLE.get(), start.x + (direction.x * currentloop / 2.5), start.y, start.z + (direction.z * currentloop / 2.5), direction.x / (1 + currentloop / 1.5f), 0, direction.z / (1 + currentloop / 1.5f));
+            Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.ELECTRICITY_PARTICLE.get(), start.x + (direction.x * currentloop / 2.5),
+                    start.y, start.z + (direction.z * currentloop / 2.5), direction.x / (1 + currentloop / 1.5f), 0, direction.z / (1 + currentloop / 1.5f));
             TimerUtil.schedule(()-> loopLightningTrail(start, direction, (byte) (currentloop + 1)), 50, TimeUnit.MILLISECONDS);
         }
     }

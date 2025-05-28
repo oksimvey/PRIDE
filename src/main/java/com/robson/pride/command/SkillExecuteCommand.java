@@ -11,14 +11,18 @@ import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.registries.WeaponSkillRegister;
+import com.yukami.epicironcompat.animation.Animation;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.gameasset.Animations;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +31,9 @@ import java.util.concurrent.TimeUnit;
 import static com.robson.pride.registries.WeaponSkillRegister.*;
 
 public class SkillExecuteCommand implements Command<CommandSourceStack> {
+
+    private static List<Entity> performingCommandEntities = new ArrayList<>();
+
     private static final SkillExecuteCommand COMMAND = new SkillExecuteCommand();
 
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
@@ -50,10 +57,12 @@ public class SkillExecuteCommand implements Command<CommandSourceStack> {
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         Entity ent = EntityArgument.getEntity(context, "living_entity");
         String skill = StringArgumentType.getString(context, "skilltype");
-        if (ent instanceof LivingEntity liv) {
+        if (ent instanceof LivingEntity liv && !performingCommandEntities.contains(ent)) {
             WeaponSkillBase ski = WeaponSkillRegister.WeaponSkills.get(skill.replace("_", " ").replace("-", "'"));
             if (ski != null){
                ski.tryToExecute(liv);
+               performingCommandEntities.add(ent);
+               TimerUtil.schedule(()-> performingCommandEntities.remove(ent), ski.getDuration(), TimeUnit.MILLISECONDS);
             }
         }
         return 1;

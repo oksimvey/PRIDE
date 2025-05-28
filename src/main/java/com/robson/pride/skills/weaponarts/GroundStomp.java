@@ -5,7 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class GroundStomp extends WeaponSkillBase {
     public GroundStomp() {
-        super("Uncommon", "Neutral",4, 4);
+        super("Uncommon", "Neutral",4, 4, 2000);
     }
 
     @Override

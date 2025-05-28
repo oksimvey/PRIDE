@@ -8,7 +8,7 @@ import yesman.epicfight.gameasset.Animations;
 public class LongSwordWeaponSkill extends WeaponSkillBase {
 
     public LongSwordWeaponSkill() {
-        super("Common", "Neutral", 10, 3);
+        super("Common", "Neutral", 10, 3, 40);
     }
 
     @Override

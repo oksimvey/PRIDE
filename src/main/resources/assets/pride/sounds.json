@@ -15,6 +15,14 @@
       }
     ]
   },
+  "theoporos": {
+    "sounds": [
+      {
+        "name": "pride:musics/theoporos",
+        "stream": false
+      }
+    ]
+  },
   "plains_music": {
     "sounds": [
       {
