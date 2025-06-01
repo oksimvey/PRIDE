@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import reascer.wom.gameasset.WOMAnimations;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.client.events.engine.ControllEngine;
 import yesman.epicfight.gameasset.Armatures;
@@ -46,7 +47,11 @@ public class MobilityEffect extends PrideEffectBase {
     public void onEffectStart(LivingEntity ent){
         if (ent instanceof Player){
             if (ElementalUtils.getElement(ent).equals("Thunder")){
-                StepMobility(ent);
+                ThunderMobility(ent);
+                return;
+            }
+            if (ElementalUtils.getElement(ent).equals("Moon")){
+                MoonMobility(ent);
                 return;
             }
             this.effecttick++;
@@ -59,7 +64,27 @@ public class MobilityEffect extends PrideEffectBase {
         }
     }
 
-    public void StepMobility(LivingEntity entity){
+    public void MoonMobility(LivingEntity entity){
+        CameraUtils.correctCamera();
+        TimerUtil.schedule(()-> {
+            CameraUtils.correctCamera();
+            if (Minecraft.getInstance().options.keyUp.isDown()) {
+                AnimUtils.playAnim(entity,  WOMAnimations.ENDERSTEP_FORWARD, 0);
+                return;
+            }
+            if (Minecraft.getInstance().options.keyLeft.isDown()) {
+                AnimUtils.playAnim(entity, WOMAnimations.ENDERSTEP_LEFT, 0);
+                return;
+            }
+            if (Minecraft.getInstance().options.keyRight.isDown()) {
+                AnimUtils.playAnim(entity, WOMAnimations.ENDERSTEP_RIGHT, 0);
+                return;
+            }
+            AnimUtils.playAnim(entity, WOMAnimations.ENDERSTEP_BACKWARD, 0);
+        }, 100, TimeUnit.MILLISECONDS);
+    }
+
+    public void ThunderMobility(LivingEntity entity){
         entity.setDeltaMovement(entity.getDeltaMovement().x, 0 + Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector().y, entity.getDeltaMovement().z);
         CameraUtils.correctCamera();
         List<Vec3> points = ArmatureUtils.getEntityArmatureVecsForParticle(Minecraft.getInstance().player, entity, 2, 0.1f);
@@ -74,21 +99,21 @@ public class MobilityEffect extends PrideEffectBase {
         Vec3 start = entity.position().add(0, entity.getBbHeight() / 1.8f, 0);
         Vec3 direction = Minecraft.getInstance().gameRenderer.getMainCamera().getEntity().getLookAngle();
             if (Minecraft.getInstance().options.keyUp.isDown()) {
-                AnimUtils.playAnim(entity, AnimationsRegister.STEP_FORWARD, 0.05f);
+                AnimUtils.playAnim(entity, AnimationsRegister.STEP_FORWARD, 0);
                 loopLightningTrail(start, direction, (byte) 0);
                 return;
             }
             if (Minecraft.getInstance().options.keyLeft.isDown()) {
-                AnimUtils.playAnim(entity, AnimationsRegister.STEP_LEFT, 0.05f);
+                AnimUtils.playAnim(entity, AnimationsRegister.STEP_LEFT, 0);
                 loopLightningTrail(start, MathUtils.rotate2DVector(direction, -90), (byte) 0);
                 return;
             }
             if (Minecraft.getInstance().options.keyRight.isDown()) {
-                AnimUtils.playAnim(entity, AnimationsRegister.STEP_RIGHT, 0.05f);
+                AnimUtils.playAnim(entity, AnimationsRegister.STEP_RIGHT, 0);
                 loopLightningTrail(start, MathUtils.rotate2DVector(direction, 90), (byte) 0);
                 return;
             }
-            AnimUtils.playAnim(entity, AnimationsRegister.STEP_BACKWARD, 0.05f);
+            AnimUtils.playAnim(entity, AnimationsRegister.STEP_BACKWARD, 0);
             loopLightningTrail(start, MathUtils.rotate2DVector(direction, 180), (byte) 0);
         }, 100, TimeUnit.MILLISECONDS);
     }

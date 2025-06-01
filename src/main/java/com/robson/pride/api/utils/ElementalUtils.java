@@ -1,24 +1,12 @@
 package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.PrideCapabilityReloadListener;
-import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.registries.EffectRegister;
-import com.robson.pride.registries.ParticleRegister;
-import io.redspace.ironsspellbooks.IronsSpellbooks;
-import io.redspace.ironsspellbooks.registries.ParticleRegistry;
-import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -26,10 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Random;
-
+import static com.robson.pride.registries.ElementsRegister.elements;
 import static com.robson.pride.registries.WeaponSkillRegister.WeaponSkills;
-import static com.robson.pride.registries.WeaponSkillRegister.elements;
 
 public class ElementalUtils {
 
@@ -39,108 +25,23 @@ public class ElementalUtils {
         }
     }
 
-
     public static ParticleOptions getParticleByElement(String element) {
-        switch (element) {
-            case "Darkness" -> {
-                Random random = new Random();
-                if (random.nextInt(20) == 1) {
-                    return ParticleRegister.RED_LIGHTNING.get();
-                } else return ParticleTypes.SMOKE;
-            }
-            case "Light" -> {
-                return ParticleRegistry.WISP_PARTICLE.get();
-            }
-            case "Thunder" -> {
-                return ParticleRegistry.ELECTRICITY_PARTICLE.get();
-            }
-            case "Sun" -> {
-                return ParticleRegistry.FIRE_PARTICLE.get();
-            }
-            case "Moon" -> {
-                return ParticleTypes.DRAGON_BREATH;
-            }
-            case "Blood" -> {
-                return ParticleRegistry.BLOOD_PARTICLE.get();
-            }
-            case "Wind" -> {
-                return ParticleTypes.CLOUD;
-            }
-            case "Nature" -> {
-                return ParticleTypes.COMPOSTER;
-            }
-            case "Ice" -> {
-                return ParticleRegistry.SNOWFLAKE_PARTICLE.get();
-            }
-            case "Water" -> {
-                return new DustParticleOptions(new Vec3(0.3f, 0.5f, 1).normalize().toVector3f(), 1f);
-            }
-        }
-        return null;
+       if (elements.get(element) != null){
+           return elements.get(element).getNormalParticleType();
+       }
+       return null;
     }
 
     public static ChatFormatting getColorByElement(String element) {
-        switch (element) {
-            case "Darkness" -> {
-                return ChatFormatting.BLACK;
-            }
-            case "Light" -> {
-                return ChatFormatting.YELLOW;
-            }
-            case "Thunder" -> {
-                return ChatFormatting.AQUA;
-            }
-            case "Sun" -> {
-                return ChatFormatting.GOLD;
-            }
-            case "Moon" -> {
-                return ChatFormatting.DARK_PURPLE;
-            }
-            case "Blood" -> {
-                return ChatFormatting.DARK_RED;
-            }
-            case "Wind" -> {
-                return ChatFormatting.WHITE;
-            }
-            case "Nature" -> {
-                return ChatFormatting.DARK_GREEN;
-            }
-            case "Ice" -> {
-                return ChatFormatting.DARK_AQUA;
-            }
-            case "Water" -> {
-                return ChatFormatting.DARK_BLUE;
-            }
+        if (elements.get(element) != null) {
+           return elements.get(element).getChatColor();
         }
         return ChatFormatting.GRAY;
     }
 
     public static void playSoundByElement(String element, Entity ent, float volume) {
-        ClientLevel level = Minecraft.getInstance().level;
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (level != null) {
-            switch (element) {
-                case "Darkness" -> level.playSound(player, ent, SoundEvents.PARROT_IMITATE_WITHER, SoundSource.NEUTRAL, volume, 1);
-
-                case "Light" -> level.playSound(player, ent, SoundRegistry.CLOUD_OF_REGEN_LOOP.get(), SoundSource.NEUTRAL, volume, 1);
-
-                case "Thunder" -> level.playSound(player, ent, SoundRegistry.LIGHTNING_WOOSH_01.get(), SoundSource.NEUTRAL, volume, 1);
-
-                case "Sun" -> level.playSound(player, ent, SoundRegistry.FIRE_BREATH_LOOP.get(), SoundSource.NEUTRAL, volume, 1);
-
-                case "Moon" -> level.playSound(player, ent, SoundRegistry.TELEKINESIS_LOOP.get(), SoundSource.NEUTRAL, volume, 1);
-
-                case "Blood" -> level.playSound(player, ent, SoundRegistry.BLOOD_NEEDLE_IMPACT.get(), SoundSource.NEUTRAL, volume, 1);
-
-                case "Wind" -> level.playSound(player, ent, SoundRegistry.GUST_CHARGE.get(), SoundSource.NEUTRAL, volume, 1);
-
-                case "Nature" -> level.playSound(player, ent, SoundRegistry.POISON_SPLASH_BEGIN.get(), SoundSource.NEUTRAL, volume, 1);
-
-                case "Ice" -> level.playSound(player, ent, SoundRegistry.CONE_OF_COLD_LOOP.get(), SoundSource.NEUTRAL, volume, 1);
-
-                case "Water" -> level.playSound(player, ent, SoundEvents.DROWNED_SWIM, SoundSource.NEUTRAL, volume, 1);
-
-            }
+        if (elements.get(element) != null){
+            elements.get(element).playSound(ent, volume);
         }
     }
 
@@ -179,11 +80,11 @@ public class ElementalUtils {
         if (item != null) {
             if (item.getTag() != null) {
                 element = item.getTag().getString("passive_element");
-                if (!elements.contains(element)) {
+                if (!elements.containsKey(element)) {
                     CompoundTag tag = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem());
                     if (tag != null) {
                         if (tag.contains("element")) {
-                            if (elements.contains(tag.getString("element"))) {
+                            if (elements.containsKey(tag.getString("element"))) {
                                 element = tag.getString("element");
                             }
                         }
@@ -235,146 +136,6 @@ public class ElementalUtils {
             }
         }
         return "";
-    }
-
-    public static float getFinalValueForDarknessDMG(Entity ent, float amount) {
-        if (ent != null) {
-            String element = getElement(ent);
-            float multiplier = 1;
-            if (element.equals("Moon") || element.equals("Blood")) {
-                multiplier = 0.5f;
-            } else if (element.equals("Light") || element.equals("Sun")) {
-                multiplier = 1.5f;
-            }
-            return multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:darkness_resist"));
-        }
-        return amount;
-    }
-
-    public static float getFinalValueForLightDMG(Entity ent, float amount) {
-        if (ent != null) {
-            String element = getElement(ent);
-            float multiplier = 1;
-            if (element.equals("Darkness")) {
-                multiplier = 0.5f;
-            } else if (element.equals("Moon") || element.equals("Blood")) {
-                multiplier = 1.5f;
-            }
-            return multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:light_resist"));
-        }
-        return amount;
-    }
-
-    public static float getFinalValueForThunderDMG(Entity ent, float amount) {
-        if (ent != null) {
-            String element = getElement(ent);
-            float multiplier = 1;
-            if (element.equals("Nature") || element.equals("Wind")) {
-                multiplier = 0.5f;
-            } else if (element.equals("Water") || element.equals("Ice")) {
-                multiplier = 1.5f;
-            }
-            return multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:thunder_resist"));
-        }
-        return amount;
-    }
-
-    public static float getFinalValueForSunDMG(Entity ent, float amount) {
-        if (ent != null) {
-            String element = getElement(ent);
-            float multiplier = 1;
-            if (element.equals("Water") || element.equals("Nature")) {
-                multiplier = 0.5f;
-            } else if (element.equals("Ice") || element.equals("Moon")) {
-                multiplier = 1.5f;
-            }
-            return multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:sun_resist"));
-        }
-        return amount;
-    }
-
-    public static float getFinalValueForMoonDMG(Entity ent, float amount) {
-        if (ent != null) {
-            String element = getElement(ent);
-            float multiplier = 1;
-            if (element.equals("Light") || element.equals("Sun")) {
-                multiplier = 0.5f;
-            } else if (element.equals("Thunder") || element.equals("Water")) {
-                multiplier = 1.5f;
-            }
-            return multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:moon_resist"));
-        }
-        return amount;
-    }
-
-    public static float getFinalValueForBloodDMG(Entity ent, float amount) {
-        if (ent != null) {
-            String element = getElement(ent);
-            float multiplier = 1;
-            if (element.equals("Light") || element.equals("Water")) {
-                multiplier = 0.5f;
-            } else if (element.equals("Nature") || element.equals("Thunder")) {
-                multiplier = 1.5f;
-            }
-            return multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:blood_resist"));
-        }
-        return amount;
-    }
-
-    public static float getFinalValueForWindDMG(Entity ent, float amount) {
-        if (ent != null) {
-            String element = getElement(ent);
-            float multiplier = 1;
-            if (element.equals("Water") || element.equals("Ice")) {
-                multiplier = 0.5f;
-            } else if (element.equals("Sun") || element.equals("Nature")) {
-                multiplier = 1.5f;
-            }
-            return multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:wind_resist"));
-        }
-        return amount;
-    }
-
-    public static float getFinalValueForNatureDMG(Entity ent, float amount) {
-        if (ent != null) {
-            String element = getElement(ent);
-            float multiplier = 1;
-            if (element.equals("Sun") || element.equals("Wind")) {
-                multiplier = 0.5f;
-            } else if (element.equals("Thunder") || element.equals("Water")) {
-                multiplier = 1.5f;
-            }
-            return multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:nature_resist"));
-        }
-        return amount;
-    }
-
-    public static float getFinalValueForIceDMG(Entity ent, float amount) {
-        if (ent != null) {
-            String element = getElement(ent);
-            float multiplier = 1;
-            if (element.equals("Sun") || element.equals("Thunder")) {
-                multiplier = 0.5f;
-            } else if (element.equals("Water") || element.equals("Wind")) {
-                multiplier = 1.5f;
-            }
-            return multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:ice_resist"));
-        }
-        return amount;
-    }
-
-    public static float getFinalValueForWaterDMG(Entity ent, float amount) {
-        if (ent != null) {
-            String element = getElement(ent);
-            float multiplier = 1;
-            if (element.equals("Thunder") || element.equals("Nature")) {
-                multiplier = 0.5f;
-            } else if (element.equals("Sun") || element.equals("Blood")) {
-                multiplier = 1.5f;
-            }
-            return multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:water_resist"));
-        }
-        return amount;
     }
 
     public static boolean isNotInWater(Entity ent, Vec3 vec3) {

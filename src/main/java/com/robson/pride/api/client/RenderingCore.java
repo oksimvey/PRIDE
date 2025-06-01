@@ -1,5 +1,6 @@
 package com.robson.pride.api.client;
 
+import com.robson.pride.api.elements.ElementBase;
 import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.ItemStackUtils;
@@ -31,12 +32,12 @@ public class RenderingCore{
     public static void entityRenderer(LivingEntity ent) {
         if (ent != null) {
             if (ParticleTracking.shouldRenderParticle(ent.getMainHandItem(), ent)) {
-                ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR, ParticleTracking.getParticle(ent.getMainHandItem(), ent), ParticleTracking.getAABBForImbuement(ent.getMainHandItem(), ent));
+                ElementBase element = ParticleTracking.getItemElementForImbuement(ent.getMainHandItem(), ent);
+                ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR, element.getNormalParticleType(), ParticleTracking.getAABBForImbuement(ent.getMainHandItem(), ent), element.getParticleAmount());
             }
-            if (ItemStackUtils.getStyle(ent) == PrideStyles.DUAL_WIELD) {
-                if (ParticleTracking.shouldRenderParticle(ent.getOffhandItem(), ent)) {
-                    ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolL, ParticleTracking.getParticle(ent.getOffhandItem(), ent), ParticleTracking.getAABBForImbuement(ent.getOffhandItem(), ent));
-                }
+            if (ItemStackUtils.getStyle(ent) == PrideStyles.DUAL_WIELD && ParticleTracking.shouldRenderParticle(ent.getOffhandItem(), ent)) {
+                    ElementBase element = ParticleTracking.getItemElementForImbuement(ent.getMainHandItem(), ent);
+                    ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolL, element.getNormalParticleType(), ParticleTracking.getAABBForImbuement(ent.getOffhandItem(), ent), element.getParticleAmount());
             }
             for (MobEffectInstance effect : ent.getActiveEffects()){
                 if (effect.getEffect() instanceof PrideEffectBase prideEffect){

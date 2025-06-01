@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static com.robson.pride.registries.ElementsRegister.elements;
 import static com.robson.pride.registries.WeaponSkillRegister.*;
 
 public class SkillExecuteCommand implements Command<CommandSourceStack> {
@@ -42,7 +43,7 @@ public class SkillExecuteCommand implements Command<CommandSourceStack> {
                     List<Map.Entry<String, WeaponSkillBase>> sortedEntries = WeaponSkills.entrySet()
                             .stream()
                             .sorted(Comparator
-                                    .comparing((Map.Entry<String, WeaponSkillBase> entry) -> elements.indexOf(entry.getValue().getSkillElement()))
+                                    .comparing((Map.Entry<String, WeaponSkillBase> entry) -> WeaponSkillRegister.elements.indexOf(entry.getValue().getSkillElement()))
                                     .thenComparing(entry -> rarities.indexOf(entry.getValue().getSkillRarity())))
                             .toList();
                     for (Map.Entry<String, WeaponSkillBase> entry : sortedEntries) {

@@ -1,16 +1,22 @@
 package com.robson.pride.events;
 
+import com.robson.pride.api.elements.ElementBase;
 import com.robson.pride.api.mechanics.ElementalPassives;
 import com.robson.pride.api.mechanics.MikiriCounter;
 import com.robson.pride.api.utils.ProgressionUtils;
 import com.robson.pride.registries.EffectRegister;
+import com.robson.pride.registries.ElementsRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
+import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.ArrayList;
 
 @Mod.EventBusSubscriber
 public class onSpellDamage {
@@ -36,6 +42,12 @@ public class onSpellDamage {
             if (MikiriCounter.isJumpCounterableSpell(event.getSpellDamageSource().spell())) {
                 if (MikiriCounter.canMobMikiri(ent, event.getSpellDamageSource().getEntity(), "Jump")) {
                     event.setCanceled(true);
+                }
+            }
+            for (ElementBase element : ElementsRegister.elements.values()){
+                if (element.getSchool() == spell.getSchoolType()) {
+                    element.onHit(ent, event.getSpellDamageSource().getEntity(), event.getAmount(), true);
+                    event.setAmount(0);
                 }
             }
         }

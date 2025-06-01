@@ -10,6 +10,7 @@ import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import com.robson.pride.registries.*;
+import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -49,6 +50,7 @@ public class Pride {
         EntityRegister.SPECIAL_ENTITIES.register(bus);
         MinecraftForge.EVENT_BUS.addListener(this::onDatapackSync);
         AttributeRegister.register(bus);
+        SchoolRegister.register(bus);
         GUIRegister.REGISTRY.register(bus);
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupCommon);
@@ -114,6 +116,7 @@ public class Pride {
             DialogueConditionsRegister.register();
             ActionsRegister.register();
             StructureRegister.register();
+            ElementsRegister.register();
                 BiomeSettingsManager.register();
         });
     }

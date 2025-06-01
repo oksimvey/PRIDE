@@ -26,7 +26,11 @@ public class CameraUtils{
         Config config = ThirdPerson.getConfig();
         if(config.normal_rotate_mode != AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA) {
             config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA;
-            TimerUtil.schedule(() -> config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.INTEREST_POINT, 500, TimeUnit.MILLISECONDS);
+            TimerUtil.schedule(() -> {
+                if (config.normal_rotate_mode != AbstractConfig.PlayerRotateMode.INTEREST_POINT) {
+                    config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.INTEREST_POINT;
+                }
+            }, 500, TimeUnit.MILLISECONDS);
         }
     }
 

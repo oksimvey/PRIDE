@@ -1,6 +1,7 @@
 package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.data.PrideCapabilityReloadListener;
+import com.robson.pride.api.elements.ElementBase;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.effect.ImbuementEffect;
@@ -24,6 +25,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.robson.pride.registries.ElementsRegister.elements;
+
 public class ParticleTracking {
 
     private static ConcurrentHashMap<Entity, Boolean> togglefire = new ConcurrentHashMap<>();
@@ -32,17 +35,17 @@ public class ParticleTracking {
         if (item != null && ent != null) {
             if (item.getTag() != null) {
                 String element = ElementalUtils.getItemElement(item);
-                if (WeaponSkillRegister.elements.contains(element)){
+                if (elements.containsKey(element)){
                    return !element.equals("Sun") || shouldRenderSunParticle(ent);
                 }
                 if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMBUEMENT.get())){
                     if (living.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect){
-                        if (WeaponSkillRegister.elements.contains(imbuementEffect.element) && imbuementEffect.active){
+                        if (elements.containsKey(imbuementEffect.element) && imbuementEffect.active){
                           return !imbuementEffect.element.equals("Sun") || shouldRenderSunParticle(ent);
                         }
                     }
                 }
-                else return WeaponSkillRegister.elements.contains(element);
+                else return elements.containsKey(element);
             }
         }
         return false;
@@ -63,18 +66,16 @@ public class ParticleTracking {
         return false;
     }
 
-    public static ParticleOptions getParticle(ItemStack item, LivingEntity ent) {
+    public static ElementBase getItemElementForImbuement(ItemStack item, LivingEntity ent) {
         if (item != null && ent != null) {
             String element = ElementalUtils.getItemElement(item);
-            if (WeaponSkillRegister.elements.contains(element)) {
-                return ElementalUtils.getParticleByElement(element);
+            if (elements.containsKey(element)) {
+                return elements.get(element);
             }
-            if (ent.hasEffect(EffectRegister.IMBUEMENT.get())) {
-                if (ent.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect) {
-                    if (WeaponSkillRegister.elements.contains(imbuementEffect.element)) {
-                        return ElementalUtils.getParticleByElement(imbuementEffect.element);
-                    }
-                }
+            if (ent.hasEffect(EffectRegister.IMBUEMENT.get()) &&
+                    ent.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect &&
+                    elements.containsKey(imbuementEffect.element)) {
+                return elements.get(element);
             }
         }
         return null;

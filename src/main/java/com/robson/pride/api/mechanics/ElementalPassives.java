@@ -7,6 +7,7 @@ import com.robson.pride.particles.StringParticle;
 import com.robson.pride.progression.AttributeModifiers;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.EffectRegister;
+import com.robson.pride.registries.ElementsRegister;
 import com.robson.pride.registries.WeaponSkillRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
@@ -35,66 +36,39 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.robson.pride.registries.ElementsRegister.elements;
+
 public class ElementalPassives {
 
     public static void onElementalDamage(Entity ent, Entity dmgent, ItemStack item, LivingAttackEvent event) {
-        if (ent != null && dmgent != null  && event.getSource().getDirectEntity() instanceof LivingEntity living) {
+        if (ent != null && dmgent != null && event.getSource().getDirectEntity() instanceof LivingEntity living) {
             String element = ElementalUtils.getItemElement(item);
-            if (!WeaponSkillRegister.elements.contains(element)) {
+            if (!elements.containsKey(element)) {
                 if (living.hasEffect(EffectRegister.IMBUEMENT.get())) {
                     if (living.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect) {
                         element = imbuementEffect.element;
                     }
                 }
             }
-            if (!WeaponSkillRegister.elements.contains(element)) {
+            if (!elements.containsKey(element)) {
                 return;
             }
-                float damage = event.getAmount();
-                InteractionHand hand = ItemStackUtils.checkAttackingHand(dmgent);
-                if (hand != null && dmgent instanceof Player dmgent1) {
-                    float extradamage = 0;
-                    if (hand == InteractionHand.MAIN_HAND) {
-                        extradamage = AttributeModifiers.calculateModifier(dmgent1, dmgent1.getMainHandItem(), event.getAmount());
-                    } else if (hand == InteractionHand.OFF_HAND) {
-                        extradamage = AttributeModifiers.calculateModifier(dmgent1, dmgent1.getOffhandItem(), event.getAmount());
-                    }
-                    damage += extradamage;
+            float damage = event.getAmount();
+            InteractionHand hand = ItemStackUtils.checkAttackingHand(dmgent);
+            if (hand != null && dmgent instanceof Player dmgent1) {
+                float extradamage = 0;
+                if (hand == InteractionHand.MAIN_HAND) {
+                    extradamage = AttributeModifiers.calculateModifier(dmgent1, dmgent1.getMainHandItem(), event.getAmount());
+                } else if (hand == InteractionHand.OFF_HAND) {
+                    extradamage = AttributeModifiers.calculateModifier(dmgent1, dmgent1.getOffhandItem(), event.getAmount());
                 }
-                switch (element) {
-
-                    case "Darkness" ->
-                            darknessPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:darkness_power")));
-
-                    case "Light" ->
-                            lightPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:light_power")));
-
-                    case "Thunder" ->
-                            thunderPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:thunder_power")), new ArrayList<>());
-
-                    case "Sun" ->
-                            sunPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:sun_power")));
-
-                    case "Moon" ->
-                            moonPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:moon_power")));
-
-                    case "Blood" ->
-                            bloodPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:blood_power")));
-
-                    case "Wind" ->
-                            windPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:wind_power")));
-
-                    case "Nature" ->
-                            naturePassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:nature_power")));
-
-                    case "Ice" ->
-                            icePassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:ice_power")));
-
-                    case "Water" ->
-                            waterPassive(ent, dmgent, MathUtils.getValueWithPercentageIncrease(damage, AttributeUtils.getAttributeValue(dmgent, "pride:water_power")));
-                }
+                damage += extradamage;
+            }
+            if (elements.get(element) != null) {
+                elements.get(element).onHit(ent, dmgent, damage, false);
             }
         }
+    }
 
     public static void darknessPassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent != null) {
@@ -147,7 +121,7 @@ public class ElementalPassives {
                 MagicManager.spawnParticles(dmgent.level(), ParticleHelper.ELECTRICITY, ent.getX(), ent.getY() + ent.getBbHeight() / 2, ent.getZ(), 10, ent.getBbWidth() / 3, ent.getBbHeight() / 3, ent.getBbWidth() / 3, 0.1, false);
             }
             PlaySoundUtils.playSound(ent, SoundRegistry.LIGHTNING_CAST.get(), 1, 1);
-            HealthUtils.hurtEntity(ent, ElementalUtils.getFinalValueForThunderDMG(ent, power / 2), dmgent.damageSources().lightningBolt());
+            HealthUtils.hurtEntity(ent, power, dmgent.damageSources().lightningBolt());
             AnimUtils.playAnim(ent, AnimationsRegister.ELECTROCUTATE, 0);
             hitentities.add(ent);
             if (!ElementalUtils.isNotInWater(ent, new Vec3(ent.getX(), ent.getY(), ent.getZ()))) {
@@ -191,7 +165,6 @@ public class ElementalPassives {
     public static void sunPassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent != null) {
             PlaySoundUtils.playSound(ent, SoundRegistry.FIRE_CAST.get(), 1, 1);
-            HealthUtils.hurtEntity(ent, ElementalUtils.getFinalValueForSunDMG(ent, power), dmgent.damageSources().inFire());
             ent.setSecondsOnFire(3 + (int) (power / 10));
         }
     }
@@ -199,7 +172,6 @@ public class ElementalPassives {
     public static void moonPassive(Entity ent, Entity dmgent, float power) {
         if (ent instanceof LivingEntity living && dmgent != null) {
             PlaySoundUtils.playSound(ent, SoundRegistry.TELEKINESIS_LOOP.get(), 1, 1);
-            int effectticks = (int) ElementalUtils.getFinalValueForMoonDMG(ent, power) * 20;
         }
     }
 
@@ -207,7 +179,7 @@ public class ElementalPassives {
         if (ent != null && dmgent != null) {
             PlaySoundUtils.playSound(ent, SoundRegistry.BLOOD_EXPLOSION.get(), 1, 1);
             if (ent instanceof LivingEntity liv) {
-                if (stackablePassiveBase(ent, ElementalUtils.getFinalValueForBloodDMG(ent, power), "bleed_stacks", StringParticle.StringParticleTypes.RED)) {
+                if (stackablePassiveBase(ent, 10, "bleed_stacks", StringParticle.StringParticleTypes.RED)) {
                     PlaySoundUtils.playSound(ent, EpicFightSounds.EVISCERATE.get(), 1, 1);
                     ParticleUtils.spawnParticleRelativeToEntity(EpicFightParticles.BLOOD.get(), ent, 0, ent.getBbHeight()/2, 0, 10, 0, 0, 0, 0.1);
                     HealthUtils.hurtEntity(ent, liv.getMaxHealth() / 10, dmgent.damageSources().generic());
@@ -225,7 +197,7 @@ public class ElementalPassives {
     public static void naturePassive(Entity ent, Entity dmgent, float power) {
         if (ent != null && dmgent instanceof LivingEntity living) {
             PlaySoundUtils.playSound(ent, SoundRegistry.NATURE_CAST.get(), 1, 1);
-            if (stackablePassiveBase(ent, ElementalUtils.getFinalValueForNatureDMG(ent, power), "root_stacks", StringParticle.StringParticleTypes.RED)) {
+            if (stackablePassiveBase(ent,10, "root_stacks", StringParticle.StringParticleTypes.RED)) {
                 SpellUtils.castSpell(living, new RootSpell(), 10);
             }
         }
@@ -238,15 +210,15 @@ public class ElementalPassives {
             if (!ElementalUtils.isNotInWater(ent, ent.position())) {
                 multiplier = 2;
             }
-            if (stackablePassiveBase(ent, multiplier * ElementalUtils.getFinalValueForIceDMG(ent, power), "frost_stacks", StringParticle.StringParticleTypes.LIGHT_BLUE)) {
-                AnimUtils.applyStun(ent, StunType.SHORT, ElementalUtils.getFinalValueForIceDMG(ent, power) / 3);
+            if (stackablePassiveBase(ent, multiplier * 10, "frost_stacks", StringParticle.StringParticleTypes.LIGHT_BLUE)) {
+                AnimUtils.applyStun(ent, StunType.SHORT, 10 / 3);
             }
         }
     }
 
     public static void waterPassive(Entity ent, Entity dmgent, float power) {
         if (ent instanceof LivingEntity living && dmgent != null) {
-            int effectticks = (int) (ElementalUtils.getFinalValueForWaterDMG(ent, power) * 20);
+            int effectticks = (int) (10 * 20);
             PlaySoundUtils.playSound(ent, SoundEvents.DROWNED_SWIM, 0.75f, 1);
             living.addEffect(new MobEffectInstance(EffectRegister.WET.get(), effectticks, 0), living);
         }

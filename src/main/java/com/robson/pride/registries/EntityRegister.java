@@ -11,6 +11,7 @@ import com.robson.pride.entities.japanese.mob.ronin.Ronin;
 import com.robson.pride.entities.forest.eliteknight.EliteKnight;
 import com.robson.pride.entities.savana.Dueler;
 import com.robson.pride.entities.special.CloneEntity;
+import com.robson.pride.entities.special.CollidingEntity;
 import com.robson.pride.entities.special.Shooter;
 import com.robson.pride.main.Pride;
 import net.minecraft.resources.ResourceLocation;
@@ -43,6 +44,7 @@ public class EntityRegister {
     public static final RegistryObject<EntityType<Mordath>> MORDATH = make(false, new ResourceLocation("mordath"), Mordath::new, MobCategory.MONSTER, 0.8f, 2f);
     public static final RegistryObject<EntityType<Cowboy>> COWBOY = make(false, new ResourceLocation("cowboy"), Cowboy::new, MobCategory.MONSTER, 0.8f, 1.8f);
     public static final RegistryObject<EntityType<Theophoros>> THEOPOROS = make(false, new ResourceLocation("theoporos"), Theophoros::new, MobCategory.MONSTER, 1.2f, 2.5f);
+    public static final RegistryObject<EntityType<CollidingEntity>> COLLIDING_ENTITY = make(true, new ResourceLocation("colliding_entity"), CollidingEntity::new, MobCategory.MISC,  1f, 1f);
 
     private static <E extends Entity> RegistryObject<EntityType<E>> make(boolean special, ResourceLocation id, EntityType.EntityFactory<E> factory, MobCategory classification, float width, float height) {
         return make(special, id, factory, classification, width, height, false);
