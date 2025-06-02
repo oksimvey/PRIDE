@@ -33,9 +33,7 @@ import static com.robson.pride.registries.WeaponSkillRegister.*;
 
 public class SkillExecuteCommand implements Command<CommandSourceStack> {
 
-    private static List<Entity> performingCommandEntities = new ArrayList<>();
-
-    private static final SkillExecuteCommand COMMAND = new SkillExecuteCommand();
+   private static final SkillExecuteCommand COMMAND = new SkillExecuteCommand();
 
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
         return Commands.literal("skill")
@@ -58,12 +56,10 @@ public class SkillExecuteCommand implements Command<CommandSourceStack> {
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         Entity ent = EntityArgument.getEntity(context, "living_entity");
         String skill = StringArgumentType.getString(context, "skilltype");
-        if (ent instanceof LivingEntity liv && !performingCommandEntities.contains(ent)) {
+        if (ent instanceof LivingEntity liv) {
             WeaponSkillBase ski = WeaponSkillRegister.WeaponSkills.get(skill.replace("_", " ").replace("-", "'"));
             if (ski != null){
                ski.tryToExecute(liv);
-               performingCommandEntities.add(ent);
-               TimerUtil.schedule(()-> performingCommandEntities.remove(ent), ski.getDuration(), TimeUnit.MILLISECONDS);
             }
         }
         return 1;

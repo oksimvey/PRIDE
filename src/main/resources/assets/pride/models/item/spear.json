@@ -1,6 +1,6 @@
 {
-  "parent": "prominent:item/partisan",
+  "parent": "item/partisan",
   "textures": {
-    "layer0": "prominent:item/transmog/partisan"
+    "layer0": "item/partisan"
   }
 }

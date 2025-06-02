@@ -1,5 +1,6 @@
 package com.robson.pride.events;
 
+import com.robson.pride.api.elements.ElementBase;
 import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
@@ -23,6 +24,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 
 import java.util.concurrent.TimeUnit;
 
@@ -36,10 +38,9 @@ public class EntityAttacked {
             Entity ddmgent = event.getSource().getDirectEntity();
             if (event.getSource().getEntity() instanceof PrideMobBase prideMobBase && (prideMobBase.getType().equals(ent.getType()) || prideMobBase.allies.contains(EntityType.getKey(ent.getType()).toString()))) {
                 event.setCanceled(true);
-            }
-            else if (ent instanceof PrideMobBase){
-                for (Entity entity : ent.level().getEntities(ent, MathUtils.createAABBAroundEnt(ent, 25))){
-                    if (entity != ent && entity instanceof PrideMobBase prideMobBase){
+            } else if (ent instanceof PrideMobBase) {
+                for (Entity entity : ent.level().getEntities(ent, MathUtils.createAABBAroundEnt(ent, 25))) {
+                    if (entity != ent && entity instanceof PrideMobBase prideMobBase) {
                         prideMobBase.deserializeAlliesTargeting(ent, event.getSource().getEntity());
                     }
                 }
@@ -58,13 +59,12 @@ public class EntityAttacked {
             if (ent.getPersistentData().getBoolean("isVulnerable")) {
                 GuardBreak.onVulnerableDamage(ent, event);
             }
-            if (PerilousAttack.checkPerilous(ent)){
+            if (PerilousAttack.checkPerilous(ent)) {
                 event.setCanceled(true);
             }
             if (PerilousAttack.checkPerilous(ddmgent)) {
                 PerilousAttack.onPerilous(ent, ddmgent, event);
-            }
-            else Guard.checkGuard(ent, ddmgent, event);
+            } else Guard.checkGuard(ent, ddmgent, event);
             if (ddmgent instanceof ServerPlayer player && event.getAmount() > 0) {
                 ProgressionUtils.addXp(player, "Strength", (int) event.getAmount());
             }
@@ -79,8 +79,6 @@ public class EntityAttacked {
         if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
             Entity ent = event.getEntity();
             Entity ddmgent = event.getSource().getDirectEntity();
-            ddmgent.setDeltaMovement(ddmgent.getDeltaMovement().x, 0, ddmgent.getDeltaMovement().z);
-            ent.setDeltaMovement(ent.getDeltaMovement().x, 0, ent.getDeltaMovement().z);
             if (ddmgent instanceof LivingEntity liv) {
                 if (liv.hasEffect(EffectRegister.HYPNOTIZED.get())) {
                     event.setCanceled(true);
@@ -90,24 +88,7 @@ public class EntityAttacked {
                     liv.removeEffect(EffectRegister.HYPNOTIZED.get());
                 }
             }
-            if (event.getSource().getDirectEntity() instanceof LivingEntity living) {
-                InteractionHand hand = ItemStackUtils.checkAttackingHand(living);
-                if (hand != null) {
-                    if (hand == InteractionHand.MAIN_HAND) {
-                        if (ParticleTracking.shouldRenderParticle(living.getMainHandItem(), living) && ItemStackUtils.getStyle(living) != PrideStyles.GUN_OFFHAND) {
-                            ElementalPassives.onElementalDamage(ent, living, living.getMainHandItem(), event);
-                            return;
-                        }
-                    }
-                    if (hand == InteractionHand.OFF_HAND) {
-                        if (ParticleTracking.shouldRenderParticle(living.getOffhandItem(), living)) {
-                            ElementalPassives.onElementalDamage(ent, living, living.getOffhandItem(), event);
-                            return;
-                        }
-                    }
-                }
-            }
-            if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMMUNITY.get())){
+            if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMMUNITY.get())) {
                 ImmunityEffect.onDamage(event, ent);
             }
         }
@@ -116,21 +97,39 @@ public class EntityAttacked {
     @SubscribeEvent
     public static void hurtEnt(LivingHurtEvent event) {
         if (event.getSource().getDirectEntity() != null && event.getSource().getEntity() != null) {
-            if (event.getSource().getDirectEntity() instanceof AbstractArrow  ) {
+            if (event.getSource().getDirectEntity() instanceof AbstractArrow) {
                 event.setAmount(event.getAmount() + AttributeUtils.getAttributeValue(event.getSource().getEntity(), "pride:arrow_power"));
             }
-            if (event.getSource().getDirectEntity() instanceof Player player) {
-                InteractionHand hand = ItemStackUtils.checkAttackingHand(player);
-                if (hand != null) {
-                    float extradamage = 0;
+            InteractionHand hand = ItemStackUtils.checkAttackingHand(event.getSource().getDirectEntity());
+            if (hand != null) {
+                float damage = event.getAmount();
+                if (event.getSource().getDirectEntity() instanceof Player player) {
                     if (hand == InteractionHand.MAIN_HAND) {
-                        extradamage = AttributeModifiers.calculateModifier(player, player.getMainHandItem(), event.getAmount());
+                        damage += AttributeModifiers.calculateModifier(player, player.getMainHandItem(), damage);
                     }
                     else if (hand == InteractionHand.OFF_HAND) {
-                        extradamage = AttributeModifiers.calculateModifier(player, player.getOffhandItem(), event.getAmount());
+                        damage += AttributeModifiers.calculateModifier(player, player.getOffhandItem(), damage);
                     }
-                    event.setAmount(event.getAmount() + extradamage);
                 }
+                if (event.getSource().getDirectEntity() instanceof LivingEntity living) {
+                    if (hand == InteractionHand.MAIN_HAND) {
+                        if (ParticleTracking.shouldRenderParticle(living.getMainHandItem(), living) && ItemStackUtils.getStyle(living) != PrideStyles.GUN_OFFHAND) {
+                            ElementBase elementBase = ParticleTracking.getItemElementForImbuement(living.getMainHandItem(), living);
+                            if (elementBase != null && elementBase.createDamageSource(living) != event.getSource()) {
+                                damage = elementBase.onHit(event.getEntity(), living, damage, false);
+                            }
+                        }
+                    }
+                    if (hand == InteractionHand.OFF_HAND) {
+                        if (ParticleTracking.shouldRenderParticle(living.getOffhandItem(), living)) {
+                            ElementBase elementBase = ParticleTracking.getItemElementForImbuement(living.getOffhandItem(), living);
+                            if (elementBase != null && elementBase.createDamageSource(living) != event.getSource()) {
+                                damage = elementBase.onHit(event.getEntity(), living, damage, false);
+                            }
+                        }
+                    }
+                }
+                event.setAmount(damage);
             }
         }
     }

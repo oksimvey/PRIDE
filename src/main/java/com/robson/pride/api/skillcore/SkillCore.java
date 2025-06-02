@@ -10,12 +10,15 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.robson.pride.registries.WeaponSkillRegister.WeaponSkills;
 
 public class SkillCore {
+
+    public static List<Entity> performingSkillEntities = new ArrayList<>();
 
     public static void onSkillExecute(LivingEntity ent) {
         if (ent != null) {

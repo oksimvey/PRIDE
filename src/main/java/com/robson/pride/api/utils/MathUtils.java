@@ -63,6 +63,8 @@ public class MathUtils {
         return circlevecs;
     }
 
+
+
     public static List<Vec3> getVectorsForHorizontalSpiral(Vec3 radiusvec, byte larps, int points, int scale){
         List<Vec3> circlevecs = new ArrayList<>();
         if (radiusvec != null){

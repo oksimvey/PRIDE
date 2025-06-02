@@ -1,6 +1,6 @@
 {
-  "parent": "prominent:item/sabre",
+  "parent": "item/sabre",
   "textures": {
-    "layer0": "prominent:item/transmog/sabre"
+    "layer0": "item/sabre"
   }
 }

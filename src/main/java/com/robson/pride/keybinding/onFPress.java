@@ -25,7 +25,7 @@ public class onFPress {
     public static void addModifierToStyle(LivingEntity living) {
         if (living != null) {
             if (ItemStackUtils.getStyle(living) == CapabilityItem.Styles.TWO_HAND) {
-                AttributeUtils.addModifier(living, "minecraft:generic.attack_damage", "914e59d6-2cb8-4b1d-b3a7-76693f1eeb8d", 0.5, AttributeModifier.Operation.MULTIPLY_TOTAL);
+                AttributeUtils.addModifier(living, "minecraft:generic.attack_damage", "914e59d6-2cb8-4b1d-b3a7-76693f1eeb8d", 0.25, AttributeModifier.Operation.MULTIPLY_TOTAL);
             } else
                 AttributeUtils.removeModifier(living, "minecraft:generic.attack_damage", "914e59d6-2cb8-4b1d-b3a7-76693f1eeb8d");
         }

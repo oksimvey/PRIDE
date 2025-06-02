@@ -1,6 +1,6 @@
 {
-  "parent": "prominent:item/scissorblade",
+  "parent": "item/scissorblade",
   "textures": {
-    "layer0": "prominent:item/transmog/scissor_blade"
+    "layer0": "item/scissor_blade"
   }
 }

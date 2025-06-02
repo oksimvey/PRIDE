@@ -1,11 +1,9 @@
 package com.robson.pride.api.mechanics;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
-import com.nameless.indestructible.world.capability.AdvancedCustomMobPatch;
 import com.robson.pride.api.utils.PlaySoundUtils;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.registries.ParticleRegister;
-import jdk.dynalink.Operation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.entity.Entity;
@@ -18,7 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BinaryOperator;
 
 public class PerilousAttack {
 
@@ -88,7 +85,7 @@ public class PerilousAttack {
             player.stopUsingItem();
         }
         else {
-            AdvancedCustomMobPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomMobPatch.class);
+            AdvancedCustomHumanoidMobPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
             if (livingEntityPatch != null) {
                 livingEntityPatch.setBlocking(false);
                 livingEntityPatch.setParried(false);

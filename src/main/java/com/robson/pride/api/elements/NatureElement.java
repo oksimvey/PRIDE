@@ -37,13 +37,13 @@ public class NatureElement  extends ElementBase {
         return SchoolRegister.NATURE.get();
     }
 
-    public void onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
+    public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
         this.playSound(ent, 1);
-        HealthUtils.hurtEntity(ent, this.calculateFinalDamage(ent, amount), this.createDamageSource(dmgent));
+        return this.calculateFinalDamage(dmgent, ent, amount);
     }
 
-    public float calculateFinalDamage(Entity ent, float amount) {
-        if (ent != null) {
+    public float calculateFinalDamage(Entity dmgent, Entity ent, float amount) {
+        if (dmgent != null && ent != null) {
             String element = getElement(ent);
             float multiplier = 1;
             if (element.equals("Sun") || element.equals("Wind")) {
@@ -51,7 +51,9 @@ public class NatureElement  extends ElementBase {
             } else if (element.equals("Thunder") || element.equals("Water")) {
                 multiplier = 1.5f;
             }
-            return multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:nature_resist"));
+            return MathUtils.getValueWithPercentageIncrease(multiplier *
+                            MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:nature_resist")),
+                    AttributeUtils.getAttributeValue(dmgent, "pride:nature_power"));
         }
         return amount;
     }

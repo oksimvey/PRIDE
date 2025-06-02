@@ -1,6 +1,6 @@
 {
-  "parent": "prominent:item/longsword",
+  "parent": "item/longsword",
   "textures": {
-    "layer0": "prominent:item/transmog/longsword"
+    "layer0": "item/longsword"
   }
 }

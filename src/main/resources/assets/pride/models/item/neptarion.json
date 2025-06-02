@@ -1,6 +1,6 @@
 {
-  "parent": "prominent:item/aquantictrident",
+  "parent": "item/aquantictrident",
   "textures": {
-    "layer0": "prominent:item/transmog/aquantic_trident"
+    "layer0": "item/aquantic_trident"
   }
 }

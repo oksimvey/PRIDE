@@ -1,20 +1,18 @@
 package com.robson.pride.skills.weaponarts;
 
+import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import net.minecraft.world.entity.LivingEntity;
+import yesman.epicfight.gameasset.Animations;
+
+import java.util.List;
 
 public class Kick extends WeaponSkillBase {
     public Kick() {
-        super("Common", "Neutral", 4, 1, 5000);
+        super("Common", "Neutral", 4, 1, "pierce_two_hand");
     }
 
-    @Override
-    public void twohandExecute(LivingEntity ent) {
-
-    }
-
-    @Override
-    public void onehandExecute(LivingEntity ent) {
-
+    public List<SkillAnimation> defineMotions(LivingEntity ent){
+        return List.of(new SkillAnimation(Animations.TACHI_DASH, null));
     }
 }

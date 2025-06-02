@@ -1,5 +1,6 @@
 package com.robson.pride.skills.weaponarts;
 
+import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.*;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
@@ -15,6 +16,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
 import reascer.wom.gameasset.WOMAnimations;
+import yesman.epicfight.gameasset.Animations;
 
 import java.util.List;
 import java.util.Random;
@@ -22,47 +24,31 @@ import java.util.concurrent.TimeUnit;
 
 public class HeavensStrike extends WeaponSkillBase {
     public HeavensStrike() {
-        super("Legendary", "Light", 1, 1, 3000);
+        super("Legendary", "Light", 1, 1, "total");
     }
 
-    @Override
-    public void twohandExecute(LivingEntity ent) {
-        common(ent);
-    }
-
-    @Override
-    public void onehandExecute(LivingEntity ent) {
-        common(ent);
-    }
-
-    public void common(LivingEntity ent){
-        if (ent != null){
+    public List<SkillAnimation> defineMotions(LivingEntity ent){
+        return List.of(new SkillAnimation(WOMAnimations.AGONY_RISING_EAGLE, ()-> {
             List<Vec3> spiralpoints = MathUtils.getVectorsForHorizontalSpiral(ent.getLookAngle().scale(2), (byte) 6, 50, 1);
-            AnimUtils.playAnim(ent, WOMAnimations.AGONY_RISING_EAGLE, 0f);
             if (!spiralpoints.isEmpty()){
                 summonSpiralPoint(ent.position(), spiralpoints, 1, ent.getBbHeight());
             }
+        }), new SkillAnimation(WOMAnimations.AGONY_SKY_DIVE,()-> {
+            for (int i = 0; i < 50; i++){
+                Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.WISP_PARTICLE.get(),
+                        ent.getX() + new Random().nextFloat(0.5f) - 0.5f,
+                        ent.getY() + 40 - i,
+                        ent.getZ()+ new Random().nextFloat(0.5f) - 0.5f, 0, 0,0 ).scale(5);
+            }
             TimerUtil.schedule(()-> {
-               hit(ent);
-            }, 1000, TimeUnit.MILLISECONDS);
-        }
+                if (TargetUtil.getTarget(ent) != null){
+                    ent.setPos(TargetUtil.getTarget(ent).position());
+                    HealthUtils.dealBlockableDmg(ent, TargetUtil.getTarget(ent), 7);
+                }
+            }, 500, TimeUnit.MILLISECONDS);
+        }));
     }
 
-    public void hit(Entity ent){
-        AnimUtils.playAnim(ent, WOMAnimations.AGONY_SKY_DIVE, 0);
-        for (int i = 0; i < 50; i++){
-            Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.WISP_PARTICLE.get(),
-                    ent.getX() + new Random().nextFloat(0.5f) - 0.5f,
-                    ent.getY() + 40 - i,
-                    ent.getZ()+ new Random().nextFloat(0.5f) - 0.5f, 0, 0,0 ).scale(5);
-        }
-        TimerUtil.schedule(()-> {
-            if (TargetUtil.getTarget(ent) != null){
-                ent.setPos(TargetUtil.getTarget(ent).position());
-                HealthUtils.dealBlockableDmg(ent, TargetUtil.getTarget(ent), 7);
-            }
-        }, 500, TimeUnit.MILLISECONDS);
-    }
 
     public void summonSpiralPoint(Vec3 entpos, List<Vec3> points, int currentloop, float height){
         if (entpos != null && points != null && points.size() >= currentloop){

@@ -1,6 +1,6 @@
 {
-  "parent": "prominent:item/katana",
+  "parent": "item/katana",
   "textures": {
-    "layer0": "prominent:item/transmog/katana"
+    "layer0": "item/katana"
   }
 }

@@ -1,6 +1,6 @@
 {
-  "parent": "prominent:item/creationsplitter",
+  "parent": "item/creationsplitter",
   "textures": {
-    "layer0": "prominent:item/transmog/creationsplitter"
+    "layer0": "item/creationsplitter"
   }
 }

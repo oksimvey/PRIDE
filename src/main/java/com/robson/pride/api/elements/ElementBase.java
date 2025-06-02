@@ -1,5 +1,6 @@
 package com.robson.pride.api.elements;
 
+import com.robson.pride.api.utils.HealthUtils;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -29,13 +30,22 @@ public abstract class ElementBase {
         Holder<DamageType> damageTypeHolder = Minecraft.getInstance().level.registryAccess()
                 .registryOrThrow(Registries.DAMAGE_TYPE)
                 .getHolderOrThrow(this.getSchool().getDamageType());
-
         return ent != null ? new DamageSource(damageTypeHolder, ent) : new DamageSource(damageTypeHolder);
     }
 
-    public abstract void onHit(Entity ent, Entity dmgent, float amount, boolean spellSource);
+    public void damageEntity(Entity ent, Entity dmgent, float amount, boolean blockable, boolean spellSource){
+        amount = onHit(ent, dmgent, amount, spellSource);
+        if (blockable) {
+            HealthUtils.dealBlockableDmg(dmgent, ent, amount);
+        }
+        else {
+            HealthUtils.hurtEntity(ent, amount, this.createDamageSource(dmgent));
+        }
+    }
 
-    public abstract float calculateFinalDamage(Entity ent, float amount);
+    public abstract float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource);
+
+    public abstract float calculateFinalDamage(Entity dmgent, Entity ent, float amount);
 
     public abstract SchoolType getSchool();
 

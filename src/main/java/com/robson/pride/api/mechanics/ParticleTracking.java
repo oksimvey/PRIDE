@@ -75,7 +75,7 @@ public class ParticleTracking {
             if (ent.hasEffect(EffectRegister.IMBUEMENT.get()) &&
                     ent.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect &&
                     elements.containsKey(imbuementEffect.element)) {
-                return elements.get(element);
+                return elements.get(imbuementEffect.element);
             }
         }
         return null;

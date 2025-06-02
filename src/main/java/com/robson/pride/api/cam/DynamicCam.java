@@ -24,7 +24,7 @@ public class DynamicCam {
         if (player != null){
             Config config = ThirdPerson.getConfig();
             boolean ismounted = player.getVehicle() != null;
-            float zmodifier = ismounted ? 2 : getDefaultZModifier(player);
+            float zmodifier = ismounted ? 1.5f : getDefaultZModifier(player);
             float xmodifier = -0.12f + (zmodifier / 50);
             float ymodifier = -0.02f;
             List<Entity> targets = CustomTickManager.targeting_entities.get(player);

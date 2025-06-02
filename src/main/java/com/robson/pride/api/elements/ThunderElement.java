@@ -58,8 +58,10 @@ public class ThunderElement  extends ElementBase {
         return SchoolRegister.THUNDER.get();
     }
 
-    public void onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
+    public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
+        this.playSound(ent, 1);
         thunderPassive(ent, dmgent, amount, new ArrayList<>());
+        return this.calculateFinalDamage(dmgent, ent, amount);
     }
 
     public void thunderPassive(Entity ent, Entity dmgent, float power, List<Entity> hitentities) {
@@ -68,7 +70,7 @@ public class ThunderElement  extends ElementBase {
                 MagicManager.spawnParticles(dmgent.level(), ParticleHelper.ELECTRICITY, ent.getX(), ent.getY() + ent.getBbHeight() / 2, ent.getZ(), 10, ent.getBbWidth() / 3, ent.getBbHeight() / 3, ent.getBbWidth() / 3, 0.1, false);
             }
             PlaySoundUtils.playSound(ent, SoundRegistry.LIGHTNING_CAST.get(), 1, 1);
-            HealthUtils.hurtEntity(ent, this.calculateFinalDamage(ent, power / 2), this.createDamageSource(dmgent));
+            HealthUtils.hurtEntity(ent, this.calculateFinalDamage(dmgent, ent, power / 2), this.createDamageSource(dmgent));
             AnimUtils.playAnim(ent, AnimationsRegister.ELECTROCUTATE, 0);
             hitentities.add(ent);
             if (!ElementalUtils.isNotInWater(ent, new Vec3(ent.getX(), ent.getY(), ent.getZ()))) {
@@ -109,8 +111,8 @@ public class ThunderElement  extends ElementBase {
         }
     }
 
-    public float calculateFinalDamage(Entity ent, float amount) {
-        if (ent != null) {
+    public float calculateFinalDamage(Entity dmgent, Entity ent, float amount) {
+        if (dmgent != null && ent != null) {
             String element = getElement(ent);
             float multiplier = 1;
             if (element.equals("Nature") || element.equals("Wind")) {
@@ -118,7 +120,9 @@ public class ThunderElement  extends ElementBase {
             } else if (element.equals("Water") || element.equals("Ice")) {
                 multiplier = 1.5f;
             }
-            return multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:thunder_resist"));
+            return MathUtils.getValueWithPercentageIncrease(multiplier *
+                            MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:thunder_resist")),
+                    AttributeUtils.getAttributeValue(dmgent, "pride:thunder_power"));
         }
         return amount;
     }

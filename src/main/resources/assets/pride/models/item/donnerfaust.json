@@ -1,28 +1,31 @@
 {
-  "parent": "item/dragonslayingblade",
+  "parent": "item/thunderbrand",
   "textures": {
-    "layer0": "item/dragon_slaying_blade"
+    "0": "item/thunderbrand",
+    "1": "item/thunderbrand_layer",
+    "2": "item/thunderbrand_layer_2",
+    "particle": "item/thunderbrand"
   },
   "display": {
     "thirdperson_righthand": {
       "rotation": [0, -90, 0],
-      "translation": [0, 20, 0],
-      "scale": [5, 5, 5]
+      "translation": [0, 5, 0],
+      "scale": [4, 4, 4]
     },
     "thirdperson_lefthand": {
       "rotation": [0, -90, 0],
-      "translation": [0, 20, 0],
-      "scale": [5, 5, 5]
+      "translation": [0, 5, 0],
+      "scale": [4, 4, 4]
     },
     "firstperson_righthand": {
       "rotation": [0, -90, 0],
-      "translation": [0, 20, 0],
-      "scale": [5, 5, 5]
+      "translation": [0, 5, 0],
+      "scale": [4, 4, 4]
     },
     "firstperson_lefthand": {
       "rotation": [0, -90, 0],
-      "translation": [0, 20, 0],
-      "scale": [5, 5, 5]
+      "translation": [0, 5, 0],
+      "scale": [4, 4, 4]
     },
     "ground": {
       "translation": [0, 4.25, 0],

@@ -8,13 +8,13 @@
   "music_priority": 1,
   "custom_music": "pride:theoporos",
   "custom_texture": "indestructible:textures/gui/boss_bar.png",
-  "custom_name": "Theophoros, Flame of the Heavens",
+  "custom_name": "Wotanstrom, The Skybreaker",
   "attributes": {
     "impact": 2.5,
     "armor_negation": 1.0,
     "max_strikes": 3,
     "chasing_speed": 0.90,
-    "scale": 2,
+    "scale": 2.5,
     "max_stamina": 50,
     "stamina_regan_multiply": 0.5,
     "stamina_regan_delay": 2000,
@@ -33,7 +33,7 @@
     "death": "epicfight:biped/living/death",
     "mount": "epicfight:biped/living/mount"
   },
-  "textures": ["pride:textures/entities/gods/theoporos.png"],
+  "textures": ["pride:textures/special/empty.png"],
   "humanoid_weapon_motions": [
     {
       "weapon_categories": [
@@ -86,22 +86,27 @@
     {
       "variations": [0],
       "slot": "mainhand",
-      "item": "pride:seraphiel"
+      "item": "pride:donnerfaust"
+    },
+    {
+      "variations": [0],
+      "slot": "head",
+      "item": "epicpaladins:sculk_helmet"
     },
     {
       "variations": [0],
       "slot": "chest",
-      "item": "epicpaladins:angel_chestplate"
+      "item": "epicpaladins:sculk_chestplate"
     },
     {
       "variations": [0],
       "slot": "leg",
-      "item": "epicpaladins:angel_leggings"
+      "item": "epicpaladins:sculk_leggings"
     },
     {
       "variations": [0],
       "slot": "feet",
-      "item": "epicpaladins:angel_boots"
+      "item": "epicpaladins:sculk_boots"
     }
   ],
   "combat_behavior": [
@@ -109,7 +114,7 @@
       "weapon_categories": [
         "uchigatana",
         "tachi",
-        "pride_colossalsword"
+        "pride_spear"
       ],
       "style": "common",
       "behavior_series": [

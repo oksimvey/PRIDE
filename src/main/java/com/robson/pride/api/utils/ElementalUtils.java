@@ -70,7 +70,8 @@ public class ElementalUtils {
     public static boolean canPutWeaponArt(ItemStack leftitem, ItemStack rightitem){
         if (leftitem != null && rightitem != null) {
             String rightelement = WeaponSkills.get(rightitem.getTag().getString("weapon_art")).getSkillElement();
-            return rightelement.equals("Neutral") || !leftitem.getTag().contains("passive_element") || leftitem.getTag().getString("passive_element").equals(rightelement);
+            String leftelement = getItemElement(leftitem);
+            return rightelement.equals("Neutral") || leftelement.isEmpty() || leftelement.equals(rightelement);
         }
         return false;
     }

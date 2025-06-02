@@ -46,8 +46,7 @@ public class onSpellDamage {
             }
             for (ElementBase element : ElementsRegister.elements.values()){
                 if (element.getSchool() == spell.getSchoolType()) {
-                    element.onHit(ent, event.getSpellDamageSource().getEntity(), event.getAmount(), true);
-                    event.setAmount(0);
+                    event.setAmount(element.onHit(ent, event.getSpellDamageSource().getEntity(), event.getOriginalAmount(), true));
                 }
             }
         }

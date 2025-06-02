@@ -1,7 +1,7 @@
 {
-  "parent": "prominent:item/soul_collector",
+  "parent": "item/soul_collector",
   "textures": {
-    "layer0": "prominent:item/transmog/soul_devourer"
+    "layer0": "item/soul_devourer"
   },
   "display": {
     "thirdperson_righthand": {

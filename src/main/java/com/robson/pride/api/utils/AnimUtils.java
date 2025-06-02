@@ -89,7 +89,7 @@ public class AnimUtils {
             LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (livingEntityPatch != null) {
                 float duration = animation.getTotalTime() / animation.getPlaySpeed(livingEntityPatch, animation);
-                return (int) (duration * 600);
+                return (int) (duration * 500);
             }
         }
         return 0;

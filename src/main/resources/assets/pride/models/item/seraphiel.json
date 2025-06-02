@@ -1,7 +1,7 @@
 {
-  "parent": "prominent:item/divine_punisher",
+  "parent": "item/divinepunisher",
   "textures": {
-    "layer0": "prominent:item/transmog/divine_punisher"
+    "layer0": "item/divinepunisher"
   },
   "display": {
     "thirdperson_righthand": {

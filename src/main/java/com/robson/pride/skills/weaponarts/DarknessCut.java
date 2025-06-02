@@ -2,6 +2,7 @@ package com.robson.pride.skills.weaponarts;
 
 import com.robson.pride.api.mechanics.ElementalPassives;
 import com.robson.pride.api.mechanics.PerilousAttack;
+import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.*;
@@ -28,23 +29,11 @@ import java.util.concurrent.TimeUnit;
 public class DarknessCut extends WeaponSkillBase {
 
     public DarknessCut() {
-        super("Mythical", "Darkness", 50, 6, 1000);
+        super("Mythical", "Darkness", 50, 6, "total");
     }
 
-    @Override
-    public void twohandExecute(LivingEntity ent) {
-        DarknessSlash(ent);
-    }
-
-    @Override
-    public void onehandExecute(LivingEntity ent) {
-
-    }
-
-    public static void DarknessSlash(LivingEntity ent) {
-        if (ent != null) {
-            StaticAnimation animation = Animations.TACHI_AUTO3;
-            AnimUtils.playAnim(ent, animation, 0);
+    public List<SkillAnimation> defineMotions(LivingEntity ent){
+        return List.of(new SkillAnimation(Animations.TACHI_AUTO3, ()-> {
             TimerUtil.schedule(() -> {
                 Vec3 lookangle = ent.getLookAngle();
                 ent.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 15, 255));
@@ -67,6 +56,6 @@ public class DarknessCut extends WeaponSkillBase {
                     }
                 }
             }, 300, TimeUnit.MILLISECONDS);
-        }
+        }));
     }
 }

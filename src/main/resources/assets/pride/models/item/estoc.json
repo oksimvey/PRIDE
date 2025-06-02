@@ -1,7 +1,7 @@
 {
-  "parent": "prominent:item/estoc",
+  "parent": "item/estoc",
   "textures": {
-    "layer0": "prominent:item/transmog/estoc"
+    "layer0": "item/estoc"
   },
   "display": {
     "thirdperson_righthand": {

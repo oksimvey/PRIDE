@@ -1,6 +1,6 @@
 {
-  "parent": "prominent:item/edgeoftheastralplane",
+  "parent": "item/edgeoftheastralplane",
   "textures": {
-    "layer0": "prominent:item/transmog/edgeoftheastralplane"
+    "layer0": "item/edgeoftheastralplane"
   }
 }

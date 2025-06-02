@@ -33,11 +33,15 @@ public class RenderingCore{
         if (ent != null) {
             if (ParticleTracking.shouldRenderParticle(ent.getMainHandItem(), ent)) {
                 ElementBase element = ParticleTracking.getItemElementForImbuement(ent.getMainHandItem(), ent);
-                ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR, element.getNormalParticleType(), ParticleTracking.getAABBForImbuement(ent.getMainHandItem(), ent), element.getParticleAmount());
+                if (element != null) {
+                    ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR, element.getNormalParticleType(), ParticleTracking.getAABBForImbuement(ent.getMainHandItem(), ent), element.getParticleAmount());
+                }
             }
             if (ItemStackUtils.getStyle(ent) == PrideStyles.DUAL_WIELD && ParticleTracking.shouldRenderParticle(ent.getOffhandItem(), ent)) {
-                    ElementBase element = ParticleTracking.getItemElementForImbuement(ent.getMainHandItem(), ent);
+                ElementBase element = ParticleTracking.getItemElementForImbuement(ent.getMainHandItem(), ent);
+                if (element != null) {
                     ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolL, element.getNormalParticleType(), ParticleTracking.getAABBForImbuement(ent.getOffhandItem(), ent), element.getParticleAmount());
+                }
             }
             for (MobEffectInstance effect : ent.getActiveEffects()){
                 if (effect.getEffect() instanceof PrideEffectBase prideEffect){

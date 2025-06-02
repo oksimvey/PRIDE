@@ -1,25 +1,21 @@
 package com.robson.pride.skills.weaponskills;
 
+import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.AnimUtils;
 import net.minecraft.world.entity.LivingEntity;
 import yesman.epicfight.gameasset.Animations;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class LongSwordWeaponSkill extends WeaponSkillBase {
 
     public LongSwordWeaponSkill() {
-        super("Common", "Neutral", 10, 3, 40);
+        super("Common", "Neutral", 10, 3, "pierce_two_hand");
     }
 
-    @Override
-    public void twohandExecute(LivingEntity ent) {
-        if (ent != null) {
-          AnimUtils.playAnimWithPerilous(ent, Animations.TACHI_DASH, "pierce_two_hand", 0);
-        }
-    }
-
-    @Override
-    public void onehandExecute(LivingEntity ent) {
-
+    public List<SkillAnimation> defineMotions(LivingEntity ent){
+        return List.of(new SkillAnimation(Animations.TACHI_DASH, null));
     }
 }

@@ -52,6 +52,7 @@ public class PrideTabRegister {
                 entries.accept(ItemsRegister.KURONAMI.get());
                 entries.accept(ItemsRegister.SERAPHIEL.get());
                 entries.accept(ItemsRegister.NOCTIVAGUS.get());
+                entries.accept(ItemsRegister.DONNERFAUST.get());
             })
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
             .build());

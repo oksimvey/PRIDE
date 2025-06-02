@@ -4,8 +4,10 @@ import com.robson.pride.entities.badlands.Cowboy;
 import com.robson.pride.entities.forest.FireDragon;
 import com.robson.pride.entities.forest.hunter.Hunter;
 import com.robson.pride.entities.forest.magmamonster.MagmaMonster;
+import com.robson.pride.entities.gods.Furventor;
 import com.robson.pride.entities.gods.Mordath;
 import com.robson.pride.entities.gods.Theophoros;
+import com.robson.pride.entities.gods.Wotanstrom;
 import com.robson.pride.entities.japanese.boss.shogun.Shogun;
 import com.robson.pride.entities.japanese.mob.ronin.Ronin;
 import com.robson.pride.entities.forest.eliteknight.EliteKnight;
@@ -43,8 +45,10 @@ public class EntityRegister {
     public static final RegistryObject<EntityType<Dueler>> DUELER = make(false, new ResourceLocation("dueler"), Dueler::new, MobCategory.MONSTER, 0.8f, 2f);
     public static final RegistryObject<EntityType<Mordath>> MORDATH = make(false, new ResourceLocation("mordath"), Mordath::new, MobCategory.MONSTER, 0.8f, 2f);
     public static final RegistryObject<EntityType<Cowboy>> COWBOY = make(false, new ResourceLocation("cowboy"), Cowboy::new, MobCategory.MONSTER, 0.8f, 1.8f);
-    public static final RegistryObject<EntityType<Theophoros>> THEOPOROS = make(false, new ResourceLocation("theoporos"), Theophoros::new, MobCategory.MONSTER, 1.2f, 2.5f);
+    public static final RegistryObject<EntityType<Theophoros>> THEOPOROS = make(false, new ResourceLocation("theoporos"), Theophoros::new, MobCategory.MONSTER, 1.6f, 3.6f);
     public static final RegistryObject<EntityType<CollidingEntity>> COLLIDING_ENTITY = make(true, new ResourceLocation("colliding_entity"), CollidingEntity::new, MobCategory.MISC,  1f, 1f);
+    public static final RegistryObject<EntityType<Furventor>> FURVENTOR = make(false, new ResourceLocation("furventor"), Furventor::new, MobCategory.MONSTER, 2.4f, 5.4f);
+    public static final RegistryObject<EntityType<Wotanstrom>> WOTANSTROM = make(false, new ResourceLocation("wotanstrom"), Wotanstrom::new, MobCategory.MONSTER, 2f, 4.5F);
 
     private static <E extends Entity> RegistryObject<EntityType<E>> make(boolean special, ResourceLocation id, EntityType.EntityFactory<E> factory, MobCategory classification, float width, float height) {
         return make(special, id, factory, classification, width, height, false);
@@ -89,5 +93,7 @@ public class EntityRegister {
         event.put(MORDATH.get(), Mordath.registerAttributes().build());
         event.put(COWBOY.get(), Cowboy.registerAttributes().build());
         event.put(THEOPOROS.get(), Theophoros.registerAttributes().build());
+        event.put(FURVENTOR.get(), Furventor.registerAttributes().build());
+        event.put(WOTANSTROM.get(), Wotanstrom.registerAttributes().build());
     }
 }
