@@ -24,6 +24,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -97,60 +98,43 @@ public class StringParticle extends TextureSheetParticle {
     }
 
     @Override
-    public void render(VertexConsumer consumer, Camera camera, float partialTicks) {
+    public void render(VertexConsumer consumer, Camera camera, float tickDelta) {
         if (this.particletext != null) {
-            Component text1 = Component.literal(this.particletext);
+
             Vec3 cameraPos = camera.getPosition();
-            float particleX = (float) (Mth.lerp(partialTicks, this.xo, this.x) - cameraPos.x());
-            float particleY = (float) (Mth.lerp(partialTicks, this.yo, this.y) - cameraPos.y());
-            float particleZ = (float) (Mth.lerp(partialTicks, this.zo, this.z) - cameraPos.z());
-            int light = this.getLightColor(partialTicks);
 
-            PoseStack poseStack = new PoseStack();
-            poseStack.pushPose();
+            float particleX = (float) (this.xo + (x - this.xo) * (double) tickDelta - cameraPos.x);
+            float particleY = (float) (this.yo + (y - this.yo) * (double) tickDelta - cameraPos.y);
+            float particleZ = (float) (this.zo + (z - this.zo) * (double) tickDelta - cameraPos.z);
 
-            // Position setup
-            poseStack.translate(particleX, particleY, particleZ);
-            double distanceFromCam = (new Vec3(particleX, particleY, particleZ)).length();
-            double inc = Mth.clamp(distanceFromCam / 32.0F, 0.0F, 5.0F);
 
-            // Movement and rotation
-            poseStack.translate(0.0F, (1.0F + inc / 4.0F) * Mth.lerp(partialTicks, this.prevVisualDY, this.visualDY), 0.0F);
-            float fadeout = Mth.lerp(partialTicks, this.prevFadeout, this.fadeout);
-            float defScale = 0.006F;
-            float scale = (float) (defScale * distanceFromCam);
-            poseStack.mulPose(camera.rotation());
-            poseStack.translate((1.0F + inc) * Mth.lerp(partialTicks, this.prevVisualDX, this.visualDX), 0.0F, 0.0F);
+            Font textRenderer = Minecraft.getInstance().font;
 
-            // Scale and fade
-            poseStack.scale(-scale, -scale, scale);
-            poseStack.translate(0.0F, 4.0F * (1.0F - fadeout), 0.0F);
-            poseStack.scale(fadeout, fadeout, fadeout);
-            poseStack.translate(0.0F, -distanceFromCam / 10.0F, 0.0F);
+            String text = this.particletext;
 
-            MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
+            PoseStack matrixStack = new PoseStack();
+            float textX = textRenderer.width(text) / -2.0F;
+            matrixStack.pushPose();
+            matrixStack.translate(particleX, particleY, particleZ);
+            float size = 0.001F;
+            matrixStack.scale(-size, -size, size);
+            Quaternionf rot = null;
+            try {
+                rot = (Quaternionf) camera.rotation().clone();
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
+            if (rot != null) {
+                rot.mul(-1);
+                rot.conjugate();
+                matrixStack.mulPose(rot);
+                matrixStack.pushPose();
+                matrixStack.translate(0.4f, 0.4f, 0.4f);
+                textRenderer.drawInBatch(Component.literal(text), textX, 0.0F, this.type.color, false,
+                        matrixStack.last().pose(), Minecraft.getInstance().renderBuffers().bufferSource(), Font.DisplayMode.NORMAL, 0, this.getLightColor(tickDelta));
 
-            // Set up render states
-            RenderSystem.enableDepthTest();
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-            RenderSystem.depthMask(false);
-
-            // Render text
-            float x1 = 0.5F - (float) this.fontRenderer.width(text1) / 2.0F;
-            this.fontRenderer.drawInBatch(text1, x1, 0.0F, this.type.color, false,
-                    poseStack.last().pose(), buffer, Font.DisplayMode.NORMAL, 0, light);
-
-            // Render shadow
-            poseStack.translate(1.0F, 1.0F, 0.03);
-            this.fontRenderer.drawInBatch(text1, x1, 0.0F, this.darkColor, false,
-                    poseStack.last().pose(), buffer, Font.DisplayMode.NORMAL, 0, light);
-
-            // Clean up
-            buffer.endBatch();
-            RenderSystem.depthMask(true);
-            RenderSystem.disableBlend();
-            poseStack.popPose();
+                matrixStack.popPose();
+            }
         }
 
     }

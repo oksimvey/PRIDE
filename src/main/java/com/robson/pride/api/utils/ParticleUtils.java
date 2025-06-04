@@ -8,6 +8,7 @@ import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,6 +28,7 @@ public class ParticleUtils {
 
     public static Particle spawnStringParticle(Entity ent, String text, StringParticle.StringParticleTypes type, int lifetime) {
         if (ent != null) {
+            Minecraft.getInstance().player.displayClientMessage(Component.literal(text), true);
                Vec3 pos = new Vec3( new Random().nextFloat() - ent.getBbWidth() * ent.getBbWidth() ,  ent.getBbHeight() * 1.25,  new Random().nextFloat() - ent.getBbWidth() * ent.getBbWidth());
                 StringParticle particle = new StringParticle(Minecraft.getInstance().level, pos.x + ent.getX(), pos.y + ent.getY(), pos.z + ent.getZ(), 0, 0, type.ordinal());
                particle.setparams(lifetime, text);

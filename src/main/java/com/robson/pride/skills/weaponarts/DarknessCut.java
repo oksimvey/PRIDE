@@ -39,7 +39,7 @@ public class DarknessCut extends WeaponSkillBase {
                 ent.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 15, 255));
                 PlaySoundUtils.playSound(ent, SoundRegistry.TELEKINESIS_CAST.get(), 1, 1);
                 if (!ent.level().isClientSide()) {
-                    List<Entity> list = ((ServerLevel) ent.level()).getEntities(ent, new AABB(ent.getX() - 25, ent.getY() - 10, ent.getZ() - 25, ent.getX() + 25, ent.getY() + 20, ent.getZ() + 25));
+                    List<Entity> list = ent.level().getEntities(ent, new AABB(ent.getX() - 25, ent.getY() - 10, ent.getZ() - 25, ent.getX() + 25, ent.getY() + 20, ent.getZ() + 25));
                     for (int i = -20; i < 20; i++) {
                         Vec3 vec = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, new Vec3f(0, (float) i / 2, 0), Armatures.BIPED.chest);
                         double particleposx = vec.x;

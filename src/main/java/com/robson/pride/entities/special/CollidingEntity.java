@@ -15,10 +15,13 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 import java.util.Random;
 
-public class CollidingEntity extends AbstractHurtingProjectile {
+public class CollidingEntity<T extends LivingEntity> extends AbstractHurtingProjectile {
+        protected T original;
     public int life = 200;
 
     public CollidingEntity(EntityType<? extends CollidingEntity> p_37598_, Level p_37599_) {
