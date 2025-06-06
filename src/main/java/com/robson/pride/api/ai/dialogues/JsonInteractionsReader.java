@@ -13,6 +13,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -84,7 +85,6 @@ public class JsonInteractionsReader {
                 CompoundTag dialogue = tag.getCompound(i);
                 ClientLevel level = Minecraft.getInstance().level;
                 LocalPlayer player = Minecraft.getInstance().player;
-                Particle stringparticle = null;
                 if (dialogue.contains("actions")) {
                     deserializeActions(ent, dialogue.getList("actions", 10), (byte) 0);
                 }
@@ -107,10 +107,13 @@ public class JsonInteractionsReader {
                         level.playSound(player, ent, holder.get(), SoundSource.NEUTRAL, volume, 1);
                     }
                     if (ent.distanceTo(player) < ent.getBbHeight() * volumemultiplier) {
-                        stringparticle = ParticleUtils.spawnStringParticle(ent, dialogue.getString("subtitle"), StringParticle.StringParticleTypes.WHITE, duration / 50 - 1);
+                        player.displayClientMessage(Component.literal(dialogue.getString("subtitle")), true);
                     }
                     TimerUtil.schedule(() -> {
                         if (ent != null) {
+                            if (player != null) {
+                                player.displayClientMessage(Component.empty(), true);
+                            }
                             isSpeaking.remove(ent);
                         }
                     }, duration - 1, TimeUnit.MILLISECONDS);
@@ -126,14 +129,14 @@ public class JsonInteractionsReader {
                 }
                 if (dialogue.contains("is_question")){
                     if (sourceent instanceof Player player1){
-                        deserializeQuestions(ent, player1, dialogue, stringparticle);
+                        deserializeQuestions(ent, player1, dialogue);
                     }
                 }
             }
         }
     }
 
-    public static void deserializeQuestions(Entity ent, Player player, CompoundTag dialogue, Particle stringparticle){
+    public static void deserializeQuestions(Entity ent, Player player, CompoundTag dialogue){
         if (ent != null && player != null && dialogue != null){
             if (dialogue.contains("true_answer") && dialogue.contains("false_answer") && dialogue.contains("duration")){
                 CompoundTag trueanswer = dialogue.getCompound("true_answer");
@@ -145,7 +148,7 @@ public class JsonInteractionsReader {
                     player.getPersistentData().put("pride_true_answer_dialogues", trueanswer.getList("dialogues", 10));
                     player.getPersistentData().put("pride_false_answer_dialogues", falseanswer.getList("dialogues", 10));
                     Minecraft client = Minecraft.getInstance();
-                    TimerUtil.schedule(()->isAnswering.put(player, new AnswerGUI(player, ent, stringparticle, player.getPersistentData(), client)), duration / 5, TimeUnit.MILLISECONDS);
+                    TimerUtil.schedule(()->isAnswering.put(player, new AnswerGUI(player, ent, player.getPersistentData(), client)), duration / 5, TimeUnit.MILLISECONDS);
                     TimerUtil.schedule(()->{
                         if (player != null && client.level != null && isAnswering.get(player) != null){
                                 isAnswering.get(player).onClose();

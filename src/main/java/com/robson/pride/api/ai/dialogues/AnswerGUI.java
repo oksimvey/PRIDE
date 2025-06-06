@@ -21,15 +21,12 @@ public class AnswerGUI extends Screen {
 
     private final Entity questionent;
 
-    private final Particle stringparticle;
-
     private final CompoundTag playerTags;
 
-    public AnswerGUI(Player player, Entity questionent, Particle stringparticle, CompoundTag playerTags, Minecraft client) {
+    public AnswerGUI(Player player, Entity questionent, CompoundTag playerTags, Minecraft client) {
         super(Component.empty());
         this.player = player;
         this.questionent = questionent;
-        this.stringparticle = stringparticle;
         this.playerTags = playerTags;
         this.minecraft = client;
         this.font = client.font;
@@ -65,8 +62,8 @@ public class AnswerGUI extends Screen {
     }
 
     public void removeParticle(){
-        if (this.stringparticle != null){
-            this.stringparticle.remove();
+        if (this.minecraft.player != null){
+           this.minecraft.player.displayClientMessage(Component.empty(), true);
         }
     }
 

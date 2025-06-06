@@ -16,6 +16,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
+import yesman.epicfight.api.client.animation.property.TrailInfo;
 
 import java.util.Random;
 
@@ -29,6 +30,10 @@ public class DarknessElement extends ElementBase {
             return ParticleRegister.RED_LIGHTNING.get();
         }
         return ParticleTypes.SMOKE;
+    }
+
+    public TrailInfo getTrailInfo(TrailInfo info){
+        return info;
     }
 
     public ChatFormatting getChatColor() {

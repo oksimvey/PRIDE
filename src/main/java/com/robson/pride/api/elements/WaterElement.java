@@ -13,6 +13,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
+import yesman.epicfight.api.client.animation.property.TrailInfo;
 
 import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
@@ -33,6 +34,11 @@ public class WaterElement  extends ElementBase {
     public byte getParticleAmount() {
         return 5;
     }
+
+    public TrailInfo getTrailInfo(TrailInfo info){
+        return info;
+    }
+
 
 
     public SchoolType getSchool(){

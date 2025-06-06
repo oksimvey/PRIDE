@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_17",
+  "package": "com.robson.pride.mixins",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "mixins.pride.refmap.json",
+  "client": [
+    "AnimatedMeshMixin",
+    "TrailParticleAccessor",
+    "TrailParticleProviderMixin"
+  ]
+}

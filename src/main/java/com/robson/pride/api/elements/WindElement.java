@@ -12,6 +12,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
+import yesman.epicfight.api.client.animation.property.TrailInfo;
 
 import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
@@ -32,6 +33,11 @@ public class WindElement  extends ElementBase {
     public byte getParticleAmount() {
         return 5;
     }
+
+    public TrailInfo getTrailInfo(TrailInfo info){
+        return info;
+    }
+
 
 
     public SchoolType getSchool(){

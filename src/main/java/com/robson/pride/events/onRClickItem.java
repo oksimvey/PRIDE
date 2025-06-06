@@ -2,20 +2,17 @@ package com.robson.pride.events;
 
 import com.robson.pride.api.mechanics.Parry;
 import com.robson.pride.api.utils.ItemStackUtils;
-import com.robson.pride.api.utils.MathUtils;
+import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.epicfight.styles.SheatProvider;
-import io.redspace.ironsspellbooks.registries.ParticleRegistry;
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import yesman.epicfight.client.renderer.shader.AnimationShaderInstance;
-import yesman.epicfight.client.renderer.shader.IrisAnimationShader;
+import yesman.epicfight.world.effect.EpicFightMobEffects;
 
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Mod.EventBusSubscriber
 public class onRClickItem {
@@ -30,8 +27,27 @@ public class onRClickItem {
             }
             if (ItemStackUtils.checkShield(player, InteractionHand.MAIN_HAND) || ItemStackUtils.checkShield(player, InteractionHand.OFF_HAND)) {
                 Parry.ParryWindow(player);
+                shieldEffect(player);
             }
             SheatProvider.unsheat(player);
+        }
+    }
+
+    private static boolean isBlockingWithShield(Player player){
+        return player != null && player.isUsingItem() && (ItemStackUtils.checkShield(player, InteractionHand.MAIN_HAND) || ItemStackUtils.checkShield(player, InteractionHand.OFF_HAND));
+    }
+
+    private static void shieldEffect(Player player){
+        if (player != null) {
+            TimerUtil.schedule(() -> {
+                if (isBlockingWithShield(player)) {
+                    shieldEffect(player);
+                }
+            }, 500, TimeUnit.MILLISECONDS);
+            if (player.hasEffect(EpicFightMobEffects.STUN_IMMUNITY.get())) {
+                player.removeEffect(EpicFightMobEffects.STUN_IMMUNITY.get());
+            }
+            else player.addEffect(new MobEffectInstance(EpicFightMobEffects.STUN_IMMUNITY.get(), 10));
         }
     }
 }

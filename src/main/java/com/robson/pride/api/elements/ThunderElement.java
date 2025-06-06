@@ -28,6 +28,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
+import yesman.epicfight.api.client.animation.property.TrailInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,11 @@ public class ThunderElement  extends ElementBase {
     public ParticleOptions getNormalParticleType() {
         return ParticleRegistry.ELECTRICITY_PARTICLE.get();
     }
+
+    public TrailInfo getTrailInfo(TrailInfo info){
+        return info;
+    }
+
 
     public ChatFormatting getChatColor() {
         return ChatFormatting.AQUA;

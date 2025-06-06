@@ -26,20 +26,10 @@ import java.util.concurrent.TimeUnit;
 @Mod.EventBusSubscriber
 public class ParticleUtils {
 
-    public static Particle spawnStringParticle(Entity ent, String text, StringParticle.StringParticleTypes type, int lifetime) {
+    public static void spawnStringParticle(Entity ent, String text, StringParticle.StringParticleTypes type, int lifetime) {
         if (ent != null) {
             Minecraft.getInstance().player.displayClientMessage(Component.literal(text), true);
-               Vec3 pos = new Vec3( new Random().nextFloat() - ent.getBbWidth() * ent.getBbWidth() ,  ent.getBbHeight() * 1.25,  new Random().nextFloat() - ent.getBbWidth() * ent.getBbWidth());
-                StringParticle particle = new StringParticle(Minecraft.getInstance().level, pos.x + ent.getX(), pos.y + ent.getY(), pos.z + ent.getZ(), 0, 0, type.ordinal());
-               particle.setparams(lifetime, text);
-                particle.setColor((float) ((type.getColor() >> 16) & 0xFF) / 255.0f,
-                        (float) ((type.getColor() >> 8) & 0xFF) / 255.0f,
-                        (float) (type.getColor() & 0xFF) / 255.0f);
-                Minecraft.getInstance().particleEngine.add(particle);
-                tpParticleToEnt(ent, particle);
-                return particle;
         }
-        return null;
     }
 
     public static void tpParticleToEnt(Entity ent, Particle particle){

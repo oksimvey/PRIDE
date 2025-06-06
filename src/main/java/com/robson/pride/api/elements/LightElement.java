@@ -12,10 +12,16 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
+import yesman.epicfight.api.client.animation.property.TrailInfo;
 
 import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
 public class LightElement extends ElementBase {
+
+    public TrailInfo getTrailInfo(TrailInfo info){
+        return info;
+    }
+
 
     public ParticleOptions getNormalParticleType() {
         return ParticleRegistry.WISP_PARTICLE.get();

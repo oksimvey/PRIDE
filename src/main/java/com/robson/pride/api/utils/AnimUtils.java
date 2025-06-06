@@ -1,27 +1,16 @@
 package com.robson.pride.api.utils;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.nameless.indestructible.world.capability.AdvancedCustomMobPatch;
-import com.robson.pride.item.materials.Bullet;
 import com.robson.pride.registries.ItemsRegister;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.animation.AnimationManager;
-import yesman.epicfight.api.animation.Pose;
 import yesman.epicfight.api.animation.types.*;
-import yesman.epicfight.api.client.model.AnimatedMesh;
-import yesman.epicfight.api.client.model.Mesh;
-import yesman.epicfight.api.client.model.RawMesh;
-import yesman.epicfight.client.renderer.EpicFightRenderTypes;
-import yesman.epicfight.client.renderer.patched.entity.PatchedEntityRenderer;
-import yesman.epicfight.client.renderer.shader.AnimationShaderInstance;
 import yesman.epicfight.network.server.SPPlayAnimation;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;

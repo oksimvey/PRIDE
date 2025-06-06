@@ -14,6 +14,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
+import yesman.epicfight.api.client.animation.property.TrailInfo;
 
 public abstract class ElementBase {
 
@@ -24,6 +25,8 @@ public abstract class ElementBase {
     public abstract SoundEvent getSound();
 
     public abstract byte getParticleAmount();
+
+    public abstract TrailInfo getTrailInfo(TrailInfo defaultInfo);
 
     public DamageSource createDamageSource(Entity ent){
         assert Minecraft.getInstance().level != null;

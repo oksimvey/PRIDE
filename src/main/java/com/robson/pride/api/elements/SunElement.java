@@ -15,12 +15,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
+import yesman.epicfight.api.client.animation.property.TrailInfo;
 
 import java.util.concurrent.TimeUnit;
 
 import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
-public class SunElement  extends ElementBase {
+public class SunElement extends ElementBase {
 
     public ParticleOptions getNormalParticleType() {
         return ParticleRegistry.FIRE_PARTICLE.get();
@@ -37,6 +38,24 @@ public class SunElement  extends ElementBase {
     public byte getParticleAmount() {
         return 5;
     }
+
+    public TrailInfo getTrailInfo(TrailInfo info){
+        TrailInfo.Builder builder = new TrailInfo.Builder();
+        builder.r(50);
+        builder.g(120);
+        builder.b(216);
+        builder.joint(info.joint);
+        builder.endPos(info.end);
+        builder.startPos(info.start);
+        builder.itemSkinHand(info.hand);
+        builder.fadeTime(info.fadeTime);
+        builder.time(info.startTime, info.endTime);
+        builder.type(info.particle);
+        builder.interpolations(info.interpolateCount);
+       builder.texture("epicfight:textures/particle/efmc/fire_trail.png");
+        return builder.create();
+    }
+
 
     public SchoolType getSchool(){
         return SchoolRegister.SUN.get();
