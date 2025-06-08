@@ -10,14 +10,13 @@ public class MikiriType {
 
     private static ConcurrentHashMap<Entity, List<MikiriType>> mikiriTypeMap = new ConcurrentHashMap<>();
 
-    public void onMikiri(Entity dmgent, Entity ent){
+    public void onMikiri(Entity dmgent, Entity ent) {
 
     }
 
 
-
-    public static boolean canMikiri(Entity ent, PerilousType perilousType){
-        if (ent != null && perilousType != null && mikiriTypeMap.get(ent) != null){
+    public static boolean canMikiri(Entity ent, PerilousType perilousType) {
+        if (ent != null && perilousType != null && mikiriTypeMap.get(ent) != null) {
             return mikiriTypeMap.get(ent).contains(perilousType.getMikiriType());
         }
         return false;

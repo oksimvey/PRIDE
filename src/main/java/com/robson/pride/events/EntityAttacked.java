@@ -24,7 +24,6 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 
 import java.util.concurrent.TimeUnit;
 
@@ -106,14 +105,13 @@ public class EntityAttacked {
                 if (event.getSource().getDirectEntity() instanceof Player player) {
                     if (hand == InteractionHand.MAIN_HAND) {
                         damage += AttributeModifiers.calculateModifier(player, player.getMainHandItem(), damage);
-                    }
-                    else if (hand == InteractionHand.OFF_HAND) {
+                    } else if (hand == InteractionHand.OFF_HAND) {
                         damage += AttributeModifiers.calculateModifier(player, player.getOffhandItem(), damage);
                     }
                 }
                 if (event.getSource().getDirectEntity() instanceof LivingEntity living) {
                     if (hand == InteractionHand.MAIN_HAND) {
-                        if (ParticleTracking.shouldRenderParticle(living.getMainHandItem(), living) && ItemStackUtils.getStyle(living) != PrideStyles.GUN_OFFHAND) {
+                        if (ItemStackUtils.getStyle(living) != PrideStyles.GUN_OFFHAND) {
                             ElementBase elementBase = ParticleTracking.getItemElementForImbuement(living.getMainHandItem(), living);
                             if (elementBase != null && elementBase.createDamageSource(living) != event.getSource()) {
                                 damage = elementBase.onHit(event.getEntity(), living, damage, false);
@@ -121,11 +119,9 @@ public class EntityAttacked {
                         }
                     }
                     if (hand == InteractionHand.OFF_HAND) {
-                        if (ParticleTracking.shouldRenderParticle(living.getOffhandItem(), living)) {
-                            ElementBase elementBase = ParticleTracking.getItemElementForImbuement(living.getOffhandItem(), living);
-                            if (elementBase != null && elementBase.createDamageSource(living) != event.getSource()) {
-                                damage = elementBase.onHit(event.getEntity(), living, damage, false);
-                            }
+                        ElementBase elementBase = ParticleTracking.getItemElementForImbuement(living.getOffhandItem(), living);
+                        if (elementBase != null && elementBase.createDamageSource(living) != event.getSource()) {
+                            damage = elementBase.onHit(event.getEntity(), living, damage, false);
                         }
                     }
                 }

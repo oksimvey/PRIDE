@@ -1,16 +1,16 @@
 package com.robson.pride.api.skillcore;
+
 import com.robson.pride.api.mechanics.PerilousAttack;
-import com.robson.pride.api.utils.*;
-import net.minecraft.world.entity.Entity;
+import com.robson.pride.api.utils.ManaUtils;
+import com.robson.pride.api.utils.StaminaUtils;
+import com.robson.pride.api.utils.TargetUtil;
+import com.robson.pride.api.utils.TimerUtil;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-import java.lang.annotation.Target;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.robson.pride.api.mechanics.PerilousAttack.perilousParticle;
-import static com.robson.pride.api.mechanics.PerilousAttack.playPerilous;
 import static com.robson.pride.api.utils.ProgressionUtils.haveReqs;
 
 public abstract class WeaponSkillBase {
@@ -36,7 +36,7 @@ public abstract class WeaponSkillBase {
         return this.SkillRarity;
     }
 
-    public String getSkillElement(){
+    public String getSkillElement() {
         return this.SkillElement;
     }
 
@@ -54,12 +54,12 @@ public abstract class WeaponSkillBase {
         }
     }
 
-    public void onExecution(LivingEntity ent, int currentAnim){
-        if (currentAnim == 0){
+    public void onExecution(LivingEntity ent, int currentAnim) {
+        if (currentAnim == 0) {
             SkillCore.performingSkillEntities.add(ent);
             this.motions = defineMotions(ent);
             ent.getPersistentData().putString("Perilous", this.perilousType);
-            if (TargetUtil.getTarget(ent) instanceof Player player){
+            if (TargetUtil.getTarget(ent) instanceof Player player) {
                 PerilousAttack.playPerilous(player);
             }
         }
@@ -67,13 +67,13 @@ public abstract class WeaponSkillBase {
             SkillAnimation animation = this.motions.get(currentAnim);
             int duration = animation.getDuration(ent);
             animation.play(ent);
-            TimerUtil.schedule(()-> onExecution(ent, currentAnim + 1), duration, TimeUnit.MILLISECONDS);
-        }
-        else {
+            TimerUtil.schedule(() -> onExecution(ent, currentAnim + 1), duration, TimeUnit.MILLISECONDS);
+        } else {
             SkillCore.performingSkillEntities.remove(ent);
-             if (ent != null){
-                 ent.getPersistentData().remove("Perilous");
-             }
-        };
+            if (ent != null) {
+                ent.getPersistentData().remove("Perilous");
+            }
+        }
+        ;
     }
 }

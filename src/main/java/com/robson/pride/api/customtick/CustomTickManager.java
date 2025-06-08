@@ -28,7 +28,7 @@ public class CustomTickManager {
 
     public static void startTick(Player player) {
         stopTick(player);
-       playerMusicManagerThread.put(player, new PrideMusicManager((byte) 0, Minecraft.getInstance().getMusicManager()));
+        playerMusicManagerThread.put(player, new PrideMusicManager((byte) 0, Minecraft.getInstance().getMusicManager()));
         loopTick(player);
     }
 
@@ -40,23 +40,22 @@ public class CustomTickManager {
         if (playerMusicManagerThread.get(player) != null) {
             loopTick(player);
             CooldownManager.timeCooldowns(player);
-            if (player.tickCount % 200 == 0 && !Minecraft.getInstance().isPaused()){
-                SpawnTick.trySpawn(player);
-            }
-            if (player.tickCount % 10 == 0 && !Minecraft.getInstance().isPaused()) {
+            if (!Minecraft.getInstance().isPaused()) {
+                if (player.tickCount % 10 == 0) {
                     SheatProvider.provideSheat(player);
                     MusicCore.musicCore(player);
                     playerTargetingEntitiesSet(player);
                     DynamicCam.dynamicCamTick(player);
                     AutoBattleMode.autoSwitch(EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class));
-                    if (targeting_entities.get(player) != null){
+                    if (targeting_entities.get(player) != null) {
                         playerTargetingEntitiesCheck(player);
+                    }
                 }
             }
         }
     }
 
-    public static void playerTargetingEntitiesSet(Player player){
+    public static void playerTargetingEntitiesSet(Player player) {
         for (Entity ent : player.level().getEntities(player, MathUtils.createAABBAroundEnt(player, 50))) {
             if (ent != null && TargetUtil.getTarget(ent) == player) {
                 List<Entity> targeting = targeting_entities.getOrDefault(player, new ArrayList<>());
@@ -66,7 +65,7 @@ public class CustomTickManager {
         }
     }
 
-    public static void playerTargetingEntitiesCheck(Player player){
+    public static void playerTargetingEntitiesCheck(Player player) {
         targeting_entities.get(player).removeIf(ent -> ent == null || !ent.isAlive() || TargetUtil.getTarget(ent) != player);
     }
 

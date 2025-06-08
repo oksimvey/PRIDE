@@ -10,16 +10,16 @@ public class BiomeSettings {
 
     private List<EntityTypeSpawnSetting> entitiesSpawnSettings;
 
-    public BiomeSettings(Music music, List<EntityTypeSpawnSetting> entitiesSpawnSettings){
+    public BiomeSettings(Music music, List<EntityTypeSpawnSetting> entitiesSpawnSettings) {
         this.biomeMusic = music;
         this.entitiesSpawnSettings = entitiesSpawnSettings;
     }
 
-    public Music getBiomeMusic(){
+    public Music getBiomeMusic() {
         return this.biomeMusic;
     }
 
-    public List<EntityTypeSpawnSetting> getEntitiesSpawnSettings(){
+    public List<EntityTypeSpawnSetting> getEntitiesSpawnSettings() {
         return this.entitiesSpawnSettings;
     }
 }

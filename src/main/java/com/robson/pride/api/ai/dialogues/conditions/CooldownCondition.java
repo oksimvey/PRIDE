@@ -8,7 +8,7 @@ public class CooldownCondition extends DialogueConditionBase {
 
     @Override
     public boolean isTrue(Entity ent, Entity target, CompoundTag predicate) {
-        if (predicate.contains("cooldown")){
+        if (predicate.contains("cooldown")) {
             return ent.tickCount % predicate.getInt("cooldown") == 0;
         }
         return false;

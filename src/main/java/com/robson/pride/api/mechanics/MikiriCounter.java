@@ -88,8 +88,8 @@ public class MikiriCounter {
         if (target != null) {
             Shooter shooter = Shooter.summonShooter(ent, target, false);
             TimerUtil.schedule(() -> ProjectileUtil.shootProjectileFromShooter(shooter, projectile, ent, 3, false), 450, TimeUnit.MILLISECONDS);
-        }
-        else TimerUtil.schedule(() -> ProjectileUtil.shootProjectileFromEnt(projectile, ent, 3), 450, TimeUnit.MILLISECONDS);
+        } else
+            TimerUtil.schedule(() -> ProjectileUtil.shootProjectileFromEnt(projectile, ent, 3), 450, TimeUnit.MILLISECONDS);
         AnimUtils.playAnim(ent, AnimationsRegister.PROJECTILE_COUNTER, 0);
     }
 
@@ -120,11 +120,11 @@ public class MikiriCounter {
         }
     }
 
-    public static boolean canMobMikiri(Entity ent, Entity ddmgent, String periloustype){
+    public static boolean canMobMikiri(Entity ent, Entity ddmgent, String periloustype) {
         if (ent != null && ddmgent != null) {
-            if (ent instanceof Player){
-                return switch(periloustype){
-                    case "Dodge"-> ent.getPersistentData().getBoolean("mikiri_dodge");
+            if (ent instanceof Player) {
+                return switch (periloustype) {
+                    case "Dodge" -> ent.getPersistentData().getBoolean("mikiri_dodge");
                     case "Jump" -> ent.getPersistentData().getBoolean("mikiri_sweep");
                     default -> false;
                 };

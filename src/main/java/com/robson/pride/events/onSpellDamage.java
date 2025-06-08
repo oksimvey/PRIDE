@@ -1,22 +1,17 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.elements.ElementBase;
-import com.robson.pride.api.mechanics.ElementalPassives;
 import com.robson.pride.api.mechanics.MikiriCounter;
 import com.robson.pride.api.utils.ProgressionUtils;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.ElementsRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
-import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.util.ArrayList;
 
 @Mod.EventBusSubscriber
 public class onSpellDamage {
@@ -33,9 +28,9 @@ public class onSpellDamage {
                 if (MikiriCounter.canMobMikiri(ent, event.getSpellDamageSource().getEntity(), "Dodge")) {
                     MikiriCounter.onSpellMikiri(event, spell);
                 }
-                if(ent instanceof LivingEntity living){
-                    if(living.hasEffect(EffectRegister.DARKNESS_WRATH.get())){
-                        ElementalPassives.darknessSpellDmg(ent, event);
+                if (ent instanceof LivingEntity living) {
+                    if (living.hasEffect(EffectRegister.DARKNESS_WRATH.get())) {
+
                     }
                 }
             }
@@ -44,7 +39,7 @@ public class onSpellDamage {
                     event.setCanceled(true);
                 }
             }
-            for (ElementBase element : ElementsRegister.elements.values()){
+            for (ElementBase element : ElementsRegister.elements.values()) {
                 if (element.getSchool() == spell.getSchoolType()) {
                     event.setAmount(element.onHit(ent, event.getSpellDamageSource().getEntity(), event.getOriginalAmount(), true));
                 }

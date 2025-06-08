@@ -10,7 +10,6 @@ import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import com.robson.pride.registries.*;
-import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -109,15 +108,15 @@ public class Pride {
         }
     }
 
-        private void setupCommon(FMLCommonSetupEvent event) {
-            PacketRegister.register();
-            event.enqueueWork(()-> {
+    private void setupCommon(FMLCommonSetupEvent event) {
+        PacketRegister.register();
+        event.enqueueWork(() -> {
             WeaponSkillRegister.registerWeaponArts();
             DialogueConditionsRegister.register();
             ActionsRegister.register();
             StructureRegister.register();
             ElementsRegister.register();
-                BiomeSettingsManager.register();
+            BiomeSettingsManager.register();
         });
     }
 

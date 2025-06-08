@@ -11,12 +11,9 @@ import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.KeyRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.client.events.engine.ControllEngine;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,7 +21,7 @@ public class OnLeftClick {
 
     public static void onLClick(Player player) {
         Entity target = TargetUtil.getTarget(player);
-        TimerUtil.schedule(()-> SheatProvider.unsheat(player), 250, TimeUnit.MILLISECONDS);
+        TimerUtil.schedule(() -> SheatProvider.unsheat(player), 250, TimeUnit.MILLISECONDS);
         if (target != null) {
             onTarget(player, target);
         }
@@ -42,7 +39,7 @@ public class OnLeftClick {
                                         AnimUtils.preventAttack(player, 1000);
                                         TimerUtil.schedule(() -> {
                                             if (ControllEngine.isKeyDown(KeyRegister.keyActionSpecial)) {
-                                                SkillCore.onSkillExecute(player);
+
                                             }
                                         }, 50, TimeUnit.MILLISECONDS);
                                     }
@@ -58,7 +55,7 @@ public class OnLeftClick {
     public static void onTarget(Player ent, Entity target) {
         if (target != null) {
             if (Stealth.canBackStab(ent, target)) {
-                target.getPersistentData().putBoolean("isVulnerable", true);
+
             }
         }
         TimerUtil.schedule(() -> {

@@ -12,19 +12,19 @@ import static com.robson.pride.api.biomesettings.BiomeSettingsManager.biomeSetti
 public class MusicCore {
 
     public static void musicCore(Player player) {
-       if (player != null){
-           PrideMusicManager prideMusicManager = PrideMusicManager.playerMusicManagerThread.get(player);
-           MusicManager musicManager = prideMusicManager.getMusicManager();
-           Music music = deserializeMobMusic(player, prideMusicManager);
-           if (music == null){
-               musicManager.stopPlaying();
-               return;
-           }
-           if (!musicManager.isPlayingMusic(music)){
-                   musicManager.stopPlaying();
-                   musicManager.startPlaying(music);
-           }
-       }
+        if (player != null) {
+            PrideMusicManager prideMusicManager = PrideMusicManager.playerMusicManagerThread.get(player);
+            MusicManager musicManager = prideMusicManager.getMusicManager();
+            Music music = deserializeMobMusic(player, prideMusicManager);
+            if (music == null) {
+                musicManager.stopPlaying();
+                return;
+            }
+            if (!musicManager.isPlayingMusic(music)) {
+                musicManager.stopPlaying();
+                musicManager.startPlaying(music);
+            }
+        }
     }
 
     public static Music deserializeMobMusic(Player player, PrideMusicManager musicManager) {
@@ -42,10 +42,10 @@ public class MusicCore {
         return deserializeBiomeMusic(player);
     }
 
-    public static Music deserializeBiomeMusic(Player player){
-        if (player != null){
+    public static Music deserializeBiomeMusic(Player player) {
+        if (player != null) {
             String biome = player.level().getBiome(player.blockPosition()).unwrapKey().get().location().toString();
-            if (biomeSettingsMap.get(biome) != null){
+            if (biomeSettingsMap.get(biome) != null) {
                 return biomeSettingsMap.get(biome).getBiomeMusic();
             }
         }

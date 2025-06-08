@@ -12,21 +12,21 @@ public class EntityTypeSpawnSetting {
 
     private boolean rain;
 
-    public EntityTypeSpawnSetting(EntityType type, byte maxEntities, byte weight){
-       this.entityType = type;
-       this.maxEntities = maxEntities;
-       this.weight = weight;
+    public EntityTypeSpawnSetting(EntityType type, byte maxEntities, byte weight) {
+        this.entityType = type;
+        this.maxEntities = maxEntities;
+        this.weight = weight;
     }
 
-    public EntityType getEntityType(){
+    public EntityType getEntityType() {
         return this.entityType;
     }
 
-    public byte getMaxEntities(){
+    public byte getMaxEntities() {
         return this.maxEntities;
     }
 
-    public byte getWeight(){
+    public byte getWeight() {
         return this.weight;
     }
 

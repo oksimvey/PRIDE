@@ -9,14 +9,15 @@ import net.minecraftforge.fml.common.Mod;
 public class EffectEvents {
 
     @SubscribeEvent
-    public static void onEffectStart(MobEffectEvent.Added event){
-        if (event.getEntity() != null && event.getEffectInstance().getEffect() instanceof PrideEffectBase prideEffectBase){
+    public static void onEffectStart(MobEffectEvent.Added event) {
+        if (event.getEntity() != null && event.getEffectInstance().getEffect() instanceof PrideEffectBase prideEffectBase) {
             prideEffectBase.onEffectStart(event.getEntity());
         }
     }
+
     @SubscribeEvent
-    public static void onEffectEnd(MobEffectEvent.Remove event){
-        if (event.getEntity() != null && event.getEffectInstance() != null  && event.getEffectInstance().getEffect() instanceof PrideEffectBase prideEffectBase){
+    public static void onEffectEnd(MobEffectEvent.Remove event) {
+        if (event.getEntity() != null && event.getEffectInstance() != null && event.getEffectInstance().getEffect() instanceof PrideEffectBase prideEffectBase) {
             prideEffectBase.onEffectEnd(event.getEntity());
         }
     }

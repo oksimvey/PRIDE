@@ -1,22 +1,27 @@
 package com.robson.pride.api.elements;
 
-import com.robson.pride.api.utils.AttributeUtils;
-import com.robson.pride.api.utils.HealthUtils;
-import com.robson.pride.api.utils.MathUtils;
+import com.robson.pride.api.client.GlintRenderTypes;
+import com.robson.pride.api.client.ItemRenderingParams;
+import com.robson.pride.api.skillcore.SkillCore;
+import com.robson.pride.api.utils.*;
+import com.robson.pride.particles.StringParticle;
 import com.robson.pride.registries.SchoolRegister;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
-import yesman.epicfight.api.client.animation.property.TrailInfo;
+import net.minecraft.world.entity.LivingEntity;
+import yesman.epicfight.gameasset.EpicFightSounds;
+import yesman.epicfight.particle.EpicFightParticles;
 
+import static com.robson.pride.api.skillcore.SkillCore.stackablePassiveBase;
 import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
-public class BloodElement  extends ElementBase {
+public class BloodElement extends ElementBase {
 
     public ParticleOptions getNormalParticleType() {
         return ParticleRegistry.BLOOD_PARTICLE.get();
@@ -34,17 +39,24 @@ public class BloodElement  extends ElementBase {
         return 5;
     }
 
-    public TrailInfo getTrailInfo(TrailInfo info){
-        return info;
+
+    public ItemRenderingParams getItemRenderingParams() {
+        return new ItemRenderingParams(50, 150, 250, new ResourceLocation("epicfight:textures/particle/efmc/fire_trail.png"),
+                GlintRenderTypes.getFireGlintDirect(), GlintRenderTypes.getFreezeEntityGlintDirect());
     }
 
 
-    public SchoolType getSchool(){
+    public SchoolType getSchool() {
         return SchoolRegister.BLOOD.get();
     }
 
     public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
         this.playSound(ent, 1);
+        if (stackablePassiveBase(ent, this.calculateFinalDamage(dmgent, ent, amount), "bleed_stacks", StringParticle.StringParticleTypes.RED) && ent instanceof LivingEntity liv) {
+            PlaySoundUtils.playSound(ent, EpicFightSounds.EVISCERATE.get(), 1, 1);
+            ParticleUtils.spawnParticleRelativeToEntity(EpicFightParticles.BLOOD.get(), ent, 0, ent.getBbHeight()/2, 0, 10, 0, 0, 0, 0.1);
+            HealthUtils.hurtEntity(ent, liv.getMaxHealth() / 10, dmgent.damageSources().generic());
+        }
         return this.calculateFinalDamage(dmgent, ent, amount);
     }
 

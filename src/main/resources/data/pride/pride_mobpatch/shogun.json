@@ -33,8 +33,12 @@
     "death": "epicfight:biped/living/death",
     "mount": "epicfight:biped/living/mount"
   },
-  "allies": ["pride:ronin"],
-  "textures": ["pride:textures/entities/japanese/isshin.png"],
+  "allies": [
+    "pride:ronin"
+  ],
+  "textures": [
+    "pride:textures/entities/japanese/isshin.png"
+  ],
   "humanoid_weapon_motions": [
     {
       "weapon_categories": [
@@ -85,7 +89,9 @@
   },
   "equipment": [
     {
-      "variations": [0],
+      "variations": [
+        0
+      ],
       "slot": "mainhand",
       "item": "pride:hoshigiri"
     }

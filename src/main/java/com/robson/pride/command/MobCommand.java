@@ -19,7 +19,7 @@ public class MobCommand implements Command<CommandSourceStack> {
         return Commands.literal("mob")
                 .then(Commands.argument("mob_action", StringArgumentType.word()).suggests(((commandContext, suggestionsBuilder) -> {
 
-                                suggestionsBuilder.suggest("deserialize_path");
+                            suggestionsBuilder.suggest("deserialize_path");
 
                             return suggestionsBuilder.buildFuture();
                         }))
@@ -29,8 +29,8 @@ public class MobCommand implements Command<CommandSourceStack> {
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         Entity ent = EntityArgument.getEntity(context, "living_entity");
-        String mob_action  = StringArgumentType.getString(context, "mob_action");
-        switch (mob_action){
+        String mob_action = StringArgumentType.getString(context, "mob_action");
+        switch (mob_action) {
             case "deserialize_path" -> {
                 if (ent instanceof PrideMobBase prideMobBase) prideMobBase.deserializePassiveSkills();
             }

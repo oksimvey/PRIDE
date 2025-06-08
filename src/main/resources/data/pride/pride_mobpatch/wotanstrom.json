@@ -33,7 +33,9 @@
     "death": "epicfight:biped/living/death",
     "mount": "epicfight:biped/living/mount"
   },
-  "textures": ["pride:textures/special/empty.png"],
+  "textures": [
+    "pride:textures/special/empty.png"
+  ],
   "humanoid_weapon_motions": [
     {
       "weapon_categories": [
@@ -84,27 +86,37 @@
   },
   "equipment": [
     {
-      "variations": [0],
+      "variations": [
+        0
+      ],
       "slot": "mainhand",
       "item": "pride:donnerfaust"
     },
     {
-      "variations": [0],
+      "variations": [
+        0
+      ],
       "slot": "head",
       "item": "epicpaladins:sculk_helmet"
     },
     {
-      "variations": [0],
+      "variations": [
+        0
+      ],
       "slot": "chest",
       "item": "epicpaladins:sculk_chestplate"
     },
     {
-      "variations": [0],
+      "variations": [
+        0
+      ],
       "slot": "leg",
       "item": "epicpaladins:sculk_leggings"
     },
     {
-      "variations": [0],
+      "variations": [
+        0
+      ],
       "slot": "feet",
       "item": "epicpaladins:sculk_boots"
     }
@@ -157,10 +169,21 @@
           "behaviors": [
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {
+                  "predicate": "within_eye_height"
+                },
+                {
+                  "predicate": "within_distance",
+                  "min": 0.0,
+                  "max": 50.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
               ],
               "animation": "wom:biped/combat/solar_auto_1"
-
             },
             {
               "conditions": [
@@ -182,14 +205,37 @@
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {
+                  "predicate": "within_eye_height"
+                },
+                {
+                  "predicate": "within_distance",
+                  "min": 0.0,
+                  "max": 50.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
               ],
               "animation": "wom:biped/combat/solar_auto_3"
-
             },
             {
               "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {
+                  "predicate": "within_eye_height"
+                },
+                {
+                  "predicate": "within_distance",
+                  "min": 0.0,
+                  "max": 50.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
               ],
               "animation": "wom:biped/combat/solar_auto_4"
             }

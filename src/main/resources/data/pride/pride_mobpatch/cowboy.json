@@ -32,16 +32,24 @@
   },
   "humanoid_weapon_motions": [
     {
-      "weapon_categories": ["axe", "hoe", "pickaxe", "shovel", "sword"],
-      "style":"common",
+      "weapon_categories": [
+        "axe",
+        "hoe",
+        "pickaxe",
+        "shovel",
+        "sword"
+      ],
+      "style": "common",
       "livingmotions": {
         "chase": "epicfight:biped/living/hold_longsword",
         "walk": "epicfight:biped/living/walk"
       }
     },
     {
-      "weapon_categories": ["longsword"],
-      "style":"common",
+      "weapon_categories": [
+        "longsword"
+      ],
+      "style": "common",
       "livingmotions": {
         "chase": "epicfight:biped/living/hold_longsword",
         "walk": "epicfight:biped/living/hold_longsword"
@@ -50,13 +58,17 @@
   ],
   "custom_guard_motion": [
     {
-      "weapon_categories": ["longsword","tachi","sword"],
-      "style":"common",
+      "weapon_categories": [
+        "longsword",
+        "tachi",
+        "sword"
+      ],
+      "style": "common",
       "guard": "indestructible:guard/guard_longsword",
       "stamina_cost_multiply": 3,
-      "can_block_projectile" : false,
+      "can_block_projectile": false,
       "parry_cost_multiply": 0.5,
-      "parry_animation":[]
+      "parry_animation": []
     }
   ],
   "stun_animations": {
@@ -66,13 +78,21 @@
     "fall": "epicfight:biped/living/landing",
     "neutralize": "epicfight:biped/skill/guard_break2"
   },
-  "stun_command_list":[
-    {"command":"effect give @s pride:guard_break 2 1 true", "stun_type": "neutralize", "execute_at_target":false}
+  "stun_command_list": [
+    {
+      "command": "effect give @s pride:guard_break 2 1 true",
+      "stun_type": "neutralize",
+      "execute_at_target": false
+    }
   ],
-  "textures": ["pride:textures/entities/cowboy/cowboy1.png"],
+  "textures": [
+    "pride:textures/entities/cowboy/cowboy1.png"
+  ],
   "equipment": [
     {
-      "variations": [0],
+      "variations": [
+        0
+      ],
       "slot": "mainhand",
       "item": "pride:cowboy_revolver"
     }

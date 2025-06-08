@@ -23,13 +23,16 @@ public class AnswerGUI extends Screen {
 
     private final CompoundTag playerTags;
 
-    public AnswerGUI(Player player, Entity questionent, CompoundTag playerTags, Minecraft client) {
+    private Particle stringParticle;
+
+    public AnswerGUI(Player player, Entity questionent, CompoundTag playerTags, Minecraft client, Particle stringparticle) {
         super(Component.empty());
         this.player = player;
         this.questionent = questionent;
         this.playerTags = playerTags;
         this.minecraft = client;
         this.font = client.font;
+        this.stringParticle = stringparticle;
     }
 
     @Override
@@ -61,13 +64,13 @@ public class AnswerGUI extends Screen {
         }
     }
 
-    public void removeParticle(){
-        if (this.minecraft.player != null){
-           this.minecraft.player.displayClientMessage(Component.empty(), true);
+    public void removeParticle() {
+        if (this.stringParticle != null) {
+            this.stringParticle.remove();
         }
     }
 
-    public void onAnswer(){
+    public void onAnswer() {
         isAnswering.remove(player);
         player.getPersistentData().remove("pride_true_answer");
         player.getPersistentData().remove("pride_false_answer");

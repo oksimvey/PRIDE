@@ -1,14 +1,11 @@
 package com.robson.pride.api.utils;
 
 import com.robson.pride.particles.StringParticle;
-import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,16 +23,25 @@ import java.util.concurrent.TimeUnit;
 @Mod.EventBusSubscriber
 public class ParticleUtils {
 
-    public static void spawnStringParticle(Entity ent, String text, StringParticle.StringParticleTypes type, int lifetime) {
+    public static Particle spawnStringParticle(Entity ent, String text, StringParticle.StringParticleTypes type, int lifetime) {
         if (ent != null) {
-            Minecraft.getInstance().player.displayClientMessage(Component.literal(text), true);
+            Vec3 pos = new Vec3(new Random().nextFloat() - ent.getBbWidth() * ent.getBbWidth(), ent.getBbHeight() * 1.25, new Random().nextFloat() - ent.getBbWidth() * ent.getBbWidth());
+            StringParticle particle = new StringParticle(Minecraft.getInstance().level, pos.x + ent.getX(), pos.y + ent.getY(), pos.z + ent.getZ(), 0, 0, type.ordinal());
+            particle.setparams(lifetime, text);
+            particle.setColor((float) ((type.getColor() >> 16) & 0xFF) / 255.0f,
+                    (float) ((type.getColor() >> 8) & 0xFF) / 255.0f,
+                    (float) (type.getColor() & 0xFF) / 255.0f);
+            Minecraft.getInstance().particleEngine.add(particle);
+            tpParticleToEnt(ent, particle);
+            return particle;
         }
+        return null;
     }
 
-    public static void tpParticleToEnt(Entity ent, Particle particle){
-        if (ent != null && particle != null){
+    public static void tpParticleToEnt(Entity ent, Particle particle) {
+        if (ent != null && particle != null) {
             particle.setPos(ent.getX(), ent.getY() + ent.getBbHeight() * 1.25, ent.getZ());
-            TimerUtil.schedule(()-> tpParticleToEnt(ent, particle), 50, TimeUnit.MILLISECONDS);
+            TimerUtil.schedule(() -> tpParticleToEnt(ent, particle), 50, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -53,9 +59,9 @@ public class ParticleUtils {
         }
     }
 
-    public static Particle spawnAuraParticle(ParticleOptions particletype, double x, double y, double z, double deltax, double deltay, double deltaz){
-           ParticleEngine particleEngine = Minecraft.getInstance().particleEngine;
-            return particleEngine.createParticle(particletype, x, y, z, deltax, deltay, deltaz);
+    public static Particle spawnAuraParticle(ParticleOptions particletype, double x, double y, double z, double deltax, double deltay, double deltaz) {
+        ParticleEngine particleEngine = Minecraft.getInstance().particleEngine;
+        return particleEngine.createParticle(particletype, x, y, z, deltax, deltay, deltaz);
 
     }
 
@@ -71,8 +77,7 @@ public class ParticleUtils {
                             if (vec != null) {
                                 Vec3 delta = living.getDeltaMovement();
                                 renderer.level().addParticle(particle, vec.x, vec.y, vec.z, ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.x, (double) (((new Random()).nextFloat() - 0.5F) * 0.02F), ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.z);
-                            }
-                            else break;
+                            } else break;
                         }
                     }
                 }

@@ -8,7 +8,6 @@ import com.robson.pride.api.utils.ParticleUtils;
 import com.robson.pride.api.utils.TimerUtil;
 import com.yukami.epicironcompat.animation.Animation;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.*;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import yesman.epicfight.api.utils.math.Vec3f;
@@ -33,10 +32,10 @@ public class ImbuementEffect extends PrideEffectBase {
         this.active = false;
     }
 
-    public void onEffectStart(LivingEntity ent){
+    public void onEffectStart(LivingEntity ent) {
         AnimUtils.playAnim(ent, Animation.CHANTING_TWO_HAND_BACK, 0.05f);
-        TimerUtil.schedule(()-> {
-            if (ent != null){
+        TimerUtil.schedule(() -> {
+            if (ent != null) {
                 this.active = true;
                 AnimUtils.playAnim(ent, Animation.CASTING_TWO_HAND_BACK, 0.15f);
                 ElementalUtils.playSoundByElement(this.element, ent, 1);
@@ -44,7 +43,7 @@ public class ImbuementEffect extends PrideEffectBase {
         }, 1500, TimeUnit.MILLISECONDS);
     }
 
-    public void onEffectEnd(LivingEntity ent){
+    public void onEffectEnd(LivingEntity ent) {
         ElementalUtils.playSoundByElement(this.element, ent, 1);
         AnimUtils.playAnim(ent, Animation.CASTING_TWO_HAND_TOP, 0.1f);
     }
@@ -52,12 +51,12 @@ public class ImbuementEffect extends PrideEffectBase {
     @Override
     public void prideClientTick(LivingEntity ent) {
         if (this.active && elements.containsKey(element) && ent.tickCount % ((int) (10 / ent.getBbHeight())) == 0) {
-                if (!element.equals("Sun") || ParticleTracking.shouldRenderSunParticle(ent)) {
-                    ElementBase element = elements.get(this.element);
-                    Vec3f vec3f = ParticleTracking.getAABBForImbuement(null, ent);
-                    ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR, element.getNormalParticleType(), vec3f, element.getParticleAmount());
-                    ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolL, element.getNormalParticleType(), vec3f, element.getParticleAmount());
-                }
+            if (!element.equals("Sun") || ParticleTracking.shouldRenderSunParticle(ent)) {
+                ElementBase element = elements.get(this.element);
+                Vec3f vec3f = ParticleTracking.getAABBForImbuement(null, ent);
+                ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR, element.getNormalParticleType(), vec3f, element.getParticleAmount());
+                ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolL, element.getNormalParticleType(), vec3f, element.getParticleAmount());
             }
         }
+    }
 }

@@ -1,7 +1,6 @@
 package com.robson.pride.command;
 
 import com.mojang.brigadier.Command;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -20,12 +19,12 @@ public class PerilousCommand implements Command<CommandSourceStack> {
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
         return Commands.literal("perilous")
                 .then(Commands.argument("periloustype", StringArgumentType.word()).suggests(((commandContext, suggestionsBuilder) -> {
-                    for (String periloustypes : PerilousAttack.periloustypes) {
-                        suggestionsBuilder.suggest(periloustypes);
-                    }
+                            for (String periloustypes : PerilousAttack.periloustypes) {
+                                suggestionsBuilder.suggest(periloustypes);
+                            }
                             return suggestionsBuilder.buildFuture();
                         }))
-                                .executes(COMMAND));
+                        .executes(COMMAND));
     }
 
     @Override
@@ -33,7 +32,7 @@ public class PerilousCommand implements Command<CommandSourceStack> {
         Entity ent = EntityArgument.getEntity(context, "living_entity");
         String periloustype = StringArgumentType.getString(context, "periloustype");
         StaticAnimation currentmotion = AnimUtils.getCurrentAnimation(ent);
-        if (currentmotion != null){
+        if (currentmotion != null) {
             AnimUtils.addPerilousToAnim(ent, currentmotion, periloustype);
         }
         return 1;

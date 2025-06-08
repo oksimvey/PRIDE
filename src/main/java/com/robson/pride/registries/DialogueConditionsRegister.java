@@ -10,7 +10,7 @@ public class DialogueConditionsRegister {
 
     public static Map<String, DialogueConditionBase> dialogueConditions = new HashMap<>();
 
-    public static void register(){
+    public static void register() {
         dialogueConditions.put("isRaining", new IsRainingCondition());
         dialogueConditions.put("entityType", new EntityTypeCondition());
         dialogueConditions.put("time", new TimeCondition());

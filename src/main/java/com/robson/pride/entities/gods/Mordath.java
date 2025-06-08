@@ -1,7 +1,6 @@
 package com.robson.pride.entities.gods;
 
 import com.robson.pride.api.entity.PrideMobBase;
-import com.robson.pride.entities.japanese.mob.ronin.Ronin;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;

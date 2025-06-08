@@ -59,13 +59,13 @@ public class Guard {
             if (ent.getPersistentData().getBoolean("isParrying")) {
                 Parry.onParry(ent, ddmgent);
                 ProgressionUtils.addXp(player, "Endurance", (int) event.getAmount() * 2);
-                if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)){
+                if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)) {
                     onAnyBlock(player, event, true);
                 }
             } else {
                 onGuard(ent, ddmgent, event);
                 ProgressionUtils.addXp(player, "Endurance", (int) event.getAmount());
-                if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)){
+                if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)) {
                     onAnyBlock(player, event, false);
                 }
             }

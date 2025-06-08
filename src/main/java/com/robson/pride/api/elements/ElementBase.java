@@ -1,5 +1,6 @@
 package com.robson.pride.api.elements;
 
+import com.robson.pride.api.client.ItemRenderingParams;
 import com.robson.pride.api.utils.HealthUtils;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import net.minecraft.ChatFormatting;
@@ -14,7 +15,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
-import yesman.epicfight.api.client.animation.property.TrailInfo;
 
 public abstract class ElementBase {
 
@@ -26,9 +26,9 @@ public abstract class ElementBase {
 
     public abstract byte getParticleAmount();
 
-    public abstract TrailInfo getTrailInfo(TrailInfo defaultInfo);
+    public abstract ItemRenderingParams getItemRenderingParams();
 
-    public DamageSource createDamageSource(Entity ent){
+    public DamageSource createDamageSource(Entity ent) {
         assert Minecraft.getInstance().level != null;
         Holder<DamageType> damageTypeHolder = Minecraft.getInstance().level.registryAccess()
                 .registryOrThrow(Registries.DAMAGE_TYPE)
@@ -36,12 +36,11 @@ public abstract class ElementBase {
         return ent != null ? new DamageSource(damageTypeHolder, ent) : new DamageSource(damageTypeHolder);
     }
 
-    public void damageEntity(Entity ent, Entity dmgent, float amount, boolean blockable, boolean spellSource){
+    public void damageEntity(Entity ent, Entity dmgent, float amount, boolean blockable, boolean spellSource) {
         amount = onHit(ent, dmgent, amount, spellSource);
         if (blockable) {
             HealthUtils.dealBlockableDmg(dmgent, ent, amount);
-        }
-        else {
+        } else {
             HealthUtils.hurtEntity(ent, amount, this.createDamageSource(dmgent));
         }
     }
@@ -52,11 +51,11 @@ public abstract class ElementBase {
 
     public abstract SchoolType getSchool();
 
-    public void playSound(Entity ent, float volume){
+    public void playSound(Entity ent, float volume) {
         ClientLevel level = Minecraft.getInstance().level;
         LocalPlayer player = Minecraft.getInstance().player;
         if (level != null) {
-           level.playSound(player, ent, this.getSound(), SoundSource.NEUTRAL, volume, 1);
+            level.playSound(player, ent, this.getSound(), SoundSource.NEUTRAL, volume, 1);
         }
     }
 }

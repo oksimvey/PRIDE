@@ -26,11 +26,11 @@ public class DialogueCommand implements Command<CommandSourceStack> {
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
         return Commands.literal("dialogue")
                 .then(Commands.argument("delay", IntegerArgumentType.integer())
-                .then(Commands.argument("dialogue",StringArgumentType.string())
-                        .then(Commands.argument("duration", IntegerArgumentType.integer())
-                        .then(Commands.argument("sound", StringArgumentType.string())
-                        .then(Commands.argument("volume", FloatArgumentType.floatArg())
-                                .executes(COMMAND))))));
+                        .then(Commands.argument("dialogue", StringArgumentType.string())
+                                .then(Commands.argument("duration", IntegerArgumentType.integer())
+                                        .then(Commands.argument("sound", StringArgumentType.string())
+                                                .then(Commands.argument("volume", FloatArgumentType.floatArg())
+                                                        .executes(COMMAND))))));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class DialogueCommand implements Command<CommandSourceStack> {
         int duration = IntegerArgumentType.getInteger(context, "duration");
         String sound = StringArgumentType.getString(context, "sound");
         float volume = FloatArgumentType.getFloat(context, "volume");
-        TimerUtil.schedule(()->{
+        TimerUtil.schedule(() -> {
             ListTag dialoguetags = new ListTag();
             CompoundTag dialogue1 = new CompoundTag();
             dialogue1.putString("subtitle", dialogue);

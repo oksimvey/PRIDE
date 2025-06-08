@@ -17,10 +17,10 @@ public class SpellUtils {
         }
     }
 
-    public static void castMikiriSpell(LivingEntity ent, AbstractSpell spell, int spelllvl){
-        if (ent != null){
+    public static void castMikiriSpell(LivingEntity ent, AbstractSpell spell, int spelllvl) {
+        if (ent != null) {
             MagicData magicData = MagicData.getPlayerMagicData(ent);
-            if (magicData != null){
+            if (magicData != null) {
                 magicData.initiateCast(spell, spelllvl, 0, magicData.getCastSource(), "mainhand");
             }
         }

@@ -7,8 +7,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ItemPredicateRegister {
 
-    public static void registerPredicates(FMLClientSetupEvent event){
-        event.enqueueWork(()->{
+    public static void registerPredicates(FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
             ItemPropertyFunction ELEMENTAL_GEM = ((itemStack, clientLevel, livingEntity, i) -> {
                 String element = itemStack.getOrCreateTag().getString("passive_element");
                 switch (element) {
@@ -33,13 +33,13 @@ public class ItemPredicateRegister {
                     case "Wind" -> {
                         return 6;
                     }
-                    case "Nature"->{
+                    case "Nature" -> {
                         return 7;
                     }
                     case "Ice" -> {
                         return 8;
                     }
-                    case "Water"->{
+                    case "Water" -> {
                         return 9;
                     }
                 }

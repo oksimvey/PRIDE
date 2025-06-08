@@ -6,7 +6,6 @@ import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.KeyRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
-import net.minecraft.BlockUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -15,7 +14,6 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.AirBlock;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -26,9 +24,9 @@ import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
-import javax.swing.text.Element;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.TimeUnit;
 
@@ -44,32 +42,32 @@ public class MobilityEffect extends PrideEffectBase {
     }
 
 
-    public void onEffectStart(LivingEntity ent){
-        if (ent instanceof Player){
-            if (ElementalUtils.getElement(ent).equals("Thunder")){
+    public void onEffectStart(LivingEntity ent) {
+        if (ent instanceof Player) {
+            if (ElementalUtils.getElement(ent).equals("Thunder")) {
                 ThunderMobility(ent);
                 return;
             }
-            if (ElementalUtils.getElement(ent).equals("Moon")){
+            if (ElementalUtils.getElement(ent).equals("Moon")) {
                 MoonMobility(ent);
                 return;
             }
             this.effecttick++;
             serverTick(ent);
-            if (!ControllEngine.isKeyDown(KeyRegister.keyActionMobility)){
+            if (!ControllEngine.isKeyDown(KeyRegister.keyActionMobility)) {
                 ent.removeEffect(EffectRegister.MOBILITY.get());
                 return;
             }
-            TimerUtil.schedule(()-> onEffectStart(ent), 100, TimeUnit.MILLISECONDS);
+            TimerUtil.schedule(() -> onEffectStart(ent), 100, TimeUnit.MILLISECONDS);
         }
     }
 
-    public void MoonMobility(LivingEntity entity){
+    public void MoonMobility(LivingEntity entity) {
         CameraUtils.correctCamera();
-        TimerUtil.schedule(()-> {
+        TimerUtil.schedule(() -> {
             CameraUtils.correctCamera();
             if (Minecraft.getInstance().options.keyUp.isDown()) {
-                AnimUtils.playAnim(entity,  WOMAnimations.ENDERSTEP_FORWARD, 0);
+                AnimUtils.playAnim(entity, WOMAnimations.ENDERSTEP_FORWARD, 0);
                 return;
             }
             if (Minecraft.getInstance().options.keyLeft.isDown()) {
@@ -84,20 +82,20 @@ public class MobilityEffect extends PrideEffectBase {
         }, 100, TimeUnit.MILLISECONDS);
     }
 
-    public void ThunderMobility(LivingEntity entity){
+    public void ThunderMobility(LivingEntity entity) {
         entity.setDeltaMovement(entity.getDeltaMovement().x, 0 + Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector().y, entity.getDeltaMovement().z);
         CameraUtils.correctCamera();
         List<Vec3> points = ArmatureUtils.getEntityArmatureVecsForParticle(Minecraft.getInstance().player, entity, 2, 0.1f);
-        TimerUtil.schedule(()-> {
-        if (!points.isEmpty()){
-            for (Vec3 point : points){
-                Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.ELECTRICITY_PARTICLE.get(), point.x, point.y, point.z, 0, 0, 0);
+        TimerUtil.schedule(() -> {
+            if (!points.isEmpty()) {
+                for (Vec3 point : points) {
+                    Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.ELECTRICITY_PARTICLE.get(), point.x, point.y, point.z, 0, 0, 0);
+                }
             }
-        }
             CameraUtils.correctCamera();
             PlaySoundUtils.playSound(entity, SoundRegistry.LIGHTNING_CAST.get(), 1, 1);
-        Vec3 start = entity.position().add(0, entity.getBbHeight() / 1.8f, 0);
-        Vec3 direction = Minecraft.getInstance().gameRenderer.getMainCamera().getEntity().getLookAngle();
+            Vec3 start = entity.position().add(0, entity.getBbHeight() / 1.8f, 0);
+            Vec3 direction = Minecraft.getInstance().gameRenderer.getMainCamera().getEntity().getLookAngle();
             if (Minecraft.getInstance().options.keyUp.isDown()) {
                 AnimUtils.playAnim(entity, AnimationsRegister.STEP_FORWARD, 0);
                 loopLightningTrail(start, direction, (byte) 0);
@@ -118,16 +116,16 @@ public class MobilityEffect extends PrideEffectBase {
         }, 100, TimeUnit.MILLISECONDS);
     }
 
-    public void loopLightningTrail(Vec3 start, Vec3 direction, byte currentloop){
-        if (start != null && direction != null && currentloop < 15){
+    public void loopLightningTrail(Vec3 start, Vec3 direction, byte currentloop) {
+        if (start != null && direction != null && currentloop < 15) {
             Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.ELECTRICITY_PARTICLE.get(), start.x + (direction.x * currentloop / 2.5),
                     start.y, start.z + (direction.z * currentloop / 2.5), direction.x / (1 + currentloop / 1.5f), 0, direction.z / (1 + currentloop / 1.5f));
-            TimerUtil.schedule(()-> loopLightningTrail(start, direction, (byte) (currentloop + 1)), 50, TimeUnit.MILLISECONDS);
+            TimerUtil.schedule(() -> loopLightningTrail(start, direction, (byte) (currentloop + 1)), 50, TimeUnit.MILLISECONDS);
         }
     }
 
-    public void serverTick(LivingEntity ent){
-        if (ent != null){
+    public void serverTick(LivingEntity ent) {
+        if (ent != null) {
             LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (livingEntityPatch != null && livingEntityPatch.currentLivingMotion == LivingMotions.RUN) {
                 ent.setDeltaMovement(ent.getLookAngle().x, 0, ent.getLookAngle().z);
@@ -157,8 +155,8 @@ public class MobilityEffect extends PrideEffectBase {
         }
     }
 
-    public void storeBlockPos(LivingEntity ent, Vec3i center){
-        if (ent != null){
+    public void storeBlockPos(LivingEntity ent, Vec3i center) {
+        if (ent != null) {
             if (this.effecttick % 5 == 0) {
                 TimerUtil.schedule(() -> {
                     restoreBlockPos(ent);
@@ -180,14 +178,14 @@ public class MobilityEffect extends PrideEffectBase {
                     blockPosBlockConcurrentHashMap.put(new BlockPos(pos), ent.level().getBlockState(new BlockPos(pos)));
                 }
             }
-           for (BlockPos pos : blockPosBlockConcurrentHashMap.keySet()) {
-               ent.level().setBlockAndUpdate(pos, Blocks.ICE.defaultBlockState());
-           }
+            for (BlockPos pos : blockPosBlockConcurrentHashMap.keySet()) {
+                ent.level().setBlockAndUpdate(pos, Blocks.ICE.defaultBlockState());
+            }
         }
     }
 
 
-    public void restoreBlockPos(LivingEntity ent){
+    public void restoreBlockPos(LivingEntity ent) {
         if (ent != null && !blockPosBlockConcurrentHashMap.isEmpty()) {
             for (BlockPos blockPos : blockPosBlockConcurrentHashMap.keySet()) {
                 ent.level().setBlockAndUpdate(blockPos, blockPosBlockConcurrentHashMap.get(blockPos));
@@ -196,9 +194,9 @@ public class MobilityEffect extends PrideEffectBase {
         }
     }
 
-    public void onEffectEnd(LivingEntity ent){
+    public void onEffectEnd(LivingEntity ent) {
         this.effecttick = 0;
-        TimerUtil.schedule(()-> restoreBlockPos(ent), 1500, TimeUnit.MILLISECONDS);
+        TimerUtil.schedule(() -> restoreBlockPos(ent), 1500, TimeUnit.MILLISECONDS);
     }
 
     @Override

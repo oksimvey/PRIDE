@@ -2,12 +2,10 @@ package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.utils.EquipUtils;
 import com.robson.pride.api.utils.TimerUtil;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 

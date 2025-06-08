@@ -7,9 +7,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class TagsUtils {
 
-    public static boolean toggleBoolean(CompoundTag tag, String tagname){
-        if (tag != null){
-            if (tag.getBoolean(tagname)){
+    public static boolean toggleBoolean(CompoundTag tag, String tagname) {
+        if (tag != null) {
+            if (tag.getBoolean(tagname)) {
                 tag.putBoolean(tagname, false);
                 return true;
             }

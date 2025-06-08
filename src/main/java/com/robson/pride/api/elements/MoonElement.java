@@ -1,7 +1,8 @@
 package com.robson.pride.api.elements;
 
+import com.robson.pride.api.client.GlintRenderTypes;
+import com.robson.pride.api.client.ItemRenderingParams;
 import com.robson.pride.api.utils.AttributeUtils;
-import com.robson.pride.api.utils.HealthUtils;
 import com.robson.pride.api.utils.MathUtils;
 import com.robson.pride.registries.SchoolRegister;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
@@ -9,14 +10,13 @@ import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
-import yesman.epicfight.api.client.animation.property.TrailInfo;
 
 import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
-public class MoonElement  extends ElementBase {
+public class MoonElement extends ElementBase {
 
     public ParticleOptions getNormalParticleType() {
         return ParticleTypes.DRAGON_BREATH;
@@ -30,8 +30,9 @@ public class MoonElement  extends ElementBase {
         return SoundRegistry.TELEKINESIS_LOOP.get();
     }
 
-    public TrailInfo getTrailInfo(TrailInfo info){
-        return info;
+    public ItemRenderingParams getItemRenderingParams() {
+        return new ItemRenderingParams(50, 150, 250, new ResourceLocation("epicfight:textures/particle/efmc/fire_trail.png"),
+                GlintRenderTypes.getFireGlintDirect(), GlintRenderTypes.getFreezeEntityGlintDirect());
     }
 
 
@@ -39,7 +40,7 @@ public class MoonElement  extends ElementBase {
         return 5;
     }
 
-    public SchoolType getSchool(){
+    public SchoolType getSchool() {
         return SchoolRegister.MOON.get();
     }
 
@@ -47,6 +48,7 @@ public class MoonElement  extends ElementBase {
         this.playSound(ent, 1);
         return this.calculateFinalDamage(dmgent, ent, amount);
     }
+
     public float calculateFinalDamage(Entity dmgent, Entity ent, float amount) {
         if (dmgent != null && ent != null) {
             String element = getElement(ent);

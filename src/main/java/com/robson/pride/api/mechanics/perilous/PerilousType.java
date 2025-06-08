@@ -19,11 +19,11 @@ public class PerilousType {
         return this.mikiriType;
     }
 
-    public boolean isPerilous(Entity entity){
+    public boolean isPerilous(Entity entity) {
         return entity != null && perilousTypeMap.get(entity) != null;
     }
 
-    public PerilousType getEntityPerilous(Entity entity){
+    public PerilousType getEntityPerilous(Entity entity) {
         if (entity != null) {
             return perilousTypeMap.get(entity);
         }

@@ -9,10 +9,10 @@ import java.util.List;
 
 public class GroundStomp extends WeaponSkillBase {
     public GroundStomp() {
-        super("Uncommon", "Neutral",4, 4, "pierce_two_hand");
+        super("Uncommon", "Neutral", 4, 4, "pierce_two_hand");
     }
 
-    public List<SkillAnimation> defineMotions(LivingEntity ent){
+    public List<SkillAnimation> defineMotions(LivingEntity ent) {
         return List.of(new SkillAnimation(Animations.TACHI_DASH, null));
     }
 }

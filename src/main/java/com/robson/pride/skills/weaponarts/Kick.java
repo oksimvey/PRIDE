@@ -12,7 +12,7 @@ public class Kick extends WeaponSkillBase {
         super("Common", "Neutral", 4, 1, "pierce_two_hand");
     }
 
-    public List<SkillAnimation> defineMotions(LivingEntity ent){
+    public List<SkillAnimation> defineMotions(LivingEntity ent) {
         return List.of(new SkillAnimation(Animations.TACHI_DASH, null));
     }
 }

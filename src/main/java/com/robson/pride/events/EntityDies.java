@@ -1,6 +1,5 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.mechanics.ElementalPassives;
 import com.robson.pride.api.utils.MathUtils;
 import com.robson.pride.registries.EffectRegister;
 import net.minecraft.world.entity.Entity;
@@ -20,7 +19,7 @@ public class EntityDies {
         LivingEntity living = event.getEntity();
         if (living.hasEffect(EffectRegister.DIVINE_PROTECTION.get())) {
             event.setCanceled(true);
-            ElementalPassives.divineResurrection(living);
+
         }
     }
 
@@ -28,14 +27,13 @@ public class EntityDies {
     public static void playerDeath(PlayerEvent.Clone event) {
         if (event.isWasDeath()) {
             LivingEntity living = event.getEntity();
-            for (Entity entity : living.level().getEntities(living, MathUtils.createAABBAroundEnt(living, 50))){
-                if (entity instanceof Mob mob && mob.getHealth() > 0){
+            for (Entity entity : living.level().getEntities(living, MathUtils.createAABBAroundEnt(living, 50))) {
+                if (entity instanceof Mob mob && mob.getHealth() > 0) {
                     mob.setHealth(mob.getMaxHealth());
                 }
             }
             if (living.hasEffect(EffectRegister.DIVINE_PROTECTION.get())) {
                 event.setCanceled(true);
-                ElementalPassives.divineResurrection(living);
             }
         }
     }

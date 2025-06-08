@@ -1,23 +1,22 @@
 package com.robson.pride.skills.weaponarts;
 
-import com.robson.pride.api.mechanics.ElementalPassives;
-import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
-import com.robson.pride.api.utils.*;
+import com.robson.pride.api.utils.ArmatureUtils;
+import com.robson.pride.api.utils.PlaySoundUtils;
+import com.robson.pride.api.utils.TimerUtil;
+import com.robson.pride.registries.ElementsRegister;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.Armatures;
@@ -32,8 +31,8 @@ public class DarknessCut extends WeaponSkillBase {
         super("Mythical", "Darkness", 50, 6, "total");
     }
 
-    public List<SkillAnimation> defineMotions(LivingEntity ent){
-        return List.of(new SkillAnimation(Animations.TACHI_AUTO3, ()-> {
+    public List<SkillAnimation> defineMotions(LivingEntity ent) {
+        return List.of(new SkillAnimation(Animations.TACHI_AUTO3, () -> {
             TimerUtil.schedule(() -> {
                 Vec3 lookangle = ent.getLookAngle();
                 ent.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 15, 255));
@@ -50,7 +49,7 @@ public class DarknessCut extends WeaponSkillBase {
                             if (particle != null && entko != null) {
                                 particle.setLifetime(200);
                                 particle.scale(1.25f);
-                                SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, ()-> ElementalPassives.darknessPassive(entko, ent, 10));
+                                SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, () -> ElementsRegister.elements.get("Darkness").onHit(entko, ent, 10, false));
                             }
                         }
                     }

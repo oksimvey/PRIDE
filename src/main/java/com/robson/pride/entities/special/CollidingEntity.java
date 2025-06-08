@@ -15,13 +15,11 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 import java.util.Random;
 
 public class CollidingEntity<T extends LivingEntity> extends AbstractHurtingProjectile {
-        protected T original;
+    protected T original;
     public int life = 200;
 
     public CollidingEntity(EntityType<? extends CollidingEntity> p_37598_, Level p_37599_) {
@@ -59,17 +57,17 @@ public class CollidingEntity<T extends LivingEntity> extends AbstractHurtingProj
             ProjectileUtil.rotateTowardsMovement(this, 1.0F);
             float f = this.getInertia();
             if (this.isInWater()) {
-                for(int i = 0; i < 4; ++i) {
-                    this.level().addParticle(ParticleTypes.BUBBLE, d0 - vec3.x * (double)0.25F, d1 - vec3.y * (double)0.25F, d2 - vec3.z * (double)0.25F, vec3.x, vec3.y, vec3.z);
+                for (int i = 0; i < 4; ++i) {
+                    this.level().addParticle(ParticleTypes.BUBBLE, d0 - vec3.x * (double) 0.25F, d1 - vec3.y * (double) 0.25F, d2 - vec3.z * (double) 0.25F, vec3.x, vec3.y, vec3.z);
                 }
 
                 f = 0.8F;
             }
 
-            this.setDeltaMovement(vec3.add(this.xPower, this.yPower, this.zPower).scale((double)f));
-            this.level().addParticle(this.getTrailParticle(), d0 + (double)(((new Random()).nextFloat() - 0.5F) * 0.1F), d1 + (double)(((new Random()).nextFloat() - 0.5F) * 0.17F), d2 + (double)(((new Random()).nextFloat() - 0.5F) * 0.1F), (double)0.0F, (double)0.0F, (double)0.0F);
+            this.setDeltaMovement(vec3.add(this.xPower, this.yPower, this.zPower).scale((double) f));
+            this.level().addParticle(this.getTrailParticle(), d0 + (double) (((new Random()).nextFloat() - 0.5F) * 0.1F), d1 + (double) (((new Random()).nextFloat() - 0.5F) * 0.17F), d2 + (double) (((new Random()).nextFloat() - 0.5F) * 0.1F), (double) 0.0F, (double) 0.0F, (double) 0.0F);
             this.setPos(d0, d1, d2);
-            if (Math.abs(this.getDeltaMovement().x) + Math.abs(this.getDeltaMovement().y) + Math.abs(this.getDeltaMovement().z) > (double)100.0F || Math.abs(this.getDeltaMovement().x) + Math.abs(this.getDeltaMovement().y) + Math.abs(this.getDeltaMovement().z) < 0.1) {
+            if (Math.abs(this.getDeltaMovement().x) + Math.abs(this.getDeltaMovement().y) + Math.abs(this.getDeltaMovement().z) > (double) 100.0F || Math.abs(this.getDeltaMovement().x) + Math.abs(this.getDeltaMovement().y) + Math.abs(this.getDeltaMovement().z) < 0.1) {
                 this.discard();
             }
         }
@@ -97,7 +95,7 @@ public class CollidingEntity<T extends LivingEntity> extends AbstractHurtingProj
     protected void onHit(HitResult hitResult) {
         super.onHit(hitResult);
         if (!this.level().isClientSide() && hitResult.getType() == HitResult.Type.BLOCK) {
-                this.discard();
+            this.discard();
         }
 
     }

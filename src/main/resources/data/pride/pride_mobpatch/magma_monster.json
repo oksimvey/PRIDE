@@ -33,16 +33,24 @@
   },
   "humanoid_weapon_motions": [
     {
-      "weapon_categories": ["axe", "hoe", "pickaxe", "shovel", "sword"],
-      "style":"common",
+      "weapon_categories": [
+        "axe",
+        "hoe",
+        "pickaxe",
+        "shovel",
+        "sword"
+      ],
+      "style": "common",
       "livingmotions": {
         "chase": "epicfight:biped/living/hold_longsword",
         "walk": "epicfight:biped/living/walk"
       }
     },
     {
-      "weapon_categories": ["longsword"],
-      "style":"common",
+      "weapon_categories": [
+        "longsword"
+      ],
+      "style": "common",
       "livingmotions": {
         "chase": "epicfight:biped/living/hold_longsword",
         "walk": "epicfight:biped/living/hold_longsword"
@@ -51,13 +59,17 @@
   ],
   "custom_guard_motion": [
     {
-      "weapon_categories": ["longsword","tachi","sword"],
-      "style":"common",
+      "weapon_categories": [
+        "longsword",
+        "tachi",
+        "sword"
+      ],
+      "style": "common",
       "guard": "indestructible:guard/guard_longsword",
       "stamina_cost_multiply": 3,
-      "can_block_projectile" : false,
+      "can_block_projectile": false,
       "parry_cost_multiply": 0.5,
-      "parry_animation":[]
+      "parry_animation": []
     }
   ],
   "stun_animations": {
@@ -69,12 +81,16 @@
   },
   "equipment": [
     {
-      "variations": [0],
+      "variations": [
+        0
+      ],
       "slot": "mainhand",
       "item": "pride:pyroscourge"
     }
   ],
-  "textures": ["pride:textures/entities/special/magma_monster.png"],
+  "textures": [
+    "pride:textures/entities/special/magma_monster.png"
+  ],
   "combat_behavior": [
     {
       "weapon_categories": [
@@ -106,7 +122,11 @@
               ],
               "animation": "epicfight:biped/combat/mob_throw",
               "command_list": [
-                {"time":0.35, "command":"pride @s cast fireball 10", "execute_at_target":false}
+                {
+                  "time": 0.35,
+                  "command": "pride @s cast fireball 10",
+                  "execute_at_target": false
+                }
               ]
             }
           ]

@@ -14,7 +14,7 @@ public class PacketRegister {
             s -> true
     );
 
-    public static void register(){
+    public static void register() {
         int id = 0;
         CHANNEL.registerMessage(id++, KeyActionPacket.class, KeyActionPacket::encode, KeyActionPacket::decode, KeyActionPacket::handle);
     }

@@ -32,7 +32,7 @@ public class DataConditions {
         TargetTryingPerilous = CONDITIONS.register((new ResourceLocation("pride", "passiveskill")).getPath(), () -> {
             return PassiveSkillDeserialize::new;
         });
-        IS_NOT_STUCK = CONDITIONS.register((new ResourceLocation("pride", "not_stuck")).getPath(), ()-> {
+        IS_NOT_STUCK = CONDITIONS.register((new ResourceLocation("pride", "not_stuck")).getPath(), () -> {
             return IsNotStuck::new;
         });
     }

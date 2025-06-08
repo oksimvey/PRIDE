@@ -8,8 +8,8 @@ public class IsRainingCondition extends DialogueConditionBase {
 
     @Override
     public boolean isTrue(Entity ent, Entity target, CompoundTag predicate) {
-        if (predicate.contains("invert")){
-            if(predicate.getBoolean("invert")){
+        if (predicate.contains("invert")) {
+            if (predicate.getBoolean("invert")) {
                 return !target.level().isRaining();
             }
         }

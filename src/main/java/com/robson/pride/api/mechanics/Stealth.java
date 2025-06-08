@@ -16,7 +16,16 @@ public class Stealth {
     }
 
     public static boolean canBackStab(Entity viewer, Entity target) {
-
-        return false;
+        boolean isFront = false;
+        Vec3 sourceLocation = viewer.position();
+        if (sourceLocation != null) {
+            Vec3 viewVector = target.getViewVector(1.0F);
+            viewVector = viewVector.subtract(0, viewVector.y, 0).normalize();
+            Vec3 toSourceLocation = sourceLocation.subtract(target.position()).normalize();
+            if (toSourceLocation.dot(viewVector) > 0.0D) {
+                isFront = true;
+            }
+        }
+        return isFront;
     }
 }

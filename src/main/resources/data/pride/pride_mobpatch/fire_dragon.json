@@ -30,13 +30,17 @@
   },
   "custom_guard_motion": [
     {
-      "weapon_categories": ["longsword","tachi","sword"],
-      "style":"common",
+      "weapon_categories": [
+        "longsword",
+        "tachi",
+        "sword"
+      ],
+      "style": "common",
       "guard": "indestructible:guard/guard_longsword",
       "stamina_cost_multiply": 3,
-      "can_block_projectile" : false,
+      "can_block_projectile": false,
       "parry_cost_multiply": 0.5,
-      "parry_animation":[]
+      "parry_animation": []
     }
   ],
   "stun_animations": {
@@ -46,53 +50,91 @@
     "fall": "epicfight:dragon/neutralized",
     "neutralize": "epicfight:dragon/neutralized"
   },
-  "textures": ["pride:textures/entities/special/fire_dragon.png"],
+  "textures": [
+    "pride:textures/entities/special/fire_dragon.png"
+  ],
   "combat_behavior": [
+    {
+      "weight": 1.5,
+      "canBeInterrupted": false,
+      "looping": false,
+      "behaviors": [
         {
-          "weight": 1.5,
-          "canBeInterrupted": false,
-          "looping": false,
-          "behaviors": [
+          "conditions": [
             {
-              "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
-              ],
-              "animation": "epicfight:dragon/attack1"
+              "predicate": "within_eye_height"
+            },
+            {
+              "predicate": "within_distance",
+              "min": 0.0,
+              "max": 50.0
+            },
+            {
+              "predicate": "indestructible:attack_level",
+              "min": 0,
+              "max": 0
+            }
+          ],
+          "animation": "epicfight:dragon/attack1"
+        }
+      ]
+    },
+    {
+      "weight": 1.5,
+      "canBeInterrupted": false,
+      "looping": false,
+      "behaviors": [
+        {
+          "conditions": [
+            {
+              "predicate": "within_eye_height"
+            },
+            {
+              "predicate": "within_distance",
+              "min": 0.0,
+              "max": 50.0
+            },
+            {
+              "predicate": "indestructible:attack_level",
+              "min": 0,
+              "max": 0
+            }
+          ],
+          "animation": "epicfight:dragon/attack2"
+        }
+      ]
+    },
+    {
+      "weight": 1.5,
+      "canBeInterrupted": false,
+      "looping": false,
+      "behaviors": [
+        {
+          "conditions": [
+            {
+              "predicate": "within_eye_height"
+            },
+            {
+              "predicate": "within_distance",
+              "min": 0.0,
+              "max": 50.0
+            },
+            {
+              "predicate": "indestructible:attack_level",
+              "min": 0,
+              "max": 0
+            }
+          ],
+          "animation": "epicfight:dragon/attack4",
+          "command_list": [
+            {
+              "time": 0,
+              "command": "pride @s cast fireball 1",
+              "execute_at_target": false
             }
           ]
-        },
-        {
-          "weight": 1.5,
-          "canBeInterrupted": false,
-          "looping": false,
-          "behaviors": [
-            {
-              "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
-              ],
-              "animation": "epicfight:dragon/attack2"
-            }
-          ]
-        },
-        {
-          "weight": 1.5,
-          "canBeInterrupted": false,
-          "looping": false,
-          "behaviors": [
-            {
-              "conditions": [
-                {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 50.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
-              ],
-              "animation": "epicfight:dragon/attack4",
-              "command_list": [
-                {
-                  "time": 0,
-                  "command": "pride @s cast fireball 1" ,
-                  "execute_at_target": false
-                }
-              ]
-            }
-          ]
+        }
+      ]
     }
   ]
 }

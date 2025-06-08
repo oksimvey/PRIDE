@@ -1,56 +1,44 @@
 package com.robson.pride.registries;
 
-import com.robson.pride.api.mechanics.ElementalPassives;
 import com.robson.pride.api.skillcore.SkillCore;
-import com.robson.pride.api.utils.*;
+import com.robson.pride.api.utils.AnimUtils;
+import com.robson.pride.api.utils.ArmatureUtils;
+import com.robson.pride.api.utils.HealthUtils;
+import com.robson.pride.api.utils.PlaySoundUtils;
 import com.robson.pride.main.Pride;
-import io.redspace.ironsspellbooks.registries.ParticleRegistry;
-import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import reascer.wom.animation.attacks.SpecialAttackAnimation;
-import yesman.epicfight.api.animation.Animator;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.*;
-import yesman.epicfight.api.client.animation.ClientAnimator;
 import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.api.forgeevent.AnimationRegistryEvent;
 import yesman.epicfight.api.utils.TimePairList;
 import yesman.epicfight.api.utils.math.ValueModifier;
 import yesman.epicfight.api.utils.math.Vec3f;
-import yesman.epicfight.client.events.engine.RenderEngine;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.model.armature.HumanoidArmature;
 import yesman.epicfight.particle.EpicFightParticles;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
-import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
-import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.EpicFightDamageType;
 import yesman.epicfight.world.damagesource.StunType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public class AnimationsRegister {
 
@@ -314,10 +302,10 @@ public class AnimationsRegister {
     }
 
     public static final AnimationEvent.AnimationEventConsumer SHOOT_RIGHT = (entitypatch, self, params) -> {
-        if (entitypatch != null && AnimUtils.allowShoot(entitypatch.getOriginal())){
+        if (entitypatch != null && AnimUtils.allowShoot(entitypatch.getOriginal())) {
             PlaySoundUtils.playNonRegisteredSound(entitypatch.getOriginal(), "pride:shoot", 1, 1);
             Vec3 pos = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, entitypatch.getOriginal(), new Vec3f(0, -0.75f, -1f), Armatures.BIPED.toolR);
-            if (pos != null){
+            if (pos != null) {
                 shotBullet(entitypatch.getOriginal(), pos, new ArrayList<>());
                 Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.EXPLOSION, pos.x, pos.y, pos.z, 0, 0, 0);
                 particle.scale(0.15f);
@@ -343,10 +331,10 @@ public class AnimationsRegister {
 
 
     public static final AnimationEvent.AnimationEventConsumer SHOOT_LEFT = (entitypatch, self, params) -> {
-        if (entitypatch != null && AnimUtils.allowShoot(entitypatch.getOriginal())){
+        if (entitypatch != null && AnimUtils.allowShoot(entitypatch.getOriginal())) {
             PlaySoundUtils.playNonRegisteredSound(entitypatch.getOriginal(), "pride:shoot", 1, 1);
             Vec3 pos = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, entitypatch.getOriginal(), new Vec3f(0, -0.75f, -1f), Armatures.BIPED.toolL);
-            if (pos != null){
+            if (pos != null) {
                 Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.EXPLOSION, pos.x, pos.y, pos.z, 0, 0, 0);
                 particle.scale(0.15f);
                 particle.setLifetime(3);

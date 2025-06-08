@@ -4,7 +4,6 @@ import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPat
 import com.robson.pride.api.entity.PrideMobBase;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 

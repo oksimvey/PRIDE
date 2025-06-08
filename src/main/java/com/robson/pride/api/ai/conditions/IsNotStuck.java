@@ -29,10 +29,10 @@ public class IsNotStuck extends Condition.EntityPatchCondition {
 
     @Override
     public boolean predicate(LivingEntityPatch<?> ent) {
-       if (ent.getOriginal() instanceof PrideMobBase prideMobBase){
-           return this.invert == prideMobBase.shouldPathSneak();
-       }
-       return false;
+        if (ent.getOriginal() instanceof PrideMobBase prideMobBase) {
+            return this.invert == prideMobBase.shouldPathSneak();
+        }
+        return false;
     }
 
     @Override

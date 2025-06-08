@@ -10,10 +10,6 @@ import com.nameless.indestructible.api.animation.types.LivingEntityPatchEvent;
 import com.nameless.indestructible.data.AdvancedMobpatchReloader;
 import com.nameless.indestructible.gameasset.GuardAnimations;
 import com.nameless.indestructible.main.Indestructible;
-
-import java.util.*;
-import java.util.stream.Stream;
-
 import com.nameless.indestructible.world.ai.CombatBehaviors.*;
 import com.nameless.indestructible.world.capability.AdvancedCustomMobPatch;
 import com.robson.pride.api.entity.PrideMobPatch;
@@ -45,13 +41,19 @@ import yesman.epicfight.main.EpicFightMod;
 import yesman.epicfight.model.armature.HumanoidArmature;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.particle.HitParticleType;
-import yesman.epicfight.world.capabilities.entitypatch.*;
+import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
+import yesman.epicfight.world.capabilities.entitypatch.Faction;
+import yesman.epicfight.world.capabilities.entitypatch.HumanoidMobPatch;
+import yesman.epicfight.world.capabilities.entitypatch.MobPatch;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 import yesman.epicfight.world.capabilities.provider.EntityPatchProvider;
 import yesman.epicfight.world.damagesource.StunType;
 import yesman.epicfight.world.entity.ai.goal.CombatBehaviors;
 import yesman.epicfight.world.entity.ai.goal.CombatBehaviors.BehaviorSeries;
+
+import java.util.*;
+import java.util.stream.Stream;
 
 import static com.nameless.indestructible.data.AdvancedMobpatchReloader.*;
 
@@ -166,17 +168,17 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         provider.hasBossBar = tag.contains("boss_bar") && tag.getBoolean("boss_bar");
         provider.defaultAnimations = MobPatchReloadListener.deserializeDefaultAnimations(tag.getCompound("default_livingmotions"));
         provider.faction = Faction.valueOf(tag.getString("faction").toUpperCase(Locale.ROOT));
-        provider.scale = tag.getCompound("attributes").contains("scale") ? (float)tag.getCompound("attributes").getDouble("scale") : 1.0F;
+        provider.scale = tag.getCompound("attributes").contains("scale") ? (float) tag.getCompound("attributes").getDouble("scale") : 1.0F;
         if (tag.contains("swing_sound")) {
-            provider.swingSound = (SoundEvent)ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(tag.getString("swing_sound")));
+            provider.swingSound = (SoundEvent) ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(tag.getString("swing_sound")));
         }
 
         if (tag.contains("hit_sound")) {
-            provider.hitSound = (SoundEvent)ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(tag.getString("hit_sound")));
+            provider.hitSound = (SoundEvent) ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(tag.getString("hit_sound")));
         }
 
         if (tag.contains("hit_particle")) {
-            provider.hitParticle = (HitParticleType)ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(tag.getString("hit_particle")));
+            provider.hitParticle = (HitParticleType) ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(tag.getString("hit_particle")));
         }
 
         if (!clientSide) {
@@ -187,12 +189,12 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
             provider.guardMotions = deserializeHumanoidGuardMotions(tag.getList("custom_guard_motion", 10));
             provider.regenStaminaStandbyTime = tag.getCompound("attributes").contains("stamina_regan_delay") ? tag.getCompound("attributes").getInt("stamina_regan_delay") : 30;
             provider.hasStunReduction = !tag.getCompound("attributes").contains("has_stun_reduction") || tag.getCompound("attributes").getBoolean("has_stun_reduction");
-            provider.maxStunShield = tag.getCompound("attributes").contains("max_stun_shield") ? (float)tag.getCompound("attributes").getDouble("max_stun_shield") : 0.0F;
+            provider.maxStunShield = tag.getCompound("attributes").contains("max_stun_shield") ? (float) tag.getCompound("attributes").getDouble("max_stun_shield") : 0.0F;
             provider.reganShieldStandbyTime = tag.getCompound("attributes").contains("stun_shield_regan_delay") ? tag.getCompound("attributes").getInt("stun_shield_regan_delay") : 30;
-            provider.reganShieldMultiply = tag.getCompound("attributes").contains("stun_shield_regan_multiply") ? (float)tag.getCompound("attributes").getDouble("stun_shield_multiply") : 1.0F;
-            provider.staminaLoseMultiply = tag.getCompound("attributes").contains("stamina_lose_multiply") ? (float)tag.getCompound("attributes").getDouble("stamina_lose_multiply") : 0.0F;
-            provider.attackRadius = tag.getCompound("attributes").contains("attack_radius") ? (float)tag.getCompound("attributes").getDouble("attack_radius") : 1.5F;
-            provider.guardRadius = tag.getCompound("attributes").contains("guard_radius") ? (float)tag.getCompound("attributes").getDouble("guard_radius") : 3.0F;
+            provider.reganShieldMultiply = tag.getCompound("attributes").contains("stun_shield_regan_multiply") ? (float) tag.getCompound("attributes").getDouble("stun_shield_multiply") : 1.0F;
+            provider.staminaLoseMultiply = tag.getCompound("attributes").contains("stamina_lose_multiply") ? (float) tag.getCompound("attributes").getDouble("stamina_lose_multiply") : 0.0F;
+            provider.attackRadius = tag.getCompound("attributes").contains("attack_radius") ? (float) tag.getCompound("attributes").getDouble("attack_radius") : 1.5F;
+            provider.guardRadius = tag.getCompound("attributes").contains("guard_radius") ? (float) tag.getCompound("attributes").getDouble("guard_radius") : 3.0F;
             provider.stunEvent = deserializeStunCommandList(tag.getList("stun_command_list", 10));
         }
 
@@ -202,9 +204,9 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
     private static <T extends MobPatch<?>> CombatBehaviors.Builder<T> deserializeAdvancedBehaviorsBuilder(ListTag tag) {
         CombatBehaviors.Builder<T> builder = CombatBehaviors.builder();
 
-        for(int i = 0; i < tag.size(); ++i) {
+        for (int i = 0; i < tag.size(); ++i) {
             CompoundTag behaviorSeries = tag.getCompound(i);
-            float weight = (float)behaviorSeries.getDouble("weight");
+            float weight = (float) behaviorSeries.getDouble("weight");
             int cooldown = behaviorSeries.contains("cooldown") ? behaviorSeries.getInt("cooldown") : 0;
             boolean canBeInterrupted = behaviorSeries.contains("canBeInterrupted") && behaviorSeries.getBoolean("canBeInterrupted");
             boolean looping = behaviorSeries.contains("looping") && behaviorSeries.getBoolean("looping");
@@ -212,7 +214,7 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
             CombatBehaviors.BehaviorSeries.Builder<T> behaviorSeriesBuilder = BehaviorSeries.builder();
             behaviorSeriesBuilder.weight(weight).cooldown(cooldown).canBeInterrupted(canBeInterrupted).looping(looping);
 
-            for(int j = 0; j < behaviorList.size(); ++j) {
+            for (int j = 0; j < behaviorList.size(); ++j) {
                 AdvancedBehaviorBuilder<T> behaviorBuilder = new AdvancedBehaviorBuilder();
                 CompoundTag behavior = behaviorList.getCompound(j);
                 ListTag conditionList = behavior.getList("conditions", 10);
@@ -227,9 +229,9 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
                 if (behavior.contains("animation")) {
                     StaticAnimation animation = AnimationManager.getInstance().byKeyOrThrow(behavior.getString("animation"));
                     AnimationMotionSet motionSet = new AnimationMotionSet(animation, 0.0F, 1.0F, 0.0F);
-                    motionSet = behavior.contains("play_speed") ? motionSet.setSpeed((float)behavior.getDouble("play_speed")) : motionSet;
-                    motionSet = behavior.contains("stamina") ? motionSet.setStaminaCost((float)behavior.getDouble("stamina")) : motionSet;
-                    motionSet = behavior.contains("convert_time") ? motionSet.setConvertTime((float)behavior.getDouble("convert_time")) : motionSet;
+                    motionSet = behavior.contains("play_speed") ? motionSet.setSpeed((float) behavior.getDouble("play_speed")) : motionSet;
+                    motionSet = behavior.contains("stamina") ? motionSet.setStaminaCost((float) behavior.getDouble("stamina")) : motionSet;
+                    motionSet = behavior.contains("convert_time") ? motionSet.setConvertTime((float) behavior.getDouble("convert_time")) : motionSet;
                     motionSet = behavior.contains("damage_modifier") && !behavior.getCompound("damage_modifier").isEmpty() ? motionSet.setDamageSourceModifier(deserializeDamageModifier(behavior.getCompound("damage_modifier"))) : motionSet;
                     motionSet = behavior.contains("command_list") && !behavior.getList("command_list", 10).isEmpty() ? motionSet.addTimeStampedEvents(deserializeTimeCommandList(behavior.getList("command_list", 10))) : motionSet;
                     motionSet = behavior.contains("hit_command_list") && !behavior.getList("hit_command_list", 10).isEmpty() ? motionSet.addHitEvents(deserializeHitCommandList(behavior.getList("hit_command_list", 10))) : motionSet;
@@ -242,10 +244,10 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
                     motionSet = behavior.contains("parry_times") ? motionSet.setParryTimes(behavior.getInt("parry_times")) : motionSet;
                     motionSet = behavior.contains("stun_immunity_time") ? motionSet.setStunImmunityTime(behavior.getInt("stun_immunity_time")) : motionSet;
                     counterMotion = behavior.contains("counter") ? counterMotion.setCounterAnimation(behavior.getString("counter")) : counterMotion;
-                    counterMotion = behavior.contains("counter_cost") ? counterMotion.setCost((float)behavior.getDouble("counter_cost")) : counterMotion;
-                    counterMotion = behavior.contains("counter_chance") ? counterMotion.setChance((float)behavior.getDouble("counter_chance")) : counterMotion;
-                    counterMotion = behavior.contains("counter_speed") ? counterMotion.setSpeed((float)behavior.getDouble("counter_speed")) : counterMotion;
-                    counterMotion = behavior.contains("counter_convert_time") ? counterMotion.setConvertTime((float)behavior.getDouble("counter_convert_time")) : counterMotion;
+                    counterMotion = behavior.contains("counter_cost") ? counterMotion.setCost((float) behavior.getDouble("counter_cost")) : counterMotion;
+                    counterMotion = behavior.contains("counter_chance") ? counterMotion.setChance((float) behavior.getDouble("counter_chance")) : counterMotion;
+                    counterMotion = behavior.contains("counter_speed") ? counterMotion.setSpeed((float) behavior.getDouble("counter_speed")) : counterMotion;
+                    counterMotion = behavior.contains("counter_convert_time") ? counterMotion.setConvertTime((float) behavior.getDouble("counter_convert_time")) : counterMotion;
                     counterMotion = behavior.contains("cancel_after_counter") ? counterMotion.cancelBlock(behavior.getBoolean("cancel_after_counter")) : counterMotion;
                     motionSet = motionSet.setCounterMotion(counterMotion);
                     motionSet = behavior.contains("specific_guard_motion") ? motionSet.setSpecificGuardMotion(deserializeGuardMotions(behavior.getCompound("specific_guard_motion"))) : motionSet;
@@ -254,14 +256,14 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
                     int strafingTime = behavior.getInt("wander");
                     WanderMotionSet motionSet = new WanderMotionSet(strafingTime, strafingTime, 0.0F, 0.0F);
                     motionSet = behavior.contains("inaction_time") ? motionSet.setInactionTime(behavior.getInt("inaction_time")) : motionSet;
-                    motionSet = behavior.contains("z_axis") ? motionSet.setForwardDirection((float)behavior.getDouble("z_axis")) : motionSet;
-                    motionSet = behavior.contains("x_axis") ? motionSet.setClockwise((float)behavior.getDouble("x_axis")) : motionSet;
+                    motionSet = behavior.contains("z_axis") ? motionSet.setForwardDirection((float) behavior.getDouble("z_axis")) : motionSet;
+                    motionSet = behavior.contains("x_axis") ? motionSet.setClockwise((float) behavior.getDouble("x_axis")) : motionSet;
                     behaviorBuilder.tryProcessWanderSet(motionSet);
                 }
 
                 behaviorBuilder.process();
 
-                for(int k = 0; k < conditionList.size(); ++k) {
+                for (int k = 0; k < conditionList.size(); ++k) {
                     CompoundTag condition = conditionList.getCompound(k);
                     Condition<T> predicate = MobPatchReloadListener.deserializeBehaviorPredicate(condition.getString("predicate"), condition);
                     behaviorBuilder.predicate(predicate);
@@ -298,7 +300,7 @@ public class PrideMobPatchReloader extends SimpleJsonResourceReloadListener {
         if (original.contains("custom_music")) {
             extract.putString("custom_music", original.getString("custom_music"));
         }
-        if (original.contains("music_priority")){
+        if (original.contains("music_priority")) {
             extract.putByte("music_priority", original.getByte("music_priority"));
         }
         if (original.contains("textures")) {

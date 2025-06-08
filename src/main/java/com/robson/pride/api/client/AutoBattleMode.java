@@ -8,10 +8,9 @@ public class AutoBattleMode {
 
     public static void autoSwitch(PlayerPatch playerPatch) {
         if (playerPatch != null) {
-            if (!playerPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND).isEmpty()){
+            if (!playerPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND).isEmpty()) {
                 playerPatch.toMode(PlayerPatch.PlayerMode.BATTLE, true);
-            }
-            else playerPatch.toMode(PlayerPatch.PlayerMode.MINING, true);
+            } else playerPatch.toMode(PlayerPatch.PlayerMode.MINING, true);
         }
     }
 }

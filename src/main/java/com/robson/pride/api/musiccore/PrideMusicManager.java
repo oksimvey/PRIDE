@@ -13,7 +13,7 @@ public class PrideMusicManager {
 
     private MusicManager musicManager;
 
-    public PrideMusicManager(byte currentMusicPriority, MusicManager musicManager){
+    public PrideMusicManager(byte currentMusicPriority, MusicManager musicManager) {
         this.currentMusicPriority = currentMusicPriority;
         this.musicManager = musicManager;
     }

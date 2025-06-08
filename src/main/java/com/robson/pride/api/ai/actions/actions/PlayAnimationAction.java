@@ -9,9 +9,9 @@ public class PlayAnimationAction extends ActionBase {
 
     @Override
     public void onActionStart(Entity ent, CompoundTag action) {
-        if (action.contains("animation")){
+        if (action.contains("animation")) {
             float converttime = 0;
-            if (action.contains("convert")){
+            if (action.contains("convert")) {
                 converttime = (float) action.getDouble("convert");
             }
             AnimUtils.playAnimByString(ent, action.getString("animation"), converttime);

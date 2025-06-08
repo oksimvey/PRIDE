@@ -23,8 +23,8 @@ public class HealthUtils {
         }, 10, TimeUnit.MILLISECONDS);
     }
 
-    public static void dealBlockableDmg(Entity dmgent, Entity ent, float amount){
-        LivingEntityPatch playerpatch =  EpicFightCapabilities.getEntityPatch(dmgent, LivingEntityPatch.class);
+    public static void dealBlockableDmg(Entity dmgent, Entity ent, float amount) {
+        LivingEntityPatch playerpatch = EpicFightCapabilities.getEntityPatch(dmgent, LivingEntityPatch.class);
         if (ent != null && playerpatch != null) {
             EpicFightDamageSource damage = playerpatch.getDamageSource(AnimationsRegister.ONEHAND_SHOOT, InteractionHand.MAIN_HAND);
             damage.setStunType(StunType.HOLD);
@@ -33,9 +33,9 @@ public class HealthUtils {
             ent.invulnerableTime = 0;
             float entity1damage = 5.0F;
             AttackResult attackResult = playerpatch.tryHarm(ent, damage, entity1damage);
-            if (attackResult.resultType == AttackResult.ResultType.SUCCESS){
+            if (attackResult.resultType == AttackResult.ResultType.SUCCESS) {
                 ent.hurt(damage, amount);
             }
-}
+        }
     }
 }

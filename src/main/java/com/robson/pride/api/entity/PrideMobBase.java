@@ -5,14 +5,10 @@ import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.api.utils.*;
 import de.markusbordihn.easynpc.data.attribute.*;
 import de.markusbordihn.easynpc.data.objective.ObjectiveDataEntry;
-import de.markusbordihn.easynpc.data.objective.ObjectiveDataSet;
 import de.markusbordihn.easynpc.data.objective.ObjectiveType;
-import de.markusbordihn.easynpc.data.synched.SynchedDataIndex;
 import de.markusbordihn.easynpc.entity.EasyNPCBaseEntity;
-import de.markusbordihn.easynpc.entity.easynpc.data.AttackData;
 import de.markusbordihn.easynpc.entity.easynpc.data.ObjectiveData;
 import de.markusbordihn.easynpc.network.NetworkMessageHandlerManager;
-import de.markusbordihn.easynpc.server.player.FakePlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -22,7 +18,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -37,7 +32,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -56,12 +50,13 @@ import net.minecraftforge.common.ForgeHooks;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.AnimationProvider;
 import yesman.epicfight.api.animation.types.StaticAnimation;
-import yesman.epicfight.client.particle.TrailParticle;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
@@ -111,8 +106,8 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
         }
     }
 
-    public void deserializeAlliesTargeting(Entity ent, Entity dmgent){
-        if (ent != null && dmgent != null && (ent.getType().equals(this.getType()) || this.allies.contains(EntityType.getKey(ent.getType()).toString()))){
+    public void deserializeAlliesTargeting(Entity ent, Entity dmgent) {
+        if (ent != null && dmgent != null && (ent.getType().equals(this.getType()) || this.allies.contains(EntityType.getKey(ent.getType()).toString()))) {
             TargetUtil.setTarget(this, dmgent);
         }
     }
@@ -131,46 +126,46 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
         }
     }
 
-    public void deserializeTextures(CompoundTag tagmap){
+    public void deserializeTextures(CompoundTag tagmap) {
         ListTag targets = tagmap.getList("textures", 8);
         for (int i = 0; i < targets.size(); ++i) {
             this.textures.add(targets.getString(i));
         }
     }
 
-    public void deserializeMusics(CompoundTag tags){
+    public void deserializeMusics(CompoundTag tags) {
         if (tags.contains("custom_music")) {
             Holder<SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation(tags.getString("custom_music"))));
             this.mobMusic = new Music(holder, 1, 1, true);
         }
-        if (tags.contains("music_priority")){
+        if (tags.contains("music_priority")) {
             this.music_priority = tags.getByte("music_priority");
         }
     }
 
     private void deserializeLevel(CompoundTag tagmap) {
-        this.level = tagmap.contains("level") ? tagmap.getByte("level") :  1;
+        this.level = tagmap.contains("level") ? tagmap.getByte("level") : 1;
     }
 
-    private void deserializeSkillMotions(CompoundTag tagmap){
-        if (tagmap.contains("skills")){
+    private void deserializeSkillMotions(CompoundTag tagmap) {
+        if (tagmap.contains("skills")) {
             this.skillmotions = tagmap.getCompound("skills");
         }
     }
 
-    public boolean hasSkill(String skill){
+    public boolean hasSkill(String skill) {
         return this.skillmotions.contains(skill);
     }
 
-    public StaticAnimation getSkillMotion(String skill){
-        if (skill.equals("divine_reflexes")){
+    public StaticAnimation getSkillMotion(String skill) {
+        if (skill.equals("divine_reflexes")) {
             ListTag motions = this.skillmotions.getList(skill, 8);
             return AnimationManager.getInstance().byKeyOrThrow(motions.getString(new Random().nextInt(motions.size()) + 1));
         }
         return AnimationManager.getInstance().byKeyOrThrow(this.skillmotions.getString(skill));
     }
 
-    public boolean isEquiped(){
+    public boolean isEquiped() {
         if (!this.equipmentMap.isEmpty()) {
             for (EquipmentSlot slot : this.equipmentMap.keySet()) {
                 if (this.equipmentMap.get(slot) != this.getItemBySlot(slot)) {
@@ -203,7 +198,7 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
         return this.entityData.get(VARIANT);
     }
 
-    public byte getPrideLevel(){
+    public byte getPrideLevel() {
         return this.level;
     }
 
@@ -214,11 +209,11 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(
-                    this,
-                    LivingEntity.class,
-                    true,
-                    entity -> this.targets.contains(EntityType.getKey(entity.getType()).toString())));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(
+                this,
+                LivingEntity.class,
+                true,
+                entity -> this.targets.contains(EntityType.getKey(entity.getType()).toString())));
     }
 
     @Nullable
@@ -231,10 +226,10 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
         return data;
     }
 
-    public byte getMaxVariations(){
-        if (PrideMobPatchReloader.MOB_TAGS.get(this.getType()) != null){
+    public byte getMaxVariations() {
+        if (PrideMobPatchReloader.MOB_TAGS.get(this.getType()) != null) {
             byte variations = PrideMobPatchReloader.MOB_TAGS.get(this.getType()).getByte("variations");
-            if (variations > 0){
+            if (variations > 0) {
                 return variations;
             }
         }
@@ -248,18 +243,18 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
             equipAllSlotsToDefault();
         }
         this.target = p_21544_;
-        if (p_21544_ != null && EpicFightCapabilities.getEntityPatch(p_21544_, LivingEntityPatch.class) == null){
-           deserializeFight(p_21544_, (byte) 0);
+        if (p_21544_ != null && EpicFightCapabilities.getEntityPatch(p_21544_, LivingEntityPatch.class) == null) {
+            deserializeFight(p_21544_, (byte) 0);
         }
     }
 
-    public void deserializeFight(LivingEntity target, byte animation){
-        if (target != null){
-            if (this.target == target && target.isAlive()){
-                if (this.distanceTo(target) < this.getBbHeight() * 3){
+    public void deserializeFight(LivingEntity target, byte animation) {
+        if (target != null) {
+            if (this.target == target && target.isAlive()) {
+                if (this.distanceTo(target) < this.getBbHeight() * 3) {
                     List<AnimationProvider<?>> motions = ItemStackUtils.getWeaponMotions(this.getMainHandItem());
-                    if (motions != null){
-                        if (animation > motions.size()){
+                    if (motions != null) {
+                        if (animation > motions.size()) {
                             animation = 0;
                         }
                         StaticAnimation animationtoplay = motions.get(animation).get();
@@ -267,23 +262,23 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
                         animation += 1;
                         byte finalAnimation = animation;
                         int delay = AnimUtils.getAnimationDurationInMilliseconds(this, animationtoplay);
-                        TimerUtil.schedule(()-> deserializeFight(target, finalAnimation), delay, TimeUnit.MILLISECONDS);
+                        TimerUtil.schedule(() -> deserializeFight(target, finalAnimation), delay, TimeUnit.MILLISECONDS);
                     }
                 }
             }
         }
     }
 
-    public Music getMobMusic(){
+    public Music getMobMusic() {
         return this.mobMusic;
     }
 
-    public byte getMusicPriority(){
+    public byte getMusicPriority() {
         return (byte) (this.music_priority + 1);
     }
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand){
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (!this.level().isClientSide) {
             if (this.target != null || isSpeaking.get(this) != null) {
                 return InteractionResult.FAIL;
@@ -295,40 +290,40 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
     }
 
     public void deserializeEquipmentMap(CompoundTag tagmap) {
-          ListTag equipments = tagmap.getList("equipment", 10);
-            if (equipments != null) {
-                for (int i = 0; i < equipments.size(); ++i) {
-                    CompoundTag equipment = equipments.getCompound(i);
-                    if (equipment.contains("variations")) {
-                        ListTag variations = equipment.getList("variations", 3);
-                        for (int j = 0; j < variations.size(); ++j) {
-                            if (getTypeVariant() == variations.getInt(j)) {
-                                if (equipment.contains("slot") && equipment.contains("item")) {
-                                    ItemStack item = EquipUtils.locateItem(equipment.getString("item"));
-                                    if (equipment.contains("element")) {
-                                        item.getOrCreateTag().putString("passive_element", equipment.getString("element"));
-                                    }
-                                    switch (equipment.getString("slot")) {
-                                        case "mainhand" -> this.equipmentMap.put(EquipmentSlot.MAINHAND, item);
-                                        case "offhand" -> this.equipmentMap.put(EquipmentSlot.OFFHAND, item);
-                                        case "head" -> this.equipmentMap.put(EquipmentSlot.HEAD, item);
-                                        case "chest" -> this.equipmentMap.put(EquipmentSlot.CHEST, item);
-                                        case "leg" -> this.equipmentMap.put(EquipmentSlot.LEGS, item);
-                                        case "feet" -> this.equipmentMap.put(EquipmentSlot.FEET, item);
-                                    }
+        ListTag equipments = tagmap.getList("equipment", 10);
+        if (equipments != null) {
+            for (int i = 0; i < equipments.size(); ++i) {
+                CompoundTag equipment = equipments.getCompound(i);
+                if (equipment.contains("variations")) {
+                    ListTag variations = equipment.getList("variations", 3);
+                    for (int j = 0; j < variations.size(); ++j) {
+                        if (getTypeVariant() == variations.getInt(j)) {
+                            if (equipment.contains("slot") && equipment.contains("item")) {
+                                ItemStack item = EquipUtils.locateItem(equipment.getString("item"));
+                                if (equipment.contains("element")) {
+                                    item.getOrCreateTag().putString("passive_element", equipment.getString("element"));
+                                }
+                                switch (equipment.getString("slot")) {
+                                    case "mainhand" -> this.equipmentMap.put(EquipmentSlot.MAINHAND, item);
+                                    case "offhand" -> this.equipmentMap.put(EquipmentSlot.OFFHAND, item);
+                                    case "head" -> this.equipmentMap.put(EquipmentSlot.HEAD, item);
+                                    case "chest" -> this.equipmentMap.put(EquipmentSlot.CHEST, item);
+                                    case "leg" -> this.equipmentMap.put(EquipmentSlot.LEGS, item);
+                                    case "feet" -> this.equipmentMap.put(EquipmentSlot.FEET, item);
                                 }
                             }
                         }
                     }
                 }
             }
+        }
         equipAllSlotsToDefault();
     }
 
-    public void setupDefaultNPC(){
+    public void setupDefaultNPC() {
         EntityAttributes attributes = this.getEasyNPCAttributeData().getEntityAttributes();
         attributes.setCombatAttributes(new CombatAttributes(true, 0));
-        attributes.setInteractionAttributes( new InteractionAttributes(true, false, true));
+        attributes.setInteractionAttributes(new InteractionAttributes(true, false, true));
         attributes.setMovementAttributes(new MovementAttributes(true, true, true, false));
         attributes.setEnvironmentalAttributes(new EnvironmentalAttributes(true, false, false));
         NetworkMessageHandlerManager.getServerHandler().combatAttributeChange(this.getUUID(), CombatAttributeType.IS_ATTACKABLE, true);
@@ -340,18 +335,18 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
         objectiveData.addObjective(new ObjectiveDataEntry(ObjectiveType.RANDOM_STROLL_AROUND_HOME, 5));
     }
 
-    public void equipAllSlotsToDefault(){
-       if (!this.equipmentMap.isEmpty()){
-           for (EquipmentSlot slot : this.equipmentMap.keySet()){
-               if (this.getItemBySlot(slot) != this.equipmentMap.get(slot)) {
-                   this.setItemSlot(slot, this.equipmentMap.get(slot));
-               }
-           }
-       }
+    public void equipAllSlotsToDefault() {
+        if (!this.equipmentMap.isEmpty()) {
+            for (EquipmentSlot slot : this.equipmentMap.keySet()) {
+                if (this.getItemBySlot(slot) != this.equipmentMap.get(slot)) {
+                    this.setItemSlot(slot, this.equipmentMap.get(slot));
+                }
+            }
+        }
     }
 
     @Override
-    public void die(DamageSource damageSource){
+    public void die(DamageSource damageSource) {
         this.refreshDimensions();
         AnimUtils.cancelMotion(this);
         super.die(damageSource);
@@ -376,8 +371,7 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
     public void deserializePassiveSkills() {
         if (this.hasSkill("open_door") && shouldOpenDoor() != null) {
             shouldOpenDoor().setOpen(this, this.level(), this.level().getBlockState(getBlockPosAhead()), getBlockPosAhead(), true);
-        }
-        else if (this.hasSkill("path_sneak") && shouldPathSneak()) {
+        } else if (this.hasSkill("path_sneak") && shouldPathSneak()) {
             AnimUtils.cancelMotion(this);
             AnimUtils.playAnim(this, getSkillMotion("path_sneak"), 0.1f);
             AnimUtils.resizeBoundingBox(this, 0.5f, 1.8f);
@@ -385,9 +379,9 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
         }
     }
 
-    public DoorBlock shouldOpenDoor(){
+    public DoorBlock shouldOpenDoor() {
         if (this.level().getBlockState(getBlockPosAhead()).getBlock() instanceof DoorBlock door) {
-            if(!door.isOpen(this.level().getBlockState(getBlockPosAhead()))){
+            if (!door.isOpen(this.level().getBlockState(getBlockPosAhead()))) {
                 return door;
             }
         }
@@ -404,7 +398,7 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
         return !(level().getBlockState(checkPos).getBlock() instanceof AirBlock) && level().getBlockState(checkPos.below()).getBlock() instanceof AirBlock;
     }
 
-    public BlockPos getBlockPosAhead(){
+    public BlockPos getBlockPosAhead() {
         Vec3 lookVec = this.getLookAngle().scale(1.5).add(this.position());
         return BlockPos.containing(lookVec);
     }
@@ -482,7 +476,7 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
 
     public ItemStack getProjectile(ItemStack p_33038_) {
         if (p_33038_.getItem() instanceof ProjectileWeaponItem) {
-            Predicate<ItemStack> predicate = ((ProjectileWeaponItem)p_33038_.getItem()).getSupportedHeldProjectiles();
+            Predicate<ItemStack> predicate = ((ProjectileWeaponItem) p_33038_.getItem()).getSupportedHeldProjectiles();
             ItemStack itemstack = ProjectileWeaponItem.getHeldProjectile(this, predicate);
             return ForgeHooks.getProjectile(this, p_33038_, itemstack.isEmpty() ? new ItemStack(Items.ARROW) : itemstack);
         } else {

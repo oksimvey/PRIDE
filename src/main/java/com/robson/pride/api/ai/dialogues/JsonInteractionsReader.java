@@ -10,13 +10,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
@@ -60,7 +56,7 @@ public class JsonInteractionsReader {
         }
     }
 
-    public static boolean deserializeConditions(Entity sourceent, Entity ent, ListTag conditions){
+    public static boolean deserializeConditions(Entity sourceent, Entity ent, ListTag conditions) {
         if (ent != null && conditions != null) {
             byte trueconditions = 0;
             for (int j = 0; j < conditions.size(); ++j) {
@@ -85,6 +81,7 @@ public class JsonInteractionsReader {
                 CompoundTag dialogue = tag.getCompound(i);
                 ClientLevel level = Minecraft.getInstance().level;
                 LocalPlayer player = Minecraft.getInstance().player;
+                Particle stringparticle = null;
                 if (dialogue.contains("actions")) {
                     deserializeActions(ent, dialogue.getList("actions", 10), (byte) 0);
                 }
@@ -103,11 +100,10 @@ public class JsonInteractionsReader {
                             volume = (float) dialogue.getDouble("volume");
                             volumemultiplier = (int) (volumemultiplier * dialogue.getDouble("volume"));
                         }
-                        Holder<net.minecraft.sounds.SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation(dialogue.getString("sound"))));
-                        level.playSound(player, ent, holder.get(), SoundSource.NEUTRAL, volume, 1);
+                        PlaySoundUtils.playNonRegisteredSound(ent, dialogue.getString("sound"), volume, 1);
                     }
                     if (ent.distanceTo(player) < ent.getBbHeight() * volumemultiplier) {
-                        player.displayClientMessage(Component.literal(dialogue.getString("subtitle")), true);
+                        stringparticle = ParticleUtils.spawnStringParticle(ent, dialogue.getString("subtitle"), StringParticle.StringParticleTypes.WHITE, duration / 50 - 1);
                     }
                     TimerUtil.schedule(() -> {
                         if (ent != null) {
@@ -127,32 +123,32 @@ public class JsonInteractionsReader {
                         }
                     }, duration, TimeUnit.MILLISECONDS);
                 }
-                if (dialogue.contains("is_question")){
-                    if (sourceent instanceof Player player1){
-                        deserializeQuestions(ent, player1, dialogue);
+                if (dialogue.contains("is_question")) {
+                    if (sourceent instanceof Player player1) {
+                        deserializeQuestions(ent, player1, dialogue, stringparticle);
                     }
                 }
             }
         }
     }
 
-    public static void deserializeQuestions(Entity ent, Player player, CompoundTag dialogue){
-        if (ent != null && player != null && dialogue != null){
-            if (dialogue.contains("true_answer") && dialogue.contains("false_answer") && dialogue.contains("duration")){
+    public static void deserializeQuestions(Entity ent, Player player, CompoundTag dialogue, Particle stringparticle) {
+        if (ent != null && player != null && dialogue != null) {
+            if (dialogue.contains("true_answer") && dialogue.contains("false_answer") && dialogue.contains("duration")) {
                 CompoundTag trueanswer = dialogue.getCompound("true_answer");
                 CompoundTag falseanswer = dialogue.getCompound("false_answer");
                 int duration = dialogue.getInt("duration");
-                if (trueanswer.contains("display") && falseanswer.contains("display") && trueanswer.contains("dialogues") && falseanswer.contains("dialogues")){
+                if (trueanswer.contains("display") && falseanswer.contains("display") && trueanswer.contains("dialogues") && falseanswer.contains("dialogues")) {
                     player.getPersistentData().putString("pride_true_answer", trueanswer.getString("display"));
                     player.getPersistentData().putString("pride_false_answer", falseanswer.getString("display"));
                     player.getPersistentData().put("pride_true_answer_dialogues", trueanswer.getList("dialogues", 10));
                     player.getPersistentData().put("pride_false_answer_dialogues", falseanswer.getList("dialogues", 10));
                     Minecraft client = Minecraft.getInstance();
-                    TimerUtil.schedule(()->isAnswering.put(player, new AnswerGUI(player, ent, player.getPersistentData(), client)), duration / 5, TimeUnit.MILLISECONDS);
-                    TimerUtil.schedule(()->{
-                        if (player != null && client.level != null && isAnswering.get(player) != null){
-                                isAnswering.get(player).onClose();
-                                isAnswering.get(player).onAnswer();
+                    TimerUtil.schedule(() -> isAnswering.put(player, new AnswerGUI(player, ent, player.getPersistentData(), client, stringparticle)), duration / 5, TimeUnit.MILLISECONDS);
+                    TimerUtil.schedule(() -> {
+                        if (player != null && client.level != null && isAnswering.get(player) != null) {
+                            isAnswering.get(player).onClose();
+                            isAnswering.get(player).onAnswer();
                         }
                     }, duration, TimeUnit.MILLISECONDS);
                 }
@@ -160,17 +156,17 @@ public class JsonInteractionsReader {
         }
     }
 
-    public static void deserializeActions(Entity ent, ListTag tag, byte i){
-        if (ent != null && tag != null){
-            if (i < tag.size()){
+    public static void deserializeActions(Entity ent, ListTag tag, byte i) {
+        if (ent != null && tag != null) {
+            if (i < tag.size()) {
                 CompoundTag action = tag.getCompound(i);
-                if (action.contains("action")){
+                if (action.contains("action")) {
                     ActionBase actionBase = ActionsRegister.actions.get(action.getString("action"));
-                    if (actionBase != null){
+                    if (actionBase != null) {
                         actionBase.onActionStart(ent, action);
                     }
-                    if (action.contains("duration")){
-                        TimerUtil.schedule(()-> deserializeActions(ent, tag, (byte) (i + 1)), action.getInt("duration"), TimeUnit.MILLISECONDS);
+                    if (action.contains("duration")) {
+                        TimerUtil.schedule(() -> deserializeActions(ent, tag, (byte) (i + 1)), action.getInt("duration"), TimeUnit.MILLISECONDS);
                     }
                 }
             }

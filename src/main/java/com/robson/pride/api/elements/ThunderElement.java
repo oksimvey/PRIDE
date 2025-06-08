@@ -1,49 +1,38 @@
 package com.robson.pride.api.elements;
 
+import com.robson.pride.api.client.GlintRenderTypes;
+import com.robson.pride.api.client.ItemRenderingParams;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.SchoolRegister;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
-import io.redspace.ironsspellbooks.damage.DamageSources;
-import io.redspace.ironsspellbooks.damage.ISSDamageTypes;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
-import yesman.epicfight.api.client.animation.property.TrailInfo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
-public class ThunderElement  extends ElementBase {
+public class ThunderElement extends ElementBase {
 
     public ParticleOptions getNormalParticleType() {
         return ParticleRegistry.ELECTRICITY_PARTICLE.get();
     }
 
-    public TrailInfo getTrailInfo(TrailInfo info){
-        return info;
+    public ItemRenderingParams getItemRenderingParams() {
+        return new ItemRenderingParams(100, 100, 50, new ResourceLocation("epicfight:textures/particle/efmc/thunder_trail.png"),
+                GlintRenderTypes.getSparkGlintDirect(), GlintRenderTypes.getSparkEntityGlintDirect());
     }
 
 
@@ -60,23 +49,25 @@ public class ThunderElement  extends ElementBase {
     }
 
 
-    public SchoolType getSchool(){
+    public SchoolType getSchool() {
         return SchoolRegister.THUNDER.get();
     }
 
     public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
         this.playSound(ent, 1);
-        thunderPassive(ent, dmgent, amount, new ArrayList<>());
+        thunderPassive(ent, dmgent, amount, new ArrayList<>(), true);
         return this.calculateFinalDamage(dmgent, ent, amount);
     }
 
-    public void thunderPassive(Entity ent, Entity dmgent, float power, List<Entity> hitentities) {
+    public void thunderPassive(Entity ent, Entity dmgent, float power, List<Entity> hitentities, boolean first) {
         if (ent != null && dmgent != null) {
             if (!dmgent.level().isClientSide) {
                 MagicManager.spawnParticles(dmgent.level(), ParticleHelper.ELECTRICITY, ent.getX(), ent.getY() + ent.getBbHeight() / 2, ent.getZ(), 10, ent.getBbWidth() / 3, ent.getBbHeight() / 3, ent.getBbWidth() / 3, 0.1, false);
             }
             PlaySoundUtils.playSound(ent, SoundRegistry.LIGHTNING_CAST.get(), 1, 1);
-            HealthUtils.hurtEntity(ent, this.calculateFinalDamage(dmgent, ent, power / 2), this.createDamageSource(dmgent));
+            if (!first) {
+                HealthUtils.hurtEntity(ent, this.calculateFinalDamage(dmgent, ent, power / 2), this.createDamageSource(dmgent));
+            }
             AnimUtils.playAnim(ent, AnimationsRegister.ELECTROCUTATE, 0);
             hitentities.add(ent);
             if (!ElementalUtils.isNotInWater(ent, new Vec3(ent.getX(), ent.getY(), ent.getZ()))) {
@@ -91,7 +82,7 @@ public class ThunderElement  extends ElementBase {
             List<Entity> listent = ent.level().getEntities(ent, aabb);
             for (Entity entko : listent) {
                 if (entko != null) {
-                    if (!ElementalUtils.isNotInWater(entko, new Vec3(entko.getX(), entko.getY(), entko.getZ())) && SkillCore.canHit(dmgent, entko,  hitentities)) {
+                    if (!ElementalUtils.isNotInWater(entko, new Vec3(entko.getX(), entko.getY(), entko.getZ())) && SkillCore.canHit(dmgent, entko, hitentities)) {
                         double x1 = ent.getX();
                         double y1 = ent.getY() + ent.getBbHeight() / 2;
                         double z1 = ent.getZ();
@@ -107,7 +98,7 @@ public class ThunderElement  extends ElementBase {
                             ParticleUtils.spawnParticleOnServer(ParticleRegistry.ELECTRICITY_PARTICLE.get(), ent.level(), finalx, finaly, finalz, 1, 0, 0, 0, 0);
                             double distance = MathUtils.getTotalDistance(x2 - finalx, y2 - finaly, z2 - finalz);
                             if (distance < 0.1) {
-                                thunderPassive(entko, dmgent, power, hitentities);
+                                thunderPassive(entko, dmgent, power, hitentities, false);
                                 break;
                             }
                         }

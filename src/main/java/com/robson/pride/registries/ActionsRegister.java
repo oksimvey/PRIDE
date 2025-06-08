@@ -10,7 +10,7 @@ public class ActionsRegister {
 
     public static Map<String, ActionBase> actions = new HashMap<>();
 
-    public static void register(){
+    public static void register() {
         actions.put("animation", new PlayAnimationAction());
         actions.put("moveToVec", new MoveToPosAction());
         actions.put("command", new PerformCommand());

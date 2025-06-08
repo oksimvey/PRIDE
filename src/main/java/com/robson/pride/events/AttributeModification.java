@@ -30,8 +30,7 @@ public class AttributeModification {
                     if (PrideCapabilityReloadListener.CAPABILITY_ARMOR_DATA_MAP.get(event.getTo().getItem()) != null) {
                         AttributeUtils.addModifier(ent, "minecraft:generic.armor", AttributeModifiers.getModifierBySlot(event.getSlot()), AttributeModifiers.calculateArmorModifier(event.getTo(), PrideCapabilityReloadListener.CAPABILITY_ARMOR_DATA_MAP.get(event.getTo().getItem()), 0), AttributeModifier.Operation.ADDITION);
                     }
-                }
-                else {
+                } else {
                     AttributeUtils.addModifier(ent, "epicfight:weight", "b4c793f6-b421-43cb-81e8-754fdfe278e4", ItemStackUtils.getWeaponWeight(ent, InteractionHand.OFF_HAND, EquipmentSlot.OFFHAND), AttributeModifier.Operation.ADDITION);
                     onFPress.addModifierToStyle(ent);
                     float modifier = AttributeModifiers.calculateModifier(ent, ent.getMainHandItem(), 1);

@@ -1,8 +1,6 @@
 {
-  "attributes":
-  {
-    "common":
-    {
+  "attributes": {
+    "common": {
       "weight": 10,
       "speed_bonus": 0.75
     }
@@ -22,7 +20,7 @@
   "requiredDexterity": 5,
   "scaleStrength": "A",
   "scaleDexterity": "C",
-"element": "Moon",
+  "element": "Moon",
   "skill": "Longsword Skill",
   "type": "pride:pride_katana"
 }

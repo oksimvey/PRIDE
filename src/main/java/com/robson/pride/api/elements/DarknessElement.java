@@ -1,22 +1,19 @@
 package com.robson.pride.api.elements;
 
+import com.robson.pride.api.client.GlintRenderTypes;
+import com.robson.pride.api.client.ItemRenderingParams;
 import com.robson.pride.api.utils.AttributeUtils;
-import com.robson.pride.api.utils.HealthUtils;
 import com.robson.pride.api.utils.MathUtils;
 import com.robson.pride.registries.ParticleRegister;
 import com.robson.pride.registries.SchoolRegister;
-import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
-import io.redspace.ironsspellbooks.damage.ISSDamageTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
-import yesman.epicfight.api.client.animation.property.TrailInfo;
 
 import java.util.Random;
 
@@ -32,8 +29,9 @@ public class DarknessElement extends ElementBase {
         return ParticleTypes.SMOKE;
     }
 
-    public TrailInfo getTrailInfo(TrailInfo info){
-        return info;
+    public ItemRenderingParams getItemRenderingParams() {
+        return new ItemRenderingParams(50, 150, 250, new ResourceLocation(""),
+                GlintRenderTypes.getFireGlintDirect(), GlintRenderTypes.getFreezeEntityGlintDirect());
     }
 
     public ChatFormatting getChatColor() {
@@ -49,7 +47,7 @@ public class DarknessElement extends ElementBase {
     }
 
 
-    public SchoolType getSchool(){
+    public SchoolType getSchool() {
         return SchoolRegister.DARKNESS.get();
     }
 
@@ -67,7 +65,7 @@ public class DarknessElement extends ElementBase {
             } else if (element.equals("Light") || element.equals("Sun")) {
                 multiplier = 1.5f;
             }
-           return MathUtils.getValueWithPercentageIncrease(multiplier *
+            return MathUtils.getValueWithPercentageIncrease(multiplier *
                             MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:darkness_resist")),
                     AttributeUtils.getAttributeValue(dmgent, "pride:darkness_power"));
         }

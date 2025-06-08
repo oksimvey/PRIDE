@@ -11,12 +11,11 @@ import net.minecraftforge.fml.common.Mod;
 public class ToolTipEvent {
 
     @SubscribeEvent
-    public static void tooltipEvent(ItemTooltipEvent event){
-        ItemStack item =  event.getItemStack();
+    public static void tooltipEvent(ItemTooltipEvent event) {
+        ItemStack item = event.getItemStack();
         if (PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem()) != null) {
             CustomTooltips.deserializeWeaponTooltip(item, PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem()), event);
-        }
-        else if (PrideCapabilityReloadListener.CAPABILITY_ARMOR_DATA_MAP.get(item.getItem()) != null){
+        } else if (PrideCapabilityReloadListener.CAPABILITY_ARMOR_DATA_MAP.get(item.getItem()) != null) {
             CustomTooltips.deserializeArmorTooltip(item, PrideCapabilityReloadListener.CAPABILITY_ARMOR_DATA_MAP.get(item.getItem()), event);
         }
     }

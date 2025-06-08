@@ -1,8 +1,6 @@
 {
-  "attributes":
-  {
-    "common":
-    {
+  "attributes": {
+    "common": {
       "weight": 10,
       "speed_bonus": 0.75
     }

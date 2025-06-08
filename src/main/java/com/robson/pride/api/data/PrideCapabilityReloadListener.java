@@ -1,6 +1,4 @@
 package com.robson.pride.api.data;
-import java.util.*;
-import java.util.function.Supplier;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -9,8 +7,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.datafixers.util.Pair;
-
-import com.robson.pride.registries.AttributeRegister;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -26,21 +22,17 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.ForgeRegistries;
-import yesman.epicfight.api.client.animation.property.TrailInfo;
 import yesman.epicfight.api.collider.Collider;
-import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.data.conditions.Condition;
 import yesman.epicfight.data.conditions.EpicFightConditions;
 import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.main.EpicFightMod;
-import yesman.epicfight.world.capabilities.item.ArmorCapability;
-import yesman.epicfight.world.capabilities.item.CapabilityItem;
-import yesman.epicfight.world.capabilities.item.Style;
-import yesman.epicfight.world.capabilities.item.TagBasedSeparativeCapability;
-import yesman.epicfight.world.capabilities.item.WeaponCapability;
-import yesman.epicfight.world.capabilities.item.WeaponTypeReloadListener;
+import yesman.epicfight.world.capabilities.item.*;
 import yesman.epicfight.world.capabilities.provider.ItemCapabilityProvider;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
+
+import java.util.*;
+import java.util.function.Supplier;
 
 public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListener {
     public static final String DIRECTORY = "pride_capabilities";
@@ -87,8 +79,7 @@ public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListe
                         CapabilityItem capability = deserializeArmor(item, tag);
                         ItemCapabilityProvider.put(item, capability);
                         CAPABILITY_ARMOR_DATA_MAP.put(item, tag);
-                    }
-                    else if (str[0].equals("weapons")) {
+                    } else if (str[0].equals("weapons")) {
                         CapabilityItem capability = deserializeWeapon(item, tag);
                         ItemCapabilityProvider.put(item, capability);
                         CAPABILITY_WEAPON_DATA_MAP.put(item, tag);
@@ -103,7 +94,7 @@ public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListe
     }
 
     public static CapabilityItem deserializeArmor(Item item, CompoundTag tag) {
-        ArmorCapability.Builder builder =ArmorCapability.builder();
+        ArmorCapability.Builder builder = ArmorCapability.builder();
         if (tag.contains("attributes")) {
             CompoundTag attributes = tag.getCompound("attributes");
             builder.weight(attributes.getDouble("weight")).stunArmor(attributes.getDouble("stun_armor"));
@@ -132,7 +123,7 @@ public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListe
             }
 
             for (Tag jsonElement : jsonArray) {
-                CompoundTag innerTag = ((CompoundTag)jsonElement);
+                CompoundTag innerTag = ((CompoundTag) jsonElement);
                 Supplier<Condition<ItemStack>> conditionProvider = EpicFightConditions.getConditionOrThrow(new ResourceLocation(innerTag.getString("condition")));
                 Condition<ItemStack> condition = conditionProvider.get().read(innerTag.getCompound("predicate"));
 
@@ -207,7 +198,7 @@ public class PrideCapabilityReloadListener extends SimpleJsonResourceReloadListe
         if (tag.contains("speed_bonus")) {
             modifierMap.put(Attributes.ATTACK_SPEED, EpicFightAttributes.getSpeedBonusModifier(tag.getDouble("speed_bonus")));
         }
-        if (tag.contains("weight")){
+        if (tag.contains("weight")) {
             modifierMap.put(EpicFightAttributes.WEIGHT.get(), new AttributeModifier(UUID.fromString("5975a582-14e0-4d16-b6ef-8cbe2c9593c0"), "epicfight:weapon_modifier", tag.getDouble("weight"), AttributeModifier.Operation.ADDITION));
         }
         return modifierMap;

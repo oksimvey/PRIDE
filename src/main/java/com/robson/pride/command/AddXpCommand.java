@@ -19,13 +19,13 @@ public class AddXpCommand implements Command<CommandSourceStack> {
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
         return Commands.literal("addxp")
                 .then(Commands.argument("stat", StringArgumentType.word()).suggests(((commandContext, suggestionsBuilder) -> {
-                    suggestionsBuilder.suggest("Strength");
-                    suggestionsBuilder.suggest("Dexterity");
-                    suggestionsBuilder.suggest("Vigor");
-                    suggestionsBuilder.suggest("Endurance");
-                    suggestionsBuilder.suggest("Mind");
-                    return suggestionsBuilder.buildFuture();
-                }))
+                            suggestionsBuilder.suggest("Strength");
+                            suggestionsBuilder.suggest("Dexterity");
+                            suggestionsBuilder.suggest("Vigor");
+                            suggestionsBuilder.suggest("Endurance");
+                            suggestionsBuilder.suggest("Mind");
+                            return suggestionsBuilder.buildFuture();
+                        }))
                         .then(Commands.argument("amount", IntegerArgumentType.integer())
                                 .executes(COMMAND)));
     }

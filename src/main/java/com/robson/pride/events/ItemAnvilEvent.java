@@ -27,7 +27,7 @@ public class ItemAnvilEvent {
                     event.setMaterialCost(1);
                 }
             }
-            if (!ParticleTracking.shouldRenderParticle(event.getLeft(), event.getPlayer())) {
+            if (!ParticleTracking.shouldRenderParticle(event.getLeft())) {
                 if (rightitem.getItem() == ItemsRegister.ELEMENTAL_GEM.get()) {
                     if (ElementalUtils.canPutElementalPassive(leftitem, rightitem)) {
                         ItemStack output = event.getLeft().copy();

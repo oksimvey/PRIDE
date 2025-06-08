@@ -1,7 +1,6 @@
 package com.robson.pride.progression;
 
 import com.robson.pride.api.utils.ElementalUtils;
-import com.robson.pride.api.utils.TagsUtils;
 import com.robson.pride.registries.WeaponSkillRegister;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
@@ -31,10 +30,10 @@ public class NewCap {
         if (oldtag.contains("pride_quests")) {
             newtag.put("pride_quests", oldtag.getList("pride_quests", 8));
         }
-        if (oldtag.contains("pride_money")){
+        if (oldtag.contains("pride_money")) {
             newtag.putLong("pride_money", oldtag.getLong("pride_money"));
         }
-        for (String element : WeaponSkillRegister.elements){
+        for (String element : WeaponSkillRegister.elements) {
             newtag.putInt(element + "Xp", oldtag.getInt(element + "Xp"));
             newtag.putByte(element + "Lvl", oldtag.getByte(element + "Lvl"));
             newtag.putInt(element + "MaxXp", oldtag.getInt(element + "MaxXp"));

@@ -1,16 +1,10 @@
 package com.robson.pride.api.ai.goals;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
-import com.robson.pride.api.entity.PrideMobBase;
-import com.robson.pride.api.utils.TargetUtil;
-import com.robson.pride.api.utils.TimerUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.behavior.MoveToTargetSink;
-
-import java.util.concurrent.TimeUnit;
 
 public class PrideChasingBehavior<T extends AdvancedCustomHumanoidMobPatch<?>> extends MoveToTargetSink {
     private final T mobpatch;
@@ -50,7 +44,7 @@ public class PrideChasingBehavior<T extends AdvancedCustomHumanoidMobPatch<?>> e
                     mob.getNavigation().stop();
                 } else if (this.mobpatch.isBlocking()) {
                     mob.lookAt(target, 30.0F, 30.0F);
-                    mob.getNavigation().moveTo(target, this.speed * (double)0.8F);
+                    mob.getNavigation().moveTo(target, this.speed * (double) 0.8F);
                 } else {
                     super.tick(level, mob, p_23619_);
                 }

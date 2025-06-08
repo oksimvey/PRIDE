@@ -6,7 +6,6 @@ import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.api.utils.TagsUtils;
 import com.robson.pride.progression.NewCap;
 import com.robson.pride.progression.PlayerAttributeSetup;
-import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -54,7 +53,7 @@ public class PlayerSetup {
         TagsUtils.ClientPlayerTagsAcessor.playerTags.put(event.getOriginal(), event.getEntity().getPersistentData());
         CompoundTag originaltag = event.getOriginal().getPersistentData();
         CompoundTag clonetag = event.getEntity().getPersistentData();
-        NewCap.setupVariables( originaltag, clonetag);
+        NewCap.setupVariables(originaltag, clonetag);
     }
 
     public static void playerCommonSetup(Player player) {

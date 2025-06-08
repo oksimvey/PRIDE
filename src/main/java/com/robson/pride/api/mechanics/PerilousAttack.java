@@ -83,8 +83,7 @@ public class PerilousAttack {
     public static void PerilousSucess(Entity ent, LivingAttackEvent event) {
         if (ent instanceof Player player) {
             player.stopUsingItem();
-        }
-        else {
+        } else {
             AdvancedCustomHumanoidMobPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
             if (livingEntityPatch != null) {
                 livingEntityPatch.setBlocking(false);

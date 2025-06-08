@@ -6,17 +6,12 @@ import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.ProgressionUtils;
 import com.robson.pride.api.utils.TagsUtils;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-
-import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI> {
 
@@ -69,8 +64,8 @@ public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         if (player != null) {
-                CompoundTag variables = TagsUtils.ClientPlayerTagsAcessor.playerTags.get(player);
-                String element = ElementalUtils.getElement(player);
+            CompoundTag variables = TagsUtils.ClientPlayerTagsAcessor.playerTags.get(player);
+            String element = ElementalUtils.getElement(player);
             guiGraphics.drawString(this.font,
                     ("Strength Level:" + variables.getInt("StrengthLvl")), 118, 14, -1, false);
             guiGraphics.drawString(this.font,

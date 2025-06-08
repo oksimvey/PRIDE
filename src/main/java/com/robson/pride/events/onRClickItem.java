@@ -33,11 +33,11 @@ public class onRClickItem {
         }
     }
 
-    private static boolean isBlockingWithShield(Player player){
+    private static boolean isBlockingWithShield(Player player) {
         return player != null && player.isUsingItem() && (ItemStackUtils.checkShield(player, InteractionHand.MAIN_HAND) || ItemStackUtils.checkShield(player, InteractionHand.OFF_HAND));
     }
 
-    private static void shieldEffect(Player player){
+    private static void shieldEffect(Player player) {
         if (player != null) {
             TimerUtil.schedule(() -> {
                 if (isBlockingWithShield(player)) {
@@ -46,8 +46,7 @@ public class onRClickItem {
             }, 500, TimeUnit.MILLISECONDS);
             if (player.hasEffect(EpicFightMobEffects.STUN_IMMUNITY.get())) {
                 player.removeEffect(EpicFightMobEffects.STUN_IMMUNITY.get());
-            }
-            else player.addEffect(new MobEffectInstance(EpicFightMobEffects.STUN_IMMUNITY.get(), 10));
+            } else player.addEffect(new MobEffectInstance(EpicFightMobEffects.STUN_IMMUNITY.get(), 10));
         }
     }
 }

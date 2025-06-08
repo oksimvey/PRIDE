@@ -5,7 +5,7 @@ import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPat
 import net.minecraft.world.entity.PathfinderMob;
 import yesman.epicfight.world.capabilities.entitypatch.Faction;
 
-public class PrideMobPatch <T extends PathfinderMob> extends AdvancedCustomHumanoidMobPatch<T> {
+public class PrideMobPatch<T extends PathfinderMob> extends AdvancedCustomHumanoidMobPatch<T> {
 
     public AdvancedMobpatchReloader.AdvancedCustomHumanoidMobPatchProvider provider;
 

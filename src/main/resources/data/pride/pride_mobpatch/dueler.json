@@ -8,8 +8,7 @@
   "boss_bar": false,
   "custom_texture": "indestructible:textures/gui/boss_bar.png",
   "custom_name": "",
-"custom_music": "pride:dueler",
-
+  "custom_music": "pride:dueler",
   "attributes": {
     "impact": 1.0,
     "armor_negation": 0,
@@ -36,16 +35,24 @@
   },
   "humanoid_weapon_motions": [
     {
-      "weapon_categories": ["axe", "hoe", "pickaxe", "shovel", "sword"],
-      "style":"common",
+      "weapon_categories": [
+        "axe",
+        "hoe",
+        "pickaxe",
+        "shovel",
+        "sword"
+      ],
+      "style": "common",
       "livingmotions": {
         "chase": "epicfight:biped/living/hold_longsword",
         "walk": "epicfight:biped/living/walk"
       }
     },
     {
-      "weapon_categories": ["longsword"],
-      "style":"common",
+      "weapon_categories": [
+        "longsword"
+      ],
+      "style": "common",
       "livingmotions": {
         "chase": "epicfight:biped/living/hold_longsword",
         "walk": "epicfight:biped/living/hold_longsword"
@@ -54,13 +61,18 @@
   ],
   "custom_guard_motion": [
     {
-      "weapon_categories": ["longsword","tachi","sword", "rapier"],
-      "style":"common",
+      "weapon_categories": [
+        "longsword",
+        "tachi",
+        "sword",
+        "rapier"
+      ],
+      "style": "common",
       "guard": "refm:biped/skill/guard_rapier",
       "stamina_cost_multiply": 3,
-      "can_block_projectile" : false,
+      "can_block_projectile": false,
       "parry_cost_multiply": 1.0,
-      "parry_animation":[]
+      "parry_animation": []
     }
   ],
   "stun_animations": {
@@ -70,11 +82,19 @@
     "fall": "epicfight:biped/living/landing",
     "neutralize": "epicfight:biped/skill/guard_break1"
   },
-  "textures": ["pride:textures/entities/savana/dueler1.png"],
-  "skills": ["open_door", "path_sneak", "path_roll"],
+  "textures": [
+    "pride:textures/entities/savana/dueler1.png"
+  ],
+  "skills": [
+    "open_door",
+    "path_sneak",
+    "path_roll"
+  ],
   "equipment": [
     {
-      "variations": [0],
+      "variations": [
+        0
+      ],
       "slot": "mainhand",
       "item": "refm:iron_rapier"
     }
@@ -107,7 +127,9 @@
                 "actions": [
                   {
                     "action": "set_target",
-                    "entity_types": ["minecraft:player"],
+                    "entity_types": [
+                      "minecraft:player"
+                    ],
                     "range": 20
                   }
                 ]
@@ -130,7 +152,9 @@
   ],
   "combat_behavior": [
     {
-      "weapon_categories": ["rapier"],
+      "weapon_categories": [
+        "rapier"
+      ],
       "style": "common",
       "behavior_series": [
         {
@@ -140,29 +164,90 @@
           "behaviors": [
             {
               "conditions": [
-                {"predicate": "pride:passiveskill"}, {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},   {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {
+                  "predicate": "pride:passiveskill"
+                },
+                {
+                  "predicate": "within_eye_height"
+                },
+                {
+                  "predicate": "within_distance",
+                  "min": 0.0,
+                  "max": 5.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
               ],
               "animation": "refm:biped/combat/rapier_auto1"
-
             },
             {
               "conditions": [
-                {"predicate": "pride:passiveskill"},  {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0}, {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {
+                  "predicate": "pride:passiveskill"
+                },
+                {
+                  "predicate": "within_eye_height"
+                },
+                {
+                  "predicate": "within_distance",
+                  "min": 0.0,
+                  "max": 5.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
               ],
               "animation": "refm:biped/combat/rapier_auto2"
-
             },
             {
               "conditions": [
-                {"predicate": "pride:passiveskill"},  {"predicate":"within_eye_height"}, {"predicate":"within_distance", "min": 0.0, "max": 5.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {
+                  "predicate": "pride:passiveskill"
+                },
+                {
+                  "predicate": "within_eye_height"
+                },
+                {
+                  "predicate": "within_distance",
+                  "min": 0.0,
+                  "max": 5.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
               ],
               "animation": "refm:biped/combat/rapier_auto3"
             },
             {
               "conditions": [
-                {"predicate": "pride:passiveskill"},   {"predicate":"within_eye_height"},{"predicate": "random_chance", "chance": 0.75}, {"predicate":"within_distance", "min": 0.0, "max": 10.0},  {"predicate":"indestructible:attack_level", "min": 0, "max": 0}
+                {
+                  "predicate": "pride:passiveskill"
+                },
+                {
+                  "predicate": "within_eye_height"
+                },
+                {
+                  "predicate": "random_chance",
+                  "chance": 0.75
+                },
+                {
+                  "predicate": "within_distance",
+                  "min": 0.0,
+                  "max": 10.0
+                },
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 0,
+                  "max": 0
+                }
               ],
-
               "animation": "refm:biped/combat/rapier_dash",
               "command_list": [
                 {
@@ -185,7 +270,14 @@
                 {
                   "predicate": "within_eye_height"
                 },
-                {"predicate": "pride:passiveskill"},   {"predicate": "health", "health": 0.9, "comparator": "greater_ratio"},
+                {
+                  "predicate": "pride:passiveskill"
+                },
+                {
+                  "predicate": "health",
+                  "health": 0.9,
+                  "comparator": "greater_ratio"
+                },
                 {
                   "predicate": "within_distance",
                   "min": 5.0,
@@ -230,18 +322,25 @@
           "behaviors": [
             {
               "conditions": [
-                {"predicate":"indestructible:attack_level", "min": 1, "max": 1}
+                {
+                  "predicate": "indestructible:attack_level",
+                  "min": 1,
+                  "max": 1
+                }
               ],
               "guard": 5,
               "parry": true,
               "counter_chance": 0,
               "stun_immunity_time": 30,
-              "specific_guard_motion":{
+              "specific_guard_motion": {
                 "guard": "refm:biped/skill/guard_rapier",
                 "stamina_cost_multiply": 0.0,
-                "can_block_projectile" : true,
+                "can_block_projectile": true,
                 "parry_cost_multiply": 0.0,
-                "parry_animation":["epicfight:biped/skill/guard_sword_hit_active1", "epicfight:biped/skill/guard_sword_hit_active2"]
+                "parry_animation": [
+                  "epicfight:biped/skill/guard_sword_hit_active1",
+                  "epicfight:biped/skill/guard_sword_hit_active2"
+                ]
               }
             }
           ]

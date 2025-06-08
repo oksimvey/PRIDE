@@ -26,37 +26,36 @@ public class ElementalUtils {
     }
 
     public static ParticleOptions getParticleByElement(String element) {
-       if (elements.get(element) != null){
-           return elements.get(element).getNormalParticleType();
-       }
-       return null;
+        if (elements.get(element) != null) {
+            return elements.get(element).getNormalParticleType();
+        }
+        return null;
     }
 
     public static ChatFormatting getColorByElement(String element) {
         if (elements.get(element) != null) {
-           return elements.get(element).getChatColor();
+            return elements.get(element).getChatColor();
         }
         return ChatFormatting.GRAY;
     }
 
     public static void playSoundByElement(String element, Entity ent, float volume) {
-        if (elements.get(element) != null){
+        if (elements.get(element) != null) {
             elements.get(element).playSound(ent, volume);
         }
     }
 
-    public static boolean canPutElementalPassive(ItemStack leftitem, ItemStack rightitem){
-        if (leftitem != null && rightitem != null){
+    public static boolean canPutElementalPassive(ItemStack leftitem, ItemStack rightitem) {
+        if (leftitem != null && rightitem != null) {
             String leftelement = "";
-            if (leftitem.getTag().getBoolean("hasweaponart")){
+            if (leftitem.getTag().getBoolean("hasweaponart")) {
                 leftelement = WeaponSkills.get(leftitem.getTag().getString("weapon_art")).getSkillElement();
-            }
-            else {
+            } else {
                 CompoundTag tag = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(leftitem.getItem());
-                if (tag != null){
-                    if (tag.contains("skill")){
+                if (tag != null) {
+                    if (tag.contains("skill")) {
                         WeaponSkillBase skill = WeaponSkills.get(tag.getString("skill"));
-                        if (skill != null){
+                        if (skill != null) {
                             leftelement = skill.getSkillElement();
                         }
                     }
@@ -67,7 +66,7 @@ public class ElementalUtils {
         return false;
     }
 
-    public static boolean canPutWeaponArt(ItemStack leftitem, ItemStack rightitem){
+    public static boolean canPutWeaponArt(ItemStack leftitem, ItemStack rightitem) {
         if (leftitem != null && rightitem != null) {
             String rightelement = WeaponSkills.get(rightitem.getTag().getString("weapon_art")).getSkillElement();
             String leftelement = getItemElement(leftitem);
@@ -76,7 +75,7 @@ public class ElementalUtils {
         return false;
     }
 
-    public static String getItemElement(ItemStack item){
+    public static String getItemElement(ItemStack item) {
         String element = "";
         if (item != null) {
             if (item.getTag() != null) {
@@ -101,39 +100,30 @@ public class ElementalUtils {
             short chance = (short) MathUtils.getRandomInt(1000);
             if (chance == 0) {
                 setElement(ent, "Darkness");
-            }
-            else if (chance >= 1 && chance <= 10) {
+            } else if (chance >= 1 && chance <= 10) {
                 setElement(ent, "Light");
-            }
-            else if (chance >= 11 && chance <= 40) {
+            } else if (chance >= 11 && chance <= 40) {
                 setElement(ent, "Thunder");
-            }
-            else if (chance >= 41 && chance <= 90) {
+            } else if (chance >= 41 && chance <= 90) {
                 setElement(ent, "Sun");
-            }
-            else if (chance >= 91 && chance <= 140) {
+            } else if (chance >= 91 && chance <= 140) {
                 setElement(ent, "Moon");
-            }
-            else if (chance >= 141 && chance <= 240) {
+            } else if (chance >= 141 && chance <= 240) {
                 setElement(ent, "Blood");
-            }
-            else if (chance >= 241 && chance <= 340) {
+            } else if (chance >= 241 && chance <= 340) {
                 setElement(ent, "Wind");
-            }
-            else if (chance >= 341 && chance <= 560) {
+            } else if (chance >= 341 && chance <= 560) {
                 setElement(ent, "Nature");
-            }
-            else if (chance >= 561 && chance <= 780) {
+            } else if (chance >= 561 && chance <= 780) {
                 setElement(ent, "Ice");
-            }
-            else setElement(ent, "Water");
+            } else setElement(ent, "Water");
         }
     }
 
     public static String getElement(Entity ent) {
         if (ent != null) {
             if (ent instanceof Player player) {
-                    return TagsUtils.ClientPlayerTagsAcessor.playerTags.get(player).getString("Element");
+                return TagsUtils.ClientPlayerTagsAcessor.playerTags.get(player).getString("Element");
             }
         }
         return "";

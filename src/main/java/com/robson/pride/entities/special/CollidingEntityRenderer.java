@@ -28,7 +28,7 @@ public class CollidingEntityRenderer extends EntityRenderer<CollidingEntity> {
         PoseStack.Pose pose = poseStack.last();
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - entity.getYRot()));
         poseStack.mulPose(Axis.ZP.rotationDegrees(entity.getXRot()));
-        float randomZ = (float)(new Random(31L * (long)entity.getId())).nextInt(-8, 8);
+        float randomZ = (float) (new Random(31L * (long) entity.getId())).nextInt(-8, 8);
         poseStack.mulPose(Axis.XP.rotationDegrees(randomZ));
         this.drawSlash(pose, entity, bufferSource, entity.getBbWidth() * 1.5F, false);
         poseStack.popPose();

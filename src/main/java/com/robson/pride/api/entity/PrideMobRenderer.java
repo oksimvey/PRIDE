@@ -17,7 +17,7 @@ public class PrideMobRenderer extends HumanoidMobRenderer<PrideMobBase, Humanoid
 
     @Override
     public ResourceLocation getTextureLocation(PrideMobBase entity) {
-        if (!entity.textures.isEmpty()){
+        if (!entity.textures.isEmpty()) {
             return CustomTextureManager.getOrCreateTextureWithDefault(entity.getEasyNPCSkinData(), new ResourceLocation(entity.textures.get(entity.getTypeVariant())));
         }
         return CustomTextureManager.getOrCreateTextureWithDefault(entity.getEasyNPCSkinData(), new ResourceLocation("pride:textures/entities/special/empty.png"));

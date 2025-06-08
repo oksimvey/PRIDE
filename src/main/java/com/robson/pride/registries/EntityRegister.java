@@ -2,6 +2,7 @@ package com.robson.pride.registries;
 
 import com.robson.pride.entities.badlands.Cowboy;
 import com.robson.pride.entities.forest.FireDragon;
+import com.robson.pride.entities.forest.eliteknight.EliteKnight;
 import com.robson.pride.entities.forest.hunter.Hunter;
 import com.robson.pride.entities.forest.magmamonster.MagmaMonster;
 import com.robson.pride.entities.gods.Furventor;
@@ -10,7 +11,6 @@ import com.robson.pride.entities.gods.Theophoros;
 import com.robson.pride.entities.gods.Wotanstrom;
 import com.robson.pride.entities.japanese.boss.shogun.Shogun;
 import com.robson.pride.entities.japanese.mob.ronin.Ronin;
-import com.robson.pride.entities.forest.eliteknight.EliteKnight;
 import com.robson.pride.entities.savana.Dueler;
 import com.robson.pride.entities.special.CloneEntity;
 import com.robson.pride.entities.special.CollidingEntity;
@@ -38,7 +38,7 @@ public class EntityRegister {
     public static final RegistryObject<EntityType<Ronin>> RONIN = make(false, new ResourceLocation("ronin"), Ronin::new, MobCategory.MONSTER, 0.8F, 2.25F);
     public static final RegistryObject<EntityType<Shogun>> SHOGUN = make(false, new ResourceLocation("shogun"), Shogun::new, MobCategory.MONSTER, 1, 2.5F);
     public static final RegistryObject<EntityType<EliteKnight>> ELITE_KNIGHT = make(false, new ResourceLocation("elite_knight"), EliteKnight::new, MobCategory.MONSTER, 0.9F, 2.25f);
-    public static final RegistryObject<EntityType<CloneEntity>> CLONE_ENTITY = make(true,new ResourceLocation("clone_entity"), CloneEntity::new, MobCategory.MONSTER, 0.8f, 1.8f);
+    public static final RegistryObject<EntityType<CloneEntity>> CLONE_ENTITY = make(true, new ResourceLocation("clone_entity"), CloneEntity::new, MobCategory.MONSTER, 0.8f, 1.8f);
     public static final RegistryObject<EntityType<Hunter>> HUNTER = make(false, new ResourceLocation("hunter"), Hunter::new, MobCategory.MONSTER, 0.8f, 1.8f);
     public static final RegistryObject<EntityType<Shooter>> SHOOTER = make(true, new ResourceLocation("shooter"), Shooter::new, MobCategory.MONSTER, 0.25f, 0.25f);
     public static final RegistryObject<EntityType<MagmaMonster>> MAGMA_MONSTER = make(false, new ResourceLocation("magma_monster"), MagmaMonster::new, MobCategory.MONSTER, 1, 2.5f);
@@ -46,7 +46,7 @@ public class EntityRegister {
     public static final RegistryObject<EntityType<Mordath>> MORDATH = make(false, new ResourceLocation("mordath"), Mordath::new, MobCategory.MONSTER, 0.8f, 2f);
     public static final RegistryObject<EntityType<Cowboy>> COWBOY = make(false, new ResourceLocation("cowboy"), Cowboy::new, MobCategory.MONSTER, 0.8f, 1.8f);
     public static final RegistryObject<EntityType<Theophoros>> THEOPOROS = make(false, new ResourceLocation("theoporos"), Theophoros::new, MobCategory.MONSTER, 1.6f, 3.6f);
-    public static final RegistryObject<EntityType<CollidingEntity>> COLLIDING_ENTITY = make(true, new ResourceLocation("colliding_entity"), CollidingEntity::new, MobCategory.MISC,  1f, 1f);
+    public static final RegistryObject<EntityType<CollidingEntity>> COLLIDING_ENTITY = make(true, new ResourceLocation("colliding_entity"), CollidingEntity::new, MobCategory.MISC, 1f, 1f);
     public static final RegistryObject<EntityType<Furventor>> FURVENTOR = make(false, new ResourceLocation("furventor"), Furventor::new, MobCategory.MONSTER, 2.4f, 5.4f);
     public static final RegistryObject<EntityType<Wotanstrom>> WOTANSTROM = make(false, new ResourceLocation("wotanstrom"), Wotanstrom::new, MobCategory.MONSTER, 2f, 4.5F);
 
@@ -55,7 +55,7 @@ public class EntityRegister {
     }
 
     private static <E extends Entity> RegistryObject<EntityType<E>> make(boolean special, ResourceLocation id, EntityType.EntityFactory<E> factory, MobCategory classification, float width, float height, boolean fireproof) {
-        return special ?  buildSpecial(id, makeBuilder(factory, classification, width, height, 80, 3), fireproof) : build(id, makeBuilder(factory, classification, width, height, 80, 3), fireproof);
+        return special ? buildSpecial(id, makeBuilder(factory, classification, width, height, 80, 3), fireproof) : build(id, makeBuilder(factory, classification, width, height, 80, 3), fireproof);
     }
 
     @SuppressWarnings("unchecked")

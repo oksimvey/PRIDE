@@ -118,7 +118,7 @@ public class PrideTabRegister {
             .withTabsBefore(SKILLS_TAB.getKey())
             .build());
 
-    public static ItemStack getElementalGem(Item item, String element){
+    public static ItemStack getElementalGem(Item item, String element) {
         ItemStack itemStack = new ItemStack(item);
         itemStack.setCount(1);
         itemStack.getOrCreateTag().putString("passive_element", element);

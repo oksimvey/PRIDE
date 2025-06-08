@@ -12,8 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import yesman.epicfight.api.animation.AnimationProvider;
-import yesman.epicfight.client.events.engine.ControllEngine;
-import yesman.epicfight.client.input.EpicFightKeyMappings;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
@@ -49,10 +47,10 @@ public class ItemStackUtils {
         return null;
     }
 
-    public static float getColliderSize(ItemStack item){
-        if (item != null){
+    public static float getColliderSize(ItemStack item) {
+        if (item != null) {
             List<AABB> colliders = PrideCapabilityReloadListener.WEAPON_COLLIDER.get(item.getItem());
-            if (colliders != null){
+            if (colliders != null) {
                 float totalsize = 0;
                 for (AABB collider : colliders) {
                     totalsize += MathUtils.getTotalDistance(collider.maxX + collider.minX, collider.maxY + collider.minY, collider.maxZ + collider.minZ);
@@ -63,11 +61,11 @@ public class ItemStackUtils {
         return 1;
     }
 
-    public static List<AnimationProvider<?>> getWeaponMotions(ItemStack weapon){
-        if (weapon != null && Minecraft.getInstance().player != null){
+    public static List<AnimationProvider<?>> getWeaponMotions(ItemStack weapon) {
+        if (weapon != null && Minecraft.getInstance().player != null) {
             CapabilityItem capabilityItem = EpicFightCapabilities.getItemStackCapability(weapon);
-            if (capabilityItem != null){
-                if (capabilityItem instanceof WeaponCapability weaponCapability){
+            if (capabilityItem != null) {
+                if (capabilityItem instanceof WeaponCapability weaponCapability) {
                     return weaponCapability.getAutoAttckMotion(EpicFightCapabilities.getEntityPatch(Minecraft.getInstance().player, PlayerPatch.class));
                 }
             }

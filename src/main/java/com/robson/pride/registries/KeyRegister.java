@@ -79,8 +79,7 @@ public class KeyRegister {
         }
         if (key == keyActionSpecial) {
             wasPressedSpecial = isCurrentlyPressed;
-        }
-        else if (key == keyActionSecondary) {
+        } else if (key == keyActionSecondary) {
             wasPressedSecondary = isCurrentlyPressed;
         } else if (key == keyActionTertiary) {
             wasPressedTertiary = isCurrentlyPressed;
@@ -88,20 +87,15 @@ public class KeyRegister {
             wasPressedJump = isCurrentlyPressed;
         } else if (key == keyActionSwapHand) {
             wasPressedSwapHand = isCurrentlyPressed;
-        }
-        else if (key == keyActionAura){
+        } else if (key == keyActionAura) {
             wasPressedAura = isCurrentlyPressed;
-        }
-        else if (key == keyActionImbuement){
+        } else if (key == keyActionImbuement) {
             wasPressedImbuement = isCurrentlyPressed;
-        }
-        else if (key == keyActionImmunity){
+        } else if (key == keyActionImmunity) {
             wasPressedImmunity = isCurrentlyPressed;
-        }
-        else if (key == keyActionAwakening){
+        } else if (key == keyActionAwakening) {
             wasPressedAwakening = isCurrentlyPressed;
-        }
-        else if (key == keyActionMobility){
+        } else if (key == keyActionMobility) {
             wasPressedMobility = isCurrentlyPressed;
         }
     }

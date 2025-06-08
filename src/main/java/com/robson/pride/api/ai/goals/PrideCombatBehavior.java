@@ -1,15 +1,5 @@
 package com.robson.pride.api.ai.goals;
 
-import com.github.leawind.thirdperson.api.client.event.ThirdPersonCameraSetupEvent;
-import com.nameless.indestructible.mixin.CombatBehaviorsMixin;
-import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
-import com.robson.pride.api.entity.PrideMobBase;
-import com.robson.pride.api.utils.CommandUtils;
-import net.minecraft.client.Minecraft;
-import yesman.epicfight.api.animation.types.EntityState;
-import yesman.epicfight.world.capabilities.entitypatch.MobPatch;
-import yesman.epicfight.world.entity.ai.goal.CombatBehaviors;
-
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,6 +9,8 @@ import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.player.Player;
+import yesman.epicfight.world.capabilities.entitypatch.MobPatch;
+import yesman.epicfight.world.entity.ai.goal.CombatBehaviors;
 
 public class PrideCombatBehavior<T extends MobPatch<?>> extends Behavior<Mob> {
 
@@ -41,6 +33,6 @@ public class PrideCombatBehavior<T extends MobPatch<?>> extends Behavior<Mob> {
     }
 
     protected boolean isValidTarget(LivingEntity attackTarget) {
-        return attackTarget != null && attackTarget.isAlive() && (!(attackTarget instanceof Player) || !attackTarget.isSpectator() && !((Player)attackTarget).isCreative());
+        return attackTarget != null && attackTarget.isAlive() && (!(attackTarget instanceof Player) || !attackTarget.isSpectator() && !((Player) attackTarget).isCreative());
     }
 }

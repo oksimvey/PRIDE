@@ -10,7 +10,7 @@ public class RandomChanceCondition extends DialogueConditionBase {
 
     @Override
     public boolean isTrue(Entity ent, Entity target, CompoundTag predicate) {
-        if (predicate.contains("chance")){
+        if (predicate.contains("chance")) {
             return new Random().nextInt(101) <= predicate.getInt("chance");
         }
         return false;

@@ -11,11 +11,11 @@ public class EntityTypeCondition extends DialogueConditionBase {
 
     @Override
     public boolean isTrue(Entity ent, Entity target, CompoundTag predicate) {
-        if (ent != null){
-            if (predicate.contains("types")){
+        if (ent != null) {
+            if (predicate.contains("types")) {
                 ListTag types = predicate.getList("types", 8);
-                for(int i = 0; i < types.size(); ++i){
-                    if (types.getString(i).equals(EntityType.getKey(ent.getType()).toString())){
+                for (int i = 0; i < types.size(); ++i) {
+                    if (types.getString(i).equals(EntityType.getKey(ent.getType()).toString())) {
                         return true;
                     }
                 }

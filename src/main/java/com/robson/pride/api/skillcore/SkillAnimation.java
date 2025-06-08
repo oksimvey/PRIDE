@@ -10,13 +10,13 @@ public class SkillAnimation {
 
     private Runnable function;
 
-    public SkillAnimation(StaticAnimation animation, Runnable function){
+    public SkillAnimation(StaticAnimation animation, Runnable function) {
         this.animation = animation;
         this.function = function;
     }
 
-    public void play(Entity ent){
-        if (ent != null){
+    public void play(Entity ent) {
+        if (ent != null) {
             if (this.function != null) {
                 function.run();
             }
@@ -24,7 +24,7 @@ public class SkillAnimation {
         }
     }
 
-    public int getDuration(Entity ent){
-        return  AnimUtils.getAnimationDurationInMilliseconds(ent, this.animation);
+    public int getDuration(Entity ent) {
+        return AnimUtils.getAnimationDurationInMilliseconds(ent, this.animation);
     }
 }

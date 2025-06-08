@@ -32,6 +32,6 @@ public class CastSpellCommand implements Command<CommandSourceStack> {
         String spellId = StringArgumentType.getString(context, "spell");
         int power = IntegerArgumentType.getInteger(context, "power");
         SpellUtils.castSpell((LivingEntity) ent, SpellRegistry.getSpell(IronsSpellbooks.MODID + ":" + spellId), power);
-         return 1;
+        return 1;
     }
 }

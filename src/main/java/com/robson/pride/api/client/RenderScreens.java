@@ -6,9 +6,9 @@ import static com.robson.pride.api.ai.dialogues.JsonInteractionsReader.isAnsweri
 
 public class RenderScreens {
 
-    public static void renderPlayerScreens(Minecraft client){
-        if (client.player != null){
-            if (isAnswering.get(client.player) != null){
+    public static void renderPlayerScreens(Minecraft client) {
+        if (client.player != null) {
+            if (isAnswering.get(client.player) != null) {
                 client.setScreen(isAnswering.get(client.player));
             }
         }

@@ -6,11 +6,7 @@ import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.effect.ImbuementEffect;
 import com.robson.pride.registries.EffectRegister;
-import com.robson.pride.registries.WeaponSkillRegister;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -31,27 +27,34 @@ public class ParticleTracking {
 
     private static ConcurrentHashMap<Entity, Boolean> togglefire = new ConcurrentHashMap<>();
 
-    public static boolean shouldRenderParticle(ItemStack item, Entity ent) {
+    private static ConcurrentHashMap<ItemStack, ElementBase> itemParticleMap = new ConcurrentHashMap<>();
+
+    public static boolean shouldRenderParticle(ItemStack item) {
+        return item != null && itemParticleMap.get(item) != null;
+    }
+
+    public static void tickParticleMapping(ItemStack item, Entity ent) {
+        boolean result = false;
         if (item != null && ent != null) {
             if (item.getTag() != null) {
                 String element = ElementalUtils.getItemElement(item);
-                if (elements.containsKey(element)){
-                   return !element.equals("Sun") || shouldRenderSunParticle(ent);
-                }
-                if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMBUEMENT.get())){
-                    if (living.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect){
-                        if (elements.containsKey(imbuementEffect.element) && imbuementEffect.active){
-                          return !imbuementEffect.element.equals("Sun") || shouldRenderSunParticle(ent);
+                if (elements.containsKey(element)) {
+                    result = !element.equals("Sun") || shouldRenderSunParticle(ent);
+                } else if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMBUEMENT.get())) {
+                    if (living.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect) {
+                        if (elements.containsKey(imbuementEffect.element) && imbuementEffect.active) {
+                            result = !imbuementEffect.element.equals("Sun") || shouldRenderSunParticle(ent);
                         }
                     }
                 }
-                else return elements.containsKey(element);
             }
         }
-        return false;
+        if (!result) {
+            itemParticleMap.remove(item);
+        } else itemParticleMap.put(item, getItemElementForImbuement(item, (LivingEntity) ent));
     }
 
-    public static boolean shouldRenderSunParticle(Entity ent){
+    public static boolean shouldRenderSunParticle(Entity ent) {
         Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR);
         if (vec3 != null) {
             if (ElementalUtils.isNotInWater(ent, vec3)) {
@@ -66,13 +69,16 @@ public class ParticleTracking {
         return false;
     }
 
+    public static ElementBase getItemElementForImbuement(ItemStack item) {
+        return item != null && itemParticleMap.get(item) != null ? itemParticleMap.get(item) : null;
+    }
+
     public static ElementBase getItemElementForImbuement(ItemStack item, LivingEntity ent) {
         if (item != null && ent != null) {
             String element = ElementalUtils.getItemElement(item);
             if (elements.containsKey(element)) {
                 return elements.get(element);
-            }
-            if (ent.hasEffect(EffectRegister.IMBUEMENT.get()) &&
+            } else if (ent.hasEffect(EffectRegister.IMBUEMENT.get()) &&
                     ent.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect &&
                     elements.containsKey(imbuementEffect.element)) {
                 return elements.get(imbuementEffect.element);

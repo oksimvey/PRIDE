@@ -1,7 +1,8 @@
 package com.robson.pride.api.utils;
 
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.commands.*;
+import net.minecraft.commands.CommandSource;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.client.ClientCommandHandler;

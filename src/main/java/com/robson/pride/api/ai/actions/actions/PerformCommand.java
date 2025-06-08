@@ -8,7 +8,7 @@ import net.minecraft.world.entity.Entity;
 public class PerformCommand extends ActionBase {
     @Override
     public void onActionStart(Entity ent, CompoundTag action) {
-        if (action.contains("command")){
+        if (action.contains("command")) {
             CommandUtils.executeonEntity(ent, action.getString("command"));
         }
     }

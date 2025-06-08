@@ -1,8 +1,20 @@
 {
   "trail": {
-    "color": [255, 255, 25],
-    "begin_pos": [0.0, 0.0, -0.2],
-    "end_pos": [0.0, 0.4, -2.5],
+    "color": [
+      255,
+      255,
+      25
+    ],
+    "begin_pos": [
+      0.0,
+      0.0,
+      -0.2
+    ],
+    "end_pos": [
+      0.0,
+      0.4,
+      -2.5
+    ],
     "lifetime": 20,
     "interpolations": 5,
     "texture_path": "epicfight:textures/particle/efmc/fieryswing_trail.png",

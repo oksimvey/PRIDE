@@ -9,7 +9,7 @@ public class ElementsRegister {
 
     public static Map<String, ElementBase> elements = new HashMap<>();
 
-    public static void register(){
+    public static void register() {
         elements.put("Darkness", new DarknessElement());
         elements.put("Light", new LightElement());
         elements.put("Thunder", new ThunderElement());

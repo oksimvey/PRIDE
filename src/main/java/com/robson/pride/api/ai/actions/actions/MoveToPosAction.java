@@ -11,7 +11,7 @@ public class MoveToPosAction extends ActionBase {
     public void onActionStart(Entity ent, CompoundTag action) {
         if (ent != null && action != null) {
             if (ent instanceof PrideMobBase mob) {
-                if (action.contains("path")){
+                if (action.contains("path")) {
 
                 }
             }

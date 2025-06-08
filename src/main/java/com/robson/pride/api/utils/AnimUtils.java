@@ -10,7 +10,9 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.animation.AnimationManager;
-import yesman.epicfight.api.animation.types.*;
+import yesman.epicfight.api.animation.types.DynamicAnimation;
+import yesman.epicfight.api.animation.types.EntityState;
+import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.network.server.SPPlayAnimation;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
@@ -32,17 +34,16 @@ public class AnimUtils {
                         AHPatch.setBlocking(false);
                         AHPatch.setParried(false);
                         AHPatch.resetActionTick();
-                       AHPatch.playAnimationSynchronized(animation, convert, SPPlayAnimation::new);
-                    }
-                    else livingEntityPatch.playAnimationSynchronized(animation, convert, SPPlayAnimation::new);
+                        AHPatch.playAnimationSynchronized(animation, convert, SPPlayAnimation::new);
+                    } else livingEntityPatch.playAnimationSynchronized(animation, convert, SPPlayAnimation::new);
                 }
             }
         }, 10, TimeUnit.MILLISECONDS);
     }
 
-    public static boolean allowShoot(Entity ent){
-        if (ent != null){
-            if (ent instanceof Player player){
+    public static boolean allowShoot(Entity ent) {
+        if (ent != null) {
+            if (ent instanceof Player player) {
                 return player.isCreative() || player.getInventory().contains(ItemsRegister.BULLET.get().getDefaultInstance());
             }
             return true;
@@ -50,7 +51,7 @@ public class AnimUtils {
         return false;
     }
 
-    public static void playAnimWithPerilous(Entity ent, StaticAnimation animation, String perilous, float convert){
+    public static void playAnimWithPerilous(Entity ent, StaticAnimation animation, String perilous, float convert) {
         AnimUtils.playAnim(ent, animation, convert);
         addPerilousToAnim(ent, animation, perilous);
     }
@@ -73,7 +74,7 @@ public class AnimUtils {
         }
     }
 
-    public static int getAnimationDurationInMilliseconds(Entity ent, StaticAnimation animation){
+    public static int getAnimationDurationInMilliseconds(Entity ent, StaticAnimation animation) {
         if (ent != null && animation != null) {
             LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (livingEntityPatch != null) {
@@ -84,11 +85,11 @@ public class AnimUtils {
         return 0;
     }
 
-    public static StaticAnimation getCurrentAnimation(Entity ent){
-        if (ent != null){
+    public static StaticAnimation getCurrentAnimation(Entity ent) {
+        if (ent != null) {
             LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-            if (livingEntityPatch != null){
-                DynamicAnimation var5 = livingEntityPatch.getAnimator().getPlayerFor((DynamicAnimation)null).getAnimation();
+            if (livingEntityPatch != null) {
+                DynamicAnimation var5 = livingEntityPatch.getAnimator().getPlayerFor((DynamicAnimation) null).getAnimation();
                 if (var5 instanceof StaticAnimation animation) {
                     return animation;
                 }
@@ -114,7 +115,7 @@ public class AnimUtils {
     public static void resizeBoundingBox(Entity ent, float width, float height) {
         if (ent != null) {
             LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-            if (livingEntityPatch != null){
+            if (livingEntityPatch != null) {
                 livingEntityPatch.resetSize(new EntityDimensions(width, height, true));
             }
         }
@@ -144,7 +145,7 @@ public class AnimUtils {
     public static void applyStun(Entity ent, StunType stuntype, float duration) {
         LivingEntityPatch livingent = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
         if (livingent != null) {
-            if (livingent instanceof AdvancedCustomHumanoidMobPatch<?> mobPatch){
+            if (livingent instanceof AdvancedCustomHumanoidMobPatch<?> mobPatch) {
                 mobPatch.applyStun(stuntype, duration);
                 return;
             }
@@ -172,7 +173,7 @@ public class AnimUtils {
         if (ent instanceof LivingEntity living) {
             LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (livingEntityPatch != null) {
-                if (livingEntityPatch instanceof AdvancedCustomMobPatch<?> customMobPatch){
+                if (livingEntityPatch instanceof AdvancedCustomMobPatch<?> customMobPatch) {
                     customMobPatch.cancelAnyAction();
                     return;
                 }

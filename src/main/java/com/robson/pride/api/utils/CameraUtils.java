@@ -12,7 +12,7 @@ import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 
 import java.util.concurrent.TimeUnit;
 
-public class CameraUtils{
+public class CameraUtils {
 
     public static void unlockCamera(LocalPlayer ent, byte duration) {
         LocalPlayerPatch player = EpicFightCapabilities.getEntityPatch(ent, LocalPlayerPatch.class);
@@ -22,9 +22,9 @@ public class CameraUtils{
         }
     }
 
-    public static void correctCamera(){
+    public static void correctCamera() {
         Config config = ThirdPerson.getConfig();
-        if(config.normal_rotate_mode != AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA) {
+        if (config.normal_rotate_mode != AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA) {
             config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA;
             TimerUtil.schedule(() -> {
                 if (config.normal_rotate_mode != AbstractConfig.PlayerRotateMode.INTEREST_POINT) {
@@ -46,10 +46,10 @@ public class CameraUtils{
         TimerUtil.schedule(() -> Minecraft.getInstance().options.setCameraType(CameraType.THIRD_PERSON_BACK), duration, TimeUnit.SECONDS);
     }
 
-    public static void changeCamOffset(float x, float y, float z){
-       Config config = ThirdPerson.getConfig();
-       config.normal_max_distance = z;
-       config.normal_offset_y = y;
-       config.normal_offset_x = x;
+    public static void changeCamOffset(float x, float y, float z) {
+        Config config = ThirdPerson.getConfig();
+        config.normal_max_distance = z;
+        config.normal_offset_y = y;
+        config.normal_offset_x = x;
     }
 }
