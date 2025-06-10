@@ -17,7 +17,7 @@
     ],
     "lifetime": 20,
     "interpolations": 5,
-    "texture_path": "epicfight:textures/particle/efmc/thunder_trail.png",
+    "texture_path": "pride:textures/particle/thunder_trail.png",
     "particle_type": "epicfight:swing_trail"
   }
 }

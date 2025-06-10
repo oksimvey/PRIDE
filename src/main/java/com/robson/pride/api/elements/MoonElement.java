@@ -32,7 +32,9 @@ public class MoonElement extends ElementBase {
 
     public ItemRenderingParams getItemRenderingParams() {
         return new ItemRenderingParams(50, 150, 250, new ResourceLocation("epicfight:textures/particle/efmc/fire_trail.png"),
-                GlintRenderTypes.getFireGlintDirect(), GlintRenderTypes.getFreezeEntityGlintDirect());
+                GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
+                GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")));
+
     }
 
 

@@ -17,7 +17,7 @@
     ],
     "lifetime": 20,
     "interpolations": 5,
-    "texture_path": "epicfight:textures/particle/efmc/whisperwind_trail.png",
+    "texture_path": "pride:textures/particle/whisperwind_trail.png",
     "particle_type": "epicfight:swing_trail"
   }
 }

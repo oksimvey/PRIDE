@@ -30,8 +30,9 @@ public class DarknessElement extends ElementBase {
     }
 
     public ItemRenderingParams getItemRenderingParams() {
-        return new ItemRenderingParams(50, 150, 250, new ResourceLocation(""),
-                GlintRenderTypes.getFireGlintDirect(), GlintRenderTypes.getFreezeEntityGlintDirect());
+        return new ItemRenderingParams(250, 250, 250, new ResourceLocation("pride:textures/particle/whisperwind_trail.png"),
+                GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
+                GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")));
     }
 
     public ChatFormatting getChatColor() {

@@ -19,8 +19,10 @@ import static com.robson.pride.api.utils.ElementalUtils.getElement;
 public class LightElement extends ElementBase {
 
     public ItemRenderingParams getItemRenderingParams() {
-        return new ItemRenderingParams(50, 150, 250, new ResourceLocation("epicfight:textures/particle/efmc/fire_trail.png"),
-                GlintRenderTypes.getFireGlintDirect(), GlintRenderTypes.getFreezeEntityGlintDirect());
+        return new ItemRenderingParams(20, 20, 200, new ResourceLocation("pride:textures/particle/pointed_trail.png"),
+                GlintRenderTypes.createDirectGlint("direct_light", new ResourceLocation("pride:textures/glints/light_glint.png")),
+                GlintRenderTypes.createDirectEntityGlint("direct_entity_light", new ResourceLocation("pride:textures/glints/light_glint.png")));
+
     }
 
 

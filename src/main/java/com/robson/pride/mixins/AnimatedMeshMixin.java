@@ -47,12 +47,13 @@ public abstract class AnimatedMeshMixin extends Mesh<AnimatedMesh.AnimatedModelP
      */
     @Overwrite(remap = false)
     public void draw(PoseStack poseStack, MultiBufferSource multiBufferSource, RenderType renderType, int packedLight, float r, float g, float b, float a, int overlay, Armature armature, OpenMatrix4f[] poses) {
-        if (EpicFightMod.CLIENT_CONFIGS.useAnimationShader.getValue() && (playerStack == null || playerBuffer == null || playerBuffer != multiBufferSource || playerStack != poseStack)) {
+        if ((EpicFightMod.CLIENT_CONFIGS.useAnimationShader.getValue() && playerStack == null || playerBuffer == null || playerBuffer != multiBufferSource || playerStack != poseStack)) {
             renderType.setupRenderState();
             AnimationShaderInstance animationShader = EpicFightRenderTypes.getAnimationShader(renderType);
             this.drawWithShader(poseStack, animationShader, packedLight, 1.0F, 1.0F, 1.0F, 1.0F, overlay, armature, poses);
             renderType.clearRenderState();
-        } else {
+        }
+        else {
             VertexConsumer vertexConsumer = multiBufferSource.getBuffer(EpicFightRenderTypes.getTriangulated(renderType));
             this.drawToBuffer(poseStack, vertexConsumer, Mesh.DrawingFunction.ENTITY_TEXTURED, packedLight, r, g, b, a, overlay, armature, poses);
         }

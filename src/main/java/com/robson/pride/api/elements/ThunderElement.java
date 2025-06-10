@@ -32,7 +32,9 @@ public class ThunderElement extends ElementBase {
 
     public ItemRenderingParams getItemRenderingParams() {
         return new ItemRenderingParams(100, 100, 50, new ResourceLocation("epicfight:textures/particle/efmc/thunder_trail.png"),
-                GlintRenderTypes.getSparkGlintDirect(), GlintRenderTypes.getSparkEntityGlintDirect());
+                GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
+                GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")));
+
     }
 
 
