@@ -4,7 +4,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.nameless.indestructible.server.network.SPCancelBossInfo;
 import com.robson.pride.api.ai.DataConditions;
 import com.robson.pride.api.biomesettings.BiomeSettingsManager;
-import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
@@ -42,8 +41,8 @@ public class Pride {
 
     public Pride() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        SoundsRegister.SOUNDS.register(bus);
         MinecraftForge.EVENT_BUS.addListener(this::addReloadListnerEvent);
+        SoundsRegister.SOUNDS.register(bus);
         ItemsRegister.REGISTRY.register(bus);
         EntityRegister.ENTITIES.register(bus);
         EntityRegister.SPECIAL_ENTITIES.register(bus);
@@ -82,7 +81,6 @@ public class Pride {
     }
 
     private void addReloadListnerEvent(final AddReloadListenerEvent event) {
-        event.addListener(new PrideCapabilityReloadListener());
         event.addListener(new PrideMobPatchReloader());
     }
 
@@ -111,11 +109,9 @@ public class Pride {
     private void setupCommon(FMLCommonSetupEvent event) {
         PacketRegister.register();
         event.enqueueWork(() -> {
-            WeaponSkillRegister.registerWeaponArts();
             DialogueConditionsRegister.register();
             ActionsRegister.register();
             StructureRegister.register();
-            ElementsRegister.register();
             BiomeSettingsManager.register();
         });
     }

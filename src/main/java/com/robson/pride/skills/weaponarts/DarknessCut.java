@@ -6,7 +6,6 @@ import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.PlaySoundUtils;
 import com.robson.pride.api.utils.TimerUtil;
-import com.robson.pride.registries.ElementsRegister;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -24,6 +23,8 @@ import yesman.epicfight.gameasset.Armatures;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static com.robson.pride.api.maps.ElementMap.ELEMENTS;
 
 public class DarknessCut extends WeaponSkillBase {
 
@@ -49,7 +50,7 @@ public class DarknessCut extends WeaponSkillBase {
                             if (particle != null && entko != null) {
                                 particle.setLifetime(200);
                                 particle.scale(1.25f);
-                                SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, () -> ElementsRegister.elements.get("Darkness").onHit(entko, ent, 10, false));
+                                SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, () -> ELEMENTS.get("Darkness").onHit(entko, ent, 10, false));
                             }
                         }
                     }

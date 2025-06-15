@@ -1,6 +1,7 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.data.PrideCapabilityReloadListener;
+import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.maps.WeaponsMap;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import net.minecraft.client.Minecraft;
@@ -49,13 +50,13 @@ public class ItemStackUtils {
 
     public static float getColliderSize(ItemStack item) {
         if (item != null) {
-            List<AABB> colliders = PrideCapabilityReloadListener.WEAPON_COLLIDER.get(item.getItem());
-            if (colliders != null) {
-                float totalsize = 0;
-                for (AABB collider : colliders) {
-                    totalsize += MathUtils.getTotalDistance(collider.maxX + collider.minX, collider.maxY + collider.minY, collider.maxZ + collider.minZ);
+            WeaponData data = WeaponData.getWeaponData(item);
+            if (data != null) {
+                AABB collider = data.getCollider();
+                if (collider != null) {
+                    return MathUtils.getTotalDistance(collider.maxX + collider.minX, collider.maxY + collider.minY, collider.maxZ + collider.minZ);
+
                 }
-                return totalsize;
             }
         }
         return 1;
@@ -90,16 +91,9 @@ public class ItemStackUtils {
                 if (hand == InteractionHand.MAIN_HAND) {
                     itemStack = living.getMainHandItem();
                 } else itemStack = living.getOffhandItem();
-                CompoundTag tag = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(itemStack.getItem());
-                if (tag != null) {
-                    if (tag.contains("attributes")) {
-                        CompoundTag attributes = tag.getCompound("attributes");
-                        for (String key : attributes.getAllKeys()) {
-                            if (attributes.getCompound(key).contains("weight")) {
-                                return (float) attributes.getCompound(key).getDouble("weight");
-                            }
-                        }
-                    }
+                WeaponData weaponData = WeaponData.getWeaponData(itemStack);
+                if (weaponData != null) {
+                    return  weaponData.getWeight();
                 }
             }
         }
@@ -122,10 +116,7 @@ public class ItemStackUtils {
                     case MAIN_HAND -> living.getMainHandItem();
                     case OFF_HAND -> living.getOffhandItem();
                 };
-                CompoundTag tag = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(itemStack.getItem());
-                if (tag != null) {
-                    return tag.contains("isWeapon") && tag.getBoolean("isWeapon");
-                }
+                return WeaponData.getWeaponData(itemStack) != null;
             }
         }
         return false;

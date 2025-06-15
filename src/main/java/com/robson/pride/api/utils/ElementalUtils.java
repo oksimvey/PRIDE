@@ -1,6 +1,6 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.data.PrideCapabilityReloadListener;
+import com.robson.pride.api.data.WeaponData;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.registries.EffectRegister;
 import net.minecraft.ChatFormatting;
@@ -14,8 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
-import static com.robson.pride.registries.ElementsRegister.elements;
-import static com.robson.pride.registries.WeaponSkillRegister.WeaponSkills;
+import static com.robson.pride.api.maps.ElementMap.ELEMENTS;
+import static com.robson.pride.api.maps.SkillMap.WEAPON_SKILLS;
 
 public class ElementalUtils {
 
@@ -26,22 +26,22 @@ public class ElementalUtils {
     }
 
     public static ParticleOptions getParticleByElement(String element) {
-        if (elements.get(element) != null) {
-            return elements.get(element).getNormalParticleType();
+        if (ELEMENTS.get(element) != null) {
+            return  ELEMENTS.get(element).getNormalParticleType();
         }
         return null;
     }
 
     public static ChatFormatting getColorByElement(String element) {
-        if (elements.get(element) != null) {
-            return elements.get(element).getChatColor();
+        if (ELEMENTS.get(element) != null) {
+            return ELEMENTS.get(element).getChatColor();
         }
         return ChatFormatting.GRAY;
     }
 
     public static void playSoundByElement(String element, Entity ent, float volume) {
-        if (elements.get(element) != null) {
-            elements.get(element).playSound(ent, volume);
+        if (ELEMENTS.get(element) != null) {
+            ELEMENTS.get(element).playSound(ent, volume);
         }
     }
 
@@ -49,16 +49,14 @@ public class ElementalUtils {
         if (leftitem != null && rightitem != null) {
             String leftelement = "";
             if (leftitem.getTag().getBoolean("hasweaponart")) {
-                leftelement = WeaponSkills.get(leftitem.getTag().getString("weapon_art")).getSkillElement();
+                leftelement = WEAPON_SKILLS.get(leftitem.getTag().getString("weapon_art")).getSkillElement();
             } else {
-                CompoundTag tag = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(leftitem.getItem());
-                if (tag != null) {
-                    if (tag.contains("skill")) {
-                        WeaponSkillBase skill = WeaponSkills.get(tag.getString("skill"));
+                WeaponData data = WeaponData.getWeaponData(leftitem);
+                if (data != null) {
+                        WeaponSkillBase skill = data.getSkill();
                         if (skill != null) {
                             leftelement = skill.getSkillElement();
                         }
-                    }
                 }
             }
             return leftelement.equals("Neutral") || leftelement.equals(rightitem.getTag().getString("passive_element"));
@@ -68,7 +66,7 @@ public class ElementalUtils {
 
     public static boolean canPutWeaponArt(ItemStack leftitem, ItemStack rightitem) {
         if (leftitem != null && rightitem != null) {
-            String rightelement = WeaponSkills.get(rightitem.getTag().getString("weapon_art")).getSkillElement();
+            String rightelement = WEAPON_SKILLS.get(rightitem.getTag().getString("weapon_art")).getSkillElement();
             String leftelement = getItemElement(leftitem);
             return rightelement.equals("Neutral") || leftelement.isEmpty() || leftelement.equals(rightelement);
         }
@@ -80,12 +78,12 @@ public class ElementalUtils {
         if (item != null) {
             if (item.getTag() != null) {
                 element = item.getTag().getString("passive_element");
-                if (!elements.containsKey(element)) {
-                    CompoundTag tag = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem());
-                    if (tag != null) {
-                        if (tag.contains("element")) {
-                            if (elements.containsKey(tag.getString("element"))) {
-                                element = tag.getString("element");
+                if (!ELEMENTS.containsKey(element)) {
+                    WeaponData data = WeaponData.getWeaponData(item);
+                    if (data != null) {
+                        if (data.getElement() != null) {
+                            if (ELEMENTS.containsKey(data.getElement())) {
+                                element = data.getElement();
                             }
                         }
                     }
@@ -123,7 +121,10 @@ public class ElementalUtils {
     public static String getElement(Entity ent) {
         if (ent != null) {
             if (ent instanceof Player player) {
-                return TagsUtils.ClientPlayerTagsAcessor.playerTags.get(player).getString("Element");
+                CompoundTag tag = TagsUtils.playerTags.get(player);
+                if (tag != null) {
+                    return tag.getString("Element");
+                }
             }
         }
         return "";

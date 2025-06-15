@@ -18,7 +18,5 @@ public class TagsUtils {
         return false;
     }
 
-    public interface ClientPlayerTagsAcessor {
-        ConcurrentHashMap<Player, CompoundTag> playerTags = new ConcurrentHashMap<>();
-    }
+     public static ConcurrentHashMap<Player, CompoundTag> playerTags = new ConcurrentHashMap<>();
 }

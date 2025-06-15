@@ -1,6 +1,6 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.data.PrideCapabilityReloadListener;
+import com.robson.pride.api.data.WeaponData;
 import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.progression.PlayerAttributeSetup;
 import net.minecraft.nbt.CompoundTag;
@@ -33,7 +33,7 @@ public class ProgressionUtils {
     public static int getTotalLevel(Entity ent) {
         if (ent != null) {
             if (ent instanceof Player player) {
-                CompoundTag tag = TagsUtils.ClientPlayerTagsAcessor.playerTags.get(player);
+                CompoundTag tag = TagsUtils.playerTags.get(player);
                 return (tag.getInt("StrengthLvl") + tag.getInt("DexterityLvl") + tag.getInt("VigorLvl") + tag.getInt("EnduranceLvl") + tag.getInt("MindLvl")) / 5;
             } else if (ent instanceof PrideMobBase prideMobBase) {
                 return prideMobBase.getPrideLevel();
@@ -98,21 +98,22 @@ public class ProgressionUtils {
     public static boolean haveReqs(Player player) {
         if (player != null) {
             ItemStack weapon = player.getMainHandItem();
-            CompoundTag tags = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(weapon.getItem());
-            if (tags != null) {
+            WeaponData data = WeaponData.getWeaponData(weapon);
+            if (data != null) {
+                WeaponData.AttributeReqs reqs = data.getAttributeReqs();
                 boolean mindreqs = true;
                 boolean strreqs = true;
                 boolean dexreqs = true;
-                if (tags.contains("requiredStrength")) {
-                    strreqs = tags.getDouble("requiredStrength") <= player.getPersistentData().getInt("StrengthLvl");
+                if (reqs.getRequiredStrength() != 0) {
+                    strreqs = reqs.getRequiredStrength() <= player.getPersistentData().getInt("StrengthLvl");
                 }
-                if (tags.contains("requiredDexterity")) {
-                    dexreqs = tags.getDouble("requiredDexterity") <= player.getPersistentData().getInt("DexterityLvl");
+                if (reqs.getRequiredDexterity() != 0) {
+                    dexreqs = reqs.getRequiredDexterity() <= player.getPersistentData().getInt("DexterityLvl");
                 }
                 if (weapon.getTag().contains("requiredMind")) {
                     mindreqs = weapon.getTag().getDouble("requiredMind") <= player.getPersistentData().getInt("MindLvl");
-                } else if (tags.contains("requiredMind")) {
-                    mindreqs = tags.getDouble("requiredMind") <= player.getPersistentData().getInt("MindLvl");
+                } else if (reqs.getRequiredMind() != 0) {
+                    mindreqs = reqs.getRequiredMind() <= player.getPersistentData().getInt("MindLvl");
                 }
                 return mindreqs && strreqs && dexreqs;
             }

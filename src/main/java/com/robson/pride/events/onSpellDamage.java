@@ -4,7 +4,6 @@ import com.robson.pride.api.elements.ElementBase;
 import com.robson.pride.api.mechanics.MikiriCounter;
 import com.robson.pride.api.utils.ProgressionUtils;
 import com.robson.pride.registries.EffectRegister;
-import com.robson.pride.registries.ElementsRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import net.minecraft.world.entity.Entity;
@@ -12,6 +11,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import static com.robson.pride.api.maps.ElementMap.ELEMENTS;
 
 @Mod.EventBusSubscriber
 public class onSpellDamage {
@@ -39,7 +40,7 @@ public class onSpellDamage {
                     event.setCanceled(true);
                 }
             }
-            for (ElementBase element : ElementsRegister.elements.values()) {
+            for (ElementBase element : ELEMENTS.values()) {
                 if (element.getSchool() == spell.getSchoolType()) {
                     event.setAmount(element.onHit(ent, event.getSpellDamageSource().getEntity(), event.getOriginalAmount(), true));
                 }

@@ -9,6 +9,7 @@
   "refmap": "mixins.pride.refmap.json",
   "client": [
     "AnimatedMeshMixin",
+    "BattleGuiMixin",
     "ControllEngineMixin",
     "ItemRendererMixin",
     "RenderBufferInterface",
@@ -17,6 +18,8 @@
   ],
   "mixins": [
     "AttackAnimationMixin",
-    "CubicBezierCurveMixin"
+    "CubicBezierCurveMixin",
+    "ItemCapabilityProviderMixin",
+    "ManaBarOverlayMixin"
   ]
 }

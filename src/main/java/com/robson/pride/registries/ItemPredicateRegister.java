@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 public class ItemPredicateRegister {
 

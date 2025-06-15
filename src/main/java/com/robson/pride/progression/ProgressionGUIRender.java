@@ -64,8 +64,11 @@ public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         if (player != null) {
-            CompoundTag variables = TagsUtils.ClientPlayerTagsAcessor.playerTags.get(player);
+            CompoundTag variables = TagsUtils.playerTags.get(player);
             String element = ElementalUtils.getElement(player);
+            if (variables == null){
+                return;
+            }
             guiGraphics.drawString(this.font,
                     ("Strength Level:" + variables.getInt("StrengthLvl")), 118, 14, -1, false);
             guiGraphics.drawString(this.font,

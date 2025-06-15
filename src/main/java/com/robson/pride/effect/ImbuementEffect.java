@@ -15,7 +15,7 @@ import yesman.epicfight.gameasset.Armatures;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.robson.pride.registries.ElementsRegister.elements;
+import static com.robson.pride.api.maps.ElementMap.ELEMENTS;
 
 public class ImbuementEffect extends PrideEffectBase {
 
@@ -50,9 +50,9 @@ public class ImbuementEffect extends PrideEffectBase {
 
     @Override
     public void prideClientTick(LivingEntity ent) {
-        if (this.active && elements.containsKey(element) && ent.tickCount % ((int) (10 / ent.getBbHeight())) == 0) {
+        if (this.active && ELEMENTS.containsKey(element) && ent.tickCount % ((int) (10 / ent.getBbHeight())) == 0) {
             if (!element.equals("Sun") || ParticleTracking.shouldRenderSunParticle(ent)) {
-                ElementBase element = elements.get(this.element);
+                ElementBase element = ELEMENTS.get(this.element);
                 Vec3f vec3f = ParticleTracking.getAABBForImbuement(null, ent);
                 ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR, element.getNormalParticleType(), vec3f, element.getParticleAmount());
                 ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolL, element.getNormalParticleType(), vec3f, element.getParticleAmount());

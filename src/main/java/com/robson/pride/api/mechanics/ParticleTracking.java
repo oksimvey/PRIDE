@@ -1,7 +1,8 @@
 package com.robson.pride.api.mechanics;
 
-import com.robson.pride.api.data.PrideCapabilityReloadListener;
+import com.robson.pride.api.data.WeaponData;
 import com.robson.pride.api.elements.ElementBase;
+import com.robson.pride.api.maps.WeaponsMap;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.effect.ImbuementEffect;
@@ -21,7 +22,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.robson.pride.registries.ElementsRegister.elements;
+import static com.robson.pride.api.maps.ElementMap.ELEMENTS;
+
 
 public class ParticleTracking {
 
@@ -38,11 +40,11 @@ public class ParticleTracking {
         if (item != null && ent != null) {
             if (item.getTag() != null) {
                 String element = ElementalUtils.getItemElement(item);
-                if (elements.containsKey(element)) {
+                if (ELEMENTS.containsKey(element)) {
                     result = !element.equals("Sun") || shouldRenderSunParticle(ent);
                 } else if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMBUEMENT.get())) {
                     if (living.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect) {
-                        if (elements.containsKey(imbuementEffect.element) && imbuementEffect.active) {
+                        if (ELEMENTS.containsKey(imbuementEffect.element) && imbuementEffect.active) {
                             result = !imbuementEffect.element.equals("Sun") || shouldRenderSunParticle(ent);
                         }
                     }
@@ -76,12 +78,12 @@ public class ParticleTracking {
     public static ElementBase getItemElementForImbuement(ItemStack item, LivingEntity ent) {
         if (item != null && ent != null) {
             String element = ElementalUtils.getItemElement(item);
-            if (elements.containsKey(element)) {
-                return elements.get(element);
+            if (ELEMENTS.containsKey(element)) {
+                return ELEMENTS.get(element);
             } else if (ent.hasEffect(EffectRegister.IMBUEMENT.get()) &&
                     ent.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect &&
-                    elements.containsKey(imbuementEffect.element)) {
-                return elements.get(imbuementEffect.element);
+                    ELEMENTS.containsKey(imbuementEffect.element)) {
+                return ELEMENTS.get(imbuementEffect.element);
             }
         }
         return null;
@@ -89,9 +91,9 @@ public class ParticleTracking {
 
     public static Vec3f getAABBForImbuement(ItemStack item, Entity ent) {
         if (item != null && ent != null) {
-            List<AABB> colliders = PrideCapabilityReloadListener.WEAPON_COLLIDER.get(item.getItem());
-            if (colliders != null) {
-                AABB collider = colliders.get(new Random().nextInt(colliders.size()));
+            WeaponData data = WeaponData.getWeaponData(item);
+            if (data != null) {
+                AABB collider = data.getCollider();
                 return new Vec3f((float) (((new Random()).nextFloat() + collider.minX) * collider.maxX), (float) (((new Random()).nextFloat() + collider.minY) * collider.maxY + (collider.maxY / 10)), (float) (-((new Random()).nextFloat() * (collider.maxZ * ent.getBbHeight() / 1.8F)) + collider.minZ));
             }
         }

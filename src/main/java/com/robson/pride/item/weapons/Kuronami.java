@@ -1,39 +1,21 @@
 package com.robson.pride.item.weapons;
 
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.crafting.Ingredient;
+import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.skillcore.WeaponSkillBase;
+import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
+import com.robson.pride.skills.weaponskills.LongSwordWeaponSkill;
+import net.minecraft.world.phys.AABB;
+import org.w3c.dom.Attr;
+import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
-public class Kuronami extends SwordItem {
+public class Kuronami extends WeaponData {
+
+
     public Kuronami() {
-        super(new Tier() {
-            public int getUses() {
-                return 100;
-            }
-
-            public float getSpeed() {
-                return 4f;
-            }
-
-            public float getAttackDamageBonus() {
-                return 10f;
-            }
-
-            @Override
-            public int getLevel() {
-                return 0;
-            }
-
-
-            public int getEnchantmentValue() {
-                return 2;
-            }
-
-            public Ingredient getRepairIngredient() {
-                return Ingredient.of();
-            }
-        }, 1, -3f, new Item.Properties());
+        super(WeaponData.createCapability(WeaponCategoriesEnum.PRIDE_LONGSWORD, 1.0f, 1.0f, 1.0f, 10, 0.0f, 10),
+                10,"minecraft:item/creationsplitter", null,
+                WeaponData.createCollider(0.2f, 0.8f, 1.5f, -0.5f, -0.5f, -0.15f),
+                WeaponData.createSkill(new LongSwordWeaponSkill()),
+                new AttributeReqs('A', 'C', 'B', (byte) 10, (byte) 5, (byte) 10));
     }
 }
-

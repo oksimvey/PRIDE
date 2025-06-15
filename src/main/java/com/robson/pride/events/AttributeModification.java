@@ -1,6 +1,5 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.api.utils.AttributeUtils;
 import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.api.utils.ProgressionUtils;
@@ -26,11 +25,7 @@ public class AttributeModification {
     public static void onAttributeModification(LivingEquipmentChangeEvent event) {
         if (event.getEntity() != null) {
             if (event.getEntity() instanceof Player ent) {
-                if (armorslots.contains(event.getSlot())) {
-                    if (PrideCapabilityReloadListener.CAPABILITY_ARMOR_DATA_MAP.get(event.getTo().getItem()) != null) {
-                        AttributeUtils.addModifier(ent, "minecraft:generic.armor", AttributeModifiers.getModifierBySlot(event.getSlot()), AttributeModifiers.calculateArmorModifier(event.getTo(), PrideCapabilityReloadListener.CAPABILITY_ARMOR_DATA_MAP.get(event.getTo().getItem()), 0), AttributeModifier.Operation.ADDITION);
-                    }
-                } else {
+                if (!armorslots.contains(event.getSlot())) {
                     AttributeUtils.addModifier(ent, "epicfight:weight", "b4c793f6-b421-43cb-81e8-754fdfe278e4", ItemStackUtils.getWeaponWeight(ent, InteractionHand.OFF_HAND, EquipmentSlot.OFFHAND), AttributeModifier.Operation.ADDITION);
                     onFPress.addModifierToStyle(ent);
                     float modifier = AttributeModifiers.calculateModifier(ent, ent.getMainHandItem(), 1);

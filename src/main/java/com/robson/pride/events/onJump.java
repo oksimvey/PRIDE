@@ -17,7 +17,7 @@ public class onJump {
         if (event.getEntity() != null) {
             if (event.getEntity() instanceof Player player) {
                 MikiriCounter.setMikiri(player, "Jump", 0, 350);
-                CompoundTag playertags = TagsUtils.ClientPlayerTagsAcessor.playerTags.get(player);
+                CompoundTag playertags = TagsUtils.playerTags.get(player);
                 if (playertags != null) {
                     int dexlevel = playertags.getInt("DexterityLvl");
                     player.addDeltaMovement(new Vec3(0, dexlevel / 1000f, 0));

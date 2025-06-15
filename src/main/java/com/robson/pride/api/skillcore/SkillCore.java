@@ -1,5 +1,5 @@
 package com.robson.pride.api.skillcore;
-import com.robson.pride.api.data.PrideCapabilityReloadListener;
+import com.robson.pride.api.data.WeaponData;
 import com.robson.pride.api.utils.MathUtils;
 import com.robson.pride.api.utils.ParticleUtils;
 import com.robson.pride.api.utils.TimerUtil;
@@ -13,10 +13,10 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import static com.robson.pride.registries.WeaponSkillRegister.WeaponSkills;
+import static com.robson.pride.api.maps.SkillMap.WEAPON_SKILLS;
+
 
 public class SkillCore {
 
@@ -31,14 +31,12 @@ public class SkillCore {
     }
 
     public static void defaultSkillCore(LivingEntity ent, ItemStack weapon) {
-        CompoundTag tag = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(weapon.getItem());
-        if (tag != null) {
-            if (tag.contains("skill")) {
-                WeaponSkillBase skill = WeaponSkills.get(tag.getString("skill"));
+        WeaponData weaponData = WeaponData.getWeaponData(weapon);
+        if (weaponData != null) {
+                WeaponSkillBase skill = weaponData.getSkill();
                 if (skill != null) {
                     skill.tryToExecute(ent);
                 }
-            }
         }
     }
 
@@ -57,7 +55,7 @@ public class SkillCore {
     }
 
     public static void weaponArtCore(LivingEntity ent, String weaponart) {
-        WeaponSkillBase skill = WeaponSkills.get(weaponart);
+        WeaponSkillBase skill = WEAPON_SKILLS.get(weaponart);
         if (skill != null) {
             skill.tryToExecute(ent);
         }

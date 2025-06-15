@@ -1,6 +1,7 @@
 package com.robson.pride.registries;
 
 import com.robson.pride.api.skillcore.WeaponSkillBase;
+import com.robson.pride.item.weapons.CustomWeaponItem;
 import com.robson.pride.main.Pride;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -16,6 +17,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import static com.robson.pride.api.maps.SkillMap.WEAPON_SKILLS;
+import static com.robson.pride.api.maps.WeaponsMap.WEAPONS;
 import static com.robson.pride.registries.EntityRegister.ENTITIES;
 import static com.robson.pride.registries.EntityRegister.SPECIAL_ENTITIES;
 import static com.robson.pride.registries.WeaponSkillRegister.*;
@@ -33,26 +36,9 @@ public class PrideTabRegister {
             .title(Component.literal("Pride Equipment"))
             .icon(() -> new ItemStack(ItemsRegister.EuropeanLongsword.get()))
             .displayItems((enabledFeatures, entries) -> {
-                entries.accept(ItemsRegister.EuropeanLongsword.get());
-                entries.accept(ItemsRegister.BATTLE_AXE.get());
-                entries.accept(ItemsRegister.COLOSSAL_BLADE.get());
-                entries.accept(ItemsRegister.DAGGER.get());
-                entries.accept(ItemsRegister.ESTOC.get());
-                entries.accept(ItemsRegister.HALBERD.get());
-                entries.accept(ItemsRegister.HALBERD.get());
-                entries.accept(ItemsRegister.KATANA.get());
-                entries.accept(ItemsRegister.SABER.get());
-                entries.accept(ItemsRegister.SCYTHE.get());
-                entries.accept(ItemsRegister.SPEAR.get());
-                entries.accept(ItemsRegister.COWBOY_REVOLVER.get());
-                entries.accept(ItemsRegister.HOSHIGIRI.get());
-                entries.accept(ItemsRegister.PYROSCOURGE.get());
-                entries.accept(ItemsRegister.NEPTARION.get());
-                entries.accept(ItemsRegister.SCARVIELLE.get());
-                entries.accept(ItemsRegister.KURONAMI.get());
-                entries.accept(ItemsRegister.SERAPHIEL.get());
-                entries.accept(ItemsRegister.NOCTIVAGUS.get());
-                entries.accept(ItemsRegister.DONNERFAUST.get());
+                for (String weaponid : WEAPONS.keySet()){
+                    entries.accept(CustomWeaponItem.createWeapon(weaponid));
+                }
             })
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
             .build());
@@ -79,7 +65,7 @@ public class PrideTabRegister {
             .title(Component.literal("Pride Weapon Arts"))
             .icon(() -> new ItemStack(ItemsRegister.WEAPON_ART.get()))
             .displayItems((parameters, output) -> {
-                List<Map.Entry<String, WeaponSkillBase>> sortedEntries = WeaponSkills.entrySet()
+                List<Map.Entry<String, WeaponSkillBase>> sortedEntries = WEAPON_SKILLS.entrySet()
                         .stream()
                         .sorted(Comparator
                                 .comparing((Map.Entry<String, WeaponSkillBase> entry) -> elements.indexOf(entry.getValue().getSkillElement()))
@@ -88,7 +74,7 @@ public class PrideTabRegister {
                 for (Map.Entry<String, WeaponSkillBase> entry : sortedEntries) {
                     ItemStack item = new ItemStack(ItemsRegister.WEAPON_ART.get());
                     item.getOrCreateTag().putString("weapon_art", entry.getKey());
-                    item.getOrCreateTag().putString("rarity", WeaponSkills.get(entry.getKey()).getSkillRarity());
+                    item.getOrCreateTag().putString("rarity", WEAPON_SKILLS.get(entry.getKey()).getSkillRarity());
                     output.accept(item);
                 }
             })

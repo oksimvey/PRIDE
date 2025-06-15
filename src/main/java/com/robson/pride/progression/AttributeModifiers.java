@@ -1,6 +1,5 @@
 package com.robson.pride.progression;
 
-import com.robson.pride.api.data.PrideCapabilityReloadListener;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.TagsUtils;
 import com.robson.pride.registries.WeaponSkillRegister;
@@ -44,12 +43,13 @@ public class AttributeModifiers {
 
     public static int getValueOfDefaultAttribute(ItemStack item, String type, String stat) {
         if (item != null) {
-            CompoundTag tag = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem());
+            CompoundTag tag = null;
             if (tag != null) {
                 if (tag.contains(type + stat)) {
                     if (type.equals("required")) {
                         return tag.getInt(type + stat);
-                    } else if (type.equals("scale")) {
+                    }
+                    else if (type.equals("scale")) {
                         return scale_tiers.indexOf(tag.getString(type + stat));
                     }
                 }
@@ -67,7 +67,7 @@ public class AttributeModifiers {
 
     public static float calculateModifier(Player player, ItemStack item, float defaultmodifier) {
         if (item != null && player != null) {
-            CompoundTag tag = PrideCapabilityReloadListener.CAPABILITY_WEAPON_DATA_MAP.get(item.getItem());
+            CompoundTag tag = null;
             if (tag != null) {
                 float strmodifier = 0;
                 float dexmodifier = 0;
@@ -98,7 +98,7 @@ public class AttributeModifiers {
 
     public static float calculateWeaponAttributeModifier(Player player, ItemStack item, CompoundTag tag, String attribute) {
         if (player != null && item != null && tag != null) {
-            CompoundTag playertag = TagsUtils.ClientPlayerTagsAcessor.playerTags.get(player);
+            CompoundTag playertag = TagsUtils.playerTags.get(player);
             if (playertag != null) {
                 int lvl = playertag.getInt(attribute + "Lvl");
                 float required = (float) tag.getDouble("required" + attribute);

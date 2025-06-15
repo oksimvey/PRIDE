@@ -1,9 +1,5 @@
 package com.robson.pride.mixins;
 
-import com.robson.pride.api.skillcore.SkillCore;
-import com.robson.pride.api.utils.ServerTask;
-import com.robson.pride.keybinding.KeyActionPacket;
-import com.robson.pride.registries.PacketRegister;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -22,6 +18,7 @@ import yesman.epicfight.client.gui.screen.config.IngameConfigurationScreen;
 import yesman.epicfight.client.input.EpicFightKeyMappings;
 import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
 import yesman.epicfight.gameasset.EpicFightSkills;
+import yesman.epicfight.network.client.CPChangeSkill;
 import yesman.epicfight.skill.SkillContainer;
 import yesman.epicfight.skill.SkillSlot;
 import yesman.epicfight.skill.SkillSlots;
@@ -125,7 +122,7 @@ public abstract class ControllEngineMixin {
         }
         while(keyPressed(EpicFightKeyMappings.WEAPON_INNATE_SKILL, true)) {
             if (this.currentChargingKey != EpicFightKeyMappings.WEAPON_INNATE_SKILL && !EpicFightKeyMappings.ATTACK.getKey().equals(EpicFightKeyMappings.WEAPON_INNATE_SKILL.getKey())) {
-                ServerTask.sendTask(()-> SkillCore.onSkillExecute(this.player));
+
             }
         }
 
