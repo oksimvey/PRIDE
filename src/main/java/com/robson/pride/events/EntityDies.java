@@ -1,6 +1,6 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.utils.MathUtils;
+import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.EffectRegister;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

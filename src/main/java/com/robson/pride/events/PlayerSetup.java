@@ -1,6 +1,7 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.customtick.CustomTickManager;
+import com.robson.pride.api.maps.WeaponsMap;
 import com.robson.pride.api.musiccore.PrideMusicManager;
 import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.api.utils.TagsUtils;

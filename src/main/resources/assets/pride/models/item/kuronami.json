@@ -1,6 +1,0 @@
-{
-  "parent": "item/creationsplitter",
-  "textures": {
-    "layer0": "item/creationsplitter"
-  }
-}

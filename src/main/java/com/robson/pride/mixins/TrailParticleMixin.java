@@ -4,8 +4,10 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.robson.pride.api.client.ItemRenderingParams;
+import com.robson.pride.api.data.WeaponData;
 import com.robson.pride.api.elements.ElementBase;
 import com.robson.pride.api.mechanics.ParticleTracking;
+import com.robson.pride.item.weapons.CustomWeaponItem;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -18,10 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -36,6 +35,7 @@ import java.util.function.Function;
 @Mixin(value = TrailParticle.class, remap = false)
 @OnlyIn(Dist.CLIENT)
 public class TrailParticleMixin extends TextureSheetParticle {
+    @Mutable
     @Shadow
     @Final
     protected TrailInfo trailInfo;
@@ -91,6 +91,9 @@ public class TrailParticleMixin extends TextureSheetParticle {
         ItemStack item = entitypatch.getValidItemInHand(trailInfo.hand);
         if (item.getTag() == null) {
             return;
+        }
+        if (item.getItem() instanceof CustomWeaponItem && WeaponData.getWeaponData(item) != null){
+            this.trailInfo = WeaponData.getWeaponData(item).getTrailInfo(this.trailInfo);
         }
         if (ParticleTracking.shouldRenderParticle(item)) {
             ElementBase element = ParticleTracking.getItemElementForImbuement(item);

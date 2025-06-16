@@ -1,6 +1,7 @@
 package com.robson.pride.epicfight.weapontypes;
 
 import M6FGR.dualaxes.gameassets.DualAxesAnimations;
+import com.robson.pride.api.maps.WeaponsMap;
 import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.main.Pride;

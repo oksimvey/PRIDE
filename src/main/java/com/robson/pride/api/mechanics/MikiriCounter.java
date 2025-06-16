@@ -1,6 +1,7 @@
 package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.utils.*;
+import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.entities.special.Shooter;
 import com.robson.pride.registries.AnimationsRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;

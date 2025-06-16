@@ -2,6 +2,7 @@ package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.WeaponData;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
+import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.EffectRegister;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;

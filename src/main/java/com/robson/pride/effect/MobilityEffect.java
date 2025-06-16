@@ -1,6 +1,7 @@
 package com.robson.pride.effect;
 
 import com.robson.pride.api.utils.*;
+import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.KeyRegister;

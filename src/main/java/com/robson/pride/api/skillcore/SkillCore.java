@@ -1,12 +1,11 @@
 package com.robson.pride.api.skillcore;
 import com.robson.pride.api.data.WeaponData;
-import com.robson.pride.api.utils.MathUtils;
+import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.ParticleUtils;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.particles.StringParticle;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;

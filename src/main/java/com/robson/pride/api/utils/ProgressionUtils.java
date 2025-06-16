@@ -104,16 +104,16 @@ public class ProgressionUtils {
                 boolean mindreqs = true;
                 boolean strreqs = true;
                 boolean dexreqs = true;
-                if (reqs.getRequiredStrength() != 0) {
-                    strreqs = reqs.getRequiredStrength() <= player.getPersistentData().getInt("StrengthLvl");
+                if (reqs.requiredStrength() != 0) {
+                    strreqs = reqs.requiredStrength() <= player.getPersistentData().getInt("StrengthLvl");
                 }
-                if (reqs.getRequiredDexterity() != 0) {
-                    dexreqs = reqs.getRequiredDexterity() <= player.getPersistentData().getInt("DexterityLvl");
+                if (reqs.requiredDexterity() != 0) {
+                    dexreqs = reqs.requiredDexterity() <= player.getPersistentData().getInt("DexterityLvl");
                 }
                 if (weapon.getTag().contains("requiredMind")) {
                     mindreqs = weapon.getTag().getDouble("requiredMind") <= player.getPersistentData().getInt("MindLvl");
-                } else if (reqs.getRequiredMind() != 0) {
-                    mindreqs = reqs.getRequiredMind() <= player.getPersistentData().getInt("MindLvl");
+                } else if (reqs.requiredMind() != 0) {
+                    mindreqs = reqs.requiredMind() <= player.getPersistentData().getInt("MindLvl");
                 }
                 return mindreqs && strreqs && dexreqs;
             }

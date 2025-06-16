@@ -1,5 +1,6 @@
 package com.robson.pride.progression;
 
+import com.robson.pride.api.data.WeaponData;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.TagsUtils;
 import com.robson.pride.registries.WeaponSkillRegister;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class AttributeModifiers {
 
-    public static List<String> scale_tiers = Arrays.asList("E", "D", "C", "B", "A", "S");
+    public static List<Character> scale_tiers = Arrays.asList('E', 'D', 'C', 'B', 'A', 'S');
 
     public static void setModifierForImbuement(ItemStack item) {
         if (item != null) {
@@ -22,7 +23,7 @@ public class AttributeModifiers {
             if (newtier > 5) {
                 newtier = 5;
             }
-            item.getOrCreateTag().putString("scaleMind", scale_tiers.get(newtier));
+            item.getOrCreateTag().putString("scaleMind", String.valueOf(scale_tiers.get(newtier)));
             item.getOrCreateTag().putInt("requiredMind", (int) ((getValueOfDefaultAttribute(item, "required", "Strength") + getValueOfDefaultAttribute(item, "required", "Dexterity")) / 1.5f) + getValueOfDefaultAttribute(item, "required", "Mind"));
         }
     }
@@ -67,23 +68,23 @@ public class AttributeModifiers {
 
     public static float calculateModifier(Player player, ItemStack item, float defaultmodifier) {
         if (item != null && player != null) {
-            CompoundTag tag = null;
-            if (tag != null) {
+            WeaponData data = WeaponData.getWeaponData(item);
+            if (data != null) {
                 float strmodifier = 0;
                 float dexmodifier = 0;
                 float mindmofier = 0;
                 byte modifiers = 0;
-                if (tag.contains("requiredStrength")) {
+                if (data.getAttributeReqs().requiredStrength() != 0) {
                     modifiers = (byte) (modifiers + 1);
-                    strmodifier = calculateWeaponAttributeModifier(player, item, tag, "Strength");
+                    strmodifier = calculateWeaponAttributeModifier(player, item, data.getAttributeReqs().strengthScale(), data.getAttributeReqs().requiredStrength(), "Strength");
                 }
-                if (tag.contains("requiredDexterity")) {
+                if (data.getAttributeReqs().requiredDexterity() != 0) {
                     modifiers = (byte) (modifiers + 1);
-                    dexmodifier = calculateWeaponAttributeModifier(player, item, tag, "Dexterity");
+                    dexmodifier = calculateWeaponAttributeModifier(player, item, data.getAttributeReqs().dexterityScale(), data.getAttributeReqs().requiredDexterity(), "Dexterity");
                 }
-                if (tag.contains("requiredMind") || item.getOrCreateTag().contains("requiredMind")) {
+                if (data.getAttributeReqs().requiredMind() != 0 || item.getOrCreateTag().contains("requiredMind")) {
                     modifiers = (byte) (modifiers + 1);
-                    mindmofier = calculateWeaponAttributeModifier(player, item, tag, "Mind");
+                    mindmofier = calculateWeaponAttributeModifier(player, item, data.getAttributeReqs().mindScale(), data.getAttributeReqs().requiredMind(), "Mind");
                 }
                 float agroup = mindmofier + dexmodifier + strmodifier;
                 float finalmodifier = agroup / modifiers / 2;
@@ -96,16 +97,14 @@ public class AttributeModifiers {
         return 0;
     }
 
-    public static float calculateWeaponAttributeModifier(Player player, ItemStack item, CompoundTag tag, String attribute) {
-        if (player != null && item != null && tag != null) {
+    public static float calculateWeaponAttributeModifier(Player player, ItemStack item, char scale, int required, String attribute) {
+        if (player != null && item != null) {
             CompoundTag playertag = TagsUtils.playerTags.get(player);
             if (playertag != null) {
                 int lvl = playertag.getInt(attribute + "Lvl");
-                float required = (float) tag.getDouble("required" + attribute);
-                String scale = tag.getString("scale" + attribute);
                 if (attribute.equals("Mind") && scale_tiers.contains(item.getOrCreateTag().getString("scaleMind")) && item.getOrCreateTag().contains("requiredMind")) {
                     required = item.getTag().getInt("requiredMind");
-                    scale = item.getTag().getString("scaleMind");
+                    scale = item.getTag().getString("scaleMind").charAt(0);
                 }
                 float difference = lvl - required;
                 return difference < 0 ? difference / 10 : difference * getIncrementByScale(scale) / 2;
@@ -135,7 +134,7 @@ public class AttributeModifiers {
         return 0;
     }
 
-    public static float getIncrementByScale(String scale) {
+    public static float getIncrementByScale(char scale) {
         if (scale_tiers.contains(scale)) {
             return 0.01f + (float) scale_tiers.indexOf(scale) / 100;
         }

@@ -24,7 +24,7 @@ public class CustomWeaponItem extends SwordItem {
             }
 
             public float getAttackDamageBonus() {
-                return 0f;
+                return -2f;
             }
 
             @Override
@@ -46,17 +46,14 @@ public class CustomWeaponItem extends SwordItem {
     public static ItemStack createWeapon(String id){
         ItemStack weaponItem = new ItemStack(ItemsRegister.CUSTOM_WEAPON_ITEM.get());
         weaponItem.getOrCreateTag().putString("weaponid", id);
-        if (!weaponItem.getOrCreateTag().contains("name")){
-            weaponItem.getOrCreateTag().putString("name", id);
-        }
         return weaponItem;
     }
 
     @Override
     public @NotNull Component getName(ItemStack stack) {
         Component defaultName = super.getName(stack);
-        if (stack.getOrCreateTag().contains("name")){
-            return Component.literal(stack.getOrCreateTag().getString("name"));
+        if (stack.getOrCreateTag().contains("weaponid")){
+            return Component.literal(stack.getOrCreateTag().getString("weaponid"));
         }
         return defaultName;
     }

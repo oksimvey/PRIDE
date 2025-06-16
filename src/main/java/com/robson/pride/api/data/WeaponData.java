@@ -4,25 +4,26 @@ import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import com.robson.pride.api.maps.WeaponsMap;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
+import com.robson.pride.api.utils.math.Matrix2f;
+import com.robson.pride.api.utils.math.Vec3f;
+import com.robson.pride.mixins.WeaponTypeReloadListenerMixin;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.capabilities.CapabilityProvider;
-import org.w3c.dom.Attr;
-import yesman.epicfight.world.capabilities.item.CapabilityItem;
-import yesman.epicfight.world.capabilities.item.WeaponCategory;
-import yesman.epicfight.world.capabilities.provider.ItemCapabilityProvider;
+import net.minecraft.world.phys.Vec3;
+import yesman.epicfight.api.client.animation.property.TrailInfo;
+import yesman.epicfight.particle.EpicFightParticles;
+import yesman.epicfight.world.capabilities.item.*;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 
-import java.security.DrbgParameters;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
 
 public class WeaponData {
-
-    private final CapabilityItem itemcap;
 
     private final String model;
 
@@ -36,14 +37,41 @@ public class WeaponData {
 
     private final int weight;
 
-    public WeaponData(CapabilityItem itemcap, int weight, String model, String element, AABB collider, WeaponSkillBase skill, AttributeReqs attributeReqs){
-        this.itemcap = itemcap;
+    private final String category;
+
+    private final float damage;
+
+    private final float speed;
+
+    private final float impact;
+
+    private final int max_stikes;
+
+    private final float armor_negation;
+
+    private final TrailParams trailInfo;
+
+    private Vec3f scale;
+
+    private Matrix2f rHandParams;
+
+    private Matrix2f lHandParams;
+
+
+    public WeaponData(String category, float damage, float speed, float impact, float max_strikes, float armor_negation, int weight, String model, String element, AABB collider, WeaponSkillBase skill, AttributeReqs attributeReqs, TrailParams trail){
+        this.category = category;
+        this.damage = damage;
+        this.speed = speed;
+        this.impact = impact;
+        this.max_stikes = (int) max_strikes;
+        this.armor_negation = armor_negation;
         this.weight = weight;
         this.model = model;
         this.collider = collider;
         this.skill = skill;
         this.attributeReqs = attributeReqs;
         this.element = element;
+        this.trailInfo = trail;
     }
 
     public String getElement() {
@@ -61,19 +89,54 @@ public class WeaponData {
         return null;
     }
 
+    public TrailInfo getTrailInfo(TrailInfo info) {
+        TrailInfo.Builder builder = TrailInfo.builder();
+        builder.joint(info.joint);
+        if (!this.trailInfo.texture.isEmpty()){
+           builder.texture(new ResourceLocation(this.trailInfo.texture()));
+        }
+        else builder.texture(info.texturePath);
+        builder.time(info.startTime, info.endTime);
+        builder.startPos(new Vec3(trailInfo.positions().x0(), trailInfo.positions().y0(), trailInfo.positions().z0()));
+        builder.endPos(new Vec3(trailInfo.positions().x1(), trailInfo.positions().y1(), trailInfo.positions().z1()));
+        builder.r(trailInfo.r);
+        builder.g(trailInfo.g);
+        builder.b(trailInfo.b);
+        builder.lifetime(trailInfo.lifetime());
+        builder.type(info.particle);
+        builder.interpolations(trailInfo.lifetime() / 4);
+        return builder.create();
+    }
+
     public AttributeReqs getAttributeReqs() {
         return this.attributeReqs;
     }
 
+    public static TrailInfo createDefaultTrail(Vec3 start, Vec3 end, int r, int g, int b, int lifetime){
+        TrailInfo.Builder info = TrailInfo.builder();
+        info.texture("epicfight:textures/particle/swing_trail.png");
+        info.type(EpicFightParticles.SWING_TRAIL.get());
+        info.lifetime(lifetime);
+        info.interpolations(lifetime / 4);
+        info.r(r);
+        info.g(g);
+        info.b(b);
+        info.startPos(start);
+        info.endPos(end);
+        return info.create();
+    }
 
-    public static CapabilityItem createCapability(WeaponCategory weaponCategory, float damage, float speed, float impact, int max_strikes, float armor_negation, int weight){
-        CapabilityItem.Builder innerDefaultCapabilityBuilder = CapabilityItem.builder();
-        innerDefaultCapabilityBuilder.category(weaponCategory);
-        Map<Attribute, AttributeModifier> attributeEntry = deserializeAttributes(damage, speed, impact, max_strikes, armor_negation, weight);
-        for (Map.Entry<Attribute, AttributeModifier> attribute : attributeEntry.entrySet()) {
-            innerDefaultCapabilityBuilder.addStyleAttibutes(CapabilityItem.Styles.COMMON, Pair.of(attribute.getKey(), attribute.getValue()));
+    public CapabilityItem getItemcap(ItemStack stack){
+        ResourceLocation rl = new ResourceLocation("pride:pride_" + this.category);
+        if (WeaponTypeReloadListenerMixin.getPRESETS().containsKey(rl)) {
+            CapabilityItem.Builder builder = ((CapabilityItem.Builder)((Function)WeaponTypeReloadListenerMixin.getPRESETS().getOrDefault(rl, WeaponCapabilityPresets.SWORD)).apply(stack.getItem()));
+            Map<Attribute, AttributeModifier> attributeEntry = deserializeAttributes(this.damage, this.speed, this.impact, this.max_stikes, this.armor_negation, this.weight);
+            for (Map.Entry<Attribute, AttributeModifier> attribute : attributeEntry.entrySet()) {
+                builder.addStyleAttibutes(CapabilityItem.Styles.COMMON, Pair.of(attribute.getKey(), attribute.getValue()));
+            }
+            return builder.build();
         }
-        return innerDefaultCapabilityBuilder.build();
+        return CapabilityItem.EMPTY;
     }
 
     public static AABB createCollider(float maxx, float maxy, float maxz, float minx, float miny, float minz){
@@ -107,56 +170,12 @@ public class WeaponData {
         return modifierMap;
     }
 
-    public CapabilityItem getItemcap() {
-        return this.itemcap;
+
+    public record AttributeReqs(char strengthScale, char mindScale, char dexterityScale, byte requiredStrength,
+                                byte requiredMind, byte requiredDexterity) {
     }
 
-    public static class AttributeReqs {
 
-        private final char strengthScale;
-
-        private final char mindScale;
-
-        private final char dexterityScale;
-
-        private final byte requiredStrength;
-
-        private final byte requiredMind;
-
-        private final byte requiredDexterity;
-
-        public AttributeReqs(char strengthScale, char mindScale, char dexterityScale, byte requiredStrength, byte requiredMind, byte requiredDexterity){
-            this.strengthScale = strengthScale;
-            this.mindScale = mindScale;
-            this.dexterityScale = dexterityScale;
-            this.requiredStrength = requiredStrength;
-            this.requiredMind = requiredMind;
-            this.requiredDexterity = requiredDexterity;
-
-        }
-
-        public char getStrengthScale() {
-            return this.strengthScale;
-        }
-
-        public char getMindScale() {
-            return this.mindScale;
-        }
-
-        public char getDexterityScale() {
-            return this.dexterityScale;
-        }
-
-        public byte getRequiredStrength() {
-            return this.requiredStrength;
-        }
-
-        public byte getRequiredMind() {
-            return this.requiredMind;
-        }
-
-        public byte getRequiredDexterity() {
-            return this.requiredDexterity;
-        }
+    public record TrailParams(Matrix2f positions, int r, int g, int b, int lifetime, String texture) {
     }
 }

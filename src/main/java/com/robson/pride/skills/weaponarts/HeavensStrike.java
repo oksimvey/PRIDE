@@ -3,9 +3,10 @@ package com.robson.pride.skills.weaponarts;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.HealthUtils;
-import com.robson.pride.api.utils.MathUtils;
+import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.api.utils.TimerUtil;
+import com.robson.pride.api.utils.math.Vec3f;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,7 +24,7 @@ public class HeavensStrike extends WeaponSkillBase {
 
     public List<SkillAnimation> defineMotions(LivingEntity ent) {
         return List.of(new SkillAnimation(WOMAnimations.AGONY_RISING_EAGLE, () -> {
-            List<Vec3> spiralpoints = MathUtils.getVectorsForHorizontalSpiral(ent.getLookAngle().scale(2), (byte) 6, 50, 1);
+            List<Vec3f> spiralpoints = MathUtils.getVectorsForHorizontalSpiral(Vec3f.fromVec3(ent.getLookAngle().scale(2)), (byte) 6, 50, 1);
             if (!spiralpoints.isEmpty()) {
                 summonSpiralPoint(ent.position(), spiralpoints, 1, ent.getBbHeight());
             }
@@ -44,9 +45,9 @@ public class HeavensStrike extends WeaponSkillBase {
     }
 
 
-    public void summonSpiralPoint(Vec3 entpos, List<Vec3> points, int currentloop, float height) {
+    public void summonSpiralPoint(Vec3 entpos, List<Vec3f> points, int currentloop, float height) {
         if (entpos != null && points != null && points.size() >= currentloop) {
-            Vec3 point = points.get(currentloop);
+            Vec3f point = points.get(currentloop);
             Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.WISP_PARTICLE.get(), entpos.x + point.x, entpos.y + (currentloop / (10f / height)),
                     entpos.z + point.z, 0, 0, 0).scale(2);
             TimerUtil.schedule(() -> summonSpiralPoint(entpos, points, currentloop + 1, height), 10, TimeUnit.MILLISECONDS);

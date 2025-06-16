@@ -3,7 +3,7 @@ package com.robson.pride.api.elements;
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
 import com.robson.pride.api.utils.AttributeUtils;
-import com.robson.pride.api.utils.MathUtils;
+import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.ParticleRegister;
 import com.robson.pride.registries.SchoolRegister;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;

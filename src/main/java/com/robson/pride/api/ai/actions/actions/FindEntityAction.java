@@ -2,7 +2,7 @@ package com.robson.pride.api.ai.actions.actions;
 
 import com.robson.pride.api.ai.actions.ActionBase;
 import com.robson.pride.api.entity.PrideMobBase;
-import com.robson.pride.api.utils.MathUtils;
+import com.robson.pride.api.utils.math.MathUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.Entity;

@@ -6,7 +6,7 @@ import com.github.leawind.thirdperson.config.Config;
 import com.robson.pride.api.customtick.CustomTickManager;
 import com.robson.pride.api.utils.CameraUtils;
 import com.robson.pride.api.utils.ItemStackUtils;
-import com.robson.pride.api.utils.MathUtils;
+import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;

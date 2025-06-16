@@ -1,5 +1,6 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.api.utils.math.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;

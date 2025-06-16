@@ -2,6 +2,7 @@ package com.robson.pride.api.mechanics;
 
 import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.utils.*;
+import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.registries.AnimationsRegister;
 import net.minecraft.client.Minecraft;

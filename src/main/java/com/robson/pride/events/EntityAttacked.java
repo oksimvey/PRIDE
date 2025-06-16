@@ -4,6 +4,7 @@ import com.robson.pride.api.elements.ElementBase;
 import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
+import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.effect.ImmunityEffect;
 import com.robson.pride.entities.special.Shooter;
 import com.robson.pride.epicfight.styles.PrideStyles;

@@ -1,11 +1,10 @@
 package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.WeaponData;
-import com.robson.pride.api.maps.WeaponsMap;
+import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;

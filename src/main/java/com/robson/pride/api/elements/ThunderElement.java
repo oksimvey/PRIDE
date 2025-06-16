@@ -4,6 +4,7 @@ import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.*;
+import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.SchoolRegister;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;

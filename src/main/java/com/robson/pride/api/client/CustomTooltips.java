@@ -1,7 +1,7 @@
 package com.robson.pride.api.client;
 
 import com.robson.pride.api.data.WeaponData;
-import com.robson.pride.api.utils.MathUtils;
+import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.progression.AttributeModifiers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -12,8 +12,6 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-
-import java.util.Objects;
 
 public class CustomTooltips {
 
@@ -37,26 +35,26 @@ public class CustomTooltips {
             }
             if (item.getTag().contains("scaleMind")) {
                 event.getToolTip().add(index + 1, Component.literal(" " + item.getTag().getString("scaleMind") + " Mind Scale").withStyle(ChatFormatting.DARK_BLUE));
-            } else if (data.getAttributeReqs().getMindScale() != '\0') {
-                event.getToolTip().add(index + 1, Component.literal(" " + data.getAttributeReqs().getMindScale() + " Mind Scale").withStyle(ChatFormatting.DARK_BLUE));
+            } else if (data.getAttributeReqs().mindScale() != '\0') {
+                event.getToolTip().add(index + 1, Component.literal(" " + data.getAttributeReqs().mindScale() + " Mind Scale").withStyle(ChatFormatting.DARK_BLUE));
             }
-            if (data.getAttributeReqs().getDexterityScale() != '\0') {
-                event.getToolTip().add(index + 1, Component.literal(" " + data.getAttributeReqs().getDexterityScale() + " Dexterity Scale").withStyle(ChatFormatting.DARK_GREEN));
+            if (data.getAttributeReqs().dexterityScale() != '\0') {
+                event.getToolTip().add(index + 1, Component.literal(" " + data.getAttributeReqs().dexterityScale() + " Dexterity Scale").withStyle(ChatFormatting.DARK_GREEN));
             }
-            if (data.getAttributeReqs().getStrengthScale() != '\0') {
-                event.getToolTip().add(index + 1, Component.literal(" " + data.getAttributeReqs().getStrengthScale() + " Strength Scale").withStyle(ChatFormatting.RED));
+            if (data.getAttributeReqs().strengthScale() != '\0') {
+                event.getToolTip().add(index + 1, Component.literal(" " + data.getAttributeReqs().strengthScale() + " Strength Scale").withStyle(ChatFormatting.RED));
             }
             if (item.getTag().contains("requiredMind")) {
                 event.getToolTip().add(index + 1, Component.literal(" " + item.getTag().getInt("requiredMind") + " Required Mind").withStyle(ChatFormatting.DARK_BLUE));
             }
-            else if (data.getAttributeReqs().getRequiredMind() != 0) {
-                event.getToolTip().add(index + 1, Component.literal(" " + data.getAttributeReqs().getRequiredMind()+ " Required Mind").withStyle(ChatFormatting.DARK_BLUE));
+            else if (data.getAttributeReqs().requiredMind() != 0) {
+                event.getToolTip().add(index + 1, Component.literal(" " + data.getAttributeReqs().requiredMind()+ " Required Mind").withStyle(ChatFormatting.DARK_BLUE));
             }
-            if (data.getAttributeReqs().getRequiredDexterity() != 0) {
-                event.getToolTip().add(index + 1, Component.literal(" " + data.getAttributeReqs().getRequiredDexterity() + " Required Dexterity").withStyle(ChatFormatting.DARK_GREEN));
+            if (data.getAttributeReqs().requiredDexterity() != 0) {
+                event.getToolTip().add(index + 1, Component.literal(" " + data.getAttributeReqs().requiredDexterity() + " Required Dexterity").withStyle(ChatFormatting.DARK_GREEN));
             }
-            if (data.getAttributeReqs().getRequiredStrength() != 0) {
-                event.getToolTip().add(index + 1, Component.literal(" " + data.getAttributeReqs().getRequiredStrength() + " Required Strength").withStyle(ChatFormatting.RED));
+            if (data.getAttributeReqs().requiredStrength() != 0) {
+                event.getToolTip().add(index + 1, Component.literal(" " + data.getAttributeReqs().requiredStrength() + " Required Strength").withStyle(ChatFormatting.RED));
             }
         }
     }

@@ -19,7 +19,8 @@
   "mixins": [
     "AttackAnimationMixin",
     "CubicBezierCurveMixin",
-    "ItemCapabilityProviderMixin",
-    "ManaBarOverlayMixin"
+    "EpicFightCapabilitiesMixin",
+    "ManaBarOverlayMixin",
+    "WeaponTypeReloadListenerMixin"
   ]
 }
