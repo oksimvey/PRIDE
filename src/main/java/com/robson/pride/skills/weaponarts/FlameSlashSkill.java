@@ -18,7 +18,7 @@ public class FlameSlashSkill extends WeaponSkillBase {
     }
 
     public List<SkillAnimation> defineMotions(LivingEntity ent) {
-        return List.of(new SkillAnimation(Animations.TACHI_DASH, () -> TimerUtil.schedule(() ->
+        return List.of(new SkillAnimation(Animations.TACHI_DASH.get(), () -> TimerUtil.schedule(() ->
                 SpellUtils.castMikiriSpell(ent, SpellRegistry.FLAMING_STRIKE_SPELL.get(), 3), 400, TimeUnit.MILLISECONDS)));
     }
 }

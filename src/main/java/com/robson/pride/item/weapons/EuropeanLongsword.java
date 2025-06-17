@@ -1,38 +1,19 @@
 package com.robson.pride.item.weapons;
 
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.crafting.Ingredient;
+import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.utils.math.Matrix2f;
+import com.robson.pride.skills.weaponskills.LongSwordWeaponSkill;
 
-public class EuropeanLongsword extends SwordItem {
+public class EuropeanLongsword extends WeaponData {
+
+
     public EuropeanLongsword() {
-        super(new Tier() {
-            public int getUses() {
-                return 100;
-            }
-
-            public float getSpeed() {
-                return 4f;
-            }
-
-            public float getAttackDamageBonus() {
-                return 10f;
-            }
-
-            @Override
-            public int getLevel() {
-                return 0;
-            }
-
-
-            public int getEnchantmentValue() {
-                return 2;
-            }
-
-            public Ingredient getRepairIngredient() {
-                return Ingredient.of();
-            }
-        }, 1, -3f, new Item.Properties());
+        super("longsword", 7.5f, 0.75f, 2, 3, 2,
+                10,"minecraft:item/longsword", "",
+                WeaponData.createCollider(0.2f, 0.8f, 1.5f, -0.5f, -0.5f, -0.15f),
+                WeaponData.createSkill(new LongSwordWeaponSkill()),
+                new AttributeReqs('B', '\0', 'D', (byte) 10, (byte) 0, (byte) 5),
+                new TrailParams(new Matrix2f(0,0, -0.2f, 0, 0.2f, -1.75f),
+                        255, 255, 255, 10, ""));
     }
 }

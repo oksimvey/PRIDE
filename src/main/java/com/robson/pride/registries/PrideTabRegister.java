@@ -1,5 +1,6 @@
 package com.robson.pride.registries;
 
+import com.robson.pride.api.enums.WeaponsEnum;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.item.weapons.CustomWeaponItem;
 import com.robson.pride.main.Pride;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.robson.pride.api.maps.SkillMap.WEAPON_SKILLS;
-import static com.robson.pride.api.maps.WeaponsMap.WEAPONS;
 import static com.robson.pride.registries.EntityRegister.ENTITIES;
 import static com.robson.pride.registries.EntityRegister.SPECIAL_ENTITIES;
 import static com.robson.pride.registries.WeaponSkillRegister.*;
@@ -34,10 +34,10 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> EQUIPMENT_TAB = TABS.register("pride_equipment", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Equipment"))
-            .icon(() -> new ItemStack(ItemsRegister.EuropeanLongsword.get()))
+            .icon(() -> CustomWeaponItem.createWeapon(WeaponsEnum.European_Longsword.name()))
             .displayItems((enabledFeatures, entries) -> {
-                for (String weaponid : WEAPONS.keySet()){
-                    entries.accept(CustomWeaponItem.createWeapon(weaponid));
+                for (WeaponsEnum weaponid : WeaponsEnum.values()){
+                    entries.accept(CustomWeaponItem.createWeapon(weaponid.name()));
                 }
             })
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)

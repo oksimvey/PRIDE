@@ -20,12 +20,12 @@ public class RenderingCore {
             ParticleTracking.tickParticleMapping(ent.getOffhandItem(), ent);
             ElementBase element = ParticleTracking.getItemElementForImbuement(ent.getMainHandItem());
             if (element != null) {
-                ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR, element.getNormalParticleType(), ParticleTracking.getAABBForImbuement(ent.getMainHandItem(), ent), element.getParticleAmount());
+                ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolR, element.getNormalParticleType(), ParticleTracking.getAABBForImbuement(ent.getMainHandItem(), ent), element.getParticleAmount());
             }
             if (ItemStackUtils.getStyle(ent) == PrideStyles.DUAL_WIELD) {
                 ElementBase element2 = ParticleTracking.getItemElementForImbuement(ent.getMainHandItem());
                 if (element2 != null) {
-                    ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolL, element2.getNormalParticleType(), ParticleTracking.getAABBForImbuement(ent.getOffhandItem(), ent), element2.getParticleAmount());
+                    ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolL, element2.getNormalParticleType(), ParticleTracking.getAABBForImbuement(ent.getOffhandItem(), ent), element2.getParticleAmount());
                 }
             }
             for (MobEffectInstance effect : ent.getActiveEffects()) {

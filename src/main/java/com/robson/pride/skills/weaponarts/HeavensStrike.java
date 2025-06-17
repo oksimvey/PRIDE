@@ -11,7 +11,7 @@ import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import reascer.wom.gameasset.WOMAnimations;
+import yesman.epicfight.gameasset.Animations;
 
 import java.util.List;
 import java.util.Random;
@@ -23,12 +23,12 @@ public class HeavensStrike extends WeaponSkillBase {
     }
 
     public List<SkillAnimation> defineMotions(LivingEntity ent) {
-        return List.of(new SkillAnimation(WOMAnimations.AGONY_RISING_EAGLE, () -> {
+        return List.of(new SkillAnimation(Animations.AXE_AUTO1.get(), () -> {
             List<Vec3f> spiralpoints = MathUtils.getVectorsForHorizontalSpiral(Vec3f.fromVec3(ent.getLookAngle().scale(2)), (byte) 6, 50, 1);
             if (!spiralpoints.isEmpty()) {
                 summonSpiralPoint(ent.position(), spiralpoints, 1, ent.getBbHeight());
             }
-        }), new SkillAnimation(WOMAnimations.AGONY_SKY_DIVE, () -> {
+        }), new SkillAnimation(Animations.AXE_AUTO1.get(), () -> {
             for (int i = 0; i < 50; i++) {
                 Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.WISP_PARTICLE.get(),
                         ent.getX() + new Random().nextFloat(0.5f) - 0.5f,

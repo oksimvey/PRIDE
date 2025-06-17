@@ -124,16 +124,12 @@ dependencies {
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation fg.deobf("curse.maven:epic-fight-mod-405076:5856683")
-    implementation fg.deobf("curse.maven:epic-fight-indestructible-915201:6451998")
+    implementation fg.deobf("curse.maven:epic-fight-mod-405076:6640098")
     implementation fg.deobf("curse.maven:leawind-third-person-930880:5961735")
-    implementation fg.deobf("curse.maven:weapons-of-miracles-epicfight-918614:5889471")
     implementation fg.deobf("curse.maven:curios-309927:6058834")
     implementation fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:6488484")
     implementation fg.deobf("curse.maven:geckolib-388172:6027567")
-    implementation fg.deobf("curse.maven:epic-fight-x-irons-spells-animation-fix-1109064:6183769")
-    implementation fg.deobf("curse.maven:epic-fight-dual-axes-1174112:6421589")
-     implementation fg.deobf("curse.maven:epic-fight-mod-rapier-moveset-addon-1036425:6427022")
+     implementation fg.deobf("curse.maven:epic-fight-mod-rapier-moveset-addon-1036425:6602389")
     implementation fg.deobf("curse.maven:cmdcam-251244:6099081")
     implementation fg.deobf("curse.maven:easy-npc-559312:6008907")
 

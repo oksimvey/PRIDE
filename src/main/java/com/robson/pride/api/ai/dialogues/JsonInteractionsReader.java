@@ -1,7 +1,6 @@
 package com.robson.pride.api.ai.dialogues;
 
 import com.robson.pride.api.ai.actions.ActionBase;
-import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.particles.StringParticle;
 import com.robson.pride.registries.ActionsRegister;
@@ -28,7 +27,7 @@ public class JsonInteractionsReader {
     public static void onInteraction(Entity target, Entity sourceent) {
         if (target != null && sourceent != null) {
             if (TargetUtil.getTarget(target) == null) {
-                CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(target.getType());
+                CompoundTag tagmap = null;
                 if (tagmap != null) {
                     ListTag tag = tagmap.getList("interaction_behaviors", 10);
                     if (tag != null) {

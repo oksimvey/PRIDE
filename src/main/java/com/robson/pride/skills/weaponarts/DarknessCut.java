@@ -33,7 +33,7 @@ public class DarknessCut extends WeaponSkillBase {
     }
 
     public List<SkillAnimation> defineMotions(LivingEntity ent) {
-        return List.of(new SkillAnimation(Animations.TACHI_AUTO3, () -> {
+        return List.of(new SkillAnimation(Animations.TACHI_AUTO3.get(), () -> {
             TimerUtil.schedule(() -> {
                 Vec3 lookangle = ent.getLookAngle();
                 ent.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 15, 255));
@@ -41,7 +41,7 @@ public class DarknessCut extends WeaponSkillBase {
                 if (!ent.level().isClientSide()) {
                     List<Entity> list = ent.level().getEntities(ent, new AABB(ent.getX() - 25, ent.getY() - 10, ent.getZ() - 25, ent.getX() + 25, ent.getY() + 20, ent.getZ() + 25));
                     for (int i = -20; i < 20; i++) {
-                        Vec3 vec = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, new Vec3f(0, (float) i / 2, 0), Armatures.BIPED.chest);
+                        Vec3 vec = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, new Vec3f(0, (float) i / 2, 0), Armatures.BIPED.get().chest);
                         double particleposx = vec.x;
                         double particleposy = vec.y;
                         double particleposz = vec.z;

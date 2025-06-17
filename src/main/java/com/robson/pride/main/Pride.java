@@ -1,10 +1,11 @@
 package com.robson.pride.main;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.nameless.indestructible.server.network.SPCancelBossInfo;
 import com.robson.pride.api.ai.DataConditions;
 import com.robson.pride.api.biomesettings.BiomeSettingsManager;
-import com.robson.pride.api.data.PrideMobPatchReloader;
+import com.robson.pride.api.data.MobData;
+import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.enums.WeaponsEnum;
 import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
@@ -13,10 +14,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -27,9 +25,10 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import yesman.epicfight.network.EpicFightNetworkManager;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
+
+import java.util.Objects;
 
 @Mod("pride")
 public class Pride {
@@ -41,12 +40,11 @@ public class Pride {
 
     public Pride() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        MinecraftForge.EVENT_BUS.addListener(this::addReloadListnerEvent);
         SoundsRegister.SOUNDS.register(bus);
         ItemsRegister.REGISTRY.register(bus);
         EntityRegister.ENTITIES.register(bus);
         EntityRegister.SPECIAL_ENTITIES.register(bus);
-        MinecraftForge.EVENT_BUS.addListener(this::onDatapackSync);
+        bus.addListener(AnimationsRegister::registerAnimations);
         AttributeRegister.register(bus);
         SchoolRegister.register(bus);
         GUIRegister.REGISTRY.register(bus);
@@ -55,13 +53,12 @@ public class Pride {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(KeyRegister::registerKeyMappings);
         ParticleRegister.PARTICLES.register(bus);
-        bus.addListener(AnimationsRegister::registerAnimations);
         WeaponCategory.ENUM_MANAGER.registerEnumCls(MOD_ID, WeaponCategoriesEnum.class);
+        WeaponData.WeaponDataEnum.ENUM_MANAGER.registerEnumCls(MOD_ID, WeaponsEnum.class);
         Style.ENUM_MANAGER.registerEnumCls(Pride.MODID, PrideStyles.class);
         EffectRegister.MOB_EFFECTS.register(bus);
         DataConditions.CONDITIONS.register(bus);
         PrideTabRegister.register(bus);
-        bus.addListener(this::doCommonStuff);
     }
 
     private void registerCommands(final RegisterCommandsEvent event) {
@@ -80,35 +77,14 @@ public class Pride {
                                 .then(SetElementCommand.register())));
     }
 
-    private void addReloadListnerEvent(final AddReloadListenerEvent event) {
-        event.addListener(new PrideMobPatchReloader());
-    }
-
-    private void doCommonStuff(FMLCommonSetupEvent event) {
-        EpicFightNetworkManager.INSTANCE.registerMessage(99, com.nameless.indestructible.server.network.SPDatapackSync.class, com.nameless.indestructible.server.network.SPDatapackSync::toBytes, com.nameless.indestructible.server.network.SPDatapackSync::fromBytes, com.nameless.indestructible.server.network.SPDatapackSync::handle);
-        EpicFightNetworkManager.INSTANCE.registerMessage(98, SPCancelBossInfo.class, SPCancelBossInfo::toBytes, SPCancelBossInfo::fromBytes, SPCancelBossInfo::handle);
-    }
-
-    private void onDatapackSync(final OnDatapackSyncEvent event) {
-        ServerPlayer player = event.getPlayer();
-        if (player != null) {
-            if (!player.getServer().isSingleplayerOwner(player.getGameProfile())) {
-                com.nameless.indestructible.server.network.SPDatapackSync mobPatchPacket = new com.nameless.indestructible.server.network.SPDatapackSync(PrideMobPatchReloader.getTagCount());
-                PrideMobPatchReloader.getDataStream().forEach(mobPatchPacket::write);
-                EpicFightNetworkManager.sendToPlayer(mobPatchPacket, player);
-            }
-        } else {
-            event.getPlayerList().getPlayers().forEach((serverPlayer) -> {
-                com.nameless.indestructible.server.network.SPDatapackSync mobPatchPacket = new com.nameless.indestructible.server.network.SPDatapackSync(PrideMobPatchReloader.getTagCount());
-                PrideMobPatchReloader.getDataStream().forEach(mobPatchPacket::write);
-                EpicFightNetworkManager.sendToPlayer(mobPatchPacket, serverPlayer);
-            });
-        }
-    }
 
     private void setupCommon(FMLCommonSetupEvent event) {
         PacketRegister.register();
         event.enqueueWork(() -> {
+            Objects.requireNonNull(WeaponData.WeaponDataEnum.ENUM_MANAGER);
+            WeaponData.WeaponDataEnum.ENUM_MANAGER.loadEnum();
+            Objects.requireNonNull(MobData.MobDataEnum.ENUM_MANAGER);
+            MobData.MobDataEnum.ENUM_MANAGER.loadEnum();
             DialogueConditionsRegister.register();
             ActionsRegister.register();
             StructureRegister.register();

@@ -26,7 +26,7 @@ public class HealthUtils {
     public static void dealBlockableDmg(Entity dmgent, Entity ent, float amount) {
         LivingEntityPatch playerpatch = EpicFightCapabilities.getEntityPatch(dmgent, LivingEntityPatch.class);
         if (ent != null && playerpatch != null) {
-            EpicFightDamageSource damage = playerpatch.getDamageSource(AnimationsRegister.ONEHAND_SHOOT, InteractionHand.MAIN_HAND);
+            EpicFightDamageSource damage = playerpatch.getDamageSource(AnimationsRegister.EXECUTE, InteractionHand.MAIN_HAND);
             damage.setStunType(StunType.HOLD);
             damage.setImpact(0.5F);
             damage.addRuntimeTag(EpicFightDamageType.WEAPON_INNATE);

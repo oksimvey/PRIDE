@@ -29,8 +29,8 @@ public class DarknessWrathEffect extends PrideEffectBase {
     public void prideClientTick(LivingEntity ent) {
         if (ent != null) {
             float heightfactor = ent.getBbHeight() / 1.8f;
-            Vec3 lEye = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, new Vec3f(-0.11f * heightfactor, 0.175f * heightfactor, -0.3f * heightfactor), Armatures.BIPED.head);
-            Vec3 rEye = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, new Vec3f(0.11f * heightfactor, 0.175f * heightfactor, -0.3f * heightfactor), Armatures.BIPED.head);
+            Vec3 lEye = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, new Vec3f(-0.11f * heightfactor, 0.175f * heightfactor, -0.3f * heightfactor), Armatures.BIPED.get().head);
+            Vec3 rEye = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, new Vec3f(0.11f * heightfactor, 0.175f * heightfactor, -0.3f * heightfactor), Armatures.BIPED.get().head);
             if (lEye != null && rEye != null) {
                 Particle particle = ParticleUtils.spawnAuraParticle(ParticleRegistry.EMBER_PARTICLE.get(), lEye.x, lEye.y, lEye.z, ent.getDeltaMovement().x * 1.2, 0, ent.getDeltaMovement().z * 1.2);
                 particle.scale(0.4f);

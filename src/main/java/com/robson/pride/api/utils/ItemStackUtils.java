@@ -11,7 +11,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
-import yesman.epicfight.api.animation.AnimationProvider;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
@@ -61,17 +60,6 @@ public class ItemStackUtils {
         return 1;
     }
 
-    public static List<AnimationProvider<?>> getWeaponMotions(ItemStack weapon) {
-        if (weapon != null && Minecraft.getInstance().player != null) {
-            CapabilityItem capabilityItem = EpicFightCapabilities.getItemStackCapability(weapon);
-            if (capabilityItem != null) {
-                if (capabilityItem instanceof WeaponCapability weaponCapability) {
-                    return weaponCapability.getAutoAttckMotion(EpicFightCapabilities.getEntityPatch(Minecraft.getInstance().player, PlayerPatch.class));
-                }
-            }
-        }
-        return null;
-    }
 
     public static Style getStyle(Entity ent) {
         LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);

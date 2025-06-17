@@ -9,8 +9,6 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
-import static com.robson.pride.api.maps.WeaponsMap.WEAPONS;
-
 public class CustomWeaponItem extends SwordItem {
 
     public CustomWeaponItem() {

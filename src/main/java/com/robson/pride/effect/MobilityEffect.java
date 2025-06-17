@@ -18,7 +18,6 @@ import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import reascer.wom.gameasset.WOMAnimations;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.client.events.engine.ControllEngine;
 import yesman.epicfight.gameasset.Armatures;
@@ -65,22 +64,7 @@ public class MobilityEffect extends PrideEffectBase {
 
     public void MoonMobility(LivingEntity entity) {
         CameraUtils.correctCamera();
-        TimerUtil.schedule(() -> {
-            CameraUtils.correctCamera();
-            if (Minecraft.getInstance().options.keyUp.isDown()) {
-                AnimUtils.playAnim(entity, WOMAnimations.ENDERSTEP_FORWARD, 0);
-                return;
-            }
-            if (Minecraft.getInstance().options.keyLeft.isDown()) {
-                AnimUtils.playAnim(entity, WOMAnimations.ENDERSTEP_LEFT, 0);
-                return;
-            }
-            if (Minecraft.getInstance().options.keyRight.isDown()) {
-                AnimUtils.playAnim(entity, WOMAnimations.ENDERSTEP_RIGHT, 0);
-                return;
-            }
-            AnimUtils.playAnim(entity, WOMAnimations.ENDERSTEP_BACKWARD, 0);
-        }, 100, TimeUnit.MILLISECONDS);
+
     }
 
     public void ThunderMobility(LivingEntity entity) {
@@ -132,8 +116,8 @@ public class MobilityEffect extends PrideEffectBase {
                 ent.setDeltaMovement(ent.getLookAngle().x, 0, ent.getLookAngle().z);
                 Vec3i vec3 = new Vec3i((int) ((int) ent.getLookAngle().scale(1.5).x + ent.getX()), (int) (ent.getY() - 1), (int) ((int) ent.getLookAngle().scale(1.5).z + ent.getZ()));
                 storeBlockPos(ent, vec3);
-                Vec3 legr = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.legR);
-                Vec3 legl = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.legL);
+                Vec3 legr = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.get().legR);
+                Vec3 legl = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.get().legL);
                 float max = 0.25f;
                 float min = -0.25f;
                 Random random = new Random();

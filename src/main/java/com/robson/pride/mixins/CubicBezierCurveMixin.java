@@ -3,7 +3,7 @@ package com.robson.pride.mixins;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import yesman.epicfight.api.utils.math.CubicBezierCurve;
+import yesman.epicfight.api.physics.bezier.CubicBezierCurve;
 
 import java.util.ArrayList;
 import java.util.List;

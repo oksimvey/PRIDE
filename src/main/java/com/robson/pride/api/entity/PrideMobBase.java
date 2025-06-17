@@ -1,7 +1,6 @@
 package com.robson.pride.api.entity;
 
 import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
-import com.robson.pride.api.data.PrideMobPatchReloader;
 import com.robson.pride.api.utils.*;
 import de.markusbordihn.easynpc.data.attribute.*;
 import de.markusbordihn.easynpc.data.objective.ObjectiveDataEntry;
@@ -48,7 +47,6 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 import yesman.epicfight.api.animation.AnimationManager;
-import yesman.epicfight.api.animation.AnimationProvider;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
@@ -94,7 +92,7 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
     }
 
     private void deserializeConstructorJsons() {
-        CompoundTag tagmap = PrideMobPatchReloader.MOB_TAGS.get(this.getType());
+        CompoundTag tagmap = null;
         if (tagmap != null) {
             deserializeTargetGoals(tagmap);
             deserializeTextures(tagmap);
@@ -160,9 +158,9 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
     public StaticAnimation getSkillMotion(String skill) {
         if (skill.equals("divine_reflexes")) {
             ListTag motions = this.skillmotions.getList(skill, 8);
-            return AnimationManager.getInstance().byKeyOrThrow(motions.getString(new Random().nextInt(motions.size()) + 1));
+            return AnimationManager.byKey(motions.getString(new Random().nextInt(motions.size()) + 1)).orElse(null);
         }
-        return AnimationManager.getInstance().byKeyOrThrow(this.skillmotions.getString(skill));
+        return AnimationManager.byKey(this.skillmotions.getString(skill)).orElse(null);
     }
 
     public boolean isEquiped() {
@@ -227,13 +225,7 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
     }
 
     public byte getMaxVariations() {
-        if (PrideMobPatchReloader.MOB_TAGS.get(this.getType()) != null) {
-            byte variations = PrideMobPatchReloader.MOB_TAGS.get(this.getType()).getByte("variations");
-            if (variations > 0) {
-                return variations;
-            }
-        }
-        return 1;
+        return 0;
     }
 
     @Override
@@ -252,18 +244,7 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
         if (target != null) {
             if (this.target == target && target.isAlive()) {
                 if (this.distanceTo(target) < this.getBbHeight() * 3) {
-                    List<AnimationProvider<?>> motions = ItemStackUtils.getWeaponMotions(this.getMainHandItem());
-                    if (motions != null) {
-                        if (animation > motions.size()) {
-                            animation = 0;
-                        }
-                        StaticAnimation animationtoplay = motions.get(animation).get();
-                        AnimUtils.playAnim(this, animationtoplay, 0);
-                        animation += 1;
-                        byte finalAnimation = animation;
-                        int delay = AnimUtils.getAnimationDurationInMilliseconds(this, animationtoplay);
-                        TimerUtil.schedule(() -> deserializeFight(target, finalAnimation), delay, TimeUnit.MILLISECONDS);
-                    }
+
                 }
             }
         }

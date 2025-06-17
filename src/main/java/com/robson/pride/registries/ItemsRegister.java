@@ -14,7 +14,6 @@ import net.minecraftforge.registries.RegistryObject;
 public class ItemsRegister {
     public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, Pride.MODID);
 
-    public static final RegistryObject<Item> EuropeanLongsword = REGISTRY.register("european_longsword", com.robson.pride.item.weapons.EuropeanLongsword::new);
     public static final RegistryObject<Item> CUSTOM_WEAPON_ITEM = REGISTRY.register("weapon", CustomWeaponItem::new);
     public static final RegistryObject<Item> BULLET = REGISTRY.register("bullet",
             () -> new Bullet(new Item.Properties().stacksTo(64)));

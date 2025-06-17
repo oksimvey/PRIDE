@@ -13,8 +13,8 @@ public class Tornado extends WeaponSkillBase {
     }
 
     public List<SkillAnimation> defineMotions(LivingEntity ent) {
-        return List.of(new SkillAnimation(AnimationsRegister.GREAT_TACHI_AUTO1, null),
-                new SkillAnimation(AnimationsRegister.GREAT_TACHI_AUTO2, null),
-                new SkillAnimation(AnimationsRegister.GREAT_TACHI_AUTO3, null));
+        return List.of(new SkillAnimation(AnimationsRegister.GREAT_TACHI_AUTO1.get(), null),
+                new SkillAnimation(AnimationsRegister.GREAT_TACHI_AUTO2.get(), null),
+                new SkillAnimation(AnimationsRegister.GREAT_TACHI_AUTO3.get(), null));
     }
 }

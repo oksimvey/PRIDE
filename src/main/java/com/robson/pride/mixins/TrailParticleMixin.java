@@ -12,7 +12,6 @@ import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -24,15 +23,14 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import yesman.epicfight.api.animation.Joint;
-import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.client.animation.property.TrailInfo;
-import yesman.epicfight.client.particle.TrailParticle;
+import yesman.epicfight.client.particle.AbstractTrailParticle;
+import yesman.epicfight.world.capabilities.entitypatch.EntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 import java.util.function.Function;
 
-@Mixin(value = TrailParticle.class, remap = false)
+@Mixin(value = AbstractTrailParticle.class, remap = false)
 @OnlyIn(Dist.CLIENT)
 public class TrailParticleMixin extends TextureSheetParticle {
     @Mutable
@@ -52,7 +50,7 @@ public class TrailParticleMixin extends TextureSheetParticle {
      */
     @Overwrite(remap = false)
     public ParticleRenderType getRenderType() {
-        return TRAIL_PROVIDER.apply(this.elementPath == null ? this.trailInfo.texturePath : this.elementPath);
+        return TRAIL_PROVIDER.apply(this.elementPath == null ? this.trailInfo.texturePath() : this.elementPath);
     }
 
     private static final Function<ResourceLocation, ParticleRenderType> TRAIL_PROVIDER = Util.memoize((texturePath) -> new ParticleRenderType() {
@@ -85,23 +83,25 @@ public class TrailParticleMixin extends TextureSheetParticle {
         }
     });
 
-    @Inject(at = @At(value = "TAIL"), method = "<init>(Lnet/minecraft/client/multiplayer/ClientLevel;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/api/animation/Joint;Lyesman/epicfight/api/animation/types/StaticAnimation;Lyesman/epicfight/api/client/animation/property/TrailInfo;Lnet/minecraft/client/particle/SpriteSet;)V", cancellable = true)
-    private void injectTrailParticle(ClientLevel level, LivingEntityPatch entitypatch, Joint joint, StaticAnimation animation, TrailInfo trailInfo, SpriteSet spriteSet, CallbackInfo ci) {
-        TrailParticle trailParticle = ((TrailParticle) (Object) this);
-        ItemStack item = entitypatch.getValidItemInHand(trailInfo.hand);
-        if (item.getTag() == null) {
-            return;
-        }
-        if (item.getItem() instanceof CustomWeaponItem && WeaponData.getWeaponData(item) != null){
-            this.trailInfo = WeaponData.getWeaponData(item).getTrailInfo(this.trailInfo);
-        }
-        if (ParticleTracking.shouldRenderParticle(item)) {
-            ElementBase element = ParticleTracking.getItemElementForImbuement(item);
-            if (element != null) {
-                ItemRenderingParams params = element.getItemRenderingParams();
-                if (params != null) {
-                    trailParticle.setColor(params.getR(), params.getG(), params.getB());
-                    this.elementPath = params.getTexture();
+    @Inject(at = @At(value = "TAIL"), method = "<init>", cancellable = true)
+    private void injectTrailParticle(ClientLevel level, EntityPatch entitypatch, TrailInfo trailInfo, CallbackInfo ci) {
+        AbstractTrailParticle trailParticle = ((AbstractTrailParticle) (Object) this);
+        if (entitypatch instanceof LivingEntityPatch<?> livingEntityPatch){
+            ItemStack item = livingEntityPatch.getValidItemInHand(trailInfo.hand());
+            if (item.getTag() == null) {
+                return;
+            }
+            if (item.getItem() instanceof CustomWeaponItem && WeaponData.getWeaponData(item) != null){
+                this.trailInfo = WeaponData.getWeaponData(item).getTrailInfo(this.trailInfo);
+            }
+            if (ParticleTracking.shouldRenderParticle(item)) {
+                ElementBase element = ParticleTracking.getItemElementForImbuement(item);
+                if (element != null) {
+                    ItemRenderingParams params = element.getItemRenderingParams();
+                    if (params != null) {
+                        trailParticle.setColor(params.getR(), params.getG(), params.getB());
+                        this.elementPath = params.getTexture();
+                    }
                 }
             }
         }

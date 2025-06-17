@@ -6,7 +6,6 @@ import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.ParticleUtils;
 import com.robson.pride.api.utils.TimerUtil;
-import com.yukami.epicironcompat.animation.Animation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -33,11 +32,9 @@ public class ImbuementEffect extends PrideEffectBase {
     }
 
     public void onEffectStart(LivingEntity ent) {
-        AnimUtils.playAnim(ent, Animation.CHANTING_TWO_HAND_BACK, 0.05f);
         TimerUtil.schedule(() -> {
             if (ent != null) {
                 this.active = true;
-                AnimUtils.playAnim(ent, Animation.CASTING_TWO_HAND_BACK, 0.15f);
                 ElementalUtils.playSoundByElement(this.element, ent, 1);
             }
         }, 1500, TimeUnit.MILLISECONDS);
@@ -45,7 +42,6 @@ public class ImbuementEffect extends PrideEffectBase {
 
     public void onEffectEnd(LivingEntity ent) {
         ElementalUtils.playSoundByElement(this.element, ent, 1);
-        AnimUtils.playAnim(ent, Animation.CASTING_TWO_HAND_TOP, 0.1f);
     }
 
     @Override
@@ -54,8 +50,8 @@ public class ImbuementEffect extends PrideEffectBase {
             if (!element.equals("Sun") || ParticleTracking.shouldRenderSunParticle(ent)) {
                 ElementBase element = ELEMENTS.get(this.element);
                 Vec3f vec3f = ParticleTracking.getAABBForImbuement(null, ent);
-                ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR, element.getNormalParticleType(), vec3f, element.getParticleAmount());
-                ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.toolL, element.getNormalParticleType(), vec3f, element.getParticleAmount());
+                ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolR, element.getNormalParticleType(), vec3f, element.getParticleAmount());
+                ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolL, element.getNormalParticleType(), vec3f, element.getParticleAmount());
             }
         }
     }

@@ -17,9 +17,7 @@ public class CloneSkill {
     public static void summonPassiveClone(Entity owner, Entity target, boolean ispassive) {
         if (owner != null) {
             EntityType entityType;
-            if (owner instanceof Player) {
-                entityType = EntityRegister.CLONE_ENTITY.get();
-            } else entityType = owner.getType();
+           entityType = owner.getType();
             Entity clone = entityType.create(owner.level());
             if (clone != null) {
                 clone.setYRot(owner.getYRot());

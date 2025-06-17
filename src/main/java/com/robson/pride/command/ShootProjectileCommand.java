@@ -9,7 +9,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.robson.pride.api.utils.ProjectileUtil;
 import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.api.utils.TimerUtil;
-import com.robson.pride.entities.special.Shooter;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -52,9 +51,7 @@ public class ShootProjectileCommand implements Command<CommandSourceStack> {
         if (ent != null && projectile != null) {
             Entity entity = TargetUtil.getTarget(ent);
             if (entity != null && ent.getVehicle() != null) {
-                Shooter shooter = Shooter.summonShooter(ent, entity, false);
-                TimerUtil.schedule(() -> ProjectileUtil.shootProjectileFromShooter(shooter, projectile, ent, speed, true), 75, TimeUnit.MILLISECONDS);
-            }
+                     }
             ProjectileUtil.shootProjectileFromEnt(projectile, ent, speed);
         }
     }

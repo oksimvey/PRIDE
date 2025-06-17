@@ -9,8 +9,10 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.types.ActionAnimation;
 import yesman.epicfight.api.animation.types.AttackAnimation;
+import yesman.epicfight.api.asset.AssetAccessor;
 import yesman.epicfight.api.model.Armature;
 import yesman.epicfight.particle.HitParticleType;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
@@ -20,13 +22,14 @@ import java.util.function.BiFunction;
 @Mixin(AttackAnimation.class)
 public class AttackAnimationMixin extends ActionAnimation {
 
-    public AttackAnimationMixin(float convertTime, String path, Armature armature) {
-        super(convertTime, path, armature);
+
+    public AttackAnimationMixin(float transitionTime, AnimationManager.AnimationAccessor<? extends ActionAnimation> accessor, AssetAccessor<? extends Armature> armature) {
+        super(transitionTime, accessor, armature);
     }
 
     @Inject(at = @At(value = "TAIL"), method = "begin(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)V", remap = false)
     public void callEvent(LivingEntityPatch<?> entitypatch, CallbackInfo ci) {
-        AttackAnimation animation = (AttackAnimation) getThis();
+        AttackAnimation animation = (AttackAnimation)(Object) this;
         if (entitypatch.getOriginal() != null && !entitypatch.getOriginal().level().isClientSide) {
             OnAttackStartEvent.onAttackStart(entitypatch, animation);
         }

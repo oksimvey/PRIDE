@@ -2,7 +2,6 @@ package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.data.WeaponData;
 import com.robson.pride.api.elements.ElementBase;
-import com.robson.pride.api.maps.WeaponsMap;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.effect.ImbuementEffect;
@@ -18,7 +17,6 @@ import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Armatures;
 
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -57,7 +55,7 @@ public class ParticleTracking {
     }
 
     public static boolean shouldRenderSunParticle(Entity ent) {
-        Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.toolR);
+        Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolR);
         if (vec3 != null) {
             if (ElementalUtils.isNotInWater(ent, vec3)) {
                 togglefire.put(ent, true);

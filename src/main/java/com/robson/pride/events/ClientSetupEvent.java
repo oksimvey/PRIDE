@@ -1,5 +1,6 @@
 package com.robson.pride.events;
 
+import com.robson.pride.api.enums.WeaponsEnum;
 import com.robson.pride.item.weapons.CustomWeaponModelBase;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
@@ -7,8 +8,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import static com.robson.pride.api.maps.WeaponsMap.WEAPONS;
 
 @Mod.EventBusSubscriber(
         modid = "pride",
@@ -19,8 +18,8 @@ public class ClientSetupEvent {
 
     @SubscribeEvent
     public static void registerSpecialModels(ModelEvent.RegisterAdditional event) {
-        for (String weapon : WEAPONS.keySet()) {
-           event.register(CustomWeaponModelBase.getWeaponModelLocation(WEAPONS.get(weapon).getModel()));
+        for (WeaponsEnum weapon : WeaponsEnum.values()) {
+           event.register(CustomWeaponModelBase.getWeaponModelLocation(weapon.getWeaponData().getModel()));
        }
     }
 

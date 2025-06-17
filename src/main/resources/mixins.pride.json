@@ -9,11 +9,11 @@
   "refmap": "mixins.pride.refmap.json",
   "client": [
     "AnimatedMeshMixin",
-    "BattleGuiMixin",
     "ControllEngineMixin",
     "ItemRendererMixin",
     "RenderBufferInterface",
     "RenderBufferMixins",
+    "TargetIndicatorMixin",
     "TrailParticleMixin"
   ],
   "mixins": [

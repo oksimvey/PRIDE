@@ -6,7 +6,6 @@ import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.effect.ImmunityEffect;
-import com.robson.pride.entities.special.Shooter;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.progression.AttributeModifiers;
 import com.robson.pride.registries.EffectRegister;
@@ -45,11 +44,7 @@ public class EntityAttacked {
                     }
                 }
             }
-            if (event.getSource().getEntity() instanceof Shooter shooter) {
-                if (shooter.getOwner() == ent) {
-                    event.setCanceled(true);
-                }
-            }
+
             if (ddmgent instanceof Projectile) {
                 if (ddmgent instanceof AbstractArrow arrow && ent.getPersistentData().getBoolean("mikiri_dodge")) {
                     MikiriCounter.onArrowMikiri(ent, arrow, event);

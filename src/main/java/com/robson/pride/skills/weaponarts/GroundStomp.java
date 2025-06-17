@@ -13,6 +13,6 @@ public class GroundStomp extends WeaponSkillBase {
     }
 
     public List<SkillAnimation> defineMotions(LivingEntity ent) {
-        return List.of(new SkillAnimation(Animations.TACHI_DASH, null));
+        return List.of(new SkillAnimation(Animations.TACHI_DASH.get(), null));
     }
 }

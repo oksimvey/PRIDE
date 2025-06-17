@@ -49,7 +49,7 @@ public class DivineProtectionEffect extends PrideEffectBase {
                             Minecraft.getInstance().player,
                             ent,
                             wingPoint,
-                            Armatures.BIPED.torso);
+                            Armatures.BIPED.get().torso);
                     if (pos != null) {
                         float yoffset = new Random().nextFloat(0.5f);
                         Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.WISP_PARTICLE.get(), pos.x, pos.y + 0.4f - yoffset, pos.z, ent.getDeltaMovement().x, ent.getDeltaMovement().y, ent.getDeltaMovement().z);

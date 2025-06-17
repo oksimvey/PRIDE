@@ -1,7 +1,5 @@
 package com.robson.pride.api.utils;
 
-import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
-import com.nameless.indestructible.world.capability.AdvancedCustomMobPatch;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
@@ -20,12 +18,7 @@ public class StaminaUtils {
             } else {
                 LivingEntityPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
                 if (mobPatch != null) {
-                    if (mobPatch instanceof AdvancedCustomHumanoidMobPatch mobPatch1) {
-                        return mobPatch1.getStamina();
-                    }
-                    if (mobPatch instanceof AdvancedCustomMobPatch mobPatch1) {
-                        return mobPatch1.getStamina();
-                    }
+
                 }
             }
         }
@@ -42,12 +35,7 @@ public class StaminaUtils {
             } else {
                 LivingEntityPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
                 if (mobPatch != null) {
-                    if (mobPatch instanceof AdvancedCustomHumanoidMobPatch mobPatch1) {
-                        return mobPatch1.getMaxStamina();
-                    }
-                    if (mobPatch instanceof AdvancedCustomMobPatch mobPatch1) {
-                        return mobPatch1.getMaxStamina();
-                    }
+
                 }
             }
         }
@@ -64,13 +52,7 @@ public class StaminaUtils {
             } else {
                 LivingEntityPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
                 if (mobPatch != null) {
-                    if (mobPatch instanceof AdvancedCustomHumanoidMobPatch mobPatch1) {
-                        mobPatch1.setStamina(amount);
-                        return;
-                    }
-                    if (mobPatch instanceof AdvancedCustomMobPatch mobPatch1) {
-                        mobPatch1.setStamina(amount);
-                    }
+
                 }
             }
         }

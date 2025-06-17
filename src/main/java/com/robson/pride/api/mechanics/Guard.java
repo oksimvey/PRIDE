@@ -1,6 +1,5 @@
 package com.robson.pride.api.mechanics;
 
-import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.epicfight.styles.PrideStyles;
@@ -46,12 +45,7 @@ public class Guard {
                 ProgressionUtils.addXp(player, "Vigor", (int) event.getAmount());
             }
         } else {
-            AdvancedCustomHumanoidMobPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
-            if (livingEntityPatch != null) {
-                if (livingEntityPatch.isBlocking()) {
-                    checkParry(ent, ddmgent, event);
-                }
-            }
+
         }
     }
 
@@ -71,12 +65,7 @@ public class Guard {
                 }
             }
         } else {
-            AdvancedCustomHumanoidMobPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
-            if (livingEntityPatch != null) {
-                if (livingEntityPatch.getBlockTick() <= 5) {
-                    Parry.onParry(ent, ddmgent);
-                } else onGuard(ent, ddmgent, event);
-            }
+
         }
     }
 
@@ -97,25 +86,26 @@ public class Guard {
         if (player != null) {
             if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)) {
                 if (EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class).getAnimator() instanceof ClientAnimator) {
-                    StaticAnimation anim = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class).getClientAnimator().getCompositeLivingMotion(LivingMotions.BLOCK);
+                    StaticAnimation anim = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class).getClientAnimator().getCompositeLivingMotion(LivingMotions.BLOCK).orElse(null);
+                    if (anim == null){
+                        return Animations.SWORD_GUARD_HIT.get();
+                    }
                     if (anim == Animations.SWORD_DUAL_GUARD) {
-                        return Animations.SWORD_DUAL_GUARD_HIT;
+                        return Animations.SWORD_DUAL_GUARD_HIT.get();
                     } else if (anim == Animations.LONGSWORD_GUARD) {
-                        return Animations.LONGSWORD_GUARD_HIT;
+                        return Animations.LONGSWORD_GUARD_HIT.get();
                     } else if (anim == Animations.GREATSWORD_GUARD) {
-                        return Animations.GREATSWORD_GUARD_HIT;
+                        return Animations.GREATSWORD_GUARD_HIT.get();
                     } else if (anim == Animations.UCHIGATANA_GUARD) {
-                        return Animations.UCHIGATANA_GUARD_HIT;
+                        return Animations.UCHIGATANA_GUARD_HIT.get();
                     } else if (anim == Animations.SPEAR_GUARD) {
-                        return Animations.SPEAR_GUARD_HIT;
-                    } else if (anim == AnimationsRegister.INFERNAL_GUARD) {
-                        return AnimationsRegister.INFERNAL_GUARD_HIT;
+                        return Animations.SPEAR_GUARD_HIT.get();
                     }
 
                 }
             }
         }
-        return Animations.SWORD_GUARD_HIT;
+        return Animations.SWORD_GUARD_HIT.get();
     }
 
     public static StaticAnimation getParryMotion(Player player) {
@@ -125,14 +115,14 @@ public class Guard {
             Style style = ItemStackUtils.getStyle(player);
             if (style == PrideStyles.DUAL_WIELD) {
                 toggle = !toggle;
-                return toggle ? Animations.SWORD_GUARD_ACTIVE_HIT2 : Animations.SWORD_GUARD_ACTIVE_HIT3;
+                return toggle ? Animations.SWORD_GUARD_ACTIVE_HIT2.get() : Animations.SWORD_GUARD_ACTIVE_HIT3.get();
             } else if (style == CapabilityItem.Styles.TWO_HAND) {
                 toggle = !toggle;
-                return toggle ? Animations.LONGSWORD_GUARD_ACTIVE_HIT1 : Animations.LONGSWORD_GUARD_ACTIVE_HIT2;
+                return toggle ? Animations.LONGSWORD_GUARD_ACTIVE_HIT1.get() : Animations.LONGSWORD_GUARD_ACTIVE_HIT2.get();
             }
         }
         toggle = !toggle;
-        return toggle ? Animations.SWORD_GUARD_ACTIVE_HIT1 : Animations.SWORD_GUARD_ACTIVE_HIT2;
+        return toggle ? Animations.SWORD_GUARD_ACTIVE_HIT1.get() : Animations.SWORD_GUARD_ACTIVE_HIT2.get();
     }
 
     public static void onAnyBlock(Player serveerPlayer, LivingAttackEvent event, boolean isparry) {
@@ -143,9 +133,9 @@ public class Guard {
                 motion = getParryMotion(serveerPlayer);
                 scale = 2;
             }
-            Joint joint = Armatures.BIPED.toolR;
+            Joint joint = Armatures.BIPED.get().toolR;
             if (motion == Animations.SWORD_GUARD_ACTIVE_HIT3) {
-                joint = Armatures.BIPED.toolL;
+                joint = Armatures.BIPED.get().toolL;
             }
             AnimUtils.playAnim(serveerPlayer, motion, 0);
             PlaySoundUtils.playSound(serveerPlayer, EpicFightSounds.CLASH.get(), scale * 3 - 1, 1);
@@ -175,7 +165,7 @@ public class Guard {
     public static void spawnBlockParticle(Player player, float scale, Joint joint) {
         if (player != null) {
             ItemStack itemStack = player.getMainHandItem();
-            if (joint == Armatures.BIPED.toolL) {
+            if (joint == Armatures.BIPED.get().toolL) {
                 itemStack = player.getOffhandItem();
             }
             Vec3f vec3f = ParticleTracking.getAABBForImbuement(itemStack, player);

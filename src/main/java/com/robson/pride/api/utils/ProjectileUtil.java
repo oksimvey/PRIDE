@@ -1,6 +1,5 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.entities.special.Shooter;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -21,15 +20,4 @@ public class ProjectileUtil {
         }
     }
 
-    public static void shootProjectileFromShooter(Shooter shooter, Projectile projectile, Entity ent, float speed, boolean isnew) {
-        if (ent != null) {
-            projectile.setOwner(ent);
-            projectile.shootFromRotation(shooter, shooter.getXRot() - 10, shooter.getYRot(), 0, speed, speed / 3);
-            projectile.setPos(shooter.getLookAngle().scale(1.5).add(shooter.position()));
-            if (isnew) {
-                ent.level().addFreshEntity(projectile);
-            }
-            TimerUtil.schedule(() -> shooter.remove(Entity.RemovalReason.DISCARDED), 100, TimeUnit.MILLISECONDS);
-        }
-    }
 }

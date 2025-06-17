@@ -1,13 +1,11 @@
 package com.robson.pride.item.weapons;
 
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.robson.pride.api.data.WeaponData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModel;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.core.Direction;
@@ -17,8 +15,10 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.extensions.IForgeBakedModel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +28,7 @@ import java.util.function.Function;
 public class CustomWeaponModelBase implements BakedModel {
     private final BakedModel original;
     private final ItemOverrides itemOverrides;
+    public WeaponData weaponData = null;
 
     public CustomWeaponModelBase(BakedModel original, ModelBakery loader) {
         this.original = original;
@@ -65,9 +66,9 @@ public class CustomWeaponModelBase implements BakedModel {
             }
 
             private Optional<ResourceLocation> getModelFromTag(@NotNull ItemStack itemStack, CompoundTag tag) {
-                WeaponData data = WeaponData.getWeaponData(itemStack);
-                if (data != null) {
-                    return Optional.of(new ResourceLocation(data.getModel()));
+                weaponData = WeaponData.getWeaponData(itemStack);
+                if (weaponData != null) {
+                    return Optional.of(new ResourceLocation(weaponData.getModel()));
                 }
                 return Optional.empty();
             }

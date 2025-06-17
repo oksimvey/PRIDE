@@ -2,7 +2,7 @@ package com.robson.pride.api.data;
 
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
-import com.robson.pride.api.maps.WeaponsMap;
+import com.robson.pride.api.enums.WeaponsEnum;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.api.utils.math.Vec3f;
@@ -15,6 +15,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.client.animation.property.TrailInfo;
+import yesman.epicfight.api.utils.ExtendableEnum;
+import yesman.epicfight.api.utils.ExtendableEnumManager;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.capabilities.item.*;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
@@ -24,6 +26,11 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public class WeaponData {
+
+    public interface WeaponDataEnum extends ExtendableEnum {
+        ExtendableEnumManager<WeaponDataEnum> ENUM_MANAGER = new ExtendableEnumManager("weapon_data");
+        WeaponData getWeaponData();
+    }
 
     private final String model;
 
@@ -51,13 +58,6 @@ public class WeaponData {
 
     private final TrailParams trailInfo;
 
-    private Vec3f scale;
-
-    private Matrix2f rHandParams;
-
-    private Matrix2f lHandParams;
-
-
     public WeaponData(String category, float damage, float speed, float impact, float max_strikes, float armor_negation, int weight, String model, String element, AABB collider, WeaponSkillBase skill, AttributeReqs attributeReqs, TrailParams trail){
         this.category = category;
         this.damage = damage;
@@ -84,46 +84,39 @@ public class WeaponData {
 
     public static WeaponData getWeaponData(ItemStack itemStack){
         if (itemStack != null){
-            return WeaponsMap.WEAPONS.get(itemStack.getOrCreateTag().getString("weaponid"));
+            WeaponsEnum weaponData;
+            try {
+                weaponData = WeaponsEnum.valueOf(itemStack.getOrCreateTag().getString("weaponid"));
+            }
+            catch (IllegalArgumentException e) {
+               return null;
+            }
+            return weaponData.getWeaponData();
         }
         return null;
     }
 
     public TrailInfo getTrailInfo(TrailInfo info) {
         TrailInfo.Builder builder = TrailInfo.builder();
-        builder.joint(info.joint);
+        builder.joint(info.joint());
         if (!this.trailInfo.texture.isEmpty()){
            builder.texture(new ResourceLocation(this.trailInfo.texture()));
         }
-        else builder.texture(info.texturePath);
-        builder.time(info.startTime, info.endTime);
+        else builder.texture(info.texturePath());
+        builder.time(info.startTime(), info.endTime());
         builder.startPos(new Vec3(trailInfo.positions().x0(), trailInfo.positions().y0(), trailInfo.positions().z0()));
         builder.endPos(new Vec3(trailInfo.positions().x1(), trailInfo.positions().y1(), trailInfo.positions().z1()));
         builder.r(trailInfo.r);
         builder.g(trailInfo.g);
         builder.b(trailInfo.b);
         builder.lifetime(trailInfo.lifetime());
-        builder.type(info.particle);
+        builder.type(info.particle());
         builder.interpolations(trailInfo.lifetime() / 4);
         return builder.create();
     }
 
     public AttributeReqs getAttributeReqs() {
         return this.attributeReqs;
-    }
-
-    public static TrailInfo createDefaultTrail(Vec3 start, Vec3 end, int r, int g, int b, int lifetime){
-        TrailInfo.Builder info = TrailInfo.builder();
-        info.texture("epicfight:textures/particle/swing_trail.png");
-        info.type(EpicFightParticles.SWING_TRAIL.get());
-        info.lifetime(lifetime);
-        info.interpolations(lifetime / 4);
-        info.r(r);
-        info.g(g);
-        info.b(b);
-        info.startPos(start);
-        info.endPos(end);
-        return info.create();
     }
 
     public CapabilityItem getItemcap(ItemStack stack){

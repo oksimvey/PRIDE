@@ -2,7 +2,6 @@ package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.utils.*;
 import com.robson.pride.api.utils.math.MathUtils;
-import com.robson.pride.entities.special.Shooter;
 import com.robson.pride.registries.AnimationsRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
@@ -65,7 +64,7 @@ public class MikiriCounter {
         AnimUtils.cancelMotion(ddmgent);
         AnimUtils.rotateToEntity(ddmgent, ent);
         TimerUtil.schedule(() -> AnimUtils.rotateToEntity(ddmgent, ent), 125, TimeUnit.MILLISECONDS);
-        TeleportUtils.teleportEntityToEntityJoint(ent, ddmgent, Armatures.BIPED.toolR, 0, 0, ddmgent.getBbHeight() * 0.25);
+        TeleportUtils.teleportEntityToEntityJoint(ent, ddmgent, Armatures.BIPED.get().toolR, 0, 0, ddmgent.getBbHeight() * 0.25);
         AnimUtils.playAnimByString(ent, "pride:biped/skill/mikiri_step", 0);
         TimerUtil.schedule(() -> ent.setPos(ent.getX(), ddmgent.getY(), ent.getZ()), 15, TimeUnit.MILLISECONDS);
         TimerUtil.schedule(() -> AnimUtils.playAnimByString(ddmgent, animation + pierce_type, 0), 50, TimeUnit.MILLISECONDS);
@@ -86,10 +85,6 @@ public class MikiriCounter {
         event.setCanceled(true);
         projectile.teleportTo(0, 999999999, 0);
         Entity target = TargetUtil.getTarget(ent);
-        if (target != null) {
-            Shooter shooter = Shooter.summonShooter(ent, target, false);
-            TimerUtil.schedule(() -> ProjectileUtil.shootProjectileFromShooter(shooter, projectile, ent, 3, false), 450, TimeUnit.MILLISECONDS);
-        } else
             TimerUtil.schedule(() -> ProjectileUtil.shootProjectileFromEnt(projectile, ent, 3), 450, TimeUnit.MILLISECONDS);
         AnimUtils.playAnim(ent, AnimationsRegister.PROJECTILE_COUNTER, 0);
     }
@@ -113,7 +108,7 @@ public class MikiriCounter {
     public static void teleportProjectileToEntityHand(Entity owner, Entity projectile, Vec3 delta) {
         if (owner != null && projectile != null && delta != null) {
             projectile.setDeltaMovement(delta.x, 0.1, delta.z);
-            Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, owner, Armatures.BIPED.handL);
+            Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, owner, Armatures.BIPED.get().handL);
             if (vec3 != null) {
                 projectile.moveTo(vec3);
                 TimerUtil.schedule(() -> teleportProjectileToEntityHand(owner, projectile, delta), 50, TimeUnit.MILLISECONDS);

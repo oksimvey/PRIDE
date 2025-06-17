@@ -10,14 +10,13 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import yesman.epicfight.api.client.model.AnimatedMesh;
-import yesman.epicfight.api.client.model.AnimatedVertexBuilder;
-import yesman.epicfight.api.client.model.Mesh;
-import yesman.epicfight.api.client.model.MeshPartDefinition;
+import yesman.epicfight.api.client.model.*;
 import yesman.epicfight.api.model.Armature;
 import yesman.epicfight.api.utils.math.OpenMatrix4f;
 import yesman.epicfight.client.renderer.EpicFightRenderTypes;
 import yesman.epicfight.client.renderer.shader.AnimationShaderInstance;
+import yesman.epicfight.client.renderer.shader.ShaderParser;
+import yesman.epicfight.config.ClientConfig;
 import yesman.epicfight.main.EpicFightMod;
 
 import java.util.List;
@@ -26,36 +25,31 @@ import java.util.Map;
 import static com.robson.pride.events.onClientTick.playerBuffer;
 import static com.robson.pride.events.onClientTick.playerStack;
 
-@Mixin(AnimatedMesh.class)
+@Mixin(SkinnedMesh.class)
 @OnlyIn(Dist.CLIENT)
-public abstract class AnimatedMeshMixin extends Mesh<AnimatedMesh.AnimatedModelPart, AnimatedVertexBuilder> {
+public abstract class AnimatedMeshMixin extends StaticMesh<SkinnedMesh.SkinnedMeshPart> {
 
-    public AnimatedMeshMixin(@Nullable Map<String, float[]> arrayMap, @Nullable Map<MeshPartDefinition, List<AnimatedVertexBuilder>> partBuilders, @Nullable Mesh<AnimatedMesh.AnimatedModelPart, AnimatedVertexBuilder> parent, RenderProperties renderProperties) {
+
+    public AnimatedMeshMixin(@Nullable Map<String, Number[]> arrayMap, @Nullable Map<MeshPartDefinition, List<VertexBuilder>> partBuilders, @Nullable StaticMesh<SkinnedMesh.SkinnedMeshPart> parent, RenderProperties renderProperties) {
         super(arrayMap, partBuilders, parent, renderProperties);
     }
 
     @Shadow(remap = false)
     public abstract void drawWithShader(PoseStack poseStack, AnimationShaderInstance animationShaderInstance, int packedLight, float r, float g, float b, float a, int overlay, Armature armature, OpenMatrix4f[] poses);
 
-    @Shadow(remap = false)
-    public abstract void drawToBuffer(PoseStack poseStack, VertexConsumer builder, Mesh.DrawingFunction drawingFunction, int packedLight, float r, float g, float b, float a, int overlay, Armature armature, OpenMatrix4f[] poses);
-
-
     /**
      * @author
      * @reason
      */
     @Overwrite(remap = false)
-    public void draw(PoseStack poseStack, MultiBufferSource multiBufferSource, RenderType renderType, int packedLight, float r, float g, float b, float a, int overlay, Armature armature, OpenMatrix4f[] poses) {
-        if ((EpicFightMod.CLIENT_CONFIGS.useAnimationShader.getValue() && playerStack == null || playerBuffer == null || playerBuffer != multiBufferSource || playerStack != poseStack)) {
+    public void draw(PoseStack poseStack, MultiBufferSource bufferSources, RenderType renderType, int packedLight, float r, float g, float b, float a, int overlay, Armature armature, OpenMatrix4f[] poses) {
+        if (ClientConfig.activateAnimationShader && playerStack == null || playerBuffer == null || playerBuffer != bufferSources || playerStack != poseStack && armature.getJointNumber() <= ShaderParser.SHADER_ARRAY_LIMIT) {
             renderType.setupRenderState();
             AnimationShaderInstance animationShader = EpicFightRenderTypes.getAnimationShader(renderType);
             this.drawWithShader(poseStack, animationShader, packedLight, 1.0F, 1.0F, 1.0F, 1.0F, overlay, armature, poses);
             renderType.clearRenderState();
+            return;
         }
-        else {
-            VertexConsumer vertexConsumer = multiBufferSource.getBuffer(EpicFightRenderTypes.getTriangulated(renderType));
-            this.drawToBuffer(poseStack, vertexConsumer, Mesh.DrawingFunction.ENTITY_TEXTURED, packedLight, r, g, b, a, overlay, armature, poses);
-        }
+            this.drawPosed(poseStack, bufferSources.getBuffer(EpicFightRenderTypes.getTriangulated(renderType)), Mesh.DrawingFunction.NEW_ENTITY, packedLight, r, g, b, a, overlay, armature, poses);
     }
 }

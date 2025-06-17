@@ -1,6 +1,5 @@
 package com.robson.pride.api.utils;
 
-import com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch;
 import com.robson.pride.api.entity.PrideMobBase;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,10 +18,7 @@ public class TargetUtil {
 
     public static void setTarget(Entity ent, Entity target) {
         if (ent != null && target instanceof LivingEntity targetl) {
-            AdvancedCustomHumanoidMobPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, AdvancedCustomHumanoidMobPatch.class);
-            if (livingEntityPatch != null) {
-                livingEntityPatch.setAttakTargetSync(targetl);
-            }
+
             if (ent instanceof PrideMobBase mob) {
                 mob.setTarget(targetl);
             }

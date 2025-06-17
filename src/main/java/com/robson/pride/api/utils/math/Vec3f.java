@@ -1,6 +1,7 @@
 package com.robson.pride.api.utils.math;
 
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 public class Vec3f {
 
@@ -34,6 +35,10 @@ public class Vec3f {
 
     public Vec3 toVec3(){
         return new Vec3(x, y, z);
+    }
+
+    public Vector3f toVector3f(){
+        return new Vector3f(x, y, z);
     }
 
 
