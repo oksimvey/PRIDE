@@ -2,6 +2,7 @@ package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.data.WeaponData;
 import com.robson.pride.api.elements.ElementBase;
+import com.robson.pride.api.enums.ElementsEnum;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.effect.ImbuementEffect;
@@ -20,8 +21,6 @@ import yesman.epicfight.gameasset.Armatures;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.robson.pride.api.maps.ElementMap.ELEMENTS;
-
 
 public class ParticleTracking {
 
@@ -38,11 +37,11 @@ public class ParticleTracking {
         if (item != null && ent != null) {
             if (item.getTag() != null) {
                 String element = ElementalUtils.getItemElement(item);
-                if (ELEMENTS.containsKey(element)) {
+                if (ElementsEnum.get(element) != null) {
                     result = !element.equals("Sun") || shouldRenderSunParticle(ent);
                 } else if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMBUEMENT.get())) {
                     if (living.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect) {
-                        if (ELEMENTS.containsKey(imbuementEffect.element) && imbuementEffect.active) {
+                        if (ElementsEnum.get(imbuementEffect.element) != null && imbuementEffect.active) {
                             result = !imbuementEffect.element.equals("Sun") || shouldRenderSunParticle(ent);
                         }
                     }
@@ -76,12 +75,12 @@ public class ParticleTracking {
     public static ElementBase getItemElementForImbuement(ItemStack item, LivingEntity ent) {
         if (item != null && ent != null) {
             String element = ElementalUtils.getItemElement(item);
-            if (ELEMENTS.containsKey(element)) {
-                return ELEMENTS.get(element);
+            if (ElementsEnum.get(element) != null) {
+                return ElementsEnum.get(element);
             } else if (ent.hasEffect(EffectRegister.IMBUEMENT.get()) &&
                     ent.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect &&
-                    ELEMENTS.containsKey(imbuementEffect.element)) {
-                return ELEMENTS.get(imbuementEffect.element);
+                    ElementsEnum.get(imbuementEffect.element) != null) {
+                return ElementsEnum.get(imbuementEffect.element);
             }
         }
         return null;

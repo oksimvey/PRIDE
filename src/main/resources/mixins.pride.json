@@ -13,12 +13,12 @@
     "ItemRendererMixin",
     "RenderBufferInterface",
     "RenderBufferMixins",
+    "RenderEngineMixin",
     "TargetIndicatorMixin",
     "TrailParticleMixin"
   ],
   "mixins": [
     "AttackAnimationMixin",
-    "CubicBezierCurveMixin",
     "EpicFightCapabilitiesMixin",
     "ManaBarOverlayMixin",
     "WeaponTypeReloadListenerMixin"

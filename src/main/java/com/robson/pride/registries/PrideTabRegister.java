@@ -1,5 +1,6 @@
 package com.robson.pride.registries;
 
+import com.robson.pride.api.enums.SkillsEnum;
 import com.robson.pride.api.enums.WeaponsEnum;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.item.weapons.CustomWeaponItem;
@@ -14,11 +15,11 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import static com.robson.pride.api.maps.SkillMap.WEAPON_SKILLS;
 import static com.robson.pride.registries.EntityRegister.ENTITIES;
 import static com.robson.pride.registries.EntityRegister.SPECIAL_ENTITIES;
 import static com.robson.pride.registries.WeaponSkillRegister.*;
@@ -65,16 +66,15 @@ public class PrideTabRegister {
             .title(Component.literal("Pride Weapon Arts"))
             .icon(() -> new ItemStack(ItemsRegister.WEAPON_ART.get()))
             .displayItems((parameters, output) -> {
-                List<Map.Entry<String, WeaponSkillBase>> sortedEntries = WEAPON_SKILLS.entrySet()
-                        .stream()
+                List<SkillsEnum> sortedEntries = Arrays.stream(SkillsEnum.values())
                         .sorted(Comparator
-                                .comparing((Map.Entry<String, WeaponSkillBase> entry) -> elements.indexOf(entry.getValue().getSkillElement()))
-                                .thenComparing(entry -> rarities.indexOf(entry.getValue().getSkillRarity())))
+                                .comparing((SkillsEnum entry) -> elements.indexOf(entry.getWeaponSkill().getSkillElement()))
+                                .thenComparing(entry -> rarities.indexOf(entry.getWeaponSkill().getSkillRarity())))
                         .toList();
-                for (Map.Entry<String, WeaponSkillBase> entry : sortedEntries) {
+                for (SkillsEnum entry : sortedEntries) {
                     ItemStack item = new ItemStack(ItemsRegister.WEAPON_ART.get());
-                    item.getOrCreateTag().putString("weapon_art", entry.getKey());
-                    item.getOrCreateTag().putString("rarity", WEAPON_SKILLS.get(entry.getKey()).getSkillRarity());
+                    item.getOrCreateTag().putString("weapon_art", entry.toString());
+                    item.getOrCreateTag().putString("rarity", entry.getWeaponSkill().getSkillRarity());
                     output.accept(item);
                 }
             })

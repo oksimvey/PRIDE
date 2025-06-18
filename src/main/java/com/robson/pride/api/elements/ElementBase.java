@@ -1,6 +1,8 @@
 package com.robson.pride.api.elements;
 
 import com.robson.pride.api.client.ItemRenderingParams;
+import com.robson.pride.api.skillcore.SkillCore;
+import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.HealthUtils;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import net.minecraft.ChatFormatting;
@@ -15,8 +17,15 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
+import yesman.epicfight.api.utils.ExtendableEnum;
+import yesman.epicfight.api.utils.ExtendableEnumManager;
 
 public abstract class ElementBase {
+
+    public interface ElementEnum extends ExtendableEnum {
+        ExtendableEnumManager<ElementEnum> ENUM_MANAGER = new ExtendableEnumManager("element_data");
+        ElementBase getElement();
+    }
 
     public abstract ParticleOptions getNormalParticleType();
 

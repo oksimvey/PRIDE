@@ -1,11 +1,14 @@
 package com.robson.pride.main;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.robson.pride.api.ai.DataConditions;
 import com.robson.pride.api.biomesettings.BiomeSettingsManager;
 import com.robson.pride.api.data.MobData;
 import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.elements.ElementBase;
+import com.robson.pride.api.enums.ElementsEnum;
+import com.robson.pride.api.enums.SkillsEnum;
 import com.robson.pride.api.enums.WeaponsEnum;
+import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
@@ -55,9 +58,10 @@ public class Pride {
         ParticleRegister.PARTICLES.register(bus);
         WeaponCategory.ENUM_MANAGER.registerEnumCls(MOD_ID, WeaponCategoriesEnum.class);
         WeaponData.WeaponDataEnum.ENUM_MANAGER.registerEnumCls(MOD_ID, WeaponsEnum.class);
+        ElementsEnum.ENUM_MANAGER.registerEnumCls(MOD_ID, ElementsEnum.class);
+        SkillsEnum.ENUM_MANAGER.registerEnumCls(MOD_ID, SkillsEnum.class);
         Style.ENUM_MANAGER.registerEnumCls(Pride.MODID, PrideStyles.class);
         EffectRegister.MOB_EFFECTS.register(bus);
-        DataConditions.CONDITIONS.register(bus);
         PrideTabRegister.register(bus);
     }
 
@@ -66,12 +70,7 @@ public class Pride {
                 LiteralArgumentBuilder.<CommandSourceStack>literal(Pride.MOD_ID)
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.argument("living_entity", EntityArgument.entity())
-                                .then(PerilousCommand.register())
-                                .then(MobEatCommand.register())
                                 .then(AddXpCommand.register())
-                                .then(ShootProjectileCommand.register())
-                                .then(SkillExecuteCommand.register())
-                                .then(CastSpellCommand.register())
                                 .then(ResetLevelCommand.register())
                                 .then(DialogueCommand.register())
                                 .then(SetElementCommand.register())));
@@ -85,6 +84,10 @@ public class Pride {
             WeaponData.WeaponDataEnum.ENUM_MANAGER.loadEnum();
             Objects.requireNonNull(MobData.MobDataEnum.ENUM_MANAGER);
             MobData.MobDataEnum.ENUM_MANAGER.loadEnum();
+            Objects.requireNonNull(SkillCore.SkillEnum.ENUM_MANAGER);
+            SkillCore.SkillEnum.ENUM_MANAGER.loadEnum();
+            Objects.requireNonNull(ElementBase.ElementEnum.ENUM_MANAGER);
+            ElementBase.ElementEnum.ENUM_MANAGER.loadEnum();
             DialogueConditionsRegister.register();
             ActionsRegister.register();
             StructureRegister.register();

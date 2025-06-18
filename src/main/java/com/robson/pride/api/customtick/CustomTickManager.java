@@ -1,7 +1,6 @@
 package com.robson.pride.api.customtick;
 
 import com.robson.pride.api.cam.DynamicCam;
-import com.robson.pride.api.client.AutoBattleMode;
 import com.robson.pride.api.musiccore.MusicCore;
 import com.robson.pride.api.musiccore.PrideMusicManager;
 import com.robson.pride.api.skillcore.CooldownManager;
@@ -12,8 +11,6 @@ import com.robson.pride.epicfight.styles.SheatProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +43,6 @@ public class CustomTickManager {
                     MusicCore.musicCore(player);
                     playerTargetingEntitiesSet(player);
                     DynamicCam.dynamicCamTick(player);
-                    AutoBattleMode.autoSwitch(EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class));
                     if (targeting_entities.get(player) != null) {
                         playerTargetingEntitiesCheck(player);
                     }
