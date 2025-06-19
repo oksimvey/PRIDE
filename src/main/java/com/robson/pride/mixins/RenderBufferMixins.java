@@ -3,7 +3,7 @@ package com.robson.pride.mixins;
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.robson.pride.api.elements.ElementBase;
-import com.robson.pride.api.enums.ElementsEnum;
+import com.robson.pride.api.maps.ElementsMap;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.OutlineBufferSource;
 import net.minecraft.client.renderer.RenderBuffers;
@@ -35,9 +35,9 @@ public class RenderBufferMixins {
             RenderBuffers renderBuffers = ((RenderBuffers) (Object) this);
 
             SortedMap<RenderType, BufferBuilder> fixedBuffers = ((RenderBufferInterface) renderBuffers).getFixedBuffers();
-            for (ElementsEnum element : ElementsEnum.values()) {
-                put(fixedBuffers, element.getElement().getItemRenderingParams().getDirectGlint());
-                put(fixedBuffers, element.getElement().getItemRenderingParams().getDirectEntityGlint());
+            for (ElementBase element : ElementsMap.ELEMENTS.values()) {
+                put(fixedBuffers, element.getItemRenderingParams().getDirectGlint());
+                put(fixedBuffers, element.getItemRenderingParams().getDirectEntityGlint());
             }
             savedBufferSource = immediateWithBuffers(fixedBuffers, new BufferBuilder(256));
             savedOutlineBuffers = new OutlineBufferSource(savedBufferSource);

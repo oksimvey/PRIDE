@@ -1,10 +1,7 @@
 package com.robson.pride.api.ai.dialogues;
 
-import com.robson.pride.api.ai.actions.ActionBase;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.particles.StringParticle;
-import com.robson.pride.registries.ActionsRegister;
-import com.robson.pride.registries.DialogueConditionsRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -31,48 +28,12 @@ public class JsonInteractionsReader {
                 if (tagmap != null) {
                     ListTag tag = tagmap.getList("interaction_behaviors", 10);
                     if (tag != null) {
-                        deserializeInteractions(target, sourceent, tag);
                     }
                 }
             }
         }
     }
 
-    public static void deserializeInteractions(Entity ent, Entity sourceent, ListTag behaviors) {
-        if (ent != null && sourceent != null && behaviors != null) {
-            for (int i = 0; i < behaviors.size(); ++i) {
-                CompoundTag behavior = behaviors.getCompound(i);
-                if (behavior.contains("conditions")) {
-                    ListTag conditions = behavior.getList("conditions", 10);
-                    if (deserializeConditions(sourceent, ent, conditions)) {
-                        if (behavior.contains("dialogues")) {
-                            deserializeDialogues(ent, sourceent, behavior.getList("dialogues", 10), (byte) 0);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public static boolean deserializeConditions(Entity sourceent, Entity ent, ListTag conditions) {
-        if (ent != null && conditions != null) {
-            byte trueconditions = 0;
-            for (int j = 0; j < conditions.size(); ++j) {
-                CompoundTag condition = conditions.getCompound(j);
-                if (condition.contains("predicate")) {
-                    DialogueConditionBase conditionBase = DialogueConditionsRegister.dialogueConditions.get(condition.getString("predicate"));
-                    if (conditionBase != null) {
-                        if (conditionBase.isTrue(sourceent, ent, condition)) {
-                            trueconditions++;
-                        }
-                    }
-                }
-            }
-            return trueconditions == conditions.size();
-        }
-        return false;
-    }
 
     public static void deserializeDialogues(Entity ent, Entity sourceent, ListTag tag, byte i) {
         if (ent != null && tag != null) {
@@ -81,9 +42,6 @@ public class JsonInteractionsReader {
                 ClientLevel level = Minecraft.getInstance().level;
                 LocalPlayer player = Minecraft.getInstance().player;
                 Particle stringparticle = null;
-                if (dialogue.contains("actions")) {
-                    deserializeActions(ent, dialogue.getList("actions", 10), (byte) 0);
-                }
                 if (dialogue.contains("subtitle") && dialogue.contains("duration") && player != null && level != null) {
                     isSpeaking.put(ent, true);
                     int duration = dialogue.getInt("duration");
@@ -117,7 +75,7 @@ public class JsonInteractionsReader {
                         if (dialogue.contains("answers")) {
                             if (sourceent != null) {
                                 ListTag answers = dialogue.getList("answers", 10);
-                                deserializeInteractions(sourceent, ent, answers);
+
                             }
                         }
                     }, duration, TimeUnit.MILLISECONDS);
@@ -150,23 +108,6 @@ public class JsonInteractionsReader {
                             isAnswering.get(player).onAnswer();
                         }
                     }, duration, TimeUnit.MILLISECONDS);
-                }
-            }
-        }
-    }
-
-    public static void deserializeActions(Entity ent, ListTag tag, byte i) {
-        if (ent != null && tag != null) {
-            if (i < tag.size()) {
-                CompoundTag action = tag.getCompound(i);
-                if (action.contains("action")) {
-                    ActionBase actionBase = ActionsRegister.actions.get(action.getString("action"));
-                    if (actionBase != null) {
-                        actionBase.onActionStart(ent, action);
-                    }
-                    if (action.contains("duration")) {
-                        TimerUtil.schedule(() -> deserializeActions(ent, tag, (byte) (i + 1)), action.getInt("duration"), TimeUnit.MILLISECONDS);
-                    }
                 }
             }
         }

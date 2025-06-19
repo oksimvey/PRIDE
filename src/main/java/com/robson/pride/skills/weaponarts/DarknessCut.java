@@ -1,6 +1,6 @@
 package com.robson.pride.skills.weaponarts;
 
-import com.robson.pride.api.enums.ElementsEnum;
+import com.robson.pride.api.maps.ElementsMap;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
@@ -32,7 +32,7 @@ public class DarknessCut extends WeaponSkillBase {
     }
 
     public List<SkillAnimation> defineMotions(LivingEntity ent) {
-        return List.of(new SkillAnimation(Animations.TACHI_AUTO3.get(), () -> {
+        return List.of(new SkillAnimation(Animations.TACHI_AUTO3, () -> {
             TimerUtil.schedule(() -> {
                 Vec3 lookangle = ent.getLookAngle();
                 ent.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 15, 255));
@@ -49,7 +49,7 @@ public class DarknessCut extends WeaponSkillBase {
                             if (particle != null && entko != null) {
                                 particle.setLifetime(200);
                                 particle.scale(1.25f);
-                                SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, () -> ElementsEnum.darkness.getElement().onHit(entko, ent, 10, false));
+                                SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, () -> ElementsMap.ELEMENTS.get("Darkness").onHit(entko, ent, 10, false));
                             }
                         }
                     }

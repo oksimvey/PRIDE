@@ -1,6 +1,7 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.enums.WeaponsEnum;
+import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.maps.WeaponsMap;
 import com.robson.pride.item.weapons.CustomWeaponModelBase;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
@@ -18,8 +19,8 @@ public class ClientSetupEvent {
 
     @SubscribeEvent
     public static void registerSpecialModels(ModelEvent.RegisterAdditional event) {
-        for (WeaponsEnum weapon : WeaponsEnum.values()) {
-           event.register(CustomWeaponModelBase.getWeaponModelLocation(weapon.getWeaponData().getModel()));
+        for (WeaponData weapon : WeaponsMap.WEAPONS.values()) {
+           event.register(CustomWeaponModelBase.getWeaponModelLocation(weapon.getModel()));
        }
     }
 

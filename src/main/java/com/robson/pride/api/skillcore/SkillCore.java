@@ -2,8 +2,7 @@ package com.robson.pride.api.skillcore;
 import com.robson.pride.api.data.MobData;
 import com.robson.pride.api.data.WeaponData;
 import com.robson.pride.api.entity.PrideMobPatch;
-import com.robson.pride.api.enums.SkillsEnum;
-import com.robson.pride.api.enums.WeaponsEnum;
+import com.robson.pride.api.maps.WeaponSkillsMap;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.ParticleUtils;
 import com.robson.pride.api.utils.TimerUtil;
@@ -23,10 +22,6 @@ import java.util.concurrent.TimeUnit;
 
 public class SkillCore {
 
-    public interface SkillEnum extends ExtendableEnum {
-        ExtendableEnumManager<SkillEnum> ENUM_MANAGER = new ExtendableEnumManager("skill_data");
-        WeaponSkillBase getWeaponSkill();
-    }
 
     public static List<Entity> performingSkillEntities = new ArrayList<>();
 
@@ -63,7 +58,7 @@ public class SkillCore {
     }
 
     public static void weaponArtCore(LivingEntity ent, String weaponart) {
-        WeaponSkillBase skill = SkillsEnum.get(weaponart);
+        WeaponSkillBase skill = WeaponSkillsMap.WEAPON_SKILLS.get(weaponart);
         if (skill != null) {
             skill.tryToExecute(ent);
         }

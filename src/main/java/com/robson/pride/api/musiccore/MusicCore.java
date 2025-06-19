@@ -2,12 +2,11 @@ package com.robson.pride.api.musiccore;
 
 import com.robson.pride.api.customtick.CustomTickManager;
 import com.robson.pride.api.entity.PrideMobBase;
+import com.robson.pride.api.maps.BiomeMusics;
 import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.sounds.Music;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-
-import static com.robson.pride.api.biomesettings.BiomeSettingsManager.biomeSettingsMap;
 
 public class MusicCore {
 
@@ -45,8 +44,8 @@ public class MusicCore {
     public static Music deserializeBiomeMusic(Player player) {
         if (player != null) {
             String biome = player.level().getBiome(player.blockPosition()).unwrapKey().get().location().toString();
-            if (biomeSettingsMap.get(biome) != null) {
-                return biomeSettingsMap.get(biome).getBiomeMusic();
+            if (BiomeMusics.BIOME_MUSICS.get(biome) != null) {
+                return BiomeMusics.BIOME_MUSICS.get(biome);
             }
         }
         return null;

@@ -2,7 +2,7 @@ package com.robson.pride.api.data;
 
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
-import com.robson.pride.api.enums.WeaponsEnum;
+import com.robson.pride.api.maps.WeaponsMap;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.api.utils.math.Vec3f;
@@ -26,11 +26,6 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public class WeaponData {
-
-    public interface WeaponDataEnum extends ExtendableEnum {
-        ExtendableEnumManager<WeaponDataEnum> ENUM_MANAGER = new ExtendableEnumManager("weapon_data");
-        WeaponData getWeaponData();
-    }
 
     private final String model;
 
@@ -58,6 +53,8 @@ public class WeaponData {
 
     private final TrailParams trailInfo;
 
+    private CapabilityItem itemcap;
+
     public WeaponData(String category, float damage, float speed, float impact, float max_strikes, float armor_negation, int weight, String model, String element, AABB collider, WeaponSkillBase skill, AttributeReqs attributeReqs, TrailParams trail){
         this.category = category;
         this.damage = damage;
@@ -72,6 +69,7 @@ public class WeaponData {
         this.attributeReqs = attributeReqs;
         this.element = element;
         this.trailInfo = trail;
+        itemcap = null;
     }
 
     public String getElement() {
@@ -84,14 +82,7 @@ public class WeaponData {
 
     public static WeaponData getWeaponData(ItemStack itemStack){
         if (itemStack != null){
-            WeaponsEnum weaponData;
-            try {
-                weaponData = WeaponsEnum.valueOf(itemStack.getOrCreateTag().getString("weaponid"));
-            }
-            catch (IllegalArgumentException e) {
-               return null;
-            }
-            return weaponData.getWeaponData();
+            return WeaponsMap.WEAPONS.get(itemStack.getOrCreateTag().getString("weaponid"));
         }
         return null;
     }
@@ -120,6 +111,13 @@ public class WeaponData {
     }
 
     public CapabilityItem getItemcap(ItemStack stack){
+        if (itemcap == null || itemcap == CapabilityItem.EMPTY){
+            itemcap = createItemCap(stack);
+        }
+        return itemcap;
+    }
+
+    private CapabilityItem createItemCap(ItemStack stack){
         ResourceLocation rl = new ResourceLocation("pride:pride_" + this.category);
         if (WeaponTypeReloadListenerMixin.getPRESETS().containsKey(rl)) {
             CapabilityItem.Builder builder = ((CapabilityItem.Builder)((Function)WeaponTypeReloadListenerMixin.getPRESETS().getOrDefault(rl, WeaponCapabilityPresets.SWORD)).apply(stack.getItem()));

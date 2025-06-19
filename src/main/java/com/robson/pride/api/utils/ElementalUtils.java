@@ -1,8 +1,8 @@
 package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.WeaponData;
-import com.robson.pride.api.enums.ElementsEnum;
-import com.robson.pride.api.enums.SkillsEnum;
+import com.robson.pride.api.maps.ElementsMap;
+import com.robson.pride.api.maps.WeaponSkillsMap;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.EffectRegister;
@@ -25,22 +25,22 @@ public class ElementalUtils {
     }
 
     public static ParticleOptions getParticleByElement(String element) {
-        if (ElementsEnum.get(element) != null) {
-            return  ElementsEnum.get(element).getNormalParticleType();
+        if (ElementsMap.ELEMENTS.get(element) != null) {
+            return  ElementsMap.ELEMENTS.get(element).getNormalParticleType();
         }
         return null;
     }
 
     public static ChatFormatting getColorByElement(String element) {
-        if (ElementsEnum.get(element) != null) {
-            return ElementsEnum.get(element).getChatColor();
+        if (ElementsMap.ELEMENTS.get(element) != null) {
+            return ElementsMap.ELEMENTS.get(element).getChatColor();
         }
         return ChatFormatting.GRAY;
     }
 
     public static void playSoundByElement(String element, Entity ent, float volume) {
-        if (ElementsEnum.get(element) != null) {
-            ElementsEnum.get(element).playSound(ent, volume);
+        if (ElementsMap.ELEMENTS.get(element) != null) {
+            ElementsMap.ELEMENTS.get(element).playSound(ent, volume);
         }
     }
 
@@ -48,8 +48,9 @@ public class ElementalUtils {
         if (leftitem != null && rightitem != null) {
             String leftelement = "";
             if (leftitem.getTag().getBoolean("hasweaponart")) {
-                leftelement = SkillsEnum.get(leftitem.getTag().getString("weapon_art")).getSkillElement();
-            } else {
+                leftelement = WeaponSkillsMap.WEAPON_SKILLS.get(leftitem.getTag().getString("weapon_art")).getSkillElement();
+            }
+            else {
                 WeaponData data = WeaponData.getWeaponData(leftitem);
                 if (data != null) {
                         WeaponSkillBase skill = data.getSkill();
@@ -65,7 +66,7 @@ public class ElementalUtils {
 
     public static boolean canPutWeaponArt(ItemStack leftitem, ItemStack rightitem) {
         if (leftitem != null && rightitem != null) {
-            String rightelement = SkillsEnum.get(rightitem.getTag().getString("weapon_art")).getSkillElement();
+            String rightelement = WeaponSkillsMap.WEAPON_SKILLS.get(rightitem.getTag().getString("weapon_art")).getSkillElement();
             String leftelement = getItemElement(leftitem);
             return rightelement.equals("Neutral") || leftelement.isEmpty() || leftelement.equals(rightelement);
         }
@@ -77,11 +78,11 @@ public class ElementalUtils {
         if (item != null) {
             if (item.getTag() != null) {
                 element = item.getTag().getString("passive_element");
-                if (ElementsEnum.get(element) == null) {
+                if (ElementsMap.ELEMENTS.get(element) == null) {
                     WeaponData data = WeaponData.getWeaponData(item);
                     if (data != null) {
                         if (data.getElement() != null) {
-                            if (ElementsEnum.get((data.getElement())) != null) {
+                            if (ElementsMap.ELEMENTS.get((data.getElement())) != null) {
                                 element = data.getElement();
                             }
                         }

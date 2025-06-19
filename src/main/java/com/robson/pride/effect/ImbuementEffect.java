@@ -1,7 +1,7 @@
 package com.robson.pride.effect;
 
 import com.robson.pride.api.elements.ElementBase;
-import com.robson.pride.api.enums.ElementsEnum;
+import com.robson.pride.api.maps.ElementsMap;
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.ElementalUtils;
@@ -45,9 +45,9 @@ public class ImbuementEffect extends PrideEffectBase {
 
     @Override
     public void prideClientTick(LivingEntity ent) {
-        if (this.active && ElementsEnum.get(element) != null && ent.tickCount % ((int) (10 / ent.getBbHeight())) == 0) {
+        if (this.active && ElementsMap.ELEMENTS.get(element) != null && ent.tickCount % ((int) (10 / ent.getBbHeight())) == 0) {
             if (!element.equals("Sun") || ParticleTracking.shouldRenderSunParticle(ent)) {
-                ElementBase element = ElementsEnum.get(this.element);
+                ElementBase element = ElementsMap.ELEMENTS.get(this.element);
                 Vec3f vec3f = ParticleTracking.getAABBForImbuement(null, ent);
                 ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolR, element.getNormalParticleType(), vec3f, element.getParticleAmount());
                 ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolL, element.getNormalParticleType(), vec3f, element.getParticleAmount());

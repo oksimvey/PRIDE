@@ -22,11 +22,6 @@ import yesman.epicfight.api.utils.ExtendableEnumManager;
 
 public abstract class ElementBase {
 
-    public interface ElementEnum extends ExtendableEnum {
-        ExtendableEnumManager<ElementEnum> ENUM_MANAGER = new ExtendableEnumManager("element_data");
-        ElementBase getElement();
-    }
-
     public abstract ParticleOptions getNormalParticleType();
 
     public abstract ChatFormatting getChatColor();

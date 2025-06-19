@@ -1,7 +1,7 @@
 package com.robson.pride.registries;
 
-import com.robson.pride.api.enums.SkillsEnum;
-import com.robson.pride.api.enums.WeaponsEnum;
+import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.maps.WeaponsMap;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.item.weapons.CustomWeaponItem;
 import com.robson.pride.main.Pride;
@@ -20,6 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import static com.robson.pride.api.maps.WeaponSkillsMap.WEAPON_SKILLS;
 import static com.robson.pride.registries.EntityRegister.ENTITIES;
 import static com.robson.pride.registries.EntityRegister.SPECIAL_ENTITIES;
 import static com.robson.pride.registries.WeaponSkillRegister.*;
@@ -35,10 +36,10 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> EQUIPMENT_TAB = TABS.register("pride_equipment", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Equipment"))
-            .icon(() -> CustomWeaponItem.createWeapon(WeaponsEnum.European_Longsword.name()))
+            .icon(() -> CustomWeaponItem.createWeapon("European Longsword"))
             .displayItems((enabledFeatures, entries) -> {
-                for (WeaponsEnum weaponid : WeaponsEnum.values()){
-                    entries.accept(CustomWeaponItem.createWeapon(weaponid.name()));
+                for (String weaponid : WeaponsMap.WEAPONS.keySet()){
+                    entries.accept(CustomWeaponItem.createWeapon(weaponid));
                 }
             })
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
@@ -66,15 +67,16 @@ public class PrideTabRegister {
             .title(Component.literal("Pride Weapon Arts"))
             .icon(() -> new ItemStack(ItemsRegister.WEAPON_ART.get()))
             .displayItems((parameters, output) -> {
-                List<SkillsEnum> sortedEntries = Arrays.stream(SkillsEnum.values())
+                List<Map.Entry<String, WeaponSkillBase>> sortedEntries = WEAPON_SKILLS.entrySet()
+                        .stream()
                         .sorted(Comparator
-                                .comparing((SkillsEnum entry) -> elements.indexOf(entry.getWeaponSkill().getSkillElement()))
-                                .thenComparing(entry -> rarities.indexOf(entry.getWeaponSkill().getSkillRarity())))
+                                .comparing((Map.Entry<String, WeaponSkillBase> entry) -> elements.indexOf(entry.getValue().getSkillElement()))
+                                .thenComparing(entry -> rarities.indexOf(entry.getValue().getSkillRarity())))
                         .toList();
-                for (SkillsEnum entry : sortedEntries) {
+                for (Map.Entry<String, WeaponSkillBase> entry : sortedEntries) {
                     ItemStack item = new ItemStack(ItemsRegister.WEAPON_ART.get());
-                    item.getOrCreateTag().putString("weapon_art", entry.toString());
-                    item.getOrCreateTag().putString("rarity", entry.getWeaponSkill().getSkillRarity());
+                    item.getOrCreateTag().putString("weapon_art", entry.getKey());
+                    item.getOrCreateTag().putString("rarity", WEAPON_SKILLS.get(entry.getKey()).getSkillRarity());
                     output.accept(item);
                 }
             })

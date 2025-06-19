@@ -1,14 +1,6 @@
 package com.robson.pride.main;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.robson.pride.api.biomesettings.BiomeSettingsManager;
-import com.robson.pride.api.data.MobData;
-import com.robson.pride.api.data.WeaponData;
-import com.robson.pride.api.elements.ElementBase;
-import com.robson.pride.api.enums.ElementsEnum;
-import com.robson.pride.api.enums.SkillsEnum;
-import com.robson.pride.api.enums.WeaponsEnum;
-import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
@@ -30,8 +22,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
-
-import java.util.Objects;
 
 @Mod("pride")
 public class Pride {
@@ -57,9 +47,6 @@ public class Pride {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(KeyRegister::registerKeyMappings);
         ParticleRegister.PARTICLES.register(bus);
         WeaponCategory.ENUM_MANAGER.registerEnumCls(MOD_ID, WeaponCategoriesEnum.class);
-        WeaponData.WeaponDataEnum.ENUM_MANAGER.registerEnumCls(MOD_ID, WeaponsEnum.class);
-        ElementsEnum.ENUM_MANAGER.registerEnumCls(MOD_ID, ElementsEnum.class);
-        SkillsEnum.ENUM_MANAGER.registerEnumCls(MOD_ID, SkillsEnum.class);
         Style.ENUM_MANAGER.registerEnumCls(Pride.MODID, PrideStyles.class);
         EffectRegister.MOB_EFFECTS.register(bus);
         PrideTabRegister.register(bus);
@@ -79,20 +66,6 @@ public class Pride {
 
     private void setupCommon(FMLCommonSetupEvent event) {
         PacketRegister.register();
-        event.enqueueWork(() -> {
-            Objects.requireNonNull(WeaponData.WeaponDataEnum.ENUM_MANAGER);
-            WeaponData.WeaponDataEnum.ENUM_MANAGER.loadEnum();
-            Objects.requireNonNull(MobData.MobDataEnum.ENUM_MANAGER);
-            MobData.MobDataEnum.ENUM_MANAGER.loadEnum();
-            Objects.requireNonNull(SkillCore.SkillEnum.ENUM_MANAGER);
-            SkillCore.SkillEnum.ENUM_MANAGER.loadEnum();
-            Objects.requireNonNull(ElementBase.ElementEnum.ENUM_MANAGER);
-            ElementBase.ElementEnum.ENUM_MANAGER.loadEnum();
-            DialogueConditionsRegister.register();
-            ActionsRegister.register();
-            StructureRegister.register();
-            BiomeSettingsManager.register();
-        });
     }
 
     private void setupClient(FMLClientSetupEvent event) {
