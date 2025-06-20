@@ -7,9 +7,15 @@ import yesman.epicfight.world.capabilities.entitypatch.MobPatch;
 
 public abstract class PrideMobPatch <T extends PathfinderMob> extends MobPatch<T> {
 
+    private boolean isHumanoid;
+
     private CombatActions combatActions;
 
     private HumanoidCombatActions humanoidCombatActions;
+
+    private CombatActions hurtActions;
+
+    private HumanoidCombatActions hurtHumanoidActions;
 
     private float stamina;
 

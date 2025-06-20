@@ -1,7 +1,7 @@
 package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.WeaponData;
-import com.robson.pride.api.maps.ElementsMap;
+import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.maps.WeaponSkillsMap;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.math.MathUtils;
@@ -25,22 +25,22 @@ public class ElementalUtils {
     }
 
     public static ParticleOptions getParticleByElement(String element) {
-        if (ElementsMap.ELEMENTS.get(element) != null) {
-            return  ElementsMap.ELEMENTS.get(element).getNormalParticleType();
+        if (ElementDataManager.getByID(element) != null) {
+            return  ElementDataManager.getByID(element).getNormalParticleType();
         }
         return null;
     }
 
     public static ChatFormatting getColorByElement(String element) {
-        if (ElementsMap.ELEMENTS.get(element) != null) {
-            return ElementsMap.ELEMENTS.get(element).getChatColor();
+        if (ElementDataManager.getByID(element) != null) {
+            return ElementDataManager.getByID(element).getChatColor();
         }
         return ChatFormatting.GRAY;
     }
 
     public static void playSoundByElement(String element, Entity ent, float volume) {
-        if (ElementsMap.ELEMENTS.get(element) != null) {
-            ElementsMap.ELEMENTS.get(element).playSound(ent, volume);
+        if (ElementDataManager.getByID(element) != null) {
+            ElementDataManager.getByID(element).playSound(ent, volume);
         }
     }
 
@@ -78,11 +78,11 @@ public class ElementalUtils {
         if (item != null) {
             if (item.getTag() != null) {
                 element = item.getTag().getString("passive_element");
-                if (ElementsMap.ELEMENTS.get(element) == null) {
+                if (ElementDataManager.getByID(element) == null) {
                     WeaponData data = WeaponData.getWeaponData(item);
                     if (data != null) {
                         if (data.getElement() != null) {
-                            if (ElementsMap.ELEMENTS.get((data.getElement())) != null) {
+                            if (ElementDataManager.getByID((data.getElement())) != null) {
                                 element = data.getElement();
                             }
                         }

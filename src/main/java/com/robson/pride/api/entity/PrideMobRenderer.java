@@ -1,6 +1,5 @@
 package com.robson.pride.api.entity;
 
-import de.markusbordihn.easynpc.client.texture.CustomTextureManager;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -18,8 +17,8 @@ public class PrideMobRenderer extends HumanoidMobRenderer<PrideMobBase, Humanoid
     @Override
     public ResourceLocation getTextureLocation(PrideMobBase entity) {
         if (!entity.textures.isEmpty()) {
-            return CustomTextureManager.getOrCreateTextureWithDefault(entity.getEasyNPCSkinData(), new ResourceLocation(entity.textures.get(entity.getTypeVariant())));
+            return  new ResourceLocation(entity.textures.get(entity.getTypeVariant()));
         }
-        return CustomTextureManager.getOrCreateTextureWithDefault(entity.getEasyNPCSkinData(), new ResourceLocation("pride:textures/entities/special/empty.png"));
+        return new ResourceLocation("pride:textures/entities/special/empty.png");
     }
 }

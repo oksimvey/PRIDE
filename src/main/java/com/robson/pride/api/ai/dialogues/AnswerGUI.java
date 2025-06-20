@@ -12,8 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import static com.robson.pride.api.ai.dialogues.JsonInteractionsReader.isAnswering;
-
 @OnlyIn(Dist.CLIENT)
 public class AnswerGUI extends Screen {
 
@@ -48,16 +46,14 @@ public class AnswerGUI extends Screen {
             this.addRenderableWidget(Button.builder(Component.literal(this.playerTags.getString("pride_true_answer")), button -> {
                         onClose();
                         removeParticle();
-                        JsonInteractionsReader.deserializeDialogues(questionent, player, this.playerTags.getList("pride_true_answer_dialogues", 10), (byte) 0);
-                        onAnswer();
+                         onAnswer();
                     })
                     .bounds(this.width / 2 - 100, this.height / 2 - 30, 200, 20)
                     .build());
             this.addRenderableWidget(Button.builder(Component.literal(this.playerTags.getString("pride_false_answer")), button -> {
                         onClose();
                         removeParticle();
-                        JsonInteractionsReader.deserializeDialogues(questionent, player, this.playerTags.getList("pride_false_answer_dialogues", 10), (byte) 0);
-                        onAnswer();
+                       onAnswer();
                     })
                     .bounds(this.width / 2 - 100, this.height / 2 + 10, 200, 20)
                     .build());
@@ -71,7 +67,6 @@ public class AnswerGUI extends Screen {
     }
 
     public void onAnswer() {
-        isAnswering.remove(player);
         player.getPersistentData().remove("pride_true_answer");
         player.getPersistentData().remove("pride_false_answer");
         player.getPersistentData().remove("pride_true_answer_dialogues");

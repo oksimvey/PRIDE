@@ -1,6 +1,6 @@
 package com.robson.pride.skills.weaponarts;
 
-import com.robson.pride.api.maps.ElementsMap;
+import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
@@ -49,7 +49,7 @@ public class DarknessCut extends WeaponSkillBase {
                             if (particle != null && entko != null) {
                                 particle.setLifetime(200);
                                 particle.scale(1.25f);
-                                SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, () -> ElementsMap.ELEMENTS.get("Darkness").onHit(entko, ent, 10, false));
+                                SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, () -> ElementDataManager.getByElement(ElementDataManager.Element.DARKNESS).onHit(entko, ent, 10, false));
                             }
                         }
                     }

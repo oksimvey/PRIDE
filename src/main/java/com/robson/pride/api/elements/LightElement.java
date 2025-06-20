@@ -16,53 +16,56 @@ import net.minecraft.world.entity.Entity;
 
 import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
-public class LightElement extends ElementBase {
+public interface LightElement {
 
-    public ItemRenderingParams getItemRenderingParams() {
-        return new ItemRenderingParams(20, 20, 200, new ResourceLocation("pride:textures/particle/pointed_trail.png"),
-                GlintRenderTypes.createDirectGlint("direct_light", new ResourceLocation("pride:textures/glints/light_glint.png")),
-                GlintRenderTypes.createDirectEntityGlint("direct_entity_light", new ResourceLocation("pride:textures/glints/light_glint.png")));
+    ElementBase DATA = new ElementBase() {
 
-    }
+        public ItemRenderingParams getItemRenderingParams() {
+            return new ItemRenderingParams(20, 20, 200, new ResourceLocation("pride:textures/particle/pointed_trail.png"),
+                    GlintRenderTypes.createDirectGlint("direct_light", new ResourceLocation("pride:textures/glints/light_glint.png")),
+                    GlintRenderTypes.createDirectEntityGlint("direct_entity_light", new ResourceLocation("pride:textures/glints/light_glint.png")));
 
-
-    public ParticleOptions getNormalParticleType() {
-        return ParticleRegistry.WISP_PARTICLE.get();
-    }
-
-    public ChatFormatting getChatColor() {
-        return ChatFormatting.YELLOW;
-    }
-
-    public SoundEvent getSound() {
-        return SoundRegistry.CLOUD_OF_REGEN_LOOP.get();
-    }
-
-    public byte getParticleAmount() {
-        return 2;
-    }
-
-    public SchoolType getSchool() {
-        return SchoolRegister.LIGHT.get();
-    }
-
-    public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
-        this.playSound(ent, 1);
-        return this.calculateFinalDamage(dmgent, ent, amount);
-    }
-
-    public float calculateFinalDamage(Entity dmgent, Entity ent, float amount) {
-        if (dmgent != null && ent != null) {
-            String element = getElement(ent);
-            float multiplier = 1;
-            if (element.equals("Darkness")) {
-                multiplier = 0.5f;
-            } else if (element.equals("Moon") || element.equals("Blood")) {
-                multiplier = 1.5f;
-            }
-            return MathUtils.getValueWithPercentageIncrease(multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:light_resist")),
-                    AttributeUtils.getAttributeValue(dmgent, "pride:light_power"));
         }
-        return amount;
-    }
+
+
+        public ParticleOptions getNormalParticleType() {
+            return ParticleRegistry.WISP_PARTICLE.get();
+        }
+
+        public ChatFormatting getChatColor() {
+            return ChatFormatting.YELLOW;
+        }
+
+        public SoundEvent getSound() {
+            return SoundRegistry.CLOUD_OF_REGEN_LOOP.get();
+        }
+
+        public byte getParticleAmount() {
+            return 2;
+        }
+
+        public SchoolType getSchool() {
+            return SchoolRegister.LIGHT.get();
+        }
+
+        public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
+            this.playSound(ent, 1);
+            return this.calculateFinalDamage(dmgent, ent, amount);
+        }
+
+        public float calculateFinalDamage(Entity dmgent, Entity ent, float amount) {
+            if (dmgent != null && ent != null) {
+                String element = getElement(ent);
+                float multiplier = 1;
+                if (element.equals("Darkness")) {
+                    multiplier = 0.5f;
+                } else if (element.equals("Moon") || element.equals("Blood")) {
+                    multiplier = 1.5f;
+                }
+                return MathUtils.getValueWithPercentageIncrease(multiplier * MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:light_resist")),
+                        AttributeUtils.getAttributeValue(dmgent, "pride:light_power"));
+            }
+            return amount;
+        }
+    };
 }

@@ -1,21 +1,15 @@
 package com.robson.pride.api.ai.actions;
 
 import com.robson.pride.api.ai.combat.ActionBase;
-import com.robson.pride.api.ai.combat.Condition;
 import com.robson.pride.api.entity.PrideMobPatch;
 import com.robson.pride.api.maps.WeaponSkillsMap;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
-import yesman.epicfight.api.animation.types.StaticAnimation;
-import yesman.epicfight.api.asset.AssetAccessor;
-
-import java.util.List;
 
 public class ExecuteWeaponSkillAction extends ActionBase {
 
     private final String skillid;
 
-    public ExecuteWeaponSkillAction(List<Condition> conditions, String skillid) {
-        super(conditions);
+    public ExecuteWeaponSkillAction(String skillid) {
         this.skillid = skillid;
     }
 

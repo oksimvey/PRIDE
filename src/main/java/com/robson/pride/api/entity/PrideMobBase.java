@@ -2,12 +2,6 @@ package com.robson.pride.api.entity;
 
 import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
 import com.robson.pride.api.utils.*;
-import de.markusbordihn.easynpc.data.attribute.*;
-import de.markusbordihn.easynpc.data.objective.ObjectiveDataEntry;
-import de.markusbordihn.easynpc.data.objective.ObjectiveType;
-import de.markusbordihn.easynpc.entity.EasyNPCBaseEntity;
-import de.markusbordihn.easynpc.entity.easynpc.data.ObjectiveData;
-import de.markusbordihn.easynpc.network.NetworkMessageHandlerManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -59,9 +53,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
-import static com.robson.pride.api.ai.dialogues.JsonInteractionsReader.isSpeaking;
-
-public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
+public class PrideMobBase extends PathfinderMob implements Enemy {
 
     private static final EntityDataAccessor<Byte> VARIANT =
             SynchedEntityData.defineId(PrideMobBase.class, EntityDataSerializers.BYTE);
@@ -85,7 +77,7 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
     private byte music_priority = 0;
 
     protected PrideMobBase(EntityType<? extends PrideMobBase> p_33002_, Level p_33003_) {
-        super(p_33002_, p_33003_, Variant.STEVE);
+        super(p_33002_, p_33003_);
         this.xpReward = 5;
         this.setPersistenceRequired();
         deserializeConstructorJsons();
@@ -220,7 +212,6 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
         SpawnGroupData data = super.finalizeSpawn(accessor, difficulty, reason, spawnDataIn, dataTag);
         this.entityData.set(VARIANT, (byte) new Random().nextInt(getMaxVariations()));
         equipAllSlotsToDefault();
-        setupDefaultNPC();
         return data;
     }
 
@@ -258,17 +249,6 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
         return (byte) (this.music_priority + 1);
     }
 
-    @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (!this.level().isClientSide) {
-            if (this.target != null || isSpeaking.get(this) != null) {
-                return InteractionResult.FAIL;
-            }
-            super.mobInteract(player, hand);
-            JsonInteractionsReader.onInteraction(this, player);
-        }
-        return InteractionResult.FAIL;
-    }
 
     public void deserializeEquipmentMap(CompoundTag tagmap) {
         ListTag equipments = tagmap.getList("equipment", 10);
@@ -301,21 +281,6 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
         equipAllSlotsToDefault();
     }
 
-    public void setupDefaultNPC() {
-        EntityAttributes attributes = this.getEasyNPCAttributeData().getEntityAttributes();
-        attributes.setCombatAttributes(new CombatAttributes(true, 0));
-        attributes.setInteractionAttributes(new InteractionAttributes(true, false, true));
-        attributes.setMovementAttributes(new MovementAttributes(true, true, true, false));
-        attributes.setEnvironmentalAttributes(new EnvironmentalAttributes(true, false, false));
-        NetworkMessageHandlerManager.getServerHandler().combatAttributeChange(this.getUUID(), CombatAttributeType.IS_ATTACKABLE, true);
-        ObjectiveData objectiveData = this.getEasyNPCObjectiveData();
-        objectiveData.removeObjective(ObjectiveType.LOOK_AT_RESET);
-        objectiveData.removeObjective(ObjectiveType.LOOK_AT_PLAYER);
-        objectiveData.removeObjective(ObjectiveType.LOOK_AT_MOB);
-        objectiveData.addObjective(new ObjectiveDataEntry(ObjectiveType.MOVE_BACK_TO_HOME, 5));
-        objectiveData.addObjective(new ObjectiveDataEntry(ObjectiveType.RANDOM_STROLL_AROUND_HOME, 5));
-    }
-
     public void equipAllSlotsToDefault() {
         if (!this.equipmentMap.isEmpty()) {
             for (EquipmentSlot slot : this.equipmentMap.keySet()) {
@@ -339,14 +304,6 @@ public abstract class PrideMobBase extends EasyNPCBaseEntity implements Enemy {
             return client.player.tickCount % distance == 0;
         }
         return false;
-    }
-
-    @Override
-    public void travel(Vec3 travel) {
-        if (this.target == null && isSpeaking.get(this) != null) {
-            travel = new Vec3(0, 0, 0);
-        }
-        super.travel(travel);
     }
 
     public void deserializePassiveSkills() {

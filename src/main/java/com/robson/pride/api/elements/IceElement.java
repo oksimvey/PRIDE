@@ -16,56 +16,59 @@ import net.minecraft.world.entity.Entity;
 
 import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
-public class IceElement extends ElementBase {
+public interface IceElement {
+
+    ElementBase DATA = new ElementBase() {
 
 
-    public ParticleOptions getNormalParticleType() {
-        return ParticleRegistry.SNOWFLAKE_PARTICLE.get();
-    }
-
-    public ChatFormatting getChatColor() {
-        return ChatFormatting.DARK_AQUA;
-    }
-
-    public SoundEvent getSound() {
-        return SoundRegistry.CONE_OF_COLD_LOOP.get();
-    }
-
-    public byte getParticleAmount() {
-        return 5;
-    }
-
-
-    public ItemRenderingParams getItemRenderingParams() {
-        return new ItemRenderingParams(50, 150, 250, new ResourceLocation("epicfight:textures/particle/efmc/fire_trail.png"),
-                GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
-                GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")));
-
-    }
-
-
-    public SchoolType getSchool() {
-        return SchoolRegister.ICE.get();
-    }
-
-    public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
-        this.playSound(ent, 1);
-        return this.calculateFinalDamage(dmgent, ent, amount);
-    }
-
-    public float calculateFinalDamage(Entity dmgent, Entity ent, float amount) {
-        if (dmgent != null && ent != null) {
-            String element = getElement(ent);
-            float multiplier = 1;
-            if (element.equals("Sun") || element.equals("Thunder")) {
-                multiplier = 0.5f;
-            } else if (element.equals("Water") || element.equals("Wind")) {
-                multiplier = 1.5f;
-            }
-            return MathUtils.getValueWithPercentageIncrease(multiplier *
-                            MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:ice_resist")),
-                    AttributeUtils.getAttributeValue(dmgent, "pride:ice_power"));
+        public ParticleOptions getNormalParticleType() {
+            return ParticleRegistry.SNOWFLAKE_PARTICLE.get();
         }
-        return amount;
-    }
+
+        public ChatFormatting getChatColor() {
+            return ChatFormatting.DARK_AQUA;
+        }
+
+        public SoundEvent getSound() {
+            return SoundRegistry.CONE_OF_COLD_LOOP.get();
+        }
+
+        public byte getParticleAmount() {
+            return 5;
+        }
+
+
+        public ItemRenderingParams getItemRenderingParams() {
+            return new ItemRenderingParams(50, 150, 250, new ResourceLocation("epicfight:textures/particle/efmc/fire_trail.png"),
+                    GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
+                    GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")));
+
+        }
+
+
+        public SchoolType getSchool() {
+            return SchoolRegister.ICE.get();
+        }
+
+        public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
+            this.playSound(ent, 1);
+            return this.calculateFinalDamage(dmgent, ent, amount);
+        }
+
+        public float calculateFinalDamage(Entity dmgent, Entity ent, float amount) {
+            if (dmgent != null && ent != null) {
+                String element = getElement(ent);
+                float multiplier = 1;
+                if (element.equals("Sun") || element.equals("Thunder")) {
+                    multiplier = 0.5f;
+                } else if (element.equals("Water") || element.equals("Wind")) {
+                    multiplier = 1.5f;
+                }
+                return MathUtils.getValueWithPercentageIncrease(multiplier *
+                                MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:ice_resist")),
+                        AttributeUtils.getAttributeValue(dmgent, "pride:ice_power"));
+            }
+            return amount;
+        }
+    };
 }

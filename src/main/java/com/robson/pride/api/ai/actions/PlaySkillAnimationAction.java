@@ -1,7 +1,6 @@
 package com.robson.pride.api.ai.actions;
 
 import com.robson.pride.api.ai.combat.ActionBase;
-import com.robson.pride.api.ai.combat.Condition;
 import com.robson.pride.api.entity.PrideMobPatch;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.utils.AnimUtils;
@@ -10,14 +9,13 @@ import com.robson.pride.api.utils.TimerUtil;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class PlaySkillAnimation extends ActionBase {
+public class PlaySkillAnimationAction extends ActionBase {
 
     private final List<SkillAnimation> animations;
 
     private byte currentAnimation = 0;
 
-    public PlaySkillAnimation(List<Condition> conditions, List<SkillAnimation> animations) {
-        super(conditions);
+    public PlaySkillAnimationAction(List<SkillAnimation> animations) {
         this.animations = animations;
     }
 

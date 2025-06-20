@@ -52,31 +52,21 @@ public class CustomWeaponModelBase implements BakedModel {
         }, missing, Collections.emptyList()) {
 
             public BakedModel resolve(@NotNull BakedModel original, @NotNull ItemStack itemStack, @Nullable ClientLevel level, @Nullable LivingEntity livingEntity, int seed) {
-                if (itemStack.hasTag()) {
-                    Optional<ResourceLocation> override = this.getModelFromTag(itemStack, itemStack.getTag());
-                    if (override.isPresent()) {
-                        ModelManager manager = Minecraft.getInstance().getModelManager();
-                        BakedModel missing = manager.getModel(ModelBakery.MISSING_MODEL_LOCATION);
-                        BakedModel model = manager.getModel((ResourceLocation)override.get());
-                        return model == missing ? original : model;
+                    WeaponData data = WeaponData.getWeaponData(itemStack);
+                    if (data != null) {
+                            ModelManager manager = Minecraft.getInstance().getModelManager();
+                            BakedModel missing = manager.getModel(ModelBakery.MISSING_MODEL_LOCATION);
+                            BakedModel model = manager.getModel(getWeaponModelLocation(data));
+                            return model == missing ? original : model;
                     }
-                }
 
                 return original;
-            }
-
-            private Optional<ResourceLocation> getModelFromTag(@NotNull ItemStack itemStack, CompoundTag tag) {
-                weaponData = WeaponData.getWeaponData(itemStack);
-                if (weaponData != null) {
-                    return Optional.of(new ResourceLocation(weaponData.getModel()));
-                }
-                return Optional.empty();
             }
         };
     }
 
-    public static ResourceLocation getWeaponModelLocation(String resourcelocation) {
-        return new ResourceLocation(resourcelocation);
+    public static ResourceLocation getWeaponModelLocation(WeaponData weaponData) {
+        return new ResourceLocation(weaponData.getModel());
     }
 
 

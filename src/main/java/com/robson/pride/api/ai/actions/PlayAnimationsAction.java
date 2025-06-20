@@ -19,8 +19,7 @@ public class PlayAnimationsAction extends ActionBase {
 
     private byte currentAnimation = 0;
 
-    public PlayAnimationsAction(List<Condition> conditions, List<AnimationManager.AnimationAccessor<? extends StaticAnimation>> animations, float convert) {
-        super(conditions);
+    public PlayAnimationsAction(List<AnimationManager.AnimationAccessor<? extends StaticAnimation>> animations, float convert) {
         this.animations = animations;
         this.convert = convert;
     }

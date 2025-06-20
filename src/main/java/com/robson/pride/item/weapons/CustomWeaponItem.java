@@ -1,5 +1,6 @@
 package com.robson.pride.item.weapons;
 
+import com.robson.pride.api.data.WeaponData;
 import com.robson.pride.registries.ItemsRegister;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -41,18 +42,18 @@ public class CustomWeaponItem extends SwordItem {
         }, 1, -3f, new Item.Properties());
     }
 
-    public static ItemStack createWeapon(String id){
+    public static ItemStack createWeapon(int id){
         ItemStack weaponItem = new ItemStack(ItemsRegister.CUSTOM_WEAPON_ITEM.get());
-        weaponItem.getOrCreateTag().putString("weaponid", id);
+        weaponItem.getOrCreateTag().putInt("weaponid", id);
         return weaponItem;
     }
 
     @Override
     public @NotNull Component getName(ItemStack stack) {
-        Component defaultName = super.getName(stack);
-        if (stack.getOrCreateTag().contains("weaponid")){
-            return Component.literal(stack.getOrCreateTag().getString("weaponid"));
+        WeaponData data = WeaponData.getWeaponData(stack);
+        if (data != null) {
+            return Component.literal(data.getName());
         }
-        return defaultName;
+        return super.getName(stack);
     }
 }

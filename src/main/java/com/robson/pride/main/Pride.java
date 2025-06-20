@@ -59,7 +59,6 @@ public class Pride {
                         .then(Commands.argument("living_entity", EntityArgument.entity())
                                 .then(AddXpCommand.register())
                                 .then(ResetLevelCommand.register())
-                                .then(DialogueCommand.register())
                                 .then(SetElementCommand.register())));
     }
 

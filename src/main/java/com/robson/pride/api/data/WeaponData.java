@@ -2,10 +2,10 @@ package com.robson.pride.api.data;
 
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
-import com.robson.pride.api.maps.WeaponsMap;
+import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.math.Matrix2f;
-import com.robson.pride.api.utils.math.Vec3f;
+import com.robson.pride.item.weapons.CustomWeaponItem;
 import com.robson.pride.mixins.WeaponTypeReloadListenerMixin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -15,9 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.client.animation.property.TrailInfo;
-import yesman.epicfight.api.utils.ExtendableEnum;
-import yesman.epicfight.api.utils.ExtendableEnumManager;
-import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.capabilities.item.*;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 
@@ -26,6 +23,8 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public class WeaponData {
+
+    private final String name;
 
     private final String model;
 
@@ -55,7 +54,10 @@ public class WeaponData {
 
     private CapabilityItem itemcap;
 
-    public WeaponData(String category, float damage, float speed, float impact, float max_strikes, float armor_negation, int weight, String model, String element, AABB collider, WeaponSkillBase skill, AttributeReqs attributeReqs, TrailParams trail){
+
+
+    public WeaponData(String name, String category, float damage, float speed, float impact, float max_strikes, float armor_negation, int weight, String model, String element, AABB collider, WeaponSkillBase skill, AttributeReqs attributeReqs, TrailParams trail){
+        this.name = name;
         this.category = category;
         this.damage = damage;
         this.speed = speed;
@@ -72,6 +74,18 @@ public class WeaponData {
         itemcap = null;
     }
 
+
+    public static WeaponData getWeaponData(ItemStack itemStack){
+        if (itemStack != null && itemStack.getItem() instanceof CustomWeaponItem){
+            return WeaponDataManager.getByID(itemStack.getOrCreateTag().getInt("weaponid"));
+        }
+        return null;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
     public String getElement() {
         return this.element;
     }
@@ -80,20 +94,11 @@ public class WeaponData {
         return this.weight;
     }
 
-    public static WeaponData getWeaponData(ItemStack itemStack){
-        if (itemStack != null){
-            return WeaponsMap.WEAPONS.get(itemStack.getOrCreateTag().getString("weaponid"));
-        }
-        return null;
-    }
 
     public TrailInfo getTrailInfo(TrailInfo info) {
         TrailInfo.Builder builder = TrailInfo.builder();
         builder.joint(info.joint());
-        if (!this.trailInfo.texture.isEmpty()){
-           builder.texture(new ResourceLocation(this.trailInfo.texture()));
-        }
-        else builder.texture(info.texturePath());
+        builder.texture(info.texturePath());
         builder.time(info.startTime(), info.endTime());
         builder.startPos(new Vec3(trailInfo.positions().x0(), trailInfo.positions().y0(), trailInfo.positions().z0()));
         builder.endPos(new Vec3(trailInfo.positions().x1(), trailInfo.positions().y1(), trailInfo.positions().z1()));
@@ -167,6 +172,6 @@ public class WeaponData {
     }
 
 
-    public record TrailParams(Matrix2f positions, int r, int g, int b, int lifetime, String texture) {
+    public record TrailParams(Matrix2f positions, int r, int g, int b, int lifetime) {
     }
 }

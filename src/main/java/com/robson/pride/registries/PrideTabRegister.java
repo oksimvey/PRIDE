@@ -1,7 +1,7 @@
 package com.robson.pride.registries;
 
 import com.robson.pride.api.data.WeaponData;
-import com.robson.pride.api.maps.WeaponsMap;
+import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.item.weapons.CustomWeaponItem;
 import com.robson.pride.main.Pride;
@@ -15,7 +15,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -36,10 +35,10 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> EQUIPMENT_TAB = TABS.register("pride_equipment", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Equipment"))
-            .icon(() -> CustomWeaponItem.createWeapon("European Longsword"))
+            .icon(() -> CustomWeaponItem.createWeapon(1))
             .displayItems((enabledFeatures, entries) -> {
-                for (String weaponid : WeaponsMap.WEAPONS.keySet()){
-                    entries.accept(CustomWeaponItem.createWeapon(weaponid));
+                for (WeaponDataManager.Weapon weapon : WeaponDataManager.Weapon.values()){
+                    entries.accept(CustomWeaponItem.createWeapon(weapon.ordinal()));
                 }
             })
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
