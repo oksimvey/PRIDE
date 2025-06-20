@@ -15,7 +15,7 @@ public class ElementalGem extends Item {
     @Override
     public Component getName(ItemStack stack) {
         Component defaultName = super.getName(stack);
-        return Component.literal(stack.getOrCreateTag().getString("passive_element") + " Gem").withStyle(style -> style.withColor(getColorByElement(stack.getOrCreateTag().getString("passive_element"))));
+        return Component.literal(stack.getOrCreateTag().getByte("passive_element") + " Gem").withStyle(style -> style.withColor(getColorByElement(stack.getOrCreateTag().getByte("passive_element"))));
 
     }
 }

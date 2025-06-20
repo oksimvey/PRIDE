@@ -1,7 +1,9 @@
 package com.robson.pride.registries;
 
 import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.data.manager.WeaponDataManager;
+import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.item.weapons.CustomWeaponItem;
 import com.robson.pride.main.Pride;
@@ -15,14 +17,8 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
-import static com.robson.pride.api.maps.WeaponSkillsMap.WEAPON_SKILLS;
 import static com.robson.pride.registries.EntityRegister.ENTITIES;
 import static com.robson.pride.registries.EntityRegister.SPECIAL_ENTITIES;
-import static com.robson.pride.registries.WeaponSkillRegister.*;
 
 
 public class PrideTabRegister {
@@ -37,8 +33,12 @@ public class PrideTabRegister {
             .title(Component.literal("Pride Equipment"))
             .icon(() -> CustomWeaponItem.createWeapon(1))
             .displayItems((enabledFeatures, entries) -> {
-                for (WeaponDataManager.Weapon weapon : WeaponDataManager.Weapon.values()){
-                    entries.accept(CustomWeaponItem.createWeapon(weapon.ordinal()));
+                for (int i = 0; true; i++){
+                    WeaponData data = WeaponDataManager.getByID(i);
+                    if (data == null){
+                        return;
+                    }
+                    entries.accept(CustomWeaponItem.createWeapon(i));
                 }
             })
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
@@ -46,18 +46,11 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> MATERIALS_TAB = TABS.register("pride_materials", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Materials"))
-            .icon(() -> getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Darkness"))
+            .icon(() -> getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), ElementDataManager.DARKNESS))
             .displayItems((enabledFeatures, entries) -> {
-                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Darkness"));
-                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Light"));
-                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Thunder"));
-                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Sun"));
-                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Moon"));
-                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Blood"));
-                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Wind"));
-                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Nature"));
-                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Ice"));
-                entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), "Water"));
+                for (byte i = 1; i <= 10; i++) {
+                    entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), i));
+                }
             })
             .withTabsBefore(EQUIPMENT_TAB.getKey())
             .build());
@@ -66,18 +59,18 @@ public class PrideTabRegister {
             .title(Component.literal("Pride Weapon Arts"))
             .icon(() -> new ItemStack(ItemsRegister.WEAPON_ART.get()))
             .displayItems((parameters, output) -> {
-                List<Map.Entry<String, WeaponSkillBase>> sortedEntries = WEAPON_SKILLS.entrySet()
-                        .stream()
-                        .sorted(Comparator
-                                .comparing((Map.Entry<String, WeaponSkillBase> entry) -> elements.indexOf(entry.getValue().getSkillElement()))
-                                .thenComparing(entry -> rarities.indexOf(entry.getValue().getSkillRarity())))
-                        .toList();
-                for (Map.Entry<String, WeaponSkillBase> entry : sortedEntries) {
+                for (int i = 1; true; i++){
+                    WeaponSkillBase data = WeaponSkillsDataManager.getByID(i);
+                    if (data == null){
+                        return;
+                    }
                     ItemStack item = new ItemStack(ItemsRegister.WEAPON_ART.get());
-                    item.getOrCreateTag().putString("weapon_art", entry.getKey());
-                    item.getOrCreateTag().putString("rarity", WEAPON_SKILLS.get(entry.getKey()).getSkillRarity());
-                    output.accept(item);
+                    item.getOrCreateTag().putShort("weapon_art", (short) i);
+                    item.getOrCreateTag().putString("rarity", data.getSkillRarity());
+                    output.accept(CustomWeaponItem.createWeapon(i));
                 }
+
+
             })
             .withTabsBefore(MATERIALS_TAB.getKey())
             .build());
@@ -105,10 +98,10 @@ public class PrideTabRegister {
             .withTabsBefore(SKILLS_TAB.getKey())
             .build());
 
-    public static ItemStack getElementalGem(Item item, String element) {
+    public static ItemStack getElementalGem(Item item, byte element) {
         ItemStack itemStack = new ItemStack(item);
         itemStack.setCount(1);
-        itemStack.getOrCreateTag().putString("passive_element", element);
+        itemStack.getOrCreateTag().putByte("passive_element", element);
         return itemStack;
     }
 }

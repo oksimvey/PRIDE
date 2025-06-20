@@ -3,8 +3,11 @@ package com.robson.pride.registries;
 import java.util.Arrays;
 import java.util.List;
 
-public class WeaponSkillRegister {
+public interface WeaponSkillRegister {
 
-    public static List<String> elements = Arrays.asList("Darkness", "Light", "Thunder", "Sun", "Moon", "Blood", "Wind", "Nature", "Ice", "Water", "Neutral");
-    public static List<String> rarities = Arrays.asList("Mythical", "Legendary", "Epic", "Rare", "Uncommon", "Common");
+    List<String> rarities = Arrays.asList("Mythical", "Legendary", "Epic", "Rare", "Uncommon", "Common");
+
+    static boolean isValid(byte id){
+        return id >= 1 && id <= 11;
+    }
 }

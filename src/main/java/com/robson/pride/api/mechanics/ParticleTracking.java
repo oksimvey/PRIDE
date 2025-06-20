@@ -36,13 +36,13 @@ public class ParticleTracking {
         boolean result = false;
         if (item != null && ent != null) {
             if (item.getTag() != null) {
-                String element = ElementalUtils.getItemElement(item);
+                byte element = ElementalUtils.getItemElement(item);
                 if (ElementDataManager.getByID(element) != null) {
-                    result = !element.equals("Sun") || shouldRenderSunParticle(ent);
+                    result = element != ElementDataManager.SUN || shouldRenderSunParticle(ent);
                 } else if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMBUEMENT.get())) {
                     if (living.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect) {
                         if (ElementDataManager.getByID(imbuementEffect.element) != null && imbuementEffect.active) {
-                            result = !imbuementEffect.element.equals("Sun") || shouldRenderSunParticle(ent);
+                            result = imbuementEffect.element != ElementDataManager.SUN || shouldRenderSunParticle(ent);
                         }
                     }
                 }
@@ -74,7 +74,7 @@ public class ParticleTracking {
 
     public static ElementBase getItemElementForImbuement(ItemStack item, LivingEntity ent) {
         if (item != null && ent != null) {
-            String element = ElementalUtils.getItemElement(item);
+            byte element = ElementalUtils.getItemElement(item);
             if (ElementDataManager.getByID(element) != null) {
                 return ElementDataManager.getByID(element);
             } else if (ent.hasEffect(EffectRegister.IMBUEMENT.get()) &&

@@ -1,8 +1,6 @@
 package com.robson.pride.api.skillcore;
-import com.robson.pride.api.data.MobData;
 import com.robson.pride.api.data.WeaponData;
-import com.robson.pride.api.entity.PrideMobPatch;
-import com.robson.pride.api.maps.WeaponSkillsMap;
+import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.ParticleUtils;
 import com.robson.pride.api.utils.TimerUtil;
@@ -12,8 +10,6 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import yesman.epicfight.api.utils.ExtendableEnum;
-import yesman.epicfight.api.utils.ExtendableEnumManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +24,7 @@ public class SkillCore {
     public static void onSkillExecute(LivingEntity ent) {
         if (ent != null) {
             if (ent.getMainHandItem().getTag().getBoolean("hasweaponart")) {
-                weaponArtCore(ent, ent.getMainHandItem().getTag().getString("weapon_art"));
+                weaponArtCore(ent, ent.getMainHandItem().getTag().getShort("weapon_art"));
             } else defaultSkillCore(ent, ent.getMainHandItem());
         }
     }
@@ -57,8 +53,8 @@ public class SkillCore {
         return false;
     }
 
-    public static void weaponArtCore(LivingEntity ent, String weaponart) {
-        WeaponSkillBase skill = WeaponSkillsMap.WEAPON_SKILLS.get(weaponart);
+    public static void weaponArtCore(LivingEntity ent, short weaponart) {
+        WeaponSkillBase skill = WeaponSkillsDataManager.getByID(weaponart);
         if (skill != null) {
             skill.tryToExecute(ent);
         }

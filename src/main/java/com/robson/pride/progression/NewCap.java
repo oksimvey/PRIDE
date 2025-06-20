@@ -33,11 +33,6 @@ public class NewCap {
         if (oldtag.contains("pride_money")) {
             newtag.putLong("pride_money", oldtag.getLong("pride_money"));
         }
-        for (String element : WeaponSkillRegister.elements) {
-            newtag.putInt(element + "Xp", oldtag.getInt(element + "Xp"));
-            newtag.putByte(element + "Lvl", oldtag.getByte(element + "Lvl"));
-            newtag.putInt(element + "MaxXp", oldtag.getInt(element + "MaxXp"));
-        }
     }
 
     public static void startVariables(Player player, CompoundTag newtag) {
@@ -70,6 +65,6 @@ public class NewCap {
                 tag.getInt("VigorMaxXp") != 0 &&
                 tag.getInt("EnduranceMaxXp") != 0 &&
                 tag.getInt("MindMaxXp") != 0 &&
-                WeaponSkillRegister.elements.contains(tag.getString("Element"));
+                WeaponSkillRegister.isValid(tag.getByte("Element"));
     }
 }

@@ -18,13 +18,13 @@ public class ImbuementEffect extends PrideEffectBase {
 
     public boolean active;
 
-    public String element;
+    public byte element;
 
     public ImbuementEffect() {
         super(MobEffectCategory.NEUTRAL, 0x57CDFD);
     }
 
-    public void setElement(String element) {
+    public void setElement(byte element) {
         this.element = element;
         this.active = false;
     }
@@ -45,7 +45,7 @@ public class ImbuementEffect extends PrideEffectBase {
     @Override
     public void prideClientTick(LivingEntity ent) {
         if (this.active && ElementDataManager.getByID(element) != null && ent.tickCount % ((int) (10 / ent.getBbHeight())) == 0) {
-            if (!element.equals("Sun") || ParticleTracking.shouldRenderSunParticle(ent)) {
+            if (element != ElementDataManager.SUN || ParticleTracking.shouldRenderSunParticle(ent)) {
                 ElementBase element = ElementDataManager.getByID(this.element);
                 Vec3f vec3f = ParticleTracking.getAABBForImbuement(null, ent);
                 ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolR, element.getNormalParticleType(), vec3f, element.getParticleAmount());

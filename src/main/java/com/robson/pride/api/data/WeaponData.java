@@ -3,6 +3,7 @@ package com.robson.pride.api.data;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import com.robson.pride.api.data.manager.WeaponDataManager;
+import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.item.weapons.CustomWeaponItem;
@@ -30,11 +31,11 @@ public class WeaponData {
 
     private final AABB collider;
 
-    private final WeaponSkillBase skill;
+    private final short skill;
 
     private final AttributeReqs attributeReqs;
 
-    private final String element;
+    private final byte element;
 
     private final int weight;
 
@@ -56,7 +57,7 @@ public class WeaponData {
 
 
 
-    public WeaponData(String name, String category, float damage, float speed, float impact, float max_strikes, float armor_negation, int weight, String model, String element, AABB collider, WeaponSkillBase skill, AttributeReqs attributeReqs, TrailParams trail){
+    public WeaponData(String name, String category, float damage, float speed, float impact, float max_strikes, float armor_negation, int weight, String model,byte element, AABB collider, short skill, AttributeReqs attributeReqs, TrailParams trail){
         this.name = name;
         this.category = category;
         this.damage = damage;
@@ -86,7 +87,7 @@ public class WeaponData {
         return this.name;
     }
 
-    public String getElement() {
+    public byte getElement() {
         return this.element;
     }
 
@@ -148,7 +149,7 @@ public class WeaponData {
     }
 
     public WeaponSkillBase getSkill(){
-        return this.skill;
+        return WeaponSkillsDataManager.getByID(this.skill);
     }
 
     public String getModel() {

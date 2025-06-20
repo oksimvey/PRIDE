@@ -2,6 +2,7 @@ package com.robson.pride.api.elements;
 
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
+import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.utils.AttributeUtils;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.SchoolRegister;
@@ -57,11 +58,11 @@ public interface IceElement {
 
         public float calculateFinalDamage(Entity dmgent, Entity ent, float amount) {
             if (dmgent != null && ent != null) {
-                String element = getElement(ent);
+                byte element = getElement(ent);
                 float multiplier = 1;
-                if (element.equals("Sun") || element.equals("Thunder")) {
+                if (element == ElementDataManager.SUN || element == ElementDataManager.THUNDER) {
                     multiplier = 0.5f;
-                } else if (element.equals("Water") || element.equals("Wind")) {
+                } else if (element == ElementDataManager.WATER || element == ElementDataManager.WIND) {
                     multiplier = 1.5f;
                 }
                 return MathUtils.getValueWithPercentageIncrease(multiplier *

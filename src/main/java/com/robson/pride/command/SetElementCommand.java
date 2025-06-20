@@ -1,10 +1,12 @@
 package com.robson.pride.command;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.utils.ElementalUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -16,17 +18,10 @@ public class SetElementCommand implements Command<CommandSourceStack> {
 
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
         return Commands.literal("elemental")
-                .then(Commands.argument("set", StringArgumentType.word()).suggests(((commandContext, suggestionsBuilder) -> {
-                            suggestionsBuilder.suggest("Darkness");
-                            suggestionsBuilder.suggest("Light");
-                            suggestionsBuilder.suggest("Thunder");
-                            suggestionsBuilder.suggest("Sun");
-                            suggestionsBuilder.suggest("Moon");
-                            suggestionsBuilder.suggest("Blood");
-                            suggestionsBuilder.suggest("Wind");
-                            suggestionsBuilder.suggest("Nature");
-                            suggestionsBuilder.suggest("Ice");
-                            suggestionsBuilder.suggest("Water");
+                .then(Commands.argument("set", IntegerArgumentType.integer()).suggests(((commandContext, suggestionsBuilder) -> {
+                           for (byte i = 1; i < 10; i++){
+                               suggestionsBuilder.suggest(i);
+                           }
                             return suggestionsBuilder.buildFuture();
                         }))
                         .executes(COMMAND));
@@ -35,7 +30,7 @@ public class SetElementCommand implements Command<CommandSourceStack> {
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         Entity ent = EntityArgument.getEntity(context, "living_entity");
-        String element = StringArgumentType.getString(context, "set");
+        byte element = (byte) IntegerArgumentType.getInteger(context, "set");
         ElementalUtils.setElement(ent, element);
         return 1;
     }

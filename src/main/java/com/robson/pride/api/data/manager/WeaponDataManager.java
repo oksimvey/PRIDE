@@ -7,24 +7,18 @@ import com.robson.pride.item.weapons.Kuronami;
 
 public interface WeaponDataManager {
 
-    enum Weapon {
-        KURONAMI,
-        EUROPEAN_LONGSWORD
-    }
+    byte KURONAMI = 0;
+
+    byte EUROPEAN_LONGSWORD = 1;
 
     static WeaponData getByID(int id){
-        if (id >= 0 && id < Weapon.values().length) {
-                return getByWeapon(Weapon.values()[id]);
-        }
-        return null;
-    }
-
-    static WeaponData getByWeapon(Weapon weapon){
-        return switch (weapon){
+        return switch (id){
 
             case KURONAMI -> Kuronami.WEAPON_DATA;
 
             case EUROPEAN_LONGSWORD -> EuropeanLongsword.WEAPON_DATA;
+
+            default -> null;
         };
     }
 }

@@ -71,9 +71,9 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
         this.lastPose = currentPose;
         this.lastPos = posCur.toVec3();
         this.lastTransform = JointTransform.fromMatrix(((LivingEntityPatch)this.owner).getModelMatrix(1.0F));
-        OpenMatrix4f prvmodelTf = OpenMatrix4f.createTranslation((float)posOld.x, (float)posOld.y, (float)posOld.z).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(((LivingEntityPatch)this.owner).getModelMatrix(0.0F));
-        OpenMatrix4f middleModelTf = OpenMatrix4f.createTranslation((float)posMid.x, (float)posMid.y, (float)posMid.z).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(((LivingEntityPatch)this.owner).getModelMatrix(0.5F));
-        OpenMatrix4f curModelTf = OpenMatrix4f.createTranslation((float)posCur.x, (float)posCur.y, (float)posCur.z).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(((LivingEntityPatch)this.owner).getModelMatrix(1.0F));
+        OpenMatrix4f prvmodelTf = OpenMatrix4f.createTranslation((float) posOld.x(), (float) posOld.y(), (float) posOld.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(((LivingEntityPatch)this.owner).getModelMatrix(0.0F));
+        OpenMatrix4f middleModelTf = OpenMatrix4f.createTranslation((float) posMid.x(), (float) posMid.y(), (float) posMid.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(((LivingEntityPatch)this.owner).getModelMatrix(0.5F));
+        OpenMatrix4f curModelTf = OpenMatrix4f.createTranslation((float) posCur.x(), (float) posCur.y(), (float) posCur.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(((LivingEntityPatch)this.owner).getModelMatrix(1.0F));
         OpenMatrix4f prevJointTf = ((LivingEntityPatch)this.owner).getArmature().getBindedTransformFor(prevPose, this.joint).mulFront(prvmodelTf);
         OpenMatrix4f middleJointTf = ((LivingEntityPatch)this.owner).getArmature().getBindedTransformFor(middlePose, this.joint).mulFront(middleModelTf);
         OpenMatrix4f currentJointTf = ((LivingEntityPatch)this.owner).getArmature().getBindedTransformFor(currentPose, this.joint).mulFront(curModelTf);
@@ -127,9 +127,9 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
         OpenMatrix4f prevModelMatrix = this.lastTransform.toMatrix();
         OpenMatrix4f curModelMatrix = ((LivingEntityPatch) this.owner).getModelMatrix(1.0F);
         JointTransform currentTransform = JointTransform.fromMatrix(curModelMatrix);
-        OpenMatrix4f prvmodelTf = OpenMatrix4f.createTranslation((float) posOld.x, (float) posOld.y, (float) posOld.z).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(prevModelMatrix);
-        OpenMatrix4f middleModelTf = OpenMatrix4f.createTranslation((float) posMid.x, (float) posMid.y, (float) posMid.z).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(JointTransform.interpolate(this.lastTransform, currentTransform, 0.5F).toMatrix());
-        OpenMatrix4f curModelTf = OpenMatrix4f.createTranslation((float) posCur.x, (float) posCur.y, (float) posCur.z).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(curModelMatrix);
+        OpenMatrix4f prvmodelTf = OpenMatrix4f.createTranslation((float) posOld.x(), (float) posOld.y(), (float) posOld.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(prevModelMatrix);
+        OpenMatrix4f middleModelTf = OpenMatrix4f.createTranslation((float) posMid.x(), (float) posMid.y(), (float) posMid.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(JointTransform.interpolate(this.lastTransform, currentTransform, 0.5F).toMatrix());
+        OpenMatrix4f curModelTf = OpenMatrix4f.createTranslation((float) posCur.x(), (float) posCur.y(), (float) posCur.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(curModelMatrix);
         OpenMatrix4f prevJointTf = ((LivingEntityPatch) this.owner).getArmature().getBindedTransformFor(prevPose, this.joint).mulFront(prvmodelTf);
         OpenMatrix4f middleJointTf = ((LivingEntityPatch) this.owner).getArmature().getBindedTransformFor(middlePose, this.joint).mulFront(middleModelTf);
         OpenMatrix4f currentJointTf = ((LivingEntityPatch) this.owner).getArmature().getBindedTransformFor(currentPose, this.joint).mulFront(curModelTf);

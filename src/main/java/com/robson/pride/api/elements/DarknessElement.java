@@ -2,6 +2,7 @@ package com.robson.pride.api.elements;
 
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
+import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.utils.AttributeUtils;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.ParticleRegister;
@@ -15,6 +16,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 
+import javax.swing.text.Element;
 import java.util.Random;
 
 import static com.robson.pride.api.utils.ElementalUtils.getElement;
@@ -61,11 +63,11 @@ public interface DarknessElement {
 
         public float calculateFinalDamage(Entity dmgent, Entity ent, float amount) {
             if (dmgent != null && ent != null) {
-                String element = getElement(ent);
+                byte element = getElement(ent);
                 float multiplier = 1;
-                if (element.equals("Moon") || element.equals("Blood")) {
+                if (element == ElementDataManager.MOON || element == ElementDataManager.BLOOD) {
                     multiplier = 0.5f;
-                } else if (element.equals("Light") || element.equals("Sun")) {
+                } else if (element == ElementDataManager.LIGHT || element == ElementDataManager.SUN) {
                     multiplier = 1.5f;
                 }
                 return MathUtils.getValueWithPercentageIncrease(multiplier *

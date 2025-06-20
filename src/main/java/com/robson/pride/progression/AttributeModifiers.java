@@ -33,8 +33,8 @@ public class AttributeModifiers {
             if (modifier < 0) {
                 return ChatFormatting.RED;
             } else {
-                String element = ElementalUtils.getItemElement(item);
-                if (WeaponSkillRegister.elements.contains(element)) {
+                byte element = ElementalUtils.getItemElement(item);
+                if (WeaponSkillRegister.isValid(element)) {
                     return ElementalUtils.getColorByElement(element);
                 } else return ChatFormatting.DARK_GREEN;
             }

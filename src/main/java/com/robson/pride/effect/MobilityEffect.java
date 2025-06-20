@@ -1,5 +1,6 @@
 package com.robson.pride.effect;
 
+import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.AnimationsRegister;
@@ -44,11 +45,11 @@ public class MobilityEffect extends PrideEffectBase {
 
     public void onEffectStart(LivingEntity ent) {
         if (ent instanceof Player) {
-            if (ElementalUtils.getElement(ent).equals("Thunder")) {
+            if (ElementalUtils.getElement(ent) == ElementDataManager.THUNDER) {
                 ThunderMobility(ent);
                 return;
             }
-            if (ElementalUtils.getElement(ent).equals("Moon")) {
+            if (ElementalUtils.getElement(ent) == ElementDataManager.MOON) {
                 MoonMobility(ent);
                 return;
             }

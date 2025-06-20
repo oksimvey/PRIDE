@@ -7,12 +7,13 @@ import yesman.epicfight.gameasset.Animations;
 
 import java.util.List;
 
-public class GroundStomp extends WeaponSkillBase {
-    public GroundStomp() {
-        super("Uncommon", "Neutral", 4, 4, "pierce_two_hand");
-    }
+public interface GroundStomp {
 
-    public List<SkillAnimation> defineMotions(LivingEntity ent) {
-        return List.of(new SkillAnimation(Animations.TACHI_DASH, null));
-    }
+    WeaponSkillBase DATA = new WeaponSkillBase("Uncommon", (byte) 11, 4, 4, "pierce_two_hand") {
+
+
+        public List<SkillAnimation> defineMotions(LivingEntity ent) {
+            return List.of(new SkillAnimation(Animations.TACHI_DASH, null));
+        }
+    };
 }

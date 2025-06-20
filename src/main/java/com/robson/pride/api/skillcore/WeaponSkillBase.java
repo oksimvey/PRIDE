@@ -16,13 +16,13 @@ import static com.robson.pride.api.utils.ProgressionUtils.haveReqs;
 public abstract class WeaponSkillBase {
 
     private String SkillRarity;
-    private String SkillElement;
+    private byte SkillElement;
     private int ManaConsumption;
     private float StaminaConsumption;
     private List<SkillAnimation> motions;
     private String perilousType;
 
-    public WeaponSkillBase(String SkillRarity, String SkillElement, int ManaConsumption, float StaminaConsumption, String perilousType) {
+    public WeaponSkillBase(String SkillRarity, byte SkillElement, int ManaConsumption, float StaminaConsumption, String perilousType) {
         this.SkillRarity = SkillRarity;
         this.SkillElement = SkillElement;
         this.StaminaConsumption = StaminaConsumption;
@@ -36,7 +36,7 @@ public abstract class WeaponSkillBase {
         return this.SkillRarity;
     }
 
-    public String getSkillElement() {
+    public byte getSkillElement() {
         return this.SkillElement;
     }
 

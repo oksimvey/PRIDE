@@ -19,11 +19,12 @@ public class ClientSetupEvent {
 
     @SubscribeEvent
     public static void registerSpecialModels(ModelEvent.RegisterAdditional event) {
-        for (WeaponDataManager.Weapon weapon : WeaponDataManager.Weapon.values()) {
-            WeaponData data = WeaponDataManager.getByID(weapon.ordinal());
-            if (data != null) {
-                event.register(CustomWeaponModelBase.getWeaponModelLocation(data));
+        for (int i = 0; true; i++){
+            WeaponData data = WeaponDataManager.getByID(i);
+            if (data == null){
+               return;
             }
+            event.register(CustomWeaponModelBase.getWeaponModelLocation(data));
         }
     }
 

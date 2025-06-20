@@ -1,7 +1,6 @@
 package com.robson.pride.api.ai.actions;
 
 import com.robson.pride.api.ai.combat.ActionBase;
-import com.robson.pride.api.ai.combat.Condition;
 import com.robson.pride.api.entity.PrideMobPatch;
 import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.TimerUtil;

@@ -1,4 +1,4 @@
 package com.robson.pride.api.data;
 
-public class LocationsData {
+public class MobVariantData {
 }

@@ -7,6 +7,7 @@ import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.sounds.Music;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.biome.Biomes;
 
 public class MusicCore {
 

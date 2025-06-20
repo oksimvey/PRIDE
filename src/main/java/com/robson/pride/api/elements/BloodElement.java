@@ -2,6 +2,7 @@ package com.robson.pride.api.elements;
 
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
+import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.particles.StringParticle;
@@ -66,11 +67,11 @@ public interface BloodElement {
 
         public float calculateFinalDamage(Entity dmgent, Entity ent, float amount) {
             if (dmgent != null && ent != null) {
-                String element = getElement(ent);
+                byte element = getElement(ent);
                 float multiplier = 1;
-                if (element.equals("Light") || element.equals("Water")) {
+                if (element == ElementDataManager.LIGHT || element == ElementDataManager.WATER) {
                     multiplier = 0.5f;
-                } else if (element.equals("Nature") || element.equals("Thunder")) {
+                } else if (element == ElementDataManager.NATURE || element == ElementDataManager.THUNDER){
                     multiplier = 1.5f;
                 }
                 return MathUtils.getValueWithPercentageIncrease(multiplier *

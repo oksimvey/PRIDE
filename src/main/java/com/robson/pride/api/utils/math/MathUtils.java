@@ -1,6 +1,5 @@
 package com.robson.pride.api.utils.math;
 
-import com.google.common.collect.Lists;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -46,9 +45,9 @@ public class MathUtils {
 
     public static Vec3f rotate2DVector(Vec3f vec, float degrees) {
         float theta = degreeToRadians(degrees);
-        float x = (float) ((vec.x * Math.cos(theta)) - (vec.z * Math.sin(theta)));
-        float z = (float) ((vec.x * Math.sin(theta)) + (vec.z * Math.cos(theta)));
-        return new Vec3f(x, vec.y, z);
+        float x = (float) ((vec.x() * Math.cos(theta)) - (vec.z() * Math.sin(theta)));
+        float z = (float) ((vec.x() * Math.sin(theta)) + (vec.z() * Math.cos(theta)));
+        return new Vec3f(x, vec.y(), z);
     }
 
     public static List<Vec3f> getVectorsForHorizontalCircle(Vec3f radiusvec, int points) {

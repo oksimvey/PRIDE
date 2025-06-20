@@ -1,9 +1,12 @@
 package com.robson.pride.events;
 
+import com.robson.pride.api.data.WeaponData;
 import com.robson.pride.api.data.manager.ElementDataManager;
+import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.elements.ElementBase;
 import com.robson.pride.api.mechanics.MikiriCounter;
 import com.robson.pride.api.utils.ProgressionUtils;
+import com.robson.pride.item.weapons.CustomWeaponItem;
 import com.robson.pride.registries.EffectRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
@@ -39,11 +42,15 @@ public class onSpellDamage {
                     event.setCanceled(true);
                 }
             }
-            for (ElementDataManager.Element elementenum : ElementDataManager.Element.values()){
-                ElementBase element = ElementDataManager.getByElement(elementenum);
-                if (element.getSchool() == spell.getSchoolType()) {
-                    event.setAmount(element.onHit(ent, event.getSpellDamageSource().getEntity(), event.getOriginalAmount(), true));
+            for (byte i = 1; true; i++){
+                ElementBase data = ElementDataManager.getByID(i);
+                if (data == null){
+                    return;
                 }
+                if (data.getSchool() == spell.getSchoolType()) {
+                    event.setAmount(data.onHit(ent, event.getSpellDamageSource().getEntity(), event.getOriginalAmount(), true));
+                }
+
             }
         }
     }

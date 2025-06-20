@@ -4,53 +4,51 @@ import com.robson.pride.api.elements.*;
 
 public interface ElementDataManager {
 
-    enum Element {
-        DARKNESS,
-        LIGHT,
-        THUNDER,
-        SUN,
-        MOON,
-        BLOOD,
-        WIND,
-        NATURE,
-        ICE,
-        WATER
-    }
+    byte DARKNESS = 1;
 
+    byte LIGHT = 2;
 
-    static ElementBase getByID(String id){
-        Element element;
-        try {
-            element = Element.valueOf(id.toUpperCase());
-            return getByElement(element);
-        }
-        catch (IllegalArgumentException d){
-            return null;
-        }
-    }
+    byte THUNDER = 3;
 
-    static ElementBase getByElement(Element element){
-        return switch (element){
+    byte SUN = 4;
 
-            case DARKNESS -> DarknessElement.DATA;
+    byte MOON = 5;
 
-            case LIGHT -> LightElement.DATA;
+    byte BLOOD = 6;
 
-            case THUNDER -> ThunderElement.DATA;
+    byte WIND = 7;
 
-            case SUN -> SunElement.DATA;
+    byte NATURE = 8;
 
-            case MOON -> MoonElement.DATA;
+    byte ICE = 9;
 
-            case BLOOD -> BloodElement.DATA;
+    byte WATER = 10;
 
-            case WIND -> WindElement.DATA;
+    byte NEUTRAL = 11;
 
-            case NATURE -> NatureElement.DATA;
+    static ElementBase getByID(byte id){
+       return switch (id ) {
+           case DARKNESS -> DarknessElement.DATA;
 
-            case ICE -> IceElement.DATA;
+           case LIGHT -> LightElement.DATA;
 
-            case WATER -> WaterElement.DATA;
-        };
+           case THUNDER -> ThunderElement.DATA;
+
+           case SUN -> SunElement.DATA;
+
+           case MOON -> MoonElement.DATA;
+
+           case BLOOD -> BloodElement.DATA;
+
+           case WIND -> WindElement.DATA;
+
+           case NATURE -> NatureElement.DATA;
+
+           case ICE -> IceElement.DATA;
+
+           case WATER -> WaterElement.DATA;
+
+           default -> null;
+       };
     }
 }

@@ -1,9 +1,9 @@
 package com.robson.pride.api.data;
 
-import com.robson.pride.api.entity.PrideMobPatch;
-import yesman.epicfight.api.utils.ExtendableEnum;
-import yesman.epicfight.api.utils.ExtendableEnumManager;
+public abstract class MobData {
 
-public class MobData {
+    private byte maxVariants;
+
+    public abstract MobData getDataByVariant(byte variant);
 
 }

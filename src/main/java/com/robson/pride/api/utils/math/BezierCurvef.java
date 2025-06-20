@@ -3,7 +3,6 @@ package com.robson.pride.api.utils.math;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.floats.FloatList;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -81,9 +80,9 @@ public class BezierCurvef {
             FloatList z = new FloatArrayList();
 
             for(int idx = 0; idx < size; ++idx) {
-                x.add((points.get(idx)).x);
-                y.add((points.get(idx)).y);
-                z.add((points.get(idx)).z);
+                x.add((points.get(idx)).x());
+                y.add((points.get(idx)).y());
+                z.add((points.get(idx)).z());
             }
 
             FloatList x_a = new FloatArrayList();
@@ -112,7 +111,7 @@ public class BezierCurvef {
 
                 for(int j = 0; j < interpolatedResults + 1; ++j) {
                     float t = (float) j / interpolatedResults;
-                    interpolatedPoints.add(new Vec3f(cubicBezier(start.x, end.x, x_av, x_bv, t), cubicBezier(start.y, end.y, y_av, y_bv, t), cubicBezier(start.z, end.z, z_av, z_bv, t)));
+                    interpolatedPoints.add(new Vec3f(cubicBezier(start.x(), end.x(), x_av, x_bv, t), cubicBezier(start.y(), end.y(), y_av, y_bv, t), cubicBezier(start.z(), end.z(), z_av, z_bv, t)));
                 }
             }
 

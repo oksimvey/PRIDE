@@ -65,7 +65,7 @@ public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         if (player != null) {
             CompoundTag variables = TagsUtils.playerTags.get(player);
-            String element = ElementalUtils.getElement(player);
+            byte element = ElementalUtils.getElement(player);
             if (variables == null){
                 return;
             }

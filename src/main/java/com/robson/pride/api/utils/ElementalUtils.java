@@ -2,7 +2,7 @@ package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.WeaponData;
 import com.robson.pride.api.data.manager.ElementDataManager;
-import com.robson.pride.api.maps.WeaponSkillsMap;
+import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.EffectRegister;
@@ -18,27 +18,28 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 public class ElementalUtils {
 
-    public static void setElement(Entity ent, String element) {
+    public static void setElement(Entity ent, byte element) {
         if (ent instanceof Player player) {
-            player.getPersistentData().putString("Element", element);
+            player.getPersistentData().putByte
+                    ("Element", element);
         }
     }
 
-    public static ParticleOptions getParticleByElement(String element) {
+    public static ParticleOptions getParticleByElement(byte element) {
         if (ElementDataManager.getByID(element) != null) {
             return  ElementDataManager.getByID(element).getNormalParticleType();
         }
         return null;
     }
 
-    public static ChatFormatting getColorByElement(String element) {
+    public static ChatFormatting getColorByElement(byte element) {
         if (ElementDataManager.getByID(element) != null) {
             return ElementDataManager.getByID(element).getChatColor();
         }
         return ChatFormatting.GRAY;
     }
 
-    public static void playSoundByElement(String element, Entity ent, float volume) {
+    public static void playSoundByElement(byte element, Entity ent, float volume) {
         if (ElementDataManager.getByID(element) != null) {
             ElementDataManager.getByID(element).playSound(ent, volume);
         }
@@ -46,9 +47,9 @@ public class ElementalUtils {
 
     public static boolean canPutElementalPassive(ItemStack leftitem, ItemStack rightitem) {
         if (leftitem != null && rightitem != null) {
-            String leftelement = "";
+            byte leftelement = 0;
             if (leftitem.getTag().getBoolean("hasweaponart")) {
-                leftelement = WeaponSkillsMap.WEAPON_SKILLS.get(leftitem.getTag().getString("weapon_art")).getSkillElement();
+                leftelement = WeaponSkillsDataManager.getByID(leftitem.getTag().getShort("weapon_art")).getSkillElement();
             }
             else {
                 WeaponData data = WeaponData.getWeaponData(leftitem);
@@ -59,33 +60,29 @@ public class ElementalUtils {
                         }
                 }
             }
-            return leftelement.equals("Neutral") || leftelement.equals(rightitem.getTag().getString("passive_element"));
+            return leftelement == ElementDataManager.NEUTRAL || leftelement == rightitem.getTag().getByte("passive_element");
         }
         return false;
     }
 
     public static boolean canPutWeaponArt(ItemStack leftitem, ItemStack rightitem) {
         if (leftitem != null && rightitem != null) {
-            String rightelement = WeaponSkillsMap.WEAPON_SKILLS.get(rightitem.getTag().getString("weapon_art")).getSkillElement();
-            String leftelement = getItemElement(leftitem);
-            return rightelement.equals("Neutral") || leftelement.isEmpty() || leftelement.equals(rightelement);
+            short rightelement = rightitem.getTag().getShort("weapon_art");
+            byte leftelement = getItemElement(leftitem);
+            return rightelement == ElementDataManager.NEUTRAL || leftelement == 0 || leftelement == rightelement;
         }
         return false;
     }
 
-    public static String getItemElement(ItemStack item) {
-        String element = "";
+    public static byte getItemElement(ItemStack item) {
+        byte element = 0;
         if (item != null) {
             if (item.getTag() != null) {
-                element = item.getTag().getString("passive_element");
+                element = item.getTag().getByte("passive_element");
                 if (ElementDataManager.getByID(element) == null) {
                     WeaponData data = WeaponData.getWeaponData(item);
-                    if (data != null) {
-                        if (data.getElement() != null) {
-                            if (ElementDataManager.getByID((data.getElement())) != null) {
+                    if (data != null && ElementDataManager.getByID((data.getElement())) != null) {
                                 element = data.getElement();
-                            }
-                        }
                     }
                 }
             }
@@ -97,37 +94,37 @@ public class ElementalUtils {
         if (ent != null) {
             short chance = (short) MathUtils.getRandomInt(1000);
             if (chance == 0) {
-                setElement(ent, "Darkness");
+                setElement(ent, (byte) 1);
             } else if (chance >= 1 && chance <= 10) {
-                setElement(ent, "Light");
+                setElement(ent, (byte) 2);
             } else if (chance >= 11 && chance <= 40) {
-                setElement(ent, "Thunder");
+                setElement(ent, (byte) 3);
             } else if (chance >= 41 && chance <= 90) {
-                setElement(ent, "Sun");
+                setElement(ent, (byte) 4);
             } else if (chance >= 91 && chance <= 140) {
-                setElement(ent, "Moon");
+                setElement(ent, (byte) 5);
             } else if (chance >= 141 && chance <= 240) {
-                setElement(ent, "Blood");
+                setElement(ent, (byte) 6);
             } else if (chance >= 241 && chance <= 340) {
-                setElement(ent, "Wind");
+                setElement(ent, (byte) 7);
             } else if (chance >= 341 && chance <= 560) {
-                setElement(ent, "Nature");
+                setElement(ent, (byte) 8);
             } else if (chance >= 561 && chance <= 780) {
-                setElement(ent, "Ice");
-            } else setElement(ent, "Water");
+                setElement(ent, (byte) 9);
+            } else setElement(ent, (byte) 10);
         }
     }
 
-    public static String getElement(Entity ent) {
+    public static byte getElement(Entity ent) {
         if (ent != null) {
             if (ent instanceof Player player) {
                 CompoundTag tag = TagsUtils.playerTags.get(player);
                 if (tag != null) {
-                    return tag.getString("Element");
+                    return tag.getByte("Element");
                 }
             }
         }
-        return "";
+        return 0;
     }
 
     public static boolean isNotInWater(Entity ent, Vec3 vec3) {

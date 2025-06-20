@@ -35,8 +35,11 @@ public class RenderBufferMixins {
             RenderBuffers renderBuffers = ((RenderBuffers) (Object) this);
 
             SortedMap<RenderType, BufferBuilder> fixedBuffers = ((RenderBufferInterface) renderBuffers).getFixedBuffers();
-            for (ElementDataManager.Element elementenum : ElementDataManager.Element.values() ) {
-                ElementBase element = ElementDataManager.getByElement(elementenum);
+            for (byte i = 1; true; i++){
+                ElementBase element = ElementDataManager.getByID(i);
+                if (element == null) {
+                    break;
+                }
                 put(fixedBuffers, element.getItemRenderingParams().getDirectGlint());
                 put(fixedBuffers, element.getItemRenderingParams().getDirectEntityGlint());
             }

@@ -20,7 +20,7 @@ public class ItemAnvilEvent {
             if (rightitem.getItem() == ItemsRegister.WEAPON_ART.get()) {
                 if (ElementalUtils.canPutWeaponArt(leftitem, rightitem)) {
                     ItemStack output = event.getLeft().copy();
-                    output.getOrCreateTag().putString("weapon_art", event.getRight().getTag().getString("weapon_art"));
+                    output.getOrCreateTag().putShort("weapon_art", event.getRight().getTag().getShort("weapon_art"));
                     output.getOrCreateTag().putBoolean("hasweaponart", true);
                     event.setOutput(output);
                     event.setCost(5);
@@ -31,7 +31,7 @@ public class ItemAnvilEvent {
                 if (rightitem.getItem() == ItemsRegister.ELEMENTAL_GEM.get()) {
                     if (ElementalUtils.canPutElementalPassive(leftitem, rightitem)) {
                         ItemStack output = event.getLeft().copy();
-                        output.getOrCreateTag().putString("passive_element", rightitem.getTag().getString("passive_element"));
+                        output.getOrCreateTag().putByte("passive_element", rightitem.getTag().getByte("passive_element"));
                         AttributeModifiers.setModifierForImbuement(output);
                         event.setOutput(output);
                         event.setCost(5);
