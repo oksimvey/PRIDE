@@ -4,6 +4,7 @@ import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
 import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.utils.AttributeUtils;
+import com.robson.pride.api.utils.math.FixedRGB;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.SchoolRegister;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
@@ -26,7 +27,7 @@ public interface LightElement {
         }
 
         public ItemRenderingParams getItemRenderingParams() {
-            return new ItemRenderingParams(20, 20, 200, new ResourceLocation("pride:textures/particle/pointed_trail.png"),
+            return new ItemRenderingParams(new FixedRGB(225, 225, 50),
                     GlintRenderTypes.createDirectGlint("direct_light", new ResourceLocation("pride:textures/glints/light_glint.png")),
                     GlintRenderTypes.createDirectEntityGlint("direct_entity_light", new ResourceLocation("pride:textures/glints/light_glint.png")));
 

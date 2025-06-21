@@ -5,6 +5,7 @@ import com.robson.pride.api.client.RenderScreens;
 import com.robson.pride.api.client.RenderingCore;
 import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.utils.ItemStackUtils;
+import com.robson.pride.api.keybinding.KeyHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -29,7 +30,8 @@ public class onClientTick {
         if (Minecraft.getInstance().player != null) {
             RenderScreens.renderPlayerScreens(Minecraft.getInstance());
             LocalPlayer player = Minecraft.getInstance().player;
-            if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND) && player.isUsingItem()) {
+            KeyHandler.tick(player);
+            if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND) && player.isUsingItem() && player.canSprint()) {
                 player.setSprinting(false);
             }
         }

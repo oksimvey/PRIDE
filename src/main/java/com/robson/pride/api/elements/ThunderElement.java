@@ -5,6 +5,7 @@ import com.robson.pride.api.client.ItemRenderingParams;
 import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.*;
+import com.robson.pride.api.utils.math.FixedRGB;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.SchoolRegister;
@@ -39,7 +40,7 @@ public interface ThunderElement {
         }
 
         public ItemRenderingParams getItemRenderingParams() {
-            return new ItemRenderingParams(10, 10, 1, new ResourceLocation("pride:textures/particle/thunder_trail.png"),
+            return new ItemRenderingParams(new FixedRGB(0, 252, 227),
                     GlintRenderTypes.createDirectGlint("direct_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png")),
                     GlintRenderTypes.createDirectEntityGlint("direct_entity_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png")));
 
@@ -106,7 +107,7 @@ public interface ThunderElement {
                                 double finaly = y1 + (y2 - y1) * t;
                                 double finalz = z1 + (z2 - z1) * t;
                                 ParticleUtils.spawnParticleOnServer(ParticleRegistry.ELECTRICITY_PARTICLE.get(), ent.level(), finalx, finaly, finalz, 1, 0, 0, 0, 0);
-                                double distance = MathUtils.getTotalDistance(x2 - finalx, y2 - finaly, z2 - finalz);
+                                double distance = MathUtils.getTotalDistance((float) (x2 - finalx), (float) (y2 - finaly), (float) (z2 - finalz));
                                 if (distance < 0.1) {
                                     thunderPassive(entko, dmgent, power, hitentities, false);
                                     break;

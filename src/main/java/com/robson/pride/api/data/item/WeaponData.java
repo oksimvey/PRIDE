@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
+import com.robson.pride.api.utils.math.FixedRGB;
 import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.mixins.WeaponTypeReloadListenerMixin;
 import net.minecraft.resources.ResourceLocation;
@@ -41,12 +42,14 @@ public class WeaponData extends ItemData{
 
     private final float armor_negation;
 
-    private final TrailParams trailInfo;
+    private final FixedRGB trailcolor;
 
     private CapabilityItem itemcap;
 
+    private TrailInfo trailInfo;
 
-    public WeaponData(String name, String category, float damage, float speed, float impact, float max_strikes, float armor_negation, int weight, String model,byte element, Matrix2f collider, short skill, AttributeReqs attributeReqs, TrailParams trail){
+
+    public WeaponData(String name, String category, float damage, float speed, float impact, float max_strikes, float armor_negation, int weight, String model,byte element, Matrix2f collider, short skill, AttributeReqs attributeReqs, FixedRGB trailcolor){
         super(name, model, (byte) 1, element, collider);
         this.category = category;
         this.damage = damage;
@@ -57,8 +60,9 @@ public class WeaponData extends ItemData{
         this.weight = weight;
         this.skill = skill;
         this.attributeReqs = attributeReqs;
-        this.trailInfo = trail;
+        this.trailcolor = trailcolor;
         itemcap = null;
+        trailInfo = null;
     }
 
 
@@ -69,18 +73,25 @@ public class WeaponData extends ItemData{
 
 
     public TrailInfo getTrailInfo(TrailInfo info) {
+      if (this.trailInfo == null){
+          this.trailInfo = create(info);
+      }
+      return this.trailInfo;
+    }
+
+    public TrailInfo create(TrailInfo info){
         TrailInfo.Builder builder = TrailInfo.builder();
         builder.joint(info.joint());
         builder.texture(info.texturePath());
         builder.time(info.startTime(), info.endTime());
         builder.startPos(new Vec3(0, 0, getCollider().z0()));
         builder.endPos(new Vec3(0, 0.2f, -getCollider().z1() - getCollider().z0()));
-        builder.r(trailInfo.r);
-        builder.g(trailInfo.g);
-        builder.b(trailInfo.b);
-        builder.lifetime(trailInfo.lifetime());
+        builder.r(this.trailcolor.r());
+        builder.g(this.trailcolor.g());
+        builder.b(this.trailcolor.b());
+        builder.lifetime(info.trailLifetime());
         builder.type(info.particle());
-        builder.interpolations(trailInfo.lifetime() / 4);
+        builder.interpolations(info.trailLifetime() / 3);
         return builder.create();
     }
 
@@ -139,7 +150,4 @@ public class WeaponData extends ItemData{
                                 byte requiredMind, byte requiredDexterity) {
     }
 
-
-    public record TrailParams(int r, int g, int b, int lifetime) {
-    }
 }

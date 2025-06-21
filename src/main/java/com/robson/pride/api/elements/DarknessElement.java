@@ -4,6 +4,7 @@ import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
 import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.utils.AttributeUtils;
+import com.robson.pride.api.utils.math.FixedRGB;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.ParticleRegister;
 import com.robson.pride.registries.SchoolRegister;
@@ -38,7 +39,7 @@ public interface DarknessElement {
         }
 
         public ItemRenderingParams getItemRenderingParams() {
-            return new ItemRenderingParams(250, 250, 250, new ResourceLocation("pride:textures/particle/whisperwind_trail.png"),
+            return new ItemRenderingParams(new FixedRGB(0, 0, 0),
                     GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
                     GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")));
         }

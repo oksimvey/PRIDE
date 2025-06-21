@@ -56,9 +56,9 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
             if (element != null) {
                 ItemRenderingParams params = element.getItemRenderingParams();
                 if (params != null) {
-                    r = params.getR();;
-                    g = params.getG();;
-                    b = params.getB();;
+                    r = params.getColor().r();
+                    g = params.getColor().g();
+                    b = params.getColor().b();
                 }
             }
         }

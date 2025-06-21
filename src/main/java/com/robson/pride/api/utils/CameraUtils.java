@@ -12,9 +12,9 @@ import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 
 import java.util.concurrent.TimeUnit;
 
-public class CameraUtils {
+public interface CameraUtils {
 
-    public static void unlockCamera(LocalPlayer ent, byte duration) {
+    static void unlockCamera(LocalPlayer ent, byte duration) {
         LocalPlayerPatch player = EpicFightCapabilities.getEntityPatch(ent, LocalPlayerPatch.class);
         if (player != null) {
             player.setLockOn(false);
@@ -22,31 +22,39 @@ public class CameraUtils {
         }
     }
 
-    public static void correctCamera() {
+    static void changeRotateMode(AbstractConfig.PlayerRotateMode mode){
         Config config = ThirdPerson.getConfig();
-        if (config.normal_rotate_mode != AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA) {
-            config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA;
-            TimerUtil.schedule(() -> {
-                if (config.normal_rotate_mode != AbstractConfig.PlayerRotateMode.INTEREST_POINT) {
-                    config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.INTEREST_POINT;
-                }
-            }, 500, TimeUnit.MILLISECONDS);
+        changeRotateMode(config, mode);
+    }
+
+
+    static void changeRotateMode(Config config, AbstractConfig.PlayerRotateMode mode){
+        if (config.normal_rotate_mode != mode) {
+            config.normal_rotate_mode = mode;
         }
     }
 
-    public static void lockCamera(LocalPlayer ent) {
+    static void correctCamera() {
+        Config config = ThirdPerson.getConfig();
+        changeRotateMode(config, AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA);
+            TimerUtil.schedule(() -> {
+                changeRotateMode(config, AbstractConfig.PlayerRotateMode.INTEREST_POINT);
+            }, 500, TimeUnit.MILLISECONDS);
+        }
+
+    static void lockCamera(LocalPlayer ent) {
         LocalPlayerPatch player = EpicFightCapabilities.getEntityPatch(ent, LocalPlayerPatch.class);
         if (player != null) {
             player.setLockOn(true);
         }
     }
 
-    public static void putonFirstPerson(Entity ent, byte duration) {
+    static void putonFirstPerson(Entity ent, byte duration) {
         Minecraft.getInstance().options.setCameraType(CameraType.FIRST_PERSON);
         TimerUtil.schedule(() -> Minecraft.getInstance().options.setCameraType(CameraType.THIRD_PERSON_BACK), duration, TimeUnit.SECONDS);
     }
 
-    public static void changeCamOffset(float x, float y, float z) {
+    static void changeCamOffset(float x, float y, float z) {
         Config config = ThirdPerson.getConfig();
         config.normal_max_distance = z;
         config.normal_offset_y = y;

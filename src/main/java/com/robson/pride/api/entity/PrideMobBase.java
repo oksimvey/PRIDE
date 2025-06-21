@@ -1,6 +1,5 @@
 package com.robson.pride.api.entity;
 
-import com.robson.pride.api.ai.dialogues.JsonInteractionsReader;
 import com.robson.pride.api.utils.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -18,8 +17,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;

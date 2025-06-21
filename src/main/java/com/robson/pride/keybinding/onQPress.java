@@ -26,15 +26,15 @@ public class onQPress {
                 MikiriCounter.setMikiri(player, "Dodge", 0, 350);
             }
             TimerUtil.schedule(() -> {
-                if (KeyRegister.keyActionTertiary.isDown()) {
+                if (KeyRegister.MENU.isDown()) {
                     TimerUtil.schedule(() -> {
-                        if (KeyRegister.keyActionTertiary.isDown()) {
+                        if (KeyRegister.MENU.isDown()) {
                             TimerUtil.schedule(() -> {
-                                if (KeyRegister.keyActionTertiary.isDown()) {
+                                if (KeyRegister.MENU.isDown()) {
                                     TimerUtil.schedule(() -> {
-                                        if (KeyRegister.keyActionTertiary.isDown()) {
+                                        if (KeyRegister.MENU.isDown()) {
                                             TimerUtil.schedule(() -> {
-                                                if (KeyRegister.keyActionTertiary.isDown()) {
+                                                if (KeyRegister.MENU.isDown()) {
                                                     onRoll(player);
                                                 } else onStep(player, EquipLoad);
                                             }, 50, TimeUnit.MILLISECONDS);

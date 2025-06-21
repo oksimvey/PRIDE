@@ -1,6 +1,5 @@
 package com.robson.pride.api.musiccore;
-
-import com.robson.pride.api.customtick.CustomTickManager;
+import com.robson.pride.api.customtick.PlayerCustomTick;
 import com.robson.pride.api.data.manager.BiomeDataManager;
 import com.robson.pride.api.entity.PrideMobBase;
 import net.minecraft.client.sounds.MusicManager;
@@ -27,8 +26,8 @@ public class MusicCore {
     }
 
     public static Music deserializeMobMusic(Player player, PrideMusicManager musicManager) {
-        if (player != null && CustomTickManager.targeting_entities.get(player) != null) {
-            for (Entity ent : CustomTickManager.targeting_entities.get(player)) {
+        if (player != null && PlayerCustomTick.targeting_entities.get(player) != null) {
+            for (Entity ent : PlayerCustomTick.targeting_entities.get(player)) {
                 if (ent instanceof PrideMobBase prideMobBase) {
                     if (prideMobBase.getMusicPriority() >= musicManager.getCurrentMusicPriority()) {
                         musicManager.setCurrentMusicPriority(prideMobBase.getMusicPriority());

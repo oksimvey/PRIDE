@@ -4,6 +4,7 @@ import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
 import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.utils.AttributeUtils;
+import com.robson.pride.api.utils.math.FixedRGB;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.SchoolRegister;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
@@ -42,7 +43,7 @@ public interface WindElement {
         }
 
         public ItemRenderingParams getItemRenderingParams() {
-            return new ItemRenderingParams(50, 150, 250, new ResourceLocation("epicfight:textures/particle/efmc/fire_trail.png"),
+            return new ItemRenderingParams(new FixedRGB(225, 227, 227),
                     GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
                     GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")));
 

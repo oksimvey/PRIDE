@@ -55,7 +55,7 @@ public class MobilityEffect extends PrideEffectBase {
             }
             this.effecttick++;
             serverTick(ent);
-            if (!ControllEngine.isKeyDown(KeyRegister.keyActionMobility)) {
+            if (!ControllEngine.isKeyDown(KeyRegister.MOBILITY)) {
                 ent.removeEffect(EffectRegister.MOBILITY.get());
                 return;
             }

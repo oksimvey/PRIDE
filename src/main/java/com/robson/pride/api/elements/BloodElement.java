@@ -4,6 +4,7 @@ import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
 import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.utils.*;
+import com.robson.pride.api.utils.math.FixedRGB;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.particles.StringParticle;
 import com.robson.pride.registries.SchoolRegister;
@@ -48,7 +49,7 @@ public interface BloodElement {
 
 
         public ItemRenderingParams getItemRenderingParams() {
-            return new ItemRenderingParams(50, 150, 250, new ResourceLocation("epicfight:textures/particle/efmc/fire_trail.png"),
+            return new ItemRenderingParams(new FixedRGB(255, 100, 50),
                     GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
                     GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")));
 

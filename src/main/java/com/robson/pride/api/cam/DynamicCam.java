@@ -3,7 +3,7 @@ package com.robson.pride.api.cam;
 import com.github.leawind.thirdperson.ThirdPerson;
 import com.github.leawind.thirdperson.config.AbstractConfig;
 import com.github.leawind.thirdperson.config.Config;
-import com.robson.pride.api.customtick.CustomTickManager;
+import com.robson.pride.api.customtick.PlayerCustomTick;
 import com.robson.pride.api.utils.CameraUtils;
 import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.api.utils.math.MathUtils;
@@ -31,8 +31,8 @@ public class DynamicCam {
             }
             float xmodifier = -0.12f + (zmodifier / 50);
             float ymodifier = -0.02f;
-            List<Entity> targets = CustomTickManager.targeting_entities.get(player);
-            correctCameraRot(config, ismounted, targets);
+            List<Entity> targets = PlayerCustomTick.targeting_entities.get(player);
+           correctCameraRot(config, ismounted, targets);
             if (targets != null && !(targets.isEmpty())) {
                 if (!ismounted) {
                     xmodifier = 0;

@@ -1,16 +1,18 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.customtick.CustomTickManager;
 import com.robson.pride.api.musiccore.PrideMusicManager;
 import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.api.utils.TagsUtils;
 import com.robson.pride.progression.NewCap;
 import com.robson.pride.progression.PlayerAttributeSetup;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import static com.robson.pride.api.musiccore.PrideMusicManager.playerMusicManagerThread;
 
 @Mod.EventBusSubscriber
 public class PlayerSetup {
@@ -21,7 +23,7 @@ public class PlayerSetup {
         if (player != null) {
             player.getPersistentData().putBoolean("isParrying", false);
             playerCommonSetup(player);
-            CustomTickManager.startTick(player);
+            playerMusicManagerThread.put(player, new PrideMusicManager((byte) 0, Minecraft.getInstance().getMusicManager()));
             TagsUtils.playerTags.put(player, player.getPersistentData());
         }
     }
@@ -30,7 +32,6 @@ public class PlayerSetup {
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         Player player = event.getEntity();
         if (player != null) {
-            CustomTickManager.startRespawnTick(player);
             PlayerAttributeSetup.setupPlayerAttributes(player);
             playerCommonSetup(player);
         }
@@ -40,7 +41,6 @@ public class PlayerSetup {
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         Player player = event.getEntity();
         if (player != null) {
-            CustomTickManager.stopTick(player);
             PrideMusicManager.playerMusicManagerThread.remove(player);
             player.getPersistentData().remove("pride:cooldown_skills");
         }

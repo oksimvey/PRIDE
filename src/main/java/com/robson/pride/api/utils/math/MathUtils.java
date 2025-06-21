@@ -8,49 +8,61 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MathUtils {
+public interface MathUtils {
 
-    private static Random random = new Random();
+    Random random = new Random();
 
-    public static float getValueWithPercentageIncrease(double number, double percentage) {
+    static float getValueWithPercentageIncrease(double number, double percentage) {
         return (float) (number + (number * percentage / 100));
     }
 
-    public static float getValueWithPercentageDecrease(double number, double percentage) {
+    static float getValueWithPercentageDecrease(double number, double percentage) {
         return (float) (number - (number * percentage / 100));
     }
 
-    public static int getRandomInt(int bound) {
+    static Vec3f getDeltaForVectors(Vec3f vec1, Vec3f vec2, float speed) {
+        return getDeltaForVectors(getTotalDistance(vec1, vec2), vec1, vec2, speed);
+    }
+
+    static Vec3f getDeltaForVectors(float distance, Vec3f vec1, Vec3f vec2, float speed) {
+        return vec1.add(vec2.subtract(vec1).divide(distance).scale(speed));
+    }
+
+    static int getRandomInt(int bound) {
         return random.nextInt(bound);
     }
 
-    public static float getTotalDistance(double deltax, double deltay, double deltaz) {
-        return (float) Math.sqrt(Math.pow(deltax, 2) + Math.pow(deltay, 2) + Math.pow(deltaz, 2));
+    static float getTotalDistance(Vec3 vec1, Vec3 vec2) {
+        return getTotalDistance(Vec3f.fromVec3(vec1), Vec3f.fromVec3(vec2));
     }
 
-    public static float getTotalDistance(Vec3 vec1, Vec3 vec2) {
-        return getTotalDistance(vec1.x - vec2.x, vec1.y - vec2.y, vec1.z - vec2.z);
+    static float getTotalDistance(float deltax, float deltay, float deltaz) {
+        return (float) Math.sqrt((deltax * deltax) + (deltay * deltay) + (deltaz * deltaz));
     }
 
-    public static float degreeToRadians(float degree) {
+    static float getTotalDistance(Vec3f vec1, Vec3f vec2) {
+        return getTotalDistance(vec1.x() - vec2.x(), vec1.y() - vec2.y(), vec1.z() - vec2.z());
+    }
+
+    static float degreeToRadians(float degree) {
         return 3.14f * (degree / 180);
     }
 
-    public static Vec3 rotate2DVector(Vec3 vec, float degrees) {
+    static Vec3 rotate2DVector(Vec3 vec, float degrees) {
         float theta = degreeToRadians(degrees);
         float x = (float) ((vec.x * Math.cos(theta)) - (vec.z * Math.sin(theta)));
         float z = (float) ((vec.x * Math.sin(theta)) + (vec.z * Math.cos(theta)));
         return new Vec3(x, vec.y, z);
     }
 
-    public static Vec3f rotate2DVector(Vec3f vec, float degrees) {
+    static Vec3f rotate2DVector(Vec3f vec, float degrees) {
         float theta = degreeToRadians(degrees);
         float x = (float) ((vec.x() * Math.cos(theta)) - (vec.z() * Math.sin(theta)));
         float z = (float) ((vec.x() * Math.sin(theta)) + (vec.z() * Math.cos(theta)));
         return new Vec3f(x, vec.y(), z);
     }
 
-    public static List<Vec3f> getVectorsForHorizontalCircle(Vec3f radiusvec, int points) {
+    static List<Vec3f> getVectorsForHorizontalCircle(Vec3f radiusvec, int points) {
         List<Vec3f> circlevecs = new ArrayList<>();
         if (radiusvec != null) {
             for (int i = 0; i <= 360; i += 360 / points) {
@@ -61,7 +73,7 @@ public class MathUtils {
     }
 
 
-    public static List<Vec3f> getVectorsForHorizontalSpiral(Vec3f radiusvec, byte larps, int points, int scale) {
+    static List<Vec3f> getVectorsForHorizontalSpiral(Vec3f radiusvec, byte larps, int points, int scale) {
         List<Vec3f> circlevecs = new ArrayList<>();
         if (radiusvec != null) {
             int totalangle = 360 * larps;
@@ -73,22 +85,14 @@ public class MathUtils {
     }
 
 
-    public static float setDecimalsOnFloat(float number, byte decimals) {
+    static float setDecimalsOnFloat(float number, byte decimals) {
         int amount = (int) Math.pow(10, decimals);
         int newnumber = (int) (number * amount);
         return (float) newnumber / amount;
     }
 
-    public static AABB createAABBAroundEnt(Entity ent, float size) {
+    static AABB createAABBAroundEnt(Entity ent, float size) {
         return new AABB(ent.getX() + size, ent.getY() + size * 1.5, ent.getZ() + size, ent.getX() - size, ent.getY() - size, ent.getZ() - size);
-    }
-
-    public static Vec3 getVectorForShoot(Vec3 pos1, Vec3 pos2, float scaleFactor) {
-        if (pos1 != null && pos2 != null) {
-            float finalScale = getTotalDistance(pos1, pos2) * scaleFactor;
-            return new Vec3((pos1.x - pos2.x) / finalScale, (pos1.y - pos2.y) / finalScale, (pos1.y - pos2.y) / finalScale);
-        }
-        return null;
     }
 
 }
