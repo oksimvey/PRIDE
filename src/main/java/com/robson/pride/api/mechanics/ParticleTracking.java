@@ -1,10 +1,11 @@
 package com.robson.pride.api.mechanics;
 
-import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.data.item.ItemData;
 import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.elements.ElementBase;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
+import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.effect.ImbuementEffect;
 import com.robson.pride.registries.EffectRegister;
 import net.minecraft.client.Minecraft;
@@ -13,7 +14,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Armatures;
@@ -37,11 +37,12 @@ public class ParticleTracking {
         if (item != null && ent != null) {
             if (item.getTag() != null) {
                 byte element = ElementalUtils.getItemElement(item);
-                if (ElementDataManager.getByID(element) != null) {
+                if (ElementDataManager.INSTANCE.getByID(element) != null) {
                     result = element != ElementDataManager.SUN || shouldRenderSunParticle(ent);
-                } else if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMBUEMENT.get())) {
+                }
+                else if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMBUEMENT.get())) {
                     if (living.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect) {
-                        if (ElementDataManager.getByID(imbuementEffect.element) != null && imbuementEffect.active) {
+                        if (ElementDataManager.INSTANCE.getByID(imbuementEffect.element) != null && imbuementEffect.active) {
                             result = imbuementEffect.element != ElementDataManager.SUN || shouldRenderSunParticle(ent);
                         }
                     }
@@ -50,7 +51,8 @@ public class ParticleTracking {
         }
         if (!result) {
             itemParticleMap.remove(item);
-        } else itemParticleMap.put(item, getItemElementForImbuement(item, (LivingEntity) ent));
+        } 
+        else itemParticleMap.put(item, getItemElementForImbuement(item, (LivingEntity) ent));
     }
 
     public static boolean shouldRenderSunParticle(Entity ent) {
@@ -75,12 +77,12 @@ public class ParticleTracking {
     public static ElementBase getItemElementForImbuement(ItemStack item, LivingEntity ent) {
         if (item != null && ent != null) {
             byte element = ElementalUtils.getItemElement(item);
-            if (ElementDataManager.getByID(element) != null) {
-                return ElementDataManager.getByID(element);
+            if (ElementDataManager.INSTANCE.getByID(element) != null) {
+                return ElementDataManager.INSTANCE.getByID(element);
             } else if (ent.hasEffect(EffectRegister.IMBUEMENT.get()) &&
                     ent.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect &&
-                    ElementDataManager.getByID(imbuementEffect.element) != null) {
-                return ElementDataManager.getByID(imbuementEffect.element);
+                    ElementDataManager.INSTANCE.getByID(imbuementEffect.element) != null) {
+                return ElementDataManager.INSTANCE.getByID(imbuementEffect.element);
             }
         }
         return null;
@@ -88,10 +90,10 @@ public class ParticleTracking {
 
     public static Vec3f getAABBForImbuement(ItemStack item, Entity ent) {
         if (item != null && ent != null) {
-            WeaponData data = WeaponData.getWeaponData(item);
+            ItemData data = ItemData.getItemData(item);
             if (data != null) {
-                AABB collider = data.getCollider();
-                return new Vec3f((float) (((new Random()).nextFloat() + collider.minX) * collider.maxX), (float) (((new Random()).nextFloat() + collider.minY) * collider.maxY + (collider.maxY / 10)), (float) (-((new Random()).nextFloat() * (collider.maxZ * ent.getBbHeight() / 1.8F)) + collider.minZ));
+                Matrix2f collider = data.getCollider();
+                return new Vec3f((float) (((new Random()).nextFloat() + collider.x0()) * collider.x1()), (float) (((new Random()).nextFloat() + collider.y0()) * collider.y1() + (collider.y1() / 10)), (float) (-((new Random()).nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z0()));
             }
         }
         return new Vec3f(((new Random()).nextFloat() - 0.5F) * 0.2F, ((new Random()).nextFloat() - 0.3F) * 0.3F, ((new Random()).nextFloat() - 0.5F) * 0.2F);

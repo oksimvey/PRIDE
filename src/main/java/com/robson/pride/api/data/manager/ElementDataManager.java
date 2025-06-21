@@ -2,7 +2,7 @@ package com.robson.pride.api.data.manager;
 
 import com.robson.pride.api.elements.*;
 
-public interface ElementDataManager {
+public interface ElementDataManager extends DataManager<ElementBase> {
 
     byte DARKNESS = 1;
 
@@ -26,29 +26,27 @@ public interface ElementDataManager {
 
     byte NEUTRAL = 11;
 
-    static ElementBase getByID(byte id){
-       return switch (id ) {
-           case DARKNESS -> DarknessElement.DATA;
+    ElementDataManager INSTANCE = id -> switch (id) {
+        case DARKNESS -> DarknessElement.DATA;
 
-           case LIGHT -> LightElement.DATA;
+        case LIGHT -> LightElement.DATA;
 
-           case THUNDER -> ThunderElement.DATA;
+        case THUNDER -> ThunderElement.DATA;
 
-           case SUN -> SunElement.DATA;
+        case SUN -> SunElement.DATA;
 
-           case MOON -> MoonElement.DATA;
+        case MOON -> MoonElement.DATA;
 
-           case BLOOD -> BloodElement.DATA;
+        case BLOOD -> BloodElement.DATA;
 
-           case WIND -> WindElement.DATA;
+        case WIND -> WindElement.DATA;
 
-           case NATURE -> NatureElement.DATA;
+        case NATURE -> NatureElement.DATA;
 
-           case ICE -> IceElement.DATA;
+        case ICE -> IceElement.DATA;
 
-           case WATER -> WaterElement.DATA;
+        case WATER -> WaterElement.DATA;
 
-           default -> null;
-       };
-    }
+        default -> null;
+    };
 }

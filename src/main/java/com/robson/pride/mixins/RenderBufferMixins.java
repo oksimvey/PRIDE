@@ -36,7 +36,7 @@ public class RenderBufferMixins {
 
             SortedMap<RenderType, BufferBuilder> fixedBuffers = ((RenderBufferInterface) renderBuffers).getFixedBuffers();
             for (byte i = 1; true; i++){
-                ElementBase element = ElementDataManager.getByID(i);
+                ElementBase element = ElementDataManager.INSTANCE.getByID(i);
                 if (element == null) {
                     break;
                 }

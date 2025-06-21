@@ -1,7 +1,6 @@
 package com.robson.pride.api.ai.actions;
 
 import com.robson.pride.api.ai.combat.ActionBase;
-import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
 import com.robson.pride.api.entity.PrideMobPatch;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
@@ -15,7 +14,7 @@ public class ExecuteWeaponSkillAction extends ActionBase {
     }
 
     protected void start(PrideMobPatch<?> ent) {
-        WeaponSkillBase skill = WeaponSkillsDataManager.getByID(skillid);
+        WeaponSkillBase skill = WeaponSkillsDataManager.INSTANCE.getByID(skillid);
         if (skill != null){
             skill.tryToExecute(ent.getOriginal());
         }

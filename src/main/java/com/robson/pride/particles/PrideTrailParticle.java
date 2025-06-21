@@ -3,12 +3,12 @@ package com.robson.pride.particles;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.data.item.WeaponData;
 import com.robson.pride.api.elements.ElementBase;
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.math.BezierCurvef;
 import com.robson.pride.api.utils.math.Vec3f;
-import com.robson.pride.item.weapons.CustomWeaponItem;
+import com.robson.pride.item.weapons.CustomItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.texture.AbstractTexture;
@@ -45,7 +45,7 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
         if (item.getTag() == null) {
             return;
         }
-        if (item.getItem() instanceof CustomWeaponItem && WeaponData.getWeaponData(item) != null){
+        if (item.getItem() instanceof CustomItem && WeaponData.getWeaponData(item) != null){
             trailInfo = WeaponData.getWeaponData(item).getTrailInfo(trailInfo);
         }
         int r = (int) trailInfo.rCol();
@@ -89,6 +89,7 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
         this.rCol = Math.max(r, 0.0F);
         this.gCol = Math.max(g, 0.0F);
         this.bCol = Math.max(b, 0.0F);
+        this.setColor(r, g, b);
         if (this.trailInfo.texturePath() != null) {
             TextureManager texturemanager = Minecraft.getInstance().getTextureManager();
             AbstractTexture abstracttexture = texturemanager.getTexture(this.trailInfo.texturePath());

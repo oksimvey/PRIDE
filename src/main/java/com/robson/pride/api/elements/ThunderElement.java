@@ -30,6 +30,10 @@ public interface ThunderElement {
 
     ElementBase DATA = new ElementBase() {
 
+        public String getName(){
+            return "Thunder";
+        }
+
         public ParticleOptions getNormalParticleType() {
             return ParticleRegistry.ELECTRICITY_PARTICLE.get();
         }

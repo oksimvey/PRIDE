@@ -21,6 +21,10 @@ public interface LightElement {
 
     ElementBase DATA = new ElementBase() {
 
+        public String getName(){
+            return "Light";
+        }
+
         public ItemRenderingParams getItemRenderingParams() {
             return new ItemRenderingParams(20, 20, 200, new ResourceLocation("pride:textures/particle/pointed_trail.png"),
                     GlintRenderTypes.createDirectGlint("direct_light", new ResourceLocation("pride:textures/glints/light_glint.png")),

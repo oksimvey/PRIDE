@@ -4,7 +4,7 @@ import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.skills.weaponarts.*;
 import com.robson.pride.skills.weaponskills.LongSwordWeaponSkill;
 
-public interface WeaponSkillsDataManager {
+public interface WeaponSkillsDataManager extends DataManager<WeaponSkillBase> {
 
     byte DARKNESS_CUT = 1;
 
@@ -20,27 +20,22 @@ public interface WeaponSkillsDataManager {
 
     byte LONGSWORD_PIERCE = 7;
 
+    WeaponSkillsDataManager INSTANCE = id -> switch (id) {
 
+        case DARKNESS_CUT -> DarknessCut.DATA;
 
+        case HEAVENS_STRIKE -> HeavensStrike.DATA;
 
-    static WeaponSkillBase getByID(int id){
-        return switch (id){
+        case FLAME_SLASH -> FlameSlashSkill.DATA;
 
-            case DARKNESS_CUT -> DarknessCut.DATA;
+        case TORNADO -> Tornado.DATA;
 
-            case HEAVENS_STRIKE -> HeavensStrike.DATA;
+        case GROUND_STOMP -> GroundStomp.DATA;
 
-            case FLAME_SLASH -> FlameSlashSkill.DATA;
+        case KICK -> Kick.DATA;
 
-            case TORNADO -> Tornado.DATA;
+        case LONGSWORD_PIERCE -> LongSwordWeaponSkill.DATA;
 
-            case GROUND_STOMP -> GroundStomp.DATA;
-
-            case KICK -> Kick.DATA;
-
-            case LONGSWORD_PIERCE -> LongSwordWeaponSkill.DATA;
-
-            default -> null;
-        };
-    }
+        default -> null;
+    };
 }

@@ -1,12 +1,10 @@
-package com.robson.pride.api.data;
+package com.robson.pride.api.data.item;
 
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
-import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.math.Matrix2f;
-import com.robson.pride.item.weapons.CustomWeaponItem;
 import com.robson.pride.mixins.WeaponTypeReloadListenerMixin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -23,19 +21,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
-public class WeaponData {
-
-    private final String name;
-
-    private final String model;
-
-    private final AABB collider;
+public class WeaponData extends ItemData{
 
     private final short skill;
 
     private final AttributeReqs attributeReqs;
-
-    private final byte element;
 
     private final int weight;
 
@@ -56,9 +46,8 @@ public class WeaponData {
     private CapabilityItem itemcap;
 
 
-
-    public WeaponData(String name, String category, float damage, float speed, float impact, float max_strikes, float armor_negation, int weight, String model,byte element, AABB collider, short skill, AttributeReqs attributeReqs, TrailParams trail){
-        this.name = name;
+    public WeaponData(String name, String category, float damage, float speed, float impact, float max_strikes, float armor_negation, int weight, String model,byte element, Matrix2f collider, short skill, AttributeReqs attributeReqs, TrailParams trail){
+        super(name, model, (byte) 1, element, collider);
         this.category = category;
         this.damage = damage;
         this.speed = speed;
@@ -66,30 +55,13 @@ public class WeaponData {
         this.max_stikes = (int) max_strikes;
         this.armor_negation = armor_negation;
         this.weight = weight;
-        this.model = model;
-        this.collider = collider;
         this.skill = skill;
         this.attributeReqs = attributeReqs;
-        this.element = element;
         this.trailInfo = trail;
         itemcap = null;
     }
 
 
-    public static WeaponData getWeaponData(ItemStack itemStack){
-        if (itemStack != null && itemStack.getItem() instanceof CustomWeaponItem){
-            return WeaponDataManager.getByID(itemStack.getOrCreateTag().getInt("weaponid"));
-        }
-        return null;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public byte getElement() {
-        return this.element;
-    }
 
     public int getWeight() {
         return this.weight;
@@ -101,8 +73,8 @@ public class WeaponData {
         builder.joint(info.joint());
         builder.texture(info.texturePath());
         builder.time(info.startTime(), info.endTime());
-        builder.startPos(new Vec3(trailInfo.positions().x0(), trailInfo.positions().y0(), trailInfo.positions().z0()));
-        builder.endPos(new Vec3(trailInfo.positions().x1(), trailInfo.positions().y1(), trailInfo.positions().z1()));
+        builder.startPos(new Vec3(0, 0, getCollider().z0()));
+        builder.endPos(new Vec3(0, 0.2f, -getCollider().z1() - getCollider().z0()));
         builder.r(trailInfo.r);
         builder.g(trailInfo.g);
         builder.b(trailInfo.b);
@@ -136,12 +108,11 @@ public class WeaponData {
         return CapabilityItem.EMPTY;
     }
 
-    public static AABB createCollider(float maxx, float maxy, float maxz, float minx, float miny, float minz){
-        return new AABB(maxx, maxy, maxz, minx, miny, minz);
-    }
-
-    public AABB getCollider() {
-        return this.collider;
+    public static WeaponData getWeaponData(ItemStack stack){
+        if (stack != null && ItemData.getItemData(stack) instanceof WeaponData weaponData){
+            return weaponData;
+        }
+        return null;
     }
 
     public static WeaponSkillBase createSkill(WeaponSkillBase weaponSkillBase){
@@ -149,11 +120,7 @@ public class WeaponData {
     }
 
     public WeaponSkillBase getSkill(){
-        return WeaponSkillsDataManager.getByID(this.skill);
-    }
-
-    public String getModel() {
-        return this.model;
+        return WeaponSkillsDataManager.INSTANCE.getByID(this.skill);
     }
 
     private static Map<Attribute, AttributeModifier> deserializeAttributes(float damage, float speed, float impact, int max_strikes, float armor_negation, int weight) {
@@ -173,6 +140,6 @@ public class WeaponData {
     }
 
 
-    public record TrailParams(Matrix2f positions, int r, int g, int b, int lifetime) {
+    public record TrailParams(int r, int g, int b, int lifetime) {
     }
 }

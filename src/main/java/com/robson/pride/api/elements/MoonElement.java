@@ -20,6 +20,10 @@ import static com.robson.pride.api.utils.ElementalUtils.getElement;
 public interface MoonElement {
     ElementBase DATA = new ElementBase() {
 
+        public String getName(){
+            return "Moon";
+        }
+
         public ParticleOptions getNormalParticleType() {
             return ParticleTypes.DRAGON_BREATH;
         }

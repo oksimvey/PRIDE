@@ -1,5 +1,7 @@
 package com.robson.pride.events;
 
+import com.robson.pride.api.data.item.ElementalGemData;
+import com.robson.pride.api.data.item.ItemData;
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.progression.AttributeModifiers;
@@ -28,10 +30,10 @@ public class ItemAnvilEvent {
                 }
             }
             if (!ParticleTracking.shouldRenderParticle(event.getLeft())) {
-                if (rightitem.getItem() == ItemsRegister.ELEMENTAL_GEM.get()) {
+                if (ItemData.getItemData(rightitem) instanceof ElementalGemData data) {
                     if (ElementalUtils.canPutElementalPassive(leftitem, rightitem)) {
                         ItemStack output = event.getLeft().copy();
-                        output.getOrCreateTag().putByte("passive_element", rightitem.getTag().getByte("passive_element"));
+                        output.getOrCreateTag().putByte("passive_element", data.getElement());
                         AttributeModifiers.setModifierForImbuement(output);
                         event.setOutput(output);
                         event.setCost(5);

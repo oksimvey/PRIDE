@@ -1,7 +1,7 @@
 package com.robson.pride.mixins;
 
 
-import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.data.item.WeaponData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;

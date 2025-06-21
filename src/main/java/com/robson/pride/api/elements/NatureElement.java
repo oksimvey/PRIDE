@@ -21,6 +21,10 @@ public interface NatureElement  {
 
     ElementBase DATA = new ElementBase() {
 
+        public String getName(){
+            return "Nature";
+        }
+
         public ParticleOptions getNormalParticleType() {
             return ParticleTypes.COMPOSTER;
         }

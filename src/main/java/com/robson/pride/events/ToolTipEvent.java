@@ -1,7 +1,7 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.client.CustomTooltips;
-import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.data.item.WeaponData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

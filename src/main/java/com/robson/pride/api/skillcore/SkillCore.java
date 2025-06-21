@@ -1,5 +1,5 @@
 package com.robson.pride.api.skillcore;
-import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.data.item.WeaponData;
 import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.ParticleUtils;
@@ -54,7 +54,7 @@ public class SkillCore {
     }
 
     public static void weaponArtCore(LivingEntity ent, short weaponart) {
-        WeaponSkillBase skill = WeaponSkillsDataManager.getByID(weaponart);
+        WeaponSkillBase skill = WeaponSkillsDataManager.INSTANCE.getByID(weaponart);
         if (skill != null) {
             skill.tryToExecute(ent);
         }

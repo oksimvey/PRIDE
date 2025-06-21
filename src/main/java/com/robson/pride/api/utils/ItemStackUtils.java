@@ -1,10 +1,11 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.data.item.ItemData;
+import com.robson.pride.api.data.item.WeaponData;
 import com.robson.pride.api.utils.math.MathUtils;
+import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -13,13 +14,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
-import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
-import yesman.epicfight.world.capabilities.item.WeaponCapability;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
-
-import java.util.List;
 
 public class ItemStackUtils {
 
@@ -48,11 +45,11 @@ public class ItemStackUtils {
 
     public static float getColliderSize(ItemStack item) {
         if (item != null) {
-            WeaponData data = WeaponData.getWeaponData(item);
+            ItemData data = ItemData.getItemData(item);
             if (data != null) {
-                AABB collider = data.getCollider();
+                Matrix2f collider = data.getCollider();
                 if (collider != null) {
-                    return MathUtils.getTotalDistance(collider.maxX + collider.minX, collider.maxY + collider.minY, collider.maxZ + collider.minZ);
+                    return MathUtils.getTotalDistance(collider.x1() + collider.x0(), collider.y1() + collider.y0(), collider.z1() + collider.z0());
 
                 }
             }

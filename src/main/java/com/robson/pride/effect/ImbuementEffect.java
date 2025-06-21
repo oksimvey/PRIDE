@@ -44,9 +44,9 @@ public class ImbuementEffect extends PrideEffectBase {
 
     @Override
     public void prideClientTick(LivingEntity ent) {
-        if (this.active && ElementDataManager.getByID(element) != null && ent.tickCount % ((int) (10 / ent.getBbHeight())) == 0) {
+        if (this.active && ElementDataManager.INSTANCE.getByID(element) != null && ent.tickCount % ((int) (10 / ent.getBbHeight())) == 0) {
             if (element != ElementDataManager.SUN || ParticleTracking.shouldRenderSunParticle(ent)) {
-                ElementBase element = ElementDataManager.getByID(this.element);
+                ElementBase element = ElementDataManager.INSTANCE.getByID(this.element);
                 Vec3f vec3f = ParticleTracking.getAABBForImbuement(null, ent);
                 ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolR, element.getNormalParticleType(), vec3f, element.getParticleAmount());
                 ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolL, element.getNormalParticleType(), vec3f, element.getParticleAmount());

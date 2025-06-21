@@ -22,6 +22,8 @@ import yesman.epicfight.api.utils.ExtendableEnumManager;
 
 public abstract class ElementBase {
 
+    public abstract String getName();
+
     public abstract ParticleOptions getNormalParticleType();
 
     public abstract ChatFormatting getChatColor();

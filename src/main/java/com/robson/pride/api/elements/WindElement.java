@@ -21,6 +21,10 @@ public interface WindElement {
 
     ElementBase DATA = new ElementBase() {
 
+        public String getName(){
+            return "Wind";
+        }
+
         public ParticleOptions getNormalParticleType() {
             return ParticleTypes.CLOUD;
         }

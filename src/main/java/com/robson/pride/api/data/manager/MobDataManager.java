@@ -1,12 +1,11 @@
 package com.robson.pride.api.data.manager;
 
-import com.robson.pride.api.data.MobData;
+import com.robson.pride.api.data.mob.MobGenericData;
 
-public interface MobDataManager {
+public interface MobDataManager extends DataManager<MobGenericData> {
 
-    static MobData getByID(short id){
-        return switch (id){
-            default -> null;
-        };
-    }
+    MobDataManager INSTANCE = id -> switch (id) {
+        default -> null;
+    };
+
 }

@@ -1,6 +1,5 @@
 package com.robson.pride.api.entity;
 
-import com.robson.pride.api.ai.combat.CombatActions;
 import com.robson.pride.api.ai.combat.HumanoidCombatActions;
 import com.robson.pride.api.utils.TimerUtil;
 import net.minecraft.world.entity.PathfinderMob;
@@ -12,11 +11,9 @@ public abstract class PrideMobPatch <T extends PathfinderMob> extends MobPatch<T
 
     private boolean isHumanoid;
 
-    private CombatActions combatActions;
 
     private HumanoidCombatActions humanoidCombatActions;
 
-    private CombatActions hurtActions;
 
     private HumanoidCombatActions hurtHumanoidActions;
 

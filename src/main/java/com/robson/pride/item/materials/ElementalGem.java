@@ -1,21 +1,27 @@
 package com.robson.pride.item.materials;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import com.robson.pride.api.data.item.ElementalGemData;
+import com.robson.pride.api.data.manager.ElementDataManager;
 
-import static com.robson.pride.api.utils.ElementalUtils.getColorByElement;
+public interface ElementalGem  {
 
-public class ElementalGem extends Item {
+    ElementalGemData DARKNESS = new ElementalGemData("Darkness", ElementDataManager.DARKNESS);
 
-    public ElementalGem(Properties p_41383_) {
-        super(p_41383_);
-    }
+    ElementalGemData LIGHT = new ElementalGemData("Light", ElementDataManager.LIGHT);
 
-    @Override
-    public Component getName(ItemStack stack) {
-        Component defaultName = super.getName(stack);
-        return Component.literal(stack.getOrCreateTag().getByte("passive_element") + " Gem").withStyle(style -> style.withColor(getColorByElement(stack.getOrCreateTag().getByte("passive_element"))));
+    ElementalGemData THUNDER = new ElementalGemData("Thunder", ElementDataManager.THUNDER);
 
-    }
+    ElementalGemData SUN = new ElementalGemData("Sun", ElementDataManager.SUN);
+
+    ElementalGemData MOON = new ElementalGemData("Moon", ElementDataManager.MOON);
+
+    ElementalGemData BLOOD = new ElementalGemData("Blood", ElementDataManager.BLOOD);
+
+    ElementalGemData WIND = new ElementalGemData("Wind", ElementDataManager.WIND);
+
+    ElementalGemData NATURE = new ElementalGemData("Nature", ElementDataManager.NATURE);
+
+    ElementalGemData ICE = new ElementalGemData("Ice", ElementDataManager.ICE);
+
+    ElementalGemData WATER = new ElementalGemData("Water", ElementDataManager.WATER);
 }

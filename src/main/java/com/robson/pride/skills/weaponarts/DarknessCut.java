@@ -48,7 +48,7 @@ public interface DarknessCut {
                                 if (particle != null && entko != null) {
                                     particle.setLifetime(200);
                                     particle.scale(1.25f);
-                                    SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, () -> ElementDataManager.getByID(ElementDataManager.DARKNESS).onHit(entko, ent, 10, false));
+                                    SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, () -> ElementDataManager.INSTANCE.getByID(ElementDataManager.DARKNESS).onHit(entko, ent, 10, false));
                                 }
                             }
                         }

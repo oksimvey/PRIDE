@@ -1,6 +1,6 @@
 package com.robson.pride.api.client;
 
-import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.data.item.WeaponData;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.progression.AttributeModifiers;
 import net.minecraft.ChatFormatting;
@@ -11,8 +11,11 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
+@OnlyIn(Dist.CLIENT)
 public class CustomTooltips {
 
     public static void deserializeWeaponTooltip(ItemStack item, WeaponData data, ItemTooltipEvent event) {
@@ -20,7 +23,7 @@ public class CustomTooltips {
             byte index = 5;
             for (int i = 0; i < event.getToolTip().size(); i++) {
                 Component line = event.getToolTip().get(i);
-                if (findComponentArgument(line, Attributes.ATTACK_DAMAGE.getDescriptionId()) != null) {
+                if (line.getString().contains("Attack")){
                     float modifier = AttributeModifiers.calculateModifier(event.getEntity(), item, Float.parseFloat(line.getString().replace("Attack Damage", "")));
                     if (modifier != 0) {
                         MutableComponent name = Component.literal(line.getString() + " ").withStyle(ChatFormatting.WHITE);
@@ -59,47 +62,4 @@ public class CustomTooltips {
         }
     }
 
-    public static void deserializeArmorTooltip(ItemStack item, CompoundTag tag, ItemTooltipEvent event) {
-        if (item != null && event != null && tag != null) {
-            for (int i = 0; i < event.getToolTip().size(); i++) {
-                Component line = event.getToolTip().get(i);
-                if (findComponentArgument(line, Attributes.ARMOR.getDescriptionId()) != null) {
-                    float modifier = AttributeModifiers.calculateArmorModifier(item, tag, (int) Float.parseFloat(line.getString().replace("Armor", "").replace("+", "")));
-                    if (modifier != 0) {
-                        event.getToolTip().set(i, Component.literal("+" + modifier + " Armor").withStyle(ChatFormatting.BLUE));
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    public static Object findComponentArgument(Component component, String key) {
-        ComponentContents siblingComponent = component.getContents();
-        if (siblingComponent instanceof TranslatableContents contents) {
-            if (contents.getKey().equals(key)) {
-                return component;
-            }
-
-            if (contents.getArgs() != null) {
-                for (Object arg : contents.getArgs()) {
-                    if (arg instanceof Component) {
-                        Component argComponent = (Component) arg;
-                        Object ret = findComponentArgument(argComponent, key);
-                        if (ret != null) {
-                            return ret;
-                        }
-                    }
-                }
-            }
-        }
-
-        for (Component siblingComponent1 : component.getSiblings()) {
-            Object ret = findComponentArgument(siblingComponent1, key);
-            if (ret != null) {
-                return ret;
-            }
-        }
-        return null;
-    }
 }

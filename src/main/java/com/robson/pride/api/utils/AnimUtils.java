@@ -54,7 +54,7 @@ public class AnimUtils {
     public static boolean allowShoot(Entity ent) {
         if (ent != null) {
             if (ent instanceof Player player) {
-                return player.isCreative() || player.getInventory().contains(ItemsRegister.BULLET.get().getDefaultInstance());
+
             }
             return true;
         }

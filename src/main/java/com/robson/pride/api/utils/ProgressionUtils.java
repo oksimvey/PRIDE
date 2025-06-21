@@ -1,6 +1,6 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.data.item.WeaponData;
 import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.progression.PlayerAttributeSetup;
 import net.minecraft.nbt.CompoundTag;

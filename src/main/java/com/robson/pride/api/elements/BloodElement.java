@@ -26,6 +26,10 @@ public interface BloodElement {
 
     ElementBase DATA = new ElementBase() {
 
+        public String getName() {
+            return "Blood";
+        }
+
         public ParticleOptions getNormalParticleType() {
             return ParticleRegistry.BLOOD_PARTICLE.get();
         }

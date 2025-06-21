@@ -1,11 +1,11 @@
 package com.robson.pride.registries;
 
-import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.data.item.ItemData;
 import com.robson.pride.api.data.manager.ElementDataManager;
-import com.robson.pride.api.data.manager.WeaponDataManager;
+import com.robson.pride.api.data.manager.ItemDataManager;
 import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
-import com.robson.pride.item.weapons.CustomWeaponItem;
+import com.robson.pride.item.weapons.CustomItem;
 import com.robson.pride.main.Pride;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -31,14 +31,28 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> EQUIPMENT_TAB = TABS.register("pride_equipment", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Equipment"))
-            .icon(() -> CustomWeaponItem.createWeapon(1))
+            .icon(() -> CustomItem.createItem(ItemDataManager.EUROPEAN_LONGSWORD))
             .displayItems((enabledFeatures, entries) -> {
-                for (int i = 0; true; i++){
-                    WeaponData data = WeaponDataManager.getByID(i);
+                for (int i = 1000; true; i++){
+                    ItemData data = ItemDataManager.INSTANCE.getByID(i);
+                    if (data == null){
+                        break;
+                    }
+                    entries.accept(CustomItem.createItem(i));
+                }
+                for (int i = 2000; true; i++){
+                    ItemData data = ItemDataManager.INSTANCE.getByID(i);
+                    if (data == null){
+                        break;
+                    }
+                    entries.accept(CustomItem.createItem(i));
+                }
+                for (int i = 3000; true; i++){
+                    ItemData data = ItemDataManager.INSTANCE.getByID(i);
                     if (data == null){
                         return;
                     }
-                    entries.accept(CustomWeaponItem.createWeapon(i));
+                    entries.accept(CustomItem.createItem(i));
                 }
             })
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
@@ -46,10 +60,14 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> MATERIALS_TAB = TABS.register("pride_materials", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Materials"))
-            .icon(() -> getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), ElementDataManager.DARKNESS))
+            .icon(() -> CustomItem.createItem(ItemDataManager.DARKNESS_GEM))
             .displayItems((enabledFeatures, entries) -> {
-                for (byte i = 1; i <= 10; i++) {
-                    entries.accept(getElementalGem(ItemsRegister.ELEMENTAL_GEM.get(), i));
+                for (int i = 0; true; i++){
+                    ItemData data = ItemDataManager.INSTANCE.getByID(i);
+                    if (data == null){
+                        return;
+                    }
+                    entries.accept(CustomItem.createItem(i));
                 }
             })
             .withTabsBefore(EQUIPMENT_TAB.getKey())
@@ -60,14 +78,14 @@ public class PrideTabRegister {
             .icon(() -> new ItemStack(ItemsRegister.WEAPON_ART.get()))
             .displayItems((parameters, output) -> {
                 for (int i = 1; true; i++){
-                    WeaponSkillBase data = WeaponSkillsDataManager.getByID(i);
+                    WeaponSkillBase data = WeaponSkillsDataManager.INSTANCE.getByID(i);
                     if (data == null){
                         return;
                     }
                     ItemStack item = new ItemStack(ItemsRegister.WEAPON_ART.get());
                     item.getOrCreateTag().putShort("weapon_art", (short) i);
                     item.getOrCreateTag().putString("rarity", data.getSkillRarity());
-                    output.accept(CustomWeaponItem.createWeapon(i));
+                    output.accept(item);
                 }
 
 
@@ -98,10 +116,4 @@ public class PrideTabRegister {
             .withTabsBefore(SKILLS_TAB.getKey())
             .build());
 
-    public static ItemStack getElementalGem(Item item, byte element) {
-        ItemStack itemStack = new ItemStack(item);
-        itemStack.setCount(1);
-        itemStack.getOrCreateTag().putByte("passive_element", element);
-        return itemStack;
-    }
 }

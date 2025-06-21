@@ -1,6 +1,7 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.data.item.ItemData;
+import com.robson.pride.api.data.item.WeaponData;
 import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
@@ -26,22 +27,22 @@ public class ElementalUtils {
     }
 
     public static ParticleOptions getParticleByElement(byte element) {
-        if (ElementDataManager.getByID(element) != null) {
-            return  ElementDataManager.getByID(element).getNormalParticleType();
+        if (ElementDataManager.INSTANCE.getByID(element) != null) {
+            return  ElementDataManager.INSTANCE.getByID(element).getNormalParticleType();
         }
         return null;
     }
 
     public static ChatFormatting getColorByElement(byte element) {
-        if (ElementDataManager.getByID(element) != null) {
-            return ElementDataManager.getByID(element).getChatColor();
+        if (ElementDataManager.INSTANCE.getByID(element) != null) {
+            return ElementDataManager.INSTANCE.getByID(element).getChatColor();
         }
         return ChatFormatting.GRAY;
     }
 
     public static void playSoundByElement(byte element, Entity ent, float volume) {
-        if (ElementDataManager.getByID(element) != null) {
-            ElementDataManager.getByID(element).playSound(ent, volume);
+        if (ElementDataManager.INSTANCE.getByID(element) != null) {
+            ElementDataManager.INSTANCE.getByID(element).playSound(ent, volume);
         }
     }
 
@@ -49,10 +50,10 @@ public class ElementalUtils {
         if (leftitem != null && rightitem != null) {
             byte leftelement = 0;
             if (leftitem.getTag().getBoolean("hasweaponart")) {
-                leftelement = WeaponSkillsDataManager.getByID(leftitem.getTag().getShort("weapon_art")).getSkillElement();
+                leftelement = WeaponSkillsDataManager.INSTANCE.getByID(leftitem.getTag().getShort("weapon_art")).getSkillElement();
             }
             else {
-                WeaponData data = WeaponData.getWeaponData(leftitem);
+                WeaponData data =  WeaponData.getWeaponData(leftitem);
                 if (data != null) {
                         WeaponSkillBase skill = data.getSkill();
                         if (skill != null) {
@@ -79,10 +80,10 @@ public class ElementalUtils {
         if (item != null) {
             if (item.getTag() != null) {
                 element = item.getTag().getByte("passive_element");
-                if (ElementDataManager.getByID(element) == null) {
-                    WeaponData data = WeaponData.getWeaponData(item);
-                    if (data != null && ElementDataManager.getByID((data.getElement())) != null) {
-                                element = data.getElement();
+                if (ElementDataManager.INSTANCE.getByID(element) == null) {
+                    ItemData data = ItemData.getItemData(item);
+                    if (data != null && ElementDataManager.INSTANCE.getByID((data.getElement())) != null) {
+                        element = data.getElement();
                     }
                 }
             }

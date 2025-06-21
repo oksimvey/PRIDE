@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ArmatureUtils {
 
     public static Vec3 getJointWithTranslation(LocalPlayer renderer, Entity ent, Vec3f translation, Joint joint) {
-        if (renderer != null && ent != null && translation != null) {
+        if (renderer != null && ent != null && translation != null && joint != null) {
             if (renderer.level().isClientSide) {
                 LivingEntityPatch entitypatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
                 if (entitypatch != null) {
@@ -37,7 +37,7 @@ public class ArmatureUtils {
     }
 
     public static Vec3 getJoinPosition(LocalPlayer renderer, Entity ent, Joint joint) {
-        if (renderer != null && ent != null) {
+        if (renderer != null && ent != null && joint != null) {
             if (renderer.level().isClientSide) {
                 LivingEntityPatch entitypatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
                 if (entitypatch != null) {

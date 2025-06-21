@@ -21,6 +21,10 @@ public interface IceElement {
 
     ElementBase DATA = new ElementBase() {
 
+        public String getName(){
+            return "Ice";
+        }
+
 
         public ParticleOptions getNormalParticleType() {
             return ParticleRegistry.SNOWFLAKE_PARTICLE.get();

@@ -25,6 +25,10 @@ public interface DarknessElement {
 
     ElementBase DATA = new ElementBase() {
 
+        public String getName() {
+            return "Darkness";
+        }
+
         public ParticleOptions getNormalParticleType() {
             Random random = new Random();
             if (random.nextInt(20) == 1) {

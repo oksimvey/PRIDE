@@ -21,6 +21,10 @@ public interface SunElement {
 
     ElementBase DATA = new ElementBase() {
 
+        public String getName(){
+            return "Sun";
+        }
+
         public ParticleOptions getNormalParticleType() {
             return ParticleRegistry.FIRE_PARTICLE.get();
         }

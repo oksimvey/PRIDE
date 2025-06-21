@@ -22,6 +22,10 @@ public interface WaterElement {
 
     ElementBase DATA = new ElementBase() {
 
+        public String getName(){
+            return "Water";
+        }
+
         public ParticleOptions getNormalParticleType() {
             return new DustParticleOptions(new Vec3(0.3f, 0.5f, 1).normalize().toVector3f(), 1f);
         }

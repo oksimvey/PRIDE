@@ -1,7 +1,8 @@
 package com.robson.pride.item.weapons;
 
 
-import com.robson.pride.api.data.WeaponData;
+import com.robson.pride.api.data.item.ItemData;
+import com.robson.pride.api.data.item.WeaponData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.model.*;
@@ -23,12 +24,12 @@ import java.util.List;
 import java.util.function.Function;
 
 @OnlyIn(Dist.CLIENT)
-public class CustomWeaponModelBase implements BakedModel {
+public class CustomItemModelBase implements BakedModel {
     private final BakedModel original;
     private final ItemOverrides itemOverrides;
     public WeaponData weaponData = null;
 
-    public CustomWeaponModelBase(BakedModel original, ModelBakery loader) {
+    public CustomItemModelBase(BakedModel original, ModelBakery loader) {
         this.original = original;
         BlockModel missing = (BlockModel)loader.getModel(ModelBakery.MISSING_MODEL_LOCATION);
         this.itemOverrides = new ItemOverrides(new ModelBaker() {
@@ -50,11 +51,11 @@ public class CustomWeaponModelBase implements BakedModel {
         }, missing, Collections.emptyList()) {
 
             public BakedModel resolve(@NotNull BakedModel original, @NotNull ItemStack itemStack, @Nullable ClientLevel level, @Nullable LivingEntity livingEntity, int seed) {
-                    WeaponData data = WeaponData.getWeaponData(itemStack);
+                    ItemData data = ItemData.getItemData(itemStack);
                     if (data != null) {
                             ModelManager manager = Minecraft.getInstance().getModelManager();
                             BakedModel missing = manager.getModel(ModelBakery.MISSING_MODEL_LOCATION);
-                            BakedModel model = manager.getModel(getWeaponModelLocation(data));
+                            BakedModel model = manager.getModel(data.getModel());
                             return model == missing ? original : model;
                     }
 
@@ -62,11 +63,6 @@ public class CustomWeaponModelBase implements BakedModel {
             }
         };
     }
-
-    public static ResourceLocation getWeaponModelLocation(WeaponData weaponData) {
-        return new ResourceLocation(weaponData.getModel());
-    }
-
 
     public @NotNull ItemOverrides getOverrides() {
         return this.itemOverrides;

@@ -69,6 +69,5 @@ public class Pride {
 
     private void setupClient(FMLClientSetupEvent event) {
         KeyRegister.setupClient(event);
-        ItemPredicateRegister.registerPredicates(event);
     }
 }
