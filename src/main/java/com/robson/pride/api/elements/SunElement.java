@@ -20,38 +20,11 @@ import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
 public interface SunElement {
 
-    ElementBase DATA = new ElementBase() {
-
-        public String getName(){
-            return "Sun";
-        }
-
-        public ParticleOptions getNormalParticleType() {
-            return ParticleRegistry.FIRE_PARTICLE.get();
-        }
-
-        public ChatFormatting getChatColor() {
-            return ChatFormatting.GOLD;
-        }
-
-        public SoundEvent getSound() {
-            return SoundRegistry.FIRE_BREATH_LOOP.get();
-        }
-
-        public byte getParticleAmount() {
-            return 20;
-        }
-
-        public ItemRenderingParams getItemRenderingParams() {
-            return new ItemRenderingParams(new FixedRGB(252, 97, 0),
+    ElementBase DATA = new ElementBase("Sun", ParticleRegistry.FIRE_PARTICLE.get(), ChatFormatting.GOLD, SoundRegistry.FIRE_BREATH_LOOP.get(),
+            (byte) 20, SchoolRegister.SUN.get(), new ItemRenderingParams(new FixedRGB(252, 97, 0),
                     GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
-                    GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")));
+            GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
 
-        }
-
-        public SchoolType getSchool() {
-            return SchoolRegister.SUN.get();
-        }
 
         public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
             this.playSound(ent, 1);

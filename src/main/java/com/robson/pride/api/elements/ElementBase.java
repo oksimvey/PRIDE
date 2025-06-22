@@ -22,17 +22,53 @@ import yesman.epicfight.api.utils.ExtendableEnumManager;
 
 public abstract class ElementBase {
 
-    public abstract String getName();
+    private final String name;
 
-    public abstract ParticleOptions getNormalParticleType();
+    private final ParticleOptions particle;
 
-    public abstract ChatFormatting getChatColor();
+    private final ChatFormatting color;
 
-    public abstract SoundEvent getSound();
+    private final SoundEvent sound;
 
-    public abstract byte getParticleAmount();
+    private final byte particleAmount;
 
-    public abstract ItemRenderingParams getItemRenderingParams();
+    private final ItemRenderingParams itemRenderingParams;
+
+    private final SchoolType school;
+
+    public ElementBase(String name, ParticleOptions particle, ChatFormatting color, SoundEvent sound, byte particleAmount, SchoolType school, ItemRenderingParams itemRenderingParams) {
+        this.name = name;
+        this.particle = particle;
+        this.color = color;
+        this.sound = sound;
+        this.particleAmount = particleAmount;
+        this.school = school;
+        this.itemRenderingParams = itemRenderingParams;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public ParticleOptions getNormalParticleType(){
+        return this.particle;
+    }
+
+    public ChatFormatting getChatColor(){
+        return this.color;
+    }
+
+    public SoundEvent getSound(){
+        return this.sound;
+    }
+
+    public byte getParticleAmount(){
+        return this.particleAmount;
+    }
+
+    public ItemRenderingParams getItemRenderingParams(){
+        return this.itemRenderingParams;
+    }
 
     public DamageSource createDamageSource(Entity ent) {
         assert Minecraft.getInstance().level != null;
@@ -55,7 +91,9 @@ public abstract class ElementBase {
 
     public abstract float calculateFinalDamage(Entity dmgent, Entity ent, float amount);
 
-    public abstract SchoolType getSchool();
+    public SchoolType getSchool(){
+        return this.school;
+    }
 
     public void playSound(Entity ent, float volume) {
         ClientLevel level = Minecraft.getInstance().level;

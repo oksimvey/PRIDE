@@ -8,13 +8,10 @@ import com.robson.pride.api.utils.math.FixedRGB;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.particles.StringParticle;
 import com.robson.pride.registries.SchoolRegister;
-import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import yesman.epicfight.gameasset.EpicFightSounds;
@@ -25,40 +22,11 @@ import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
 public interface BloodElement {
 
-    ElementBase DATA = new ElementBase() {
-
-        public String getName() {
-            return "Blood";
-        }
-
-        public ParticleOptions getNormalParticleType() {
-            return ParticleRegistry.BLOOD_PARTICLE.get();
-        }
-
-        public ChatFormatting getChatColor() {
-            return ChatFormatting.DARK_RED;
-        }
-
-        public SoundEvent getSound() {
-            return SoundRegistry.BLOOD_NEEDLE_IMPACT.get();
-        }
-
-        public byte getParticleAmount() {
-            return 5;
-        }
-
-
-        public ItemRenderingParams getItemRenderingParams() {
-            return new ItemRenderingParams(new FixedRGB(255, 100, 50),
+    ElementBase DATA = new ElementBase("Blood", ParticleRegistry.BLOOD_PARTICLE.get(), ChatFormatting.DARK_RED,
+            SoundRegistry.BLOOD_NEEDLE_IMPACT.get(), (byte) 5, SchoolRegister.BLOOD.get(), new ItemRenderingParams(new FixedRGB(255, 100, 50),
                     GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
-                    GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")));
+                    GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
 
-        }
-
-
-        public SchoolType getSchool() {
-            return SchoolRegister.BLOOD.get();
-        }
 
         public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
             this.playSound(ent, 1);

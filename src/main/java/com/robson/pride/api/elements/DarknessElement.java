@@ -24,42 +24,20 @@ import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
 public interface DarknessElement {
 
-    ElementBase DATA = new ElementBase() {
+    ElementBase DATA = new ElementBase("Darkness", ParticleTypes.SMOKE, ChatFormatting.BLACK, SoundEvents.PARROT_IMITATE_WITHER, (byte) 3, SchoolRegister.DARKNESS.get(),
+            new ItemRenderingParams(new FixedRGB(0, 0, 0),
+                    GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
+                    GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
 
-        public String getName() {
-            return "Darkness";
-        }
-
+        @Override
         public ParticleOptions getNormalParticleType() {
             Random random = new Random();
             if (random.nextInt(20) == 1) {
                 return ParticleRegister.RED_LIGHTNING.get();
             }
-            return ParticleTypes.SMOKE;
+            return super.getNormalParticleType();
         }
 
-        public ItemRenderingParams getItemRenderingParams() {
-            return new ItemRenderingParams(new FixedRGB(0, 0, 0),
-                    GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
-                    GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")));
-        }
-
-        public ChatFormatting getChatColor() {
-            return ChatFormatting.BLACK;
-        }
-
-        public SoundEvent getSound() {
-            return SoundEvents.PARROT_IMITATE_WITHER;
-        }
-
-        public byte getParticleAmount() {
-            return 3;
-        }
-
-
-        public SchoolType getSchool() {
-            return SchoolRegister.DARKNESS.get();
-        }
 
         public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
             this.playSound(ent, 1);

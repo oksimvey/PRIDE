@@ -58,7 +58,7 @@ public abstract class ItemRenderBaseMixin {
         Joint holdingHand = isInMainhand ? armature.toolR : armature.toolL;
         modelMatrix.mulFront(poses[holdingHand.getId()]);
         poseStack.pushPose();
-        this.mulPoseStack(poseStack, modelMatrix);
+        MathUtils.mulStack(poseStack, modelMatrix);
         ItemDisplayContext transformType = isInMainhand ? ItemDisplayContext.THIRD_PERSON_RIGHT_HAND : ItemDisplayContext.THIRD_PERSON_LEFT_HAND;
         Minecraft mc = Minecraft.getInstance();
         mc.gameRenderer.itemInHandRenderer.renderItem(entitypatch.getOriginal(), stack, transformType, !isInMainhand, poseStack, buffer, packedLight);

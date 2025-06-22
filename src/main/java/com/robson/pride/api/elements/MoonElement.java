@@ -19,39 +19,11 @@ import net.minecraft.world.entity.Entity;
 import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
 public interface MoonElement {
-    ElementBase DATA = new ElementBase() {
+    ElementBase DATA = new ElementBase("Moon", ParticleTypes.DRAGON_BREATH, ChatFormatting.DARK_PURPLE, SoundRegistry.TELEKINESIS_LOOP.get(),
+            (byte) 5, SchoolRegister.MOON.get(), new ItemRenderingParams(new FixedRGB(134, 0, 237),
+            GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
+            GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
 
-        public String getName(){
-            return "Moon";
-        }
-
-        public ParticleOptions getNormalParticleType() {
-            return ParticleTypes.DRAGON_BREATH;
-        }
-
-        public ChatFormatting getChatColor() {
-            return ChatFormatting.DARK_PURPLE;
-        }
-
-        public SoundEvent getSound() {
-            return SoundRegistry.TELEKINESIS_LOOP.get();
-        }
-
-        public ItemRenderingParams getItemRenderingParams() {
-            return new ItemRenderingParams(new FixedRGB(134, 0, 237),
-                    GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
-                    GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")));
-
-        }
-
-
-        public byte getParticleAmount() {
-            return 5;
-        }
-
-        public SchoolType getSchool() {
-            return SchoolRegister.MOON.get();
-        }
 
         public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
             this.playSound(ent, 1);

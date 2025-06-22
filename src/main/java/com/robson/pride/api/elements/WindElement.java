@@ -20,39 +20,11 @@ import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
 public interface WindElement {
 
-    ElementBase DATA = new ElementBase() {
+    ElementBase DATA = new ElementBase("Wind", ParticleTypes.CLOUD, ChatFormatting.WHITE, SoundRegistry.GUST_CAST.get(),
+            (byte) 5, SchoolRegister.WIND.get(),new ItemRenderingParams(new FixedRGB(225, 227, 227),
+            GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
+            GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
 
-        public String getName(){
-            return "Wind";
-        }
-
-        public ParticleOptions getNormalParticleType() {
-            return ParticleTypes.CLOUD;
-        }
-
-        public ChatFormatting getChatColor() {
-            return ChatFormatting.WHITE;
-        }
-
-        public SoundEvent getSound() {
-            return SoundRegistry.GUST_CHARGE.get();
-        }
-
-        public byte getParticleAmount() {
-            return 5;
-        }
-
-        public ItemRenderingParams getItemRenderingParams() {
-            return new ItemRenderingParams(new FixedRGB(225, 227, 227),
-                    GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
-                    GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")));
-
-        }
-
-
-        public SchoolType getSchool() {
-            return SchoolRegister.WIND.get();
-        }
 
         public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
             this.playSound(ent, 1);

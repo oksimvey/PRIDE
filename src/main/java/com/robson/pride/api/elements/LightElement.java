@@ -20,39 +20,11 @@ import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
 public interface LightElement {
 
-    ElementBase DATA = new ElementBase() {
-
-        public String getName(){
-            return "Light";
-        }
-
-        public ItemRenderingParams getItemRenderingParams() {
-            return new ItemRenderingParams(new FixedRGB(225, 225, 50),
-                    GlintRenderTypes.createDirectGlint("direct_light", new ResourceLocation("pride:textures/glints/light_glint.png")),
-                    GlintRenderTypes.createDirectEntityGlint("direct_entity_light", new ResourceLocation("pride:textures/glints/light_glint.png")));
-
-        }
-
-
-        public ParticleOptions getNormalParticleType() {
-            return ParticleRegistry.WISP_PARTICLE.get();
-        }
-
-        public ChatFormatting getChatColor() {
-            return ChatFormatting.YELLOW;
-        }
-
-        public SoundEvent getSound() {
-            return SoundRegistry.CLOUD_OF_REGEN_LOOP.get();
-        }
-
-        public byte getParticleAmount() {
-            return 2;
-        }
-
-        public SchoolType getSchool() {
-            return SchoolRegister.LIGHT.get();
-        }
+    ElementBase DATA = new ElementBase("Light", ParticleRegistry.WISP_PARTICLE.get(), ChatFormatting.YELLOW, SoundRegistry.CLOUD_OF_REGEN_LOOP.get(),
+            (byte) 2, SchoolRegister.DARKNESS.get(),  new ItemRenderingParams(new FixedRGB(225, 225, 50),
+            GlintRenderTypes.createDirectGlint("direct_light", new ResourceLocation("pride:textures/glints/light_glint.png")),
+            GlintRenderTypes.createDirectEntityGlint("direct_entity_light", new ResourceLocation("pride:textures/glints/light_glint.png")))) {
+        
 
         public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
             this.playSound(ent, 1);

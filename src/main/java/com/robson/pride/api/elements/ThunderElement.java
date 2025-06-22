@@ -29,40 +29,11 @@ import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
 public interface ThunderElement {
 
-    ElementBase DATA = new ElementBase() {
+    ElementBase DATA = new ElementBase("Thunder", ParticleRegistry.ELECTRICITY_PARTICLE.get(), ChatFormatting.AQUA, SoundRegistry.LIGHTNING_WOOSH_01.get(),
+            (byte) 5, SchoolRegister.THUNDER.get(),  new ItemRenderingParams(new FixedRGB(0, 252, 227),
+            GlintRenderTypes.createDirectGlint("direct_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png")),
+            GlintRenderTypes.createDirectEntityGlint("direct_entity_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png")))) {
 
-        public String getName(){
-            return "Thunder";
-        }
-
-        public ParticleOptions getNormalParticleType() {
-            return ParticleRegistry.ELECTRICITY_PARTICLE.get();
-        }
-
-        public ItemRenderingParams getItemRenderingParams() {
-            return new ItemRenderingParams(new FixedRGB(0, 252, 227),
-                    GlintRenderTypes.createDirectGlint("direct_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png")),
-                    GlintRenderTypes.createDirectEntityGlint("direct_entity_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png")));
-
-        }
-
-
-        public ChatFormatting getChatColor() {
-            return ChatFormatting.AQUA;
-        }
-
-        public SoundEvent getSound() {
-            return SoundRegistry.LIGHTNING_WOOSH_01.get();
-        }
-
-        public byte getParticleAmount() {
-            return 5;
-        }
-
-
-        public SchoolType getSchool() {
-            return SchoolRegister.THUNDER.get();
-        }
 
         public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
             this.playSound(ent, 1);

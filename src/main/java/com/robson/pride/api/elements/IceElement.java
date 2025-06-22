@@ -20,41 +20,10 @@ import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
 public interface IceElement {
 
-    ElementBase DATA = new ElementBase() {
-
-        public String getName(){
-            return "Ice";
-        }
-
-
-        public ParticleOptions getNormalParticleType() {
-            return ParticleRegistry.SNOWFLAKE_PARTICLE.get();
-        }
-
-        public ChatFormatting getChatColor() {
-            return ChatFormatting.DARK_AQUA;
-        }
-
-        public SoundEvent getSound() {
-            return SoundRegistry.CONE_OF_COLD_LOOP.get();
-        }
-
-        public byte getParticleAmount() {
-            return 5;
-        }
-
-
-        public ItemRenderingParams getItemRenderingParams() {
-            return new ItemRenderingParams(new FixedRGB(50, 100, 250),
-                    GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
-                    GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")));
-
-        }
-
-
-        public SchoolType getSchool() {
-            return SchoolRegister.ICE.get();
-        }
+    ElementBase DATA = new ElementBase("Ice", ParticleRegistry.SNOWFLAKE_PARTICLE.get(), ChatFormatting.DARK_AQUA,
+            SoundRegistry.CONE_OF_COLD_LOOP.get(), (byte) 5, SchoolRegister.ICE.get(), new ItemRenderingParams(new FixedRGB(50, 100, 250),
+            GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
+            GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
 
         public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
             this.playSound(ent, 1);
