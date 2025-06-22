@@ -18,8 +18,8 @@ public class KeyRegister {
 
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         SPECIAL = new KeyMapping("key.pride.special", InputConstants.Type.MOUSE, 0, "key.categories.misc");
-        DODGE = new KeyMapping("key.pride.menu", InputConstants.Type.KEYSYM, InputConstants.KEY_M, "key.categories.misc");
-        MENU = new KeyMapping("key.pride.dodge", InputConstants.Type.KEYSYM, InputConstants.KEY_Q, "key.categories.misc");
+        MENU = new KeyMapping("key.pride.menu", InputConstants.Type.KEYSYM, InputConstants.KEY_M, "key.categories.misc");
+        DODGE = new KeyMapping("key.pride.dodge", InputConstants.Type.KEYSYM, InputConstants.KEY_Q, "key.categories.misc");
         SWAP_HAND = new KeyMapping("key.pride.swaphand", InputConstants.Type.KEYSYM, InputConstants.KEY_G, "key.categories.misc");
          IMBUEMENT = new KeyMapping("key.pride.imbuement", InputConstants.Type.KEYSYM, InputConstants.KEY_Z, "key.categories.misc");
         IMMUNITY = new KeyMapping("key.pride.immunity", InputConstants.Type.KEYSYM, InputConstants.KEY_X, "key.categories.misc");

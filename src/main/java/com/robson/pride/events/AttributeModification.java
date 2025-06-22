@@ -3,7 +3,6 @@ package com.robson.pride.events;
 import com.robson.pride.api.utils.AttributeUtils;
 import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.api.utils.ProgressionUtils;
-import com.robson.pride.keybinding.onFPress;
 import com.robson.pride.progression.AttributeModifiers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -16,6 +15,8 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.robson.pride.keybinding.KeySwapHand.addModifierToStyle;
+
 @Mod.EventBusSubscriber
 public class AttributeModification {
 
@@ -27,7 +28,7 @@ public class AttributeModification {
             if (event.getEntity() instanceof Player ent) {
                 if (!armorslots.contains(event.getSlot())) {
                     AttributeUtils.addModifier(ent, "epicfight:weight", "b4c793f6-b421-43cb-81e8-754fdfe278e4", ItemStackUtils.getWeaponWeight(ent, InteractionHand.OFF_HAND, EquipmentSlot.OFFHAND), AttributeModifier.Operation.ADDITION);
-                    onFPress.addModifierToStyle(ent);
+                    addModifierToStyle(ent);
                     float modifier = AttributeModifiers.calculateModifier(ent, ent.getMainHandItem(), 1);
                     if (modifier <= 0.1f) {
                         modifier = 0.1f;

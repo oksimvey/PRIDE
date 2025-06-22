@@ -12,7 +12,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.client.animation.property.TrailInfo;
 import yesman.epicfight.world.capabilities.item.*;
@@ -65,12 +64,9 @@ public class WeaponData extends ItemData{
         trailInfo = null;
     }
 
-
-
     public int getWeight() {
         return this.weight;
     }
-
 
     public TrailInfo getTrailInfo(TrailInfo info) {
       if (this.trailInfo == null){

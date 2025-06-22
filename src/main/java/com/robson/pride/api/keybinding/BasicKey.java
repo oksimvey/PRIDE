@@ -2,7 +2,7 @@ package com.robson.pride.api.keybinding;
 
 import net.minecraft.world.entity.player.Player;
 
-public abstract class PrideBasicKey {
+public abstract class BasicKey {
 
     private boolean isPressed = false;
 
@@ -17,7 +17,7 @@ public abstract class PrideBasicKey {
         return this.isPressed;
     }
 
-    public void onRelease() {
+    public void onRelease(Player player) {
         this.isPressed = false;
     }
 

@@ -23,7 +23,7 @@ public class CustomTooltips {
             byte index = 5;
             for (int i = 0; i < event.getToolTip().size(); i++) {
                 Component line = event.getToolTip().get(i);
-                if (line.getString().contains("Attack")){
+                if (line.getString().contains("Damage")){
                     float modifier = AttributeModifiers.calculateModifier(event.getEntity(), item, Float.parseFloat(line.getString().replace("Attack Damage", "")));
                     if (modifier != 0) {
                         MutableComponent name = Component.literal(line.getString() + " ").withStyle(ChatFormatting.WHITE);
@@ -60,6 +60,36 @@ public class CustomTooltips {
                 event.getToolTip().add(index + 1, Component.literal(" " + data.getAttributeReqs().requiredStrength() + " Required Strength").withStyle(ChatFormatting.RED));
             }
         }
+    }
+
+    private static Object findComponentArgument(Component component, String key) {
+        ComponentContents var4 = component.getContents();
+        if (var4 instanceof TranslatableContents contents) {
+            if (contents.getKey().equals(key)) {
+                return component;
+            }
+
+            if (contents.getArgs() != null) {
+                for(Object arg : contents.getArgs()) {
+                    if (arg instanceof Component) {
+                        Component argComponent = (Component)arg;
+                        Object ret = findComponentArgument(argComponent, key);
+                        if (ret != null) {
+                            return ret;
+                        }
+                    }
+                }
+            }
+        }
+
+        for(Component siblingComponent : component.getSiblings()) {
+            Object ret = findComponentArgument(siblingComponent, key);
+            if (ret != null) {
+                return ret;
+            }
+        }
+
+        return null;
     }
 
 }

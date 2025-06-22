@@ -6,10 +6,12 @@ import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
+import com.robson.pride.epicfight.weapontypes.WeaponPresets;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
@@ -18,20 +20,41 @@ import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
+import static com.robson.pride.epicfight.styles.SheatProvider.unsheat;
+import static com.robson.pride.keybinding.KeySwapHand.addModifierToStyle;
+
 public class ItemStackUtils {
 
     public static Style getStyle(LivingEntityPatch ent, WeaponCategory weaponCategory) {
         if (ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == CapabilityItem.WeaponCategories.SHIELD) {
             return PrideStyles.SHIELD_OFFHAND;
-        } else if (ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == weaponCategory) {
+        }
+        else if (ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == weaponCategory) {
             return PrideStyles.DUAL_WIELD;
-        } else if (ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_GUN && ent.getOriginal() instanceof LivingEntity lent && lent.getMainHandItem().getTag() != null && lent.getMainHandItem().getTag().getBoolean("two_handed")) {
+        }
+        else if (ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == WeaponCategoriesEnum.PRIDE_GUN && ent.getOriginal() instanceof LivingEntity lent && lent.getMainHandItem().getTag() != null && lent.getMainHandItem().getTag().getBoolean("two_handed")) {
             return PrideStyles.GUN_OFFHAND;
-        } else if (ent.getOriginal() instanceof LivingEntity lent && lent.getMainHandItem().getTag() != null && lent.getMainHandItem().getTag().getBoolean("two_handed") && ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == CapabilityItem.WeaponCategories.FIST) {
+        }
+        else if (ent.getOriginal() instanceof LivingEntity lent && WeaponPresets.WIELDING_TWO_HAND.contains(lent) && ent.getHoldingItemCapability(InteractionHand.OFF_HAND).getWeaponCategory() == CapabilityItem.WeaponCategories.FIST) {
             return CapabilityItem.Styles.TWO_HAND;
         }
         return CapabilityItem.Styles.ONE_HAND;
     }
+
+    public static void swapHand(LivingEntity ent){
+        if (WeaponPresets.WIELDING_TWO_HAND.contains(ent)) {
+            WeaponPresets.WIELDING_TWO_HAND.remove(ent);
+        }
+        else WeaponPresets.WIELDING_TWO_HAND.add(ent);
+        LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+        if (livingEntityPatch != null) {
+            livingEntityPatch.updateHeldItem(livingEntityPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND), livingEntityPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND), ent.getMainHandItem(), ent.getMainHandItem(), InteractionHand.MAIN_HAND);
+        }
+        if (ent instanceof Player player) {
+            addModifierToStyle(player);
+        }
+    }
+
 
     public static WeaponCategory getWeaponCategory(Entity ent, InteractionHand hand) {
         LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);

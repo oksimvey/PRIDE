@@ -29,8 +29,7 @@ public class onClientTick {
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (Minecraft.getInstance().player != null) {
             RenderScreens.renderPlayerScreens(Minecraft.getInstance());
-            LocalPlayer player = Minecraft.getInstance().player;
-            KeyHandler.tick(player);
+            Player player = Minecraft.getInstance().player;
             if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND) && player.isUsingItem() && player.canSprint()) {
                 player.setSprinting(false);
             }
