@@ -46,22 +46,21 @@ public abstract class ItemRenderBaseMixin {
 
     @Shadow @Final protected static Map<String, OpenMatrix4f> GLOBAL_OFFHAND_ITEM_TRANSFORMS;
 
+    @Shadow protected abstract OpenMatrix4f getCorrectionMatrix(LivingEntityPatch<?> entitypatch, InteractionHand hand, OpenMatrix4f[] poses);
+
+    @Shadow protected static ItemInHandRenderer itemInHandRenderer;
+
     /**
      * @author
      * @reason
      */
     @Overwrite(remap = false)
     public void renderItemInHand(ItemStack stack, LivingEntityPatch<?> entitypatch, InteractionHand hand, OpenMatrix4f[] poses, MultiBufferSource buffer, PoseStack poseStack, int packedLight, float partialTicks) {
-        HumanoidArmature armature = Armatures.BIPED.get();
         OpenMatrix4f modelMatrix = this.getCorrectionMatrix(entitypatch, hand, poses);
-        boolean isInMainhand = (hand == InteractionHand.MAIN_HAND);
-        Joint holdingHand = isInMainhand ? armature.toolR : armature.toolL;
-        modelMatrix.mulFront(poses[holdingHand.getId()]);
         poseStack.pushPose();
-        MathUtils.mulStack(poseStack, modelMatrix);
-        ItemDisplayContext transformType = isInMainhand ? ItemDisplayContext.THIRD_PERSON_RIGHT_HAND : ItemDisplayContext.THIRD_PERSON_LEFT_HAND;
-        Minecraft mc = Minecraft.getInstance();
-        mc.gameRenderer.itemInHandRenderer.renderItem(entitypatch.getOriginal(), stack, transformType, !isInMainhand, poseStack, buffer, packedLight);
+        this.mulPoseStack(poseStack, modelMatrix);
+        ItemDisplayContext transformType = hand == InteractionHand.MAIN_HAND ? ItemDisplayContext.THIRD_PERSON_RIGHT_HAND : ItemDisplayContext.THIRD_PERSON_LEFT_HAND;
+        itemInHandRenderer.renderItem((LivingEntity)entitypatch.getOriginal(), stack, transformType, hand != InteractionHand.MAIN_HAND, poseStack, buffer, packedLight);
         poseStack.popPose();
     }
 
@@ -72,25 +71,4 @@ public abstract class ItemRenderBaseMixin {
         MathUtils.scaleStack(poseStack, transposed);
     }
 
-
-    /**
-     * @author
-     * @reason
-     */
-    @Overwrite(remap = false)
-    protected OpenMatrix4f getCorrectionMatrix(LivingEntityPatch<?> entitypatch, InteractionHand hand, OpenMatrix4f[] poses) {
-        Joint parentJoint = this.alwaysInHand
-                ? (entitypatch.getArmature() instanceof ToolHolderArmature toolArmature
-                ? (hand == InteractionHand.MAIN_HAND ? toolArmature.rightToolJoint() : toolArmature.leftToolJoint())
-                : entitypatch.getArmature().rootJoint)
-                : entitypatch.getParentJointOfHand(hand);
-
-        OpenMatrix4f baseMatrix = switch (hand) {
-            case MAIN_HAND -> new OpenMatrix4f(this.mainhandCorrectionTransforms.getOrDefault(
-                    parentJoint.getName(), GLOBAL_MAINHAND_ITEM_TRANSFORMS.get(parentJoint.getName())));
-            case OFF_HAND -> new OpenMatrix4f(this.offhandCorrectionTransforms.getOrDefault(
-                    parentJoint.getName(), GLOBAL_OFFHAND_ITEM_TRANSFORMS.get(parentJoint.getName())));
-        };
-        return baseMatrix;
-    }
 }
