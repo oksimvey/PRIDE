@@ -3,7 +3,13 @@ package com.robson.pride.events;
 import com.robson.pride.api.mechanics.Parry;
 import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.api.utils.TimerUtil;
+import com.robson.pride.api.utils.math.MathUtils;
+import com.robson.pride.api.utils.math.Vec3f;
 import com.robson.pride.epicfight.styles.SheatProvider;
+import io.redspace.ironsspellbooks.registries.ParticleRegistry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
@@ -32,6 +38,7 @@ public class onRClickItem {
             SheatProvider.unsheat(player);
         }
     }
+
 
     private static boolean isBlockingWithShield(Player player) {
         return player != null && player.isUsingItem() && (ItemStackUtils.checkShield(player, InteractionHand.MAIN_HAND) || ItemStackUtils.checkShield(player, InteractionHand.OFF_HAND));

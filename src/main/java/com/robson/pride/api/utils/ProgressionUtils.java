@@ -1,7 +1,6 @@
 package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.item.WeaponData;
-import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.progression.PlayerAttributeSetup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -23,8 +22,6 @@ public class ProgressionUtils {
         if (ent != null) {
             if (ent instanceof Player) {
 
-            } else if (ent instanceof PrideMobBase prideMobBase) {
-
             }
         }
         return false;
@@ -35,8 +32,6 @@ public class ProgressionUtils {
             if (ent instanceof Player player) {
                 CompoundTag tag = TagsUtils.playerTags.get(player);
                 return (tag.getInt("StrengthLvl") + tag.getInt("DexterityLvl") + tag.getInt("VigorLvl") + tag.getInt("EnduranceLvl") + tag.getInt("MindLvl")) / 5;
-            } else if (ent instanceof PrideMobBase prideMobBase) {
-                return prideMobBase.getPrideLevel();
             }
         }
         return 0;

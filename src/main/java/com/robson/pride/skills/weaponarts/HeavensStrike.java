@@ -2,6 +2,7 @@ package com.robson.pride.skills.weaponarts;
 
 import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.skillcore.SkillAnimation;
+import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.api.utils.HealthUtils;
 import com.robson.pride.api.utils.math.MathUtils;
@@ -20,7 +21,9 @@ import java.util.concurrent.TimeUnit;
 
 public interface HeavensStrike {
 
-    WeaponSkillBase DATA = new WeaponSkillBase("Legendary", ElementDataManager.LIGHT, 1, 1, "total") {
+    byte ID = 1;
+
+    WeaponSkillBase DATA = new WeaponSkillBase(ID,"Heaven's Strike", SkillCore.WeaponArtTier.LEGENDARY, ElementDataManager.LIGHT, 1, 1, "total") {
 
         public List<SkillAnimation> defineMotions(LivingEntity ent) {
             return List.of(new SkillAnimation(Animations.AXE_AUTO1, () -> {

@@ -1,6 +1,7 @@
 package com.robson.pride.api.data.item;
 
 import com.robson.pride.api.data.manager.ItemDataManager;
+import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
 import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.item.weapons.CustomItem;
 import net.minecraft.resources.ResourceLocation;
@@ -52,6 +53,4 @@ public class ItemData {
         }
         return null;
     }
-
-
 }

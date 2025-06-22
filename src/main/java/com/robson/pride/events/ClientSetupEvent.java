@@ -2,6 +2,8 @@ package com.robson.pride.events;
 
 import com.robson.pride.api.data.item.ItemData;
 import com.robson.pride.api.data.manager.ItemDataManager;
+import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
+import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.item.weapons.CustomItemModelBase;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;

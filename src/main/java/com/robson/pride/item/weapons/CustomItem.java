@@ -52,6 +52,7 @@ public class CustomItem extends SwordItem {
         return Item;
     }
 
+
     @Override
     public int getMaxStackSize(ItemStack stack) {
         if (stack != null){

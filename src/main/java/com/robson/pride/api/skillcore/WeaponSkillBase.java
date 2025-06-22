@@ -1,5 +1,6 @@
 package com.robson.pride.api.skillcore;
 
+import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
 import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.api.utils.ManaUtils;
 import com.robson.pride.api.utils.StaminaUtils;
@@ -15,25 +16,33 @@ import static com.robson.pride.api.utils.ProgressionUtils.haveReqs;
 
 public abstract class WeaponSkillBase {
 
-    private String SkillRarity;
-    private byte SkillElement;
-    private int ManaConsumption;
-    private float StaminaConsumption;
+    private final String SkillName;
+    private final SkillCore.WeaponArtTier SkillArtTier;
+    private final byte SkillElement;
+    private final int ManaConsumption;
+    private final float StaminaConsumption;
     private List<SkillAnimation> motions;
-    private String perilousType;
+    private final String perilousType;
 
-    public WeaponSkillBase(String SkillRarity, byte SkillElement, int ManaConsumption, float StaminaConsumption, String perilousType) {
-        this.SkillRarity = SkillRarity;
+    public WeaponSkillBase(short id, String name, SkillCore.WeaponArtTier tier, byte SkillElement, int ManaConsumption, float StaminaConsumption, String perilousType) {
+        this.SkillName = name;
+        this.SkillArtTier = tier;
         this.SkillElement = SkillElement;
         this.StaminaConsumption = StaminaConsumption;
         this.ManaConsumption = ManaConsumption;
         this.perilousType = perilousType;
+        WeaponSkillBase DATA = WeaponSkillsDataManager.INSTANCE.getByID(id);
     }
+
 
     public abstract List<SkillAnimation> defineMotions(LivingEntity ent);
 
-    public String getSkillRarity() {
-        return this.SkillRarity;
+    public String getSkillName() {
+        return this.SkillName;
+    }
+
+    public SkillCore.WeaponArtTier getSkillRarity() {
+        return this.SkillArtTier;
     }
 
     public byte getSkillElement() {

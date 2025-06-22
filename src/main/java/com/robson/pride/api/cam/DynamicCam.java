@@ -61,14 +61,10 @@ public class DynamicCam {
 
     public static void correctCameraRot(Config config, boolean ismounted, List<Entity> targets) {
         if (ismounted || targets == null || targets.isEmpty()) {
-            if (config.normal_rotate_mode != AbstractConfig.PlayerRotateMode.INTEREST_POINT) {
-                config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.INTEREST_POINT;
-            }
+            CameraUtils.changeRotateMode(config, AbstractConfig.PlayerRotateMode.INTEREST_POINT);
             return;
         }
-        if (config.normal_rotate_mode != AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA) {
-            config.normal_rotate_mode = AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA;
-        }
+        CameraUtils.changeRotateMode(config, AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA);
     }
 
     public static float getDefaultZModifier(Player player) {

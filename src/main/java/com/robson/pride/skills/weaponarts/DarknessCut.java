@@ -27,8 +27,9 @@ import java.util.concurrent.TimeUnit;
 
 public interface DarknessCut {
 
-    WeaponSkillBase DATA = new WeaponSkillBase("Mythical", ElementDataManager.DARKNESS, 50, 6, "total") {
+    byte ID = 0;
 
+    WeaponSkillBase DATA = new WeaponSkillBase(ID,"Darkness Cut", SkillCore.WeaponArtTier.MYTHICAL, ElementDataManager.DARKNESS, 50, 6, "total") {
 
         public List<SkillAnimation> defineMotions(LivingEntity ent) {
             return List.of(new SkillAnimation(Animations.TACHI_AUTO3, () -> {

@@ -6,35 +6,32 @@ import com.robson.pride.skills.weaponskills.LongSwordWeaponSkill;
 
 public interface WeaponSkillsDataManager extends DataManager<WeaponSkillBase> {
 
-    byte DARKNESS_CUT = 1;
+    byte DARKNESS_CUT = 0;
 
-    byte HEAVENS_STRIKE = 2;
+    byte HEAVENS_STRIKE = 1;
 
-    byte FLAME_SLASH = 3;
+    byte FLAME_SLASH = 2;
 
-    byte TORNADO = 4;
+    byte TORNADO = 3;
 
-    byte GROUND_STOMP = 5;
+    byte GROUND_STOMP = 4;
 
-    byte KICK = 6;
-
-    byte LONGSWORD_PIERCE = 7;
 
     WeaponSkillsDataManager INSTANCE = id -> switch (id) {
 
-        case DARKNESS_CUT -> DarknessCut.DATA;
+        case DarknessCut.ID -> DarknessCut.DATA;
 
-        case HEAVENS_STRIKE -> HeavensStrike.DATA;
+        case HeavensStrike.ID -> HeavensStrike.DATA;
 
-        case FLAME_SLASH -> FlameSlashSkill.DATA;
+        case FlameSlashSkill.ID -> FlameSlashSkill.DATA;
 
-        case TORNADO -> Tornado.DATA;
+        case Tornado.ID -> Tornado.DATA;
 
-        case GROUND_STOMP -> GroundStomp.DATA;
+        case GroundStomp.ID -> GroundStomp.DATA;
 
-        case KICK -> Kick.DATA;
+        case Kick.ID -> Kick.DATA;
 
-        case LONGSWORD_PIERCE -> LongSwordWeaponSkill.DATA;
+        case LongSwordWeaponSkill.ID -> LongSwordWeaponSkill.DATA;
 
         default -> null;
     };

@@ -1,7 +1,6 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.elements.ElementBase;
-import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.api.utils.math.MathUtils;
@@ -35,15 +34,6 @@ public class EntityAttacked {
         if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
             Entity ent = event.getEntity();
             Entity ddmgent = event.getSource().getDirectEntity();
-            if (event.getSource().getEntity() instanceof PrideMobBase prideMobBase && (prideMobBase.getType().equals(ent.getType()) || prideMobBase.allies.contains(EntityType.getKey(ent.getType()).toString()))) {
-                event.setCanceled(true);
-            } else if (ent instanceof PrideMobBase) {
-                for (Entity entity : ent.level().getEntities(ent, MathUtils.createAABBAroundEnt(ent, 25))) {
-                    if (entity != ent && entity instanceof PrideMobBase prideMobBase) {
-                        prideMobBase.deserializeAlliesTargeting(ent, event.getSource().getEntity());
-                    }
-                }
-            }
 
             if (ddmgent instanceof Projectile) {
                 if (ddmgent instanceof AbstractArrow arrow && ent.getPersistentData().getBoolean("mikiri_dodge")) {

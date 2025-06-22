@@ -15,7 +15,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
-@OnlyIn(Dist.CLIENT)
 public class CustomTooltips {
 
     public static void deserializeWeaponTooltip(ItemStack item, WeaponData data, ItemTooltipEvent event) {

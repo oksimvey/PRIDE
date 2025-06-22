@@ -2,7 +2,6 @@ package com.robson.pride.item.weapons;
 
 
 import com.robson.pride.api.data.item.ItemData;
-import com.robson.pride.api.data.item.WeaponData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.model.*;
@@ -27,7 +26,6 @@ import java.util.function.Function;
 public class CustomItemModelBase implements BakedModel {
     private final BakedModel original;
     private final ItemOverrides itemOverrides;
-    public WeaponData weaponData = null;
 
     public CustomItemModelBase(BakedModel original, ModelBakery loader) {
         this.original = original;

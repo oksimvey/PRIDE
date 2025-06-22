@@ -33,11 +33,6 @@ public abstract class LongPressKey extends BasicKey {
         this.longPressTriggered = false;
     }
 
-
-
-    @Override
-    public void onPress(Player player){}
-
     public abstract void onLongPress(Player player);
 
 }

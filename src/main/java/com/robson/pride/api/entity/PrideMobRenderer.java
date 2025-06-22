@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
 
-public class PrideMobRenderer extends HumanoidMobRenderer<PrideMobBase, HumanoidModel<PrideMobBase>> {
+public class PrideMobRenderer extends HumanoidMobRenderer<PrideMob, HumanoidModel<PrideMob>> {
 
     public PrideMobRenderer(EntityRendererProvider.Context context) {
         super(context, new HumanoidModel(context.bakeLayer(ModelLayers.PLAYER)), 0.5f);
@@ -15,10 +15,7 @@ public class PrideMobRenderer extends HumanoidMobRenderer<PrideMobBase, Humanoid
     }
 
     @Override
-    public ResourceLocation getTextureLocation(PrideMobBase entity) {
-        if (!entity.textures.isEmpty()) {
-            return  new ResourceLocation(entity.textures.get(entity.getTypeVariant()));
-        }
-        return new ResourceLocation("pride:textures/entities/special/empty.png");
+    public ResourceLocation getTextureLocation(PrideMob entity) {
+        return new ResourceLocation("pride:textures/entities/gods/theoporos.png");
     }
 }

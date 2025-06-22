@@ -5,7 +5,6 @@ import com.robson.pride.api.data.item.ItemData;
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.progression.AttributeModifiers;
-import com.robson.pride.registries.ItemsRegister;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,10 +18,9 @@ public class ItemAnvilEvent {
         if (event != null) {
             ItemStack leftitem = event.getLeft();
             ItemStack rightitem = event.getRight();
-            if (rightitem.getItem() == ItemsRegister.WEAPON_ART.get()) {
+            if (false) {
                 if (ElementalUtils.canPutWeaponArt(leftitem, rightitem)) {
                     ItemStack output = event.getLeft().copy();
-                    output.getOrCreateTag().putShort("weapon_art", event.getRight().getTag().getShort("weapon_art"));
                     output.getOrCreateTag().putBoolean("hasweaponart", true);
                     event.setOutput(output);
                     event.setCost(5);

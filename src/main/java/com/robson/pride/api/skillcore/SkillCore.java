@@ -18,6 +18,14 @@ import java.util.concurrent.TimeUnit;
 
 public class SkillCore {
 
+    public enum WeaponArtTier {
+        MYTHICAL,
+        LEGENDARY,
+        EPIC,
+        RARE,
+        UNCOMMON,
+        COMMON;
+    }
 
     public static List<Entity> performingSkillEntities = new ArrayList<>();
 
@@ -29,6 +37,8 @@ public class SkillCore {
             else defaultSkillCore(ent, ent.getMainHandItem());
         }
     }
+
+
 
     public static void defaultSkillCore(LivingEntity ent, ItemStack weapon) {
         WeaponData weaponData = WeaponData.getWeaponData(weapon);

@@ -1,4 +1,6 @@
 package com.robson.pride.registries;
+import com.robson.pride.api.entity.PrideMob;
+import com.robson.pride.api.entity.PrideMobPatch;
 import com.robson.pride.main.Pride;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -7,9 +9,13 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import yesman.epicfight.api.forgeevent.EntityPatchRegistryEvent;
+import yesman.epicfight.gameasset.Armatures;
+import yesman.epicfight.world.capabilities.entitypatch.mob.ZombiePatch;
 
 @Mod.EventBusSubscriber(modid = Pride.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EntityRegister {
@@ -17,6 +23,9 @@ public class EntityRegister {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Pride.MODID);
 
     public static final DeferredRegister<EntityType<?>> SPECIAL_ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Pride.MODID);
+
+    public static final RegistryObject<EntityType<PrideMob>> PRIDE_MOB = make(false, new ResourceLocation("pride_mob"), PrideMob::new, MobCategory.MONSTER, 0.8f, 1.8f);
+
 
 
     private static <E extends Entity> RegistryObject<EntityType<E>> make(boolean special, ResourceLocation id, EntityType.EntityFactory<E> factory, MobCategory classification, float width, float height) {
@@ -49,7 +58,25 @@ public class EntityRegister {
     }
 
     @SubscribeEvent
-    public static void addEntityAttributes(EntityAttributeCreationEvent event) {
+    public static void onCommonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(EntityRegister::registerArmatures);
 
+    }
+
+    public static void registerArmatures(){
+        Armatures.registerEntityTypeArmature(PRIDE_MOB.get(), Armatures.BIPED);
+
+
+    }
+
+
+    @SubscribeEvent
+    public static void setPatch(EntityPatchRegistryEvent event) {
+        event.getTypeEntry().put(PRIDE_MOB.get(),(entity -> PrideMobPatch::new));
+    }
+
+    @SubscribeEvent
+    public static void addEntityAttributes(EntityAttributeCreationEvent event) {
+        event.put(PRIDE_MOB.get(), PrideMob.registerAttributes().build());
     }
 }

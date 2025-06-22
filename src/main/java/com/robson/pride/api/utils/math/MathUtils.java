@@ -20,13 +20,6 @@ public interface MathUtils {
         return (float) (number - (number * percentage / 100));
     }
 
-    static Vec3f getDeltaForVectors(Vec3f vec1, Vec3f vec2, float speed) {
-        return getDeltaForVectors(getTotalDistance(vec1, vec2), vec1, vec2, speed);
-    }
-
-    static Vec3f getDeltaForVectors(float distance, Vec3f vec1, Vec3f vec2, float speed) {
-        return vec1.add(vec2.subtract(vec1).divide(distance).scale(speed));
-    }
 
     static int getRandomInt(int bound) {
         return random.nextInt(bound);

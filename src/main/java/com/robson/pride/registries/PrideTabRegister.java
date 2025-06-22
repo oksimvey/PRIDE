@@ -7,6 +7,7 @@ import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
 import com.robson.pride.api.skillcore.WeaponSkillBase;
 import com.robson.pride.item.weapons.CustomItem;
 import com.robson.pride.main.Pride;
+import com.robson.pride.skills.weaponarts.DarknessCut;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -75,19 +76,8 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> SKILLS_TAB = TABS.register("pride_weapon_arts", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Weapon Arts"))
-            .icon(() -> new ItemStack(ItemsRegister.WEAPON_ART.get()))
+            .icon(() -> CustomItem.createItem(ItemDataManager.DARKNESS_GEM))
             .displayItems((parameters, output) -> {
-                for (int i = 1; true; i++){
-                    WeaponSkillBase data = WeaponSkillsDataManager.INSTANCE.getByID(i);
-                    if (data == null){
-                        return;
-                    }
-                    ItemStack item = new ItemStack(ItemsRegister.WEAPON_ART.get());
-                    item.getOrCreateTag().putShort("weapon_art", (short) i);
-                    item.getOrCreateTag().putString("rarity", data.getSkillRarity());
-                    output.accept(item);
-                }
-
 
             })
             .withTabsBefore(MATERIALS_TAB.getKey())

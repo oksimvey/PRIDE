@@ -3,11 +3,8 @@ package com.robson.pride.events;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.robson.pride.api.client.RenderScreens;
 import com.robson.pride.api.client.RenderingCore;
-import com.robson.pride.api.entity.PrideMobBase;
 import com.robson.pride.api.utils.ItemStackUtils;
-import com.robson.pride.api.keybinding.KeyHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -38,7 +35,7 @@ public class onClientTick {
 
     @SubscribeEvent
     public static void onRenderPlayer(RenderPlayerEvent.Pre event) {
-        if (event != null) {
+        if (event != null && playerStack != event.getPoseStack() && playerBuffer != event.getMultiBufferSource()) {
             playerBuffer = event.getMultiBufferSource();
             playerStack = event.getPoseStack();
         }
@@ -50,8 +47,6 @@ public class onClientTick {
         if (!client.isPaused()) {
             if (event.getEntity() instanceof Player player) {
                 RenderingCore.entityRenderer(player);
-            } else if (event.getEntity() instanceof PrideMobBase prideMobBase && prideMobBase.tickLod(client, 1) && client.levelRenderer.getFrustum().isVisible(prideMobBase.getBoundingBox())) {
-                RenderingCore.entityRenderer(prideMobBase);
             }
         }
     }
