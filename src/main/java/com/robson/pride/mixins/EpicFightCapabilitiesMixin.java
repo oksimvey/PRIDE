@@ -1,7 +1,7 @@
 package com.robson.pride.mixins;
 
 
-import com.robson.pride.api.data.item.WeaponData;
+import com.robson.pride.api.data.manager.DataManager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -27,7 +27,7 @@ public class EpicFightCapabilitiesMixin {
             )
     )
     private static LazyOptional<CapabilityItem> getFromConfig(ItemStack itemStack, Capability<CapabilityItem> capability) {
-        return WeaponData.getWeaponData(itemStack) != null ? LazyOptional.of(() -> WeaponData.getWeaponData(itemStack).getItemcap(itemStack)) : itemStack.getCapability(CAPABILITY_ITEM);
+        return DataManager.getWeaponData(itemStack) != null ? LazyOptional.of(() -> DataManager.getWeaponData(itemStack).getItemcap(itemStack)) : itemStack.getCapability(CAPABILITY_ITEM);
     }
 
     @Redirect(
@@ -38,6 +38,6 @@ public class EpicFightCapabilitiesMixin {
             )
     )
     private static LazyOptional<CapabilityItem> getFromConfigOr(ItemStack itemStack, Capability<CapabilityItem> capability) {
-        return WeaponData.getWeaponData(itemStack) != null ? LazyOptional.of(() -> WeaponData.getWeaponData(itemStack).getItemcap(itemStack)) : itemStack.getCapability(CAPABILITY_ITEM);
+        return DataManager.getWeaponData(itemStack) != null ? LazyOptional.of(() -> DataManager.getWeaponData(itemStack).getItemcap(itemStack)) : itemStack.getCapability(CAPABILITY_ITEM);
     }
 }

@@ -2,7 +2,7 @@ package com.robson.pride.mixins;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.robson.pride.api.elements.ElementBase;
+import com.robson.pride.api.data.types.ElementData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
@@ -46,7 +46,7 @@ public abstract class ItemRendererMixin implements ResourceManagerReloadListener
 
 
     private static VertexConsumer getEffectFoilBufferDirect(ItemStack item, MultiBufferSource mbs, RenderType p_115224_, boolean p_115225_, boolean hasFoil) {
-        ElementBase elementBase = ParticleTracking.getItemElementForImbuement(item);
+        ElementData elementBase = ParticleTracking.getItemElementForImbuement(item);
         VertexConsumer cons = hasFoil ? VertexMultiConsumer.create(mbs.getBuffer(p_115225_ ? elementBase.getItemRenderingParams().getDirectGlint() : elementBase.getItemRenderingParams().getDirectEntityGlint()), mbs.getBuffer(p_115224_)) : mbs.getBuffer(p_115224_);
         return cons;
     }

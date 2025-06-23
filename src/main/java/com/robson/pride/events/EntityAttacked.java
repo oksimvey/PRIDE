@@ -1,9 +1,8 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.elements.ElementBase;
+import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
-import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.effect.ImmunityEffect;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.progression.AttributeModifiers;
@@ -13,7 +12,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -98,14 +96,14 @@ public class EntityAttacked {
                 if (event.getSource().getDirectEntity() instanceof LivingEntity living) {
                     if (hand == InteractionHand.MAIN_HAND) {
                         if (ItemStackUtils.getStyle(living) != PrideStyles.GUN_OFFHAND) {
-                            ElementBase elementBase = ParticleTracking.getItemElementForImbuement(living.getMainHandItem(), living);
+                            ElementData elementBase = ParticleTracking.getItemElementForImbuement(living.getMainHandItem(), living);
                             if (elementBase != null && elementBase.createDamageSource(living) != event.getSource()) {
                                 damage = elementBase.onHit(event.getEntity(), living, damage, false);
                             }
                         }
                     }
                     if (hand == InteractionHand.OFF_HAND) {
-                        ElementBase elementBase = ParticleTracking.getItemElementForImbuement(living.getOffhandItem(), living);
+                        ElementData elementBase = ParticleTracking.getItemElementForImbuement(living.getOffhandItem(), living);
                         if (elementBase != null && elementBase.createDamageSource(living) != event.getSource()) {
                             damage = elementBase.onHit(event.getEntity(), living, damage, false);
                         }

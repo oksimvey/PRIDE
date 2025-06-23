@@ -64,4 +64,5 @@ public record Vec3f(float x, float y, float z) {
     public Vector3f toVector3f() {
         return new Vector3f(x, y, z);
     }
+
 }

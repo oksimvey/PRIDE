@@ -1,7 +1,8 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.data.item.ItemData;
-import com.robson.pride.api.data.item.WeaponData;
+import com.robson.pride.api.data.types.GenericData;
+import com.robson.pride.api.data.types.WeaponData;
+import com.robson.pride.api.data.manager.DataManager;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.epicfight.styles.PrideStyles;
@@ -13,14 +14,12 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.AABB;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
-import static com.robson.pride.epicfight.styles.SheatProvider.unsheat;
 import static com.robson.pride.keybinding.KeySwapHand.addModifierToStyle;
 
 public class ItemStackUtils {
@@ -68,7 +67,7 @@ public class ItemStackUtils {
 
     public static float getColliderSize(ItemStack item) {
         if (item != null) {
-            ItemData data = ItemData.getItemData(item);
+            GenericData data = DataManager.getGenericData(item);
             if (data != null) {
                 Matrix2f collider = data.getCollider();
                 if (collider != null) {
@@ -98,7 +97,7 @@ public class ItemStackUtils {
                 if (hand == InteractionHand.MAIN_HAND) {
                     itemStack = living.getMainHandItem();
                 } else itemStack = living.getOffhandItem();
-                WeaponData weaponData = WeaponData.getWeaponData(itemStack);
+                WeaponData weaponData = DataManager.getWeaponData(itemStack);
                 if (weaponData != null) {
                     return  weaponData.getWeight();
                 }
@@ -123,7 +122,7 @@ public class ItemStackUtils {
                     case MAIN_HAND -> living.getMainHandItem();
                     case OFF_HAND -> living.getOffhandItem();
                 };
-                return WeaponData.getWeaponData(itemStack) != null;
+                return DataManager.getWeaponData(itemStack) != null;
             }
         }
         return false;

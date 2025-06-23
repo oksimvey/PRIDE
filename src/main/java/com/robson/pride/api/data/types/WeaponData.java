@@ -1,12 +1,12 @@
-package com.robson.pride.api.data.item;
+package com.robson.pride.api.data.types;
 
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
-import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
-import com.robson.pride.api.skillcore.WeaponSkillBase;
+import com.robson.pride.api.data.manager.DataManager;
 import com.robson.pride.api.utils.math.FixedRGB;
 import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.mixins.WeaponTypeReloadListenerMixin;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
-public class WeaponData extends ItemData{
+public class WeaponData extends GenericData {
 
     private final short skill;
 
@@ -48,8 +48,8 @@ public class WeaponData extends ItemData{
     private TrailInfo trailInfo;
 
 
-    public WeaponData(String name, String category, float damage, float speed, float impact, float max_strikes, float armor_negation, int weight, String model,byte element, Matrix2f collider, short skill, AttributeReqs attributeReqs, FixedRGB trailcolor){
-        super(name, model, (byte) 1, element, collider);
+    public WeaponData(Component name, String category, float damage, float speed, float impact, float max_strikes, float armor_negation, int weight, String model, byte element, Matrix2f collider, short skill, AttributeReqs attributeReqs, FixedRGB trailcolor){
+        super(name, model, collider, element, (byte) 1);
         this.category = category;
         this.damage = damage;
         this.speed = speed;
@@ -115,19 +115,9 @@ public class WeaponData extends ItemData{
         return CapabilityItem.EMPTY;
     }
 
-    public static WeaponData getWeaponData(ItemStack stack){
-        if (stack != null && ItemData.getItemData(stack) instanceof WeaponData weaponData){
-            return weaponData;
-        }
-        return null;
-    }
 
-    public static WeaponSkillBase createSkill(WeaponSkillBase weaponSkillBase){
-        return weaponSkillBase;
-    }
-
-    public WeaponSkillBase getSkill(){
-        return WeaponSkillsDataManager.INSTANCE.getByID(this.skill);
+    public WeaponSkillData getSkill(){
+        return DataManager.getWeaponSkillData(this.skill);
     }
 
     private static Map<Attribute, AttributeModifier> deserializeAttributes(float damage, float speed, float impact, int max_strikes, float armor_negation, int weight) {

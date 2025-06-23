@@ -1,18 +1,14 @@
 package com.robson.pride.api.client;
 
-import com.robson.pride.api.data.item.WeaponData;
+import com.robson.pride.api.data.types.WeaponData;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.progression.AttributeModifiers;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 public class CustomTooltips {

@@ -1,8 +1,8 @@
 package com.robson.pride.api.mechanics;
 
-import com.robson.pride.api.data.item.ItemData;
-import com.robson.pride.api.data.manager.ElementDataManager;
-import com.robson.pride.api.elements.ElementBase;
+import com.robson.pride.api.data.types.GenericData;
+import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.math.Matrix2f;
@@ -26,7 +26,7 @@ public class ParticleTracking {
 
     private static ConcurrentHashMap<Entity, Boolean> togglefire = new ConcurrentHashMap<>();
 
-    private static ConcurrentHashMap<ItemStack, ElementBase> itemParticleMap = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<ItemStack, ElementData> itemParticleMap = new ConcurrentHashMap<>();
 
     public static boolean shouldRenderParticle(ItemStack item) {
         return item != null && itemParticleMap.get(item) != null;
@@ -37,13 +37,13 @@ public class ParticleTracking {
         if (item != null && ent != null) {
             if (item.getTag() != null) {
                 byte element = ElementalUtils.getItemElement(item);
-                if (ElementDataManager.INSTANCE.getByID(element) != null) {
-                    result = element != ElementDataManager.SUN || shouldRenderSunParticle(ent);
+                if (DataManager.getElementData(element) != null) {
+                    result = element != DataManager.SUN || shouldRenderSunParticle(ent);
                 }
                 else if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMBUEMENT.get())) {
                     if (living.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect) {
-                        if (ElementDataManager.INSTANCE.getByID(imbuementEffect.element) != null && imbuementEffect.active) {
-                            result = imbuementEffect.element != ElementDataManager.SUN || shouldRenderSunParticle(ent);
+                        if (DataManager.getElementData(imbuementEffect.element) != null && imbuementEffect.active) {
+                            result = imbuementEffect.element != DataManager.SUN || shouldRenderSunParticle(ent);
                         }
                     }
                 }
@@ -70,19 +70,19 @@ public class ParticleTracking {
         return false;
     }
 
-    public static ElementBase getItemElementForImbuement(ItemStack item) {
+    public static ElementData getItemElementForImbuement(ItemStack item) {
         return item != null && itemParticleMap.get(item) != null ? itemParticleMap.get(item) : null;
     }
 
-    public static ElementBase getItemElementForImbuement(ItemStack item, LivingEntity ent) {
+    public static ElementData getItemElementForImbuement(ItemStack item, LivingEntity ent) {
         if (item != null && ent != null) {
             byte element = ElementalUtils.getItemElement(item);
-            if (ElementDataManager.INSTANCE.getByID(element) != null) {
-                return ElementDataManager.INSTANCE.getByID(element);
+            if (DataManager.getElementData(element) != null) {
+                return DataManager.getElementData(element);
             } else if (ent.hasEffect(EffectRegister.IMBUEMENT.get()) &&
                     ent.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect &&
-                    ElementDataManager.INSTANCE.getByID(imbuementEffect.element) != null) {
-                return ElementDataManager.INSTANCE.getByID(imbuementEffect.element);
+                    DataManager.getElementData(imbuementEffect.element) != null) {
+                return DataManager.getElementData(imbuementEffect.element);
             }
         }
         return null;
@@ -90,7 +90,7 @@ public class ParticleTracking {
 
     public static Vec3f getAABBForImbuement(ItemStack item, Entity ent) {
         if (item != null && ent != null) {
-            ItemData data = ItemData.getItemData(item);
+            GenericData data = DataManager.getGenericData(item);
             if (data != null) {
                 Matrix2f collider = data.getCollider();
                 return new Vec3f((float) (((new Random()).nextFloat() + collider.x0()) * collider.x1()), (float) (((new Random()).nextFloat() + collider.y0()) * collider.y1() + (collider.y1() / 10)), (float) (-((new Random()).nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z0()));

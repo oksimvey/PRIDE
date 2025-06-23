@@ -1,0 +1,52 @@
+package com.robson.pride.api.utils;
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.function.IntConsumer;
+
+public interface LoopUtils {
+
+    @FunctionalInterface
+    interface LoopAction {
+
+        boolean run(int currentLoop);
+    }
+
+
+    static void loopByTimes(IntConsumer action, int maxLoops, int intervalMillis) {
+        Timer timer = new Timer();
+        final int[] currentLoop = {0};
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (currentLoop[0] >= maxLoops) {
+                    timer.cancel();
+                    return;
+                }
+
+                action.accept(currentLoop[0]);
+                currentLoop[0]++;
+            }
+        }, 0, intervalMillis);
+    }
+
+    static void loopByConditional(LoopAction action, int maxLoops, int intervalMillis) {
+        Timer timer = new Timer();
+        final int[] current = {0};
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (current[0] >= maxLoops) {
+                    timer.cancel();
+                    return;
+                }
+                boolean continuar = action.run(current[0]);
+                current[0]++;
+                if (!continuar) {
+                    timer.cancel();
+                }
+            }
+        }, 0, intervalMillis);
+    }
+}

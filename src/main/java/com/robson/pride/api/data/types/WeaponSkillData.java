@@ -1,11 +1,16 @@
-package com.robson.pride.api.skillcore;
+package com.robson.pride.api.data.types;
 
-import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
+import com.robson.pride.api.data.manager.DataManager;
 import com.robson.pride.api.mechanics.PerilousAttack;
+import com.robson.pride.api.skillcore.SkillAnimation;
+import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.ManaUtils;
 import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.api.utils.TimerUtil;
+import com.robson.pride.api.utils.math.Matrix2f;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
@@ -14,40 +19,64 @@ import java.util.concurrent.TimeUnit;
 
 import static com.robson.pride.api.utils.ProgressionUtils.haveReqs;
 
-public abstract class WeaponSkillBase {
+public abstract class WeaponSkillData extends GenericData {
 
-    private final String SkillName;
-    private final SkillCore.WeaponArtTier SkillArtTier;
-    private final byte SkillElement;
     private final int ManaConsumption;
     private final float StaminaConsumption;
     private List<SkillAnimation> motions;
     private final String perilousType;
+    private final short id;
 
-    public WeaponSkillBase(short id, String name, SkillCore.WeaponArtTier tier, byte SkillElement, int ManaConsumption, float StaminaConsumption, String perilousType) {
-        this.SkillName = name;
-        this.SkillArtTier = tier;
-        this.SkillElement = SkillElement;
+    public WeaponSkillData(String name, short id, String model, SkillCore.WeaponArtTier tier, byte SkillElement, int ManaConsumption, float StaminaConsumption, String perilousType) {
+        super(Component.literal(name + " Weapon Art(" + tier.name() + ")").withStyle(colorByTier(tier)),
+                getModelLocation(SkillElement),
+                new Matrix2f(-0.1f, -0.1f, -0.1f, 0.1f, 0.1f, 0.1f), SkillElement, (byte) 64);
+        this.id = id;
         this.StaminaConsumption = StaminaConsumption;
         this.ManaConsumption = ManaConsumption;
         this.perilousType = perilousType;
-        WeaponSkillBase DATA = WeaponSkillsDataManager.INSTANCE.getByID(id);
     }
 
+    public short getId() {
+        return id;
+    }
+
+    public static String getModelLocation(byte element) {
+        return switch (element) {
+
+            case DataManager.DARKNESS -> "pride:item/scroll_darkness";
+
+            case DataManager.LIGHT -> "pride:item/scroll_light";
+
+            case DataManager.THUNDER -> "pride:item/scroll_thunder";
+
+            case DataManager.SUN -> "pride:item/scroll_sun";
+
+            case DataManager.MOON -> "pride:item/scroll_moon";
+
+            case DataManager.BLOOD -> "pride:item/scroll_blood";
+
+            case DataManager.NATURE -> "pride:item/scroll_nature";
+
+            case DataManager.ICE, DataManager.WATER -> "pride:item/scroll_ice";
+
+            default -> "pride:item/scroll_wind";
+        };
+    }
+
+    public static ChatFormatting colorByTier(SkillCore.WeaponArtTier tier){
+        return switch (tier){
+            case MYTHICAL -> ChatFormatting.DARK_RED;
+            case LEGENDARY -> ChatFormatting.YELLOW;
+            case EPIC -> ChatFormatting.DARK_PURPLE;
+            case RARE -> ChatFormatting.BLUE;
+            case UNCOMMON -> ChatFormatting.GREEN;
+            case COMMON -> ChatFormatting.WHITE;
+        };
+    }
 
     public abstract List<SkillAnimation> defineMotions(LivingEntity ent);
 
-    public String getSkillName() {
-        return this.SkillName;
-    }
-
-    public SkillCore.WeaponArtTier getSkillRarity() {
-        return this.SkillArtTier;
-    }
-
-    public byte getSkillElement() {
-        return this.SkillElement;
-    }
 
     public void tryToExecute(LivingEntity ent) {
         if (ent != null && !SkillCore.performingSkillEntities.contains(ent)) {

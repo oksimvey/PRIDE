@@ -1,4 +1,4 @@
-package com.robson.pride.api.data.mob;
+package com.robson.pride.api.data.types;
 
 public abstract class MobData {
 

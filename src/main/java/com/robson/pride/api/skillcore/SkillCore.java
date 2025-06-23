@@ -1,6 +1,7 @@
 package com.robson.pride.api.skillcore;
-import com.robson.pride.api.data.item.WeaponData;
-import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
+import com.robson.pride.api.data.types.WeaponData;
+import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.types.WeaponSkillData;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.ParticleUtils;
 import com.robson.pride.api.utils.TimerUtil;
@@ -41,9 +42,9 @@ public class SkillCore {
 
 
     public static void defaultSkillCore(LivingEntity ent, ItemStack weapon) {
-        WeaponData weaponData = WeaponData.getWeaponData(weapon);
+        WeaponData weaponData = DataManager.getWeaponData(weapon);
         if (weaponData != null) {
-                WeaponSkillBase skill = weaponData.getSkill();
+                WeaponSkillData skill = weaponData.getSkill();
                 if (skill != null) {
                     skill.tryToExecute(ent);
                 }
@@ -65,7 +66,7 @@ public class SkillCore {
     }
 
     public static void weaponArtCore(LivingEntity ent, short weaponart) {
-        WeaponSkillBase skill = WeaponSkillsDataManager.INSTANCE.getByID(weaponart);
+        WeaponSkillData skill = DataManager.getWeaponSkillData(weaponart);
         if (skill != null) {
             skill.tryToExecute(ent);
         }

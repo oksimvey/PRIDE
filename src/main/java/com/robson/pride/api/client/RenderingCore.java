@@ -1,6 +1,6 @@
 package com.robson.pride.api.client;
 
-import com.robson.pride.api.elements.ElementBase;
+import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.ItemStackUtils;
 import com.robson.pride.api.utils.ParticleUtils;
@@ -18,12 +18,12 @@ public class RenderingCore {
         if (ent != null) {
             ParticleTracking.tickParticleMapping(ent.getMainHandItem(), ent);
             ParticleTracking.tickParticleMapping(ent.getOffhandItem(), ent);
-            ElementBase element = ParticleTracking.getItemElementForImbuement(ent.getMainHandItem());
+            ElementData element = ParticleTracking.getItemElementForImbuement(ent.getMainHandItem());
             if (element != null) {
                 ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolR, element.getNormalParticleType(), ParticleTracking.getAABBForImbuement(ent.getMainHandItem(), ent), element.getParticleAmount());
             }
             if (ItemStackUtils.getStyle(ent) == PrideStyles.DUAL_WIELD) {
-                ElementBase element2 = ParticleTracking.getItemElementForImbuement(ent.getMainHandItem());
+                ElementData element2 = ParticleTracking.getItemElementForImbuement(ent.getMainHandItem());
                 if (element2 != null) {
                     ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolL, element2.getNormalParticleType(), ParticleTracking.getAABBForImbuement(ent.getOffhandItem(), ent), element2.getParticleAmount());
                 }

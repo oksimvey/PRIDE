@@ -1,9 +1,9 @@
 package com.robson.pride.skills.weaponarts;
 
-import com.robson.pride.api.data.manager.ElementDataManager;
+import com.robson.pride.api.data.manager.DataManager;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
-import com.robson.pride.api.skillcore.WeaponSkillBase;
+import com.robson.pride.api.data.types.WeaponSkillData;
 import net.minecraft.world.entity.LivingEntity;
 import yesman.epicfight.gameasset.Animations;
 
@@ -11,9 +11,8 @@ import java.util.List;
 
 public interface Kick {
 
-    byte ID = 5;
 
-    WeaponSkillBase DATA = new WeaponSkillBase(ID, "Kick", SkillCore.WeaponArtTier.COMMON, ElementDataManager.NEUTRAL, 4, 1, "pierce_two_hand") {
+    WeaponSkillData DATA = new WeaponSkillData("Kick", DataManager.KICK, "pride:models/item/scroll_wind", SkillCore.WeaponArtTier.COMMON, DataManager.NEUTRAL, 4, 1, "pierce_two_hand") {
 
 
         public List<SkillAnimation> defineMotions(LivingEntity ent) {

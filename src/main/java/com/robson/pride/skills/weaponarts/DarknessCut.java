@@ -1,9 +1,9 @@
 package com.robson.pride.skills.weaponarts;
 
-import com.robson.pride.api.data.manager.ElementDataManager;
+import com.robson.pride.api.data.manager.DataManager;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
-import com.robson.pride.api.skillcore.WeaponSkillBase;
+import com.robson.pride.api.data.types.WeaponSkillData;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.PlaySoundUtils;
 import com.robson.pride.api.utils.TimerUtil;
@@ -27,9 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 public interface DarknessCut {
 
-    byte ID = 0;
-
-    WeaponSkillBase DATA = new WeaponSkillBase(ID,"Darkness Cut", SkillCore.WeaponArtTier.MYTHICAL, ElementDataManager.DARKNESS, 50, 6, "total") {
+    WeaponSkillData DATA = new WeaponSkillData("Darkness Cut", DataManager.DARKNESS_CUT, "irons_spellbooks:item/scroll_eldritch", SkillCore.WeaponArtTier.MYTHICAL,DataManager.DARKNESS, 50, 6, "total") {
 
         public List<SkillAnimation> defineMotions(LivingEntity ent) {
             return List.of(new SkillAnimation(Animations.TACHI_AUTO3, () -> {
@@ -49,7 +47,7 @@ public interface DarknessCut {
                                 if (particle != null && entko != null) {
                                     particle.setLifetime(200);
                                     particle.scale(1.25f);
-                                    SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, () -> ElementDataManager.INSTANCE.getByID(ElementDataManager.DARKNESS).onHit(entko, ent, 10, false));
+                                    SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, () -> DataManager.getElementData(DataManager.DARKNESS).onHit(entko, ent, 10, false));
                                 }
                             }
                         }

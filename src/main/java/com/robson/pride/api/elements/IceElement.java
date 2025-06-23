@@ -2,25 +2,22 @@ package com.robson.pride.api.elements;
 
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.manager.ElementDataManager;
+import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.utils.AttributeUtils;
+import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.math.FixedRGB;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.SchoolRegister;
-import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
-
-import static com.robson.pride.api.utils.ElementalUtils.getElement;
 
 public interface IceElement {
 
-    ElementBase DATA = new ElementBase("Ice", ParticleRegistry.SNOWFLAKE_PARTICLE.get(), ChatFormatting.DARK_AQUA,
+    ElementData DATA = new ElementData("Ice", DataManager.ICE, ParticleRegistry.SNOWFLAKE_PARTICLE.get(), ChatFormatting.DARK_AQUA,
             SoundRegistry.CONE_OF_COLD_LOOP.get(), (byte) 5, SchoolRegister.ICE.get(), new ItemRenderingParams(new FixedRGB(50, 100, 250),
             GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
             GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
@@ -32,11 +29,11 @@ public interface IceElement {
 
         public float calculateFinalDamage(Entity dmgent, Entity ent, float amount) {
             if (dmgent != null && ent != null) {
-                byte element = getElement(ent);
+                byte element = ElementalUtils.getElement(ent);
                 float multiplier = 1;
-                if (element == ElementDataManager.SUN || element == ElementDataManager.THUNDER) {
+                if (element == DataManager.SUN || element == DataManager.THUNDER) {
                     multiplier = 0.5f;
-                } else if (element == ElementDataManager.WATER || element == ElementDataManager.WIND) {
+                } else if (element == DataManager.WATER || element == DataManager.WIND) {
                     multiplier = 1.5f;
                 }
                 return MathUtils.getValueWithPercentageIncrease(multiplier *

@@ -1,8 +1,9 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.data.item.ElementalGemData;
-import com.robson.pride.api.data.item.ItemData;
+import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.mechanics.ParticleTracking;
+import com.robson.pride.api.data.types.WeaponSkillData;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.progression.AttributeModifiers;
 import net.minecraft.world.item.ItemStack;
@@ -18,17 +19,18 @@ public class ItemAnvilEvent {
         if (event != null) {
             ItemStack leftitem = event.getLeft();
             ItemStack rightitem = event.getRight();
-            if (false) {
+            if (DataManager.getGenericData(rightitem) instanceof WeaponSkillData data) {
                 if (ElementalUtils.canPutWeaponArt(leftitem, rightitem)) {
                     ItemStack output = event.getLeft().copy();
                     output.getOrCreateTag().putBoolean("hasweaponart", true);
+                    output.getOrCreateTag().putShort("weapon_art", data.getId());
                     event.setOutput(output);
                     event.setCost(5);
                     event.setMaterialCost(1);
                 }
             }
             if (!ParticleTracking.shouldRenderParticle(event.getLeft())) {
-                if (ItemData.getItemData(rightitem) instanceof ElementalGemData data) {
+                if (DataManager.getGenericData(rightitem) instanceof ElementData data) {
                     if (ElementalUtils.canPutElementalPassive(leftitem, rightitem)) {
                         ItemStack output = event.getLeft().copy();
                         output.getOrCreateTag().putByte("passive_element", data.getElement());

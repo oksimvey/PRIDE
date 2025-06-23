@@ -2,8 +2,8 @@ package com.robson.pride.mixins;
 
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.robson.pride.api.data.manager.ElementDataManager;
-import com.robson.pride.api.elements.ElementBase;
+import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.types.ElementData;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.OutlineBufferSource;
 import net.minecraft.client.renderer.RenderBuffers;
@@ -36,7 +36,7 @@ public class RenderBufferMixins {
 
             SortedMap<RenderType, BufferBuilder> fixedBuffers = ((RenderBufferInterface) renderBuffers).getFixedBuffers();
             for (byte i = 1; true; i++){
-                ElementBase element = ElementDataManager.INSTANCE.getByID(i);
+                ElementData element = DataManager.getElementData(i);
                 if (element == null) {
                     break;
                 }

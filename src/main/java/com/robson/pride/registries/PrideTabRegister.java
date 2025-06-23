@@ -1,18 +1,13 @@
 package com.robson.pride.registries;
 
-import com.robson.pride.api.data.item.ItemData;
-import com.robson.pride.api.data.manager.ElementDataManager;
-import com.robson.pride.api.data.manager.ItemDataManager;
-import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
-import com.robson.pride.api.skillcore.WeaponSkillBase;
+import com.robson.pride.api.data.types.GenericData;
+import com.robson.pride.api.data.manager.DataManager;
 import com.robson.pride.item.weapons.CustomItem;
 import com.robson.pride.main.Pride;
-import com.robson.pride.skills.weaponarts.DarknessCut;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -32,24 +27,24 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> EQUIPMENT_TAB = TABS.register("pride_equipment", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Equipment"))
-            .icon(() -> CustomItem.createItem(ItemDataManager.EUROPEAN_LONGSWORD))
+            .icon(() -> CustomItem.createItem(DataManager.EUROPEAN_LONGSWORD))
             .displayItems((enabledFeatures, entries) -> {
-                for (int i = 1000; true; i++){
-                    ItemData data = ItemDataManager.INSTANCE.getByID(i);
+                for (short i = 1000; true; i++){
+                    GenericData data = DataManager.getGenericData(i);
                     if (data == null){
                         break;
                     }
                     entries.accept(CustomItem.createItem(i));
                 }
-                for (int i = 2000; true; i++){
-                    ItemData data = ItemDataManager.INSTANCE.getByID(i);
+                for (short i = 2000; true; i++){
+                    GenericData data =  DataManager.getGenericData(i);
                     if (data == null){
                         break;
                     }
                     entries.accept(CustomItem.createItem(i));
                 }
-                for (int i = 3000; true; i++){
-                    ItemData data = ItemDataManager.INSTANCE.getByID(i);
+                for (short i = 3000; true; i++){
+                    GenericData data =  DataManager.getGenericData(i);
                     if (data == null){
                         return;
                     }
@@ -61,10 +56,10 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> MATERIALS_TAB = TABS.register("pride_materials", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Materials"))
-            .icon(() -> CustomItem.createItem(ItemDataManager.DARKNESS_GEM))
+            .icon(() -> CustomItem.createItem(DataManager.DARKNESS))
             .displayItems((enabledFeatures, entries) -> {
-                for (int i = 0; true; i++){
-                    ItemData data = ItemDataManager.INSTANCE.getByID(i);
+                for (short i = 1; true; i++){
+                    GenericData data = DataManager.getGenericData(i);
                     if (data == null){
                         return;
                     }
@@ -76,9 +71,15 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> SKILLS_TAB = TABS.register("pride_weapon_arts", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Weapon Arts"))
-            .icon(() -> CustomItem.createItem(ItemDataManager.DARKNESS_GEM))
+            .icon(() -> CustomItem.createItem(DataManager.DARKNESS_CUT))
             .displayItems((parameters, output) -> {
-
+                for (short i = 4000; true; i++){
+                    GenericData data =  DataManager.getGenericData(i);
+                    if (data == null){
+                        return;
+                    }
+                    output.accept(CustomItem.createItem(i));
+                }
             })
             .withTabsBefore(MATERIALS_TAB.getKey())
             .build());

@@ -1,10 +1,9 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.data.item.ItemData;
-import com.robson.pride.api.data.item.WeaponData;
-import com.robson.pride.api.data.manager.ElementDataManager;
-import com.robson.pride.api.data.manager.WeaponSkillsDataManager;
-import com.robson.pride.api.skillcore.WeaponSkillBase;
+import com.robson.pride.api.data.types.GenericData;
+import com.robson.pride.api.data.types.WeaponData;
+import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.types.WeaponSkillData;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.EffectRegister;
 import net.minecraft.ChatFormatting;
@@ -27,22 +26,22 @@ public class ElementalUtils {
     }
 
     public static ParticleOptions getParticleByElement(byte element) {
-        if (ElementDataManager.INSTANCE.getByID(element) != null) {
-            return  ElementDataManager.INSTANCE.getByID(element).getNormalParticleType();
+        if (DataManager.getElementData(element) != null) {
+            return  DataManager.getElementData(element).getNormalParticleType();
         }
         return null;
     }
 
     public static ChatFormatting getColorByElement(byte element) {
-        if (ElementDataManager.INSTANCE.getByID(element) != null) {
-            return ElementDataManager.INSTANCE.getByID(element).getChatColor();
+        if (DataManager.getElementData(element) != null) {
+            return DataManager.getElementData(element).getChatColor();
         }
         return ChatFormatting.GRAY;
     }
 
     public static void playSoundByElement(byte element, Entity ent, float volume) {
-        if (ElementDataManager.INSTANCE.getByID(element) != null) {
-            ElementDataManager.INSTANCE.getByID(element).playSound(ent, volume);
+        if (DataManager.getElementData(element) != null) {
+            DataManager.getElementData(element).playSound(ent, volume);
         }
     }
 
@@ -50,18 +49,18 @@ public class ElementalUtils {
         if (leftitem != null && rightitem != null) {
             byte leftelement = 0;
             if (leftitem.getTag().getBoolean("hasweaponart")) {
-                leftelement = WeaponSkillsDataManager.INSTANCE.getByID(leftitem.getTag().getShort("weapon_art")).getSkillElement();
+                leftelement = DataManager.getWeaponSkillData(leftitem.getTag().getShort("weapon_art")).getElement();
             }
             else {
-                WeaponData data =  WeaponData.getWeaponData(leftitem);
+                WeaponData data = DataManager.getWeaponData(leftitem);
                 if (data != null) {
-                        WeaponSkillBase skill = data.getSkill();
+                        WeaponSkillData skill = data.getSkill();
                         if (skill != null) {
-                            leftelement = skill.getSkillElement();
+                            leftelement = skill.getElement();
                         }
                 }
             }
-            return leftelement == ElementDataManager.NEUTRAL || leftelement == rightitem.getTag().getByte("passive_element");
+            return leftelement == DataManager.NEUTRAL || leftelement == rightitem.getTag().getByte("passive_element");
         }
         return false;
     }
@@ -70,7 +69,7 @@ public class ElementalUtils {
         if (leftitem != null && rightitem != null) {
             short rightelement = rightitem.getTag().getShort("weapon_art");
             byte leftelement = getItemElement(leftitem);
-            return rightelement == ElementDataManager.NEUTRAL || leftelement == 0 || leftelement == rightelement;
+            return rightelement == DataManager.NEUTRAL || leftelement == 0 || leftelement == rightelement;
         }
         return false;
     }
@@ -80,9 +79,9 @@ public class ElementalUtils {
         if (item != null) {
             if (item.getTag() != null) {
                 element = item.getTag().getByte("passive_element");
-                if (ElementDataManager.INSTANCE.getByID(element) == null) {
-                    ItemData data = ItemData.getItemData(item);
-                    if (data != null && ElementDataManager.INSTANCE.getByID((data.getElement())) != null) {
+                if (DataManager.INSTANCE.getByID(element) == null) {
+                    GenericData data = DataManager.getGenericData(item);
+                    if (data != null && DataManager.getElementData((data.getElement())) != null) {
                         element = data.getElement();
                     }
                 }

@@ -3,8 +3,8 @@ package com.robson.pride.particles;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.item.WeaponData;
-import com.robson.pride.api.elements.ElementBase;
+import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.math.BezierCurvef;
 import com.robson.pride.api.utils.math.Vec3f;
@@ -45,14 +45,14 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
         if (item.getTag() == null) {
             return;
         }
-        if (item.getItem() instanceof CustomItem && WeaponData.getWeaponData(item) != null){
-            trailInfo = WeaponData.getWeaponData(item).getTrailInfo(trailInfo);
+        if (item.getItem() instanceof CustomItem && DataManager.getWeaponData(item) != null){
+            trailInfo = DataManager.getWeaponData(item).getTrailInfo(trailInfo);
         }
         int r = (int) trailInfo.rCol();
         int g = (int) trailInfo.gCol();
         int b = (int) trailInfo.bCol();
         if (ParticleTracking.shouldRenderParticle(item)) {
-            ElementBase element = ParticleTracking.getItemElementForImbuement(item);
+            ElementData element = ParticleTracking.getItemElementForImbuement(item);
             if (element != null) {
                 ItemRenderingParams params = element.getItemRenderingParams();
                 if (params != null) {

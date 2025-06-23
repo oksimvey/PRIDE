@@ -1,7 +1,7 @@
 package com.robson.pride.api.keybinding;
 
 
-import com.robson.pride.api.data.item.WeaponData;
+import com.robson.pride.api.data.manager.DataManager;
 import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.keybinding.KeyDodge;
 import com.robson.pride.keybinding.KeySwapHand;
@@ -17,7 +17,7 @@ public interface KeyHandler {
 
     static void tick(Player player) {
         if (player != null) {
-            if (WeaponData.getWeaponData(player.getMainHandItem()) != null) {
+            if (DataManager.getWeaponData(player.getMainHandItem()) != null) {
                 handleKeyInput(player, KeyRegister.SPECIAL, KeySpecial.KEY);
                 handleKeyInput(player, KeyRegister.SWAP_HAND, KeySwapHand.KEY);
             }

@@ -1,6 +1,7 @@
 package com.robson.pride.progression;
 
-import com.robson.pride.api.data.item.WeaponData;
+import com.robson.pride.api.data.types.WeaponData;
+import com.robson.pride.api.data.manager.DataManager;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.TagsUtils;
 import com.robson.pride.registries.WeaponSkillRegister;
@@ -68,7 +69,7 @@ public class AttributeModifiers {
 
     public static float calculateModifier(Player player, ItemStack item, float defaultmodifier) {
         if (item != null && player != null) {
-            WeaponData data = WeaponData.getWeaponData(item);
+            WeaponData data = DataManager.getWeaponData(item);
             if (data != null) {
                 float strmodifier = 0;
                 float dexmodifier = 0;

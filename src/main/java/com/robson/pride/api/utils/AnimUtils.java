@@ -116,6 +116,9 @@ public class AnimUtils {
 
     public static void playAnimByString(Entity ent, String anim, float convert) {
         StaticAnimation animation = AnimationManager.byKey(anim).orElse(null) ;
+        if (animation == null) {
+            return;
+        }
         playAnim(ent, animation, convert);
     }
 

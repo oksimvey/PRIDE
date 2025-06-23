@@ -60,7 +60,8 @@ public class MikiriCounter {
         }
         if (ddmgent instanceof Player) {
             animation = "pride:biped/skill/perilous_";
-        } else animation = "pride:biped/skill/mob_perilous_";
+        }
+        else animation = "pride:biped/skill/mob_perilous_";
         AnimUtils.cancelMotion(ddmgent);
         AnimUtils.rotateToEntity(ddmgent, ent);
         TimerUtil.schedule(() -> AnimUtils.rotateToEntity(ddmgent, ent), 125, TimeUnit.MILLISECONDS);

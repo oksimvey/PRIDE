@@ -1,6 +1,7 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.data.item.WeaponData;
+import com.robson.pride.api.data.types.WeaponData;
+import com.robson.pride.api.data.manager.DataManager;
 import com.robson.pride.progression.PlayerAttributeSetup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -93,7 +94,7 @@ public class ProgressionUtils {
     public static boolean haveReqs(Player player) {
         if (player != null) {
             ItemStack weapon = player.getMainHandItem();
-            WeaponData data = WeaponData.getWeaponData(weapon);
+            WeaponData data = DataManager.getWeaponData(weapon);
             if (data != null) {
                 WeaponData.AttributeReqs reqs = data.getAttributeReqs();
                 boolean mindreqs = true;
