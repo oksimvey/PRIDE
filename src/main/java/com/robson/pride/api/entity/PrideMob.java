@@ -1,12 +1,17 @@
 package com.robson.pride.api.entity;
 
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
+import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.item.weapons.CustomItem;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+
+import javax.annotation.Nullable;
 
 public class PrideMob extends  Monster{
 
@@ -17,6 +22,14 @@ public class PrideMob extends  Monster{
         }
     }
 
+    @Deprecated
+    @org.jetbrains.annotations.ApiStatus.OverrideOnly
+    @Nullable
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_21434_, DifficultyInstance p_21435_, MobSpawnType p_21436_, @Nullable SpawnGroupData p_21437_, @Nullable CompoundTag p_21438_) {
+       this.setItemSlot(EquipmentSlot.MAINHAND, CustomItem.createItem(DataManager.EUROPEAN_LONGSWORD));
+        return super.finalizeSpawn(p_21434_, p_21435_, p_21436_, p_21437_, p_21438_);
+    }
+
     public static AttributeSupplier.Builder registerAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 100.0D)
@@ -25,6 +38,8 @@ public class PrideMob extends  Monster{
                 .add(Attributes.FOLLOW_RANGE, 50.0D)
                 .add(Attributes.ATTACK_DAMAGE, 40.0D);
     }
+
+
 
     @Override
     public float getStepHeight() {

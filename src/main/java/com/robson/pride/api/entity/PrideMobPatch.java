@@ -1,14 +1,17 @@
 package com.robson.pride.api.entity;
 
 import com.robson.pride.api.ai.combat.HumanoidCombatActions;
+import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.TimerUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import yesman.epicfight.api.animation.Animator;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.api.client.animation.ClientAnimator;
+import yesman.epicfight.api.utils.math.OpenMatrix4f;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.network.EpicFightNetworkManager;
 import yesman.epicfight.network.server.SPEntityPacket;
@@ -33,7 +36,7 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends HumanoidMobP
     private boolean canParry;
 
     public PrideMobPatch() {
-        super(Factions.UNDEAD);
+        super(Factions.NEUTRAL);
     }
 
     public void onStartTracking(ServerPlayer trackingPlayer) {
@@ -41,7 +44,6 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends HumanoidMobP
             SPEntityPacket packet = new SPEntityPacket(((PathfinderMob)this.original).getId());
             EpicFightNetworkManager.sendToPlayer(packet, trackingPlayer);
         }
-
         super.onStartTracking(trackingPlayer);
     }
 
@@ -53,8 +55,20 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends HumanoidMobP
         animator.setCurrentMotionsAsDefault();
     }
 
+    @Override
+    public OpenMatrix4f getModelMatrix(float partialTicks) {
+        return super.getModelMatrix(partialTicks).scale(1, 1, 1);
+    }
 
-    public void initAnimator(Animator animator) {
+    @Override
+    public void serverTick(LivingEvent.LivingTickEvent event) {
+        super.serverTick(event);
+        if (this.getTarget() != null && AnimUtils.checkAttack(this.getTarget())) {
+            this.startBlocking(1000, false);
+        }
+    }
+
+        public void initAnimator(Animator animator) {
         super.initAnimator(animator);
         animator.addLivingAnimation(LivingMotions.IDLE, Animations.BIPED_IDLE);
         animator.addLivingAnimation(LivingMotions.WALK, Animations.BIPED_WALK);
@@ -62,10 +76,15 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends HumanoidMobP
         animator.addLivingAnimation(LivingMotions.FALL, Animations.BIPED_FALL);
         animator.addLivingAnimation(LivingMotions.MOUNT, Animations.BIPED_MOUNT);
         animator.addLivingAnimation(LivingMotions.DEATH, Animations.BIPED_DEATH);
+        animator.addLivingAnimation(LivingMotions.BLOCK, Animations.LONGSWORD_GUARD);
     }
 
     public void updateMotion(boolean considerInaction) {
-        super.commonAggressiveMobUpdateMotion(considerInaction);
+        if (true) {
+            currentLivingMotion = LivingMotions.BLOCK;
+            return;
+        }
+        super.commonMobUpdateMotion(considerInaction);
     }
 
     public void startBlocking(int duration, boolean canParry){

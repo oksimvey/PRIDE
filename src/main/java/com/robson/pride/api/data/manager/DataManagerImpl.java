@@ -1,8 +1,6 @@
 package com.robson.pride.api.data.manager;
 
-import com.robson.pride.api.data.types.GenericData;
-
-public interface DataManagerImpl<T extends GenericData> {
+public interface DataManagerImpl<T> {
 
     T getByID(short id);
 }

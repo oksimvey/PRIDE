@@ -1,5 +1,7 @@
 package com.robson.pride.events;
 
+import com.robson.pride.api.data.manager.SkillDataManager;
+import com.robson.pride.api.data.types.DurationSkillData;
 import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
@@ -30,9 +32,14 @@ public class EntityAttacked {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void OnAnyAttack(LivingAttackEvent event) {
         if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
-            Entity ent = event.getEntity();
+            LivingEntity ent = event.getEntity();
             Entity ddmgent = event.getSource().getDirectEntity();
-
+            for (byte skill : SkillDataManager.getActiveSkills(ent)){
+                DurationSkillData data = SkillDataManager.INSTANCE.getByID(skill);
+                if (data != null) {
+                    data.onAttacked(ent, event);
+                }
+            }
             if (ddmgent instanceof Projectile) {
                 if (ddmgent instanceof AbstractArrow arrow && ent.getPersistentData().getBoolean("mikiri_dodge")) {
                     MikiriCounter.onArrowMikiri(ent, arrow, event);

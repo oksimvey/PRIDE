@@ -4,7 +4,7 @@ import net.minecraft.world.entity.player.Player;
 
 public abstract class BasicKey {
 
-    private boolean isPressed = false;
+    public boolean isPressed = false;
 
     public void onPressTick(Player player) {
         if (!this.isPressed) {
@@ -18,7 +18,6 @@ public abstract class BasicKey {
     }
 
     public void onRelease(Player player) {
-        this.isPressed = false;
     }
 
     public abstract void onPress(Player player);

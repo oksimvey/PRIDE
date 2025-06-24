@@ -8,6 +8,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.animation.AnimationManager;
+import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.DynamicAnimation;
 import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.api.animation.types.StaticAnimation;
@@ -110,6 +111,7 @@ public class AnimUtils {
 
     public static InteractionHand getAttackingHand(Entity ent) {
         if (ent != null) {
+            DynamicAnimation animation = getCurrentAnimation(ent);
         }
         return null;
     }

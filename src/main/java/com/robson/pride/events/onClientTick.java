@@ -14,6 +14,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 @Mod.EventBusSubscriber
 public class onClientTick {
@@ -26,10 +27,6 @@ public class onClientTick {
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (Minecraft.getInstance().player != null) {
             RenderScreens.renderPlayerScreens(Minecraft.getInstance());
-            Player player = Minecraft.getInstance().player;
-            if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND) && player.isUsingItem() && player.canSprint()) {
-                player.setSprinting(false);
-            }
         }
     }
 
