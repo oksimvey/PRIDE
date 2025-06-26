@@ -2,7 +2,7 @@ package com.robson.pride.api.elements;
 
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.utils.AttributeUtils;
 import com.robson.pride.api.utils.ElementalUtils;
@@ -17,7 +17,7 @@ import net.minecraft.world.entity.Entity;
 
 public interface IceElement {
 
-    ElementData DATA = new ElementData("Ice", DataManager.ICE, ParticleRegistry.SNOWFLAKE_PARTICLE.get(), ChatFormatting.DARK_AQUA,
+    ElementData DATA = new ElementData("Ice", ServerDataManager.ICE, ParticleRegistry.SNOWFLAKE_PARTICLE.get(), ChatFormatting.DARK_AQUA,
             SoundRegistry.CONE_OF_COLD_LOOP.get(), (byte) 5, SchoolRegister.ICE.get(), new ItemRenderingParams(new FixedRGB(50, 100, 250),
             GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
             GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
@@ -31,9 +31,9 @@ public interface IceElement {
             if (dmgent != null && ent != null) {
                 byte element = ElementalUtils.getElement(ent);
                 float multiplier = 1;
-                if (element == DataManager.SUN || element == DataManager.THUNDER) {
+                if (element == ServerDataManager.SUN || element == ServerDataManager.THUNDER) {
                     multiplier = 0.5f;
-                } else if (element == DataManager.WATER || element == DataManager.WIND) {
+                } else if (element == ServerDataManager.WATER || element == ServerDataManager.WIND) {
                     multiplier = 1.5f;
                 }
                 return MathUtils.getValueWithPercentageIncrease(multiplier *

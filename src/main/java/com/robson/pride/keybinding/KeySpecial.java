@@ -6,18 +6,19 @@ import net.minecraft.world.entity.player.Player;
 
 import static com.robson.pride.epicfight.styles.SheatProvider.unsheat;
 
-public interface KeySpecial {
+public class KeySpecial extends LongPressKey {
 
-    LongPressKey KEY = new LongPressKey((byte) 10) {
+    public KeySpecial() {
+        super((byte) 10);
+    }
 
-        @Override
-        public void onPress(Player player) {
-            unsheat(player);
-        }
+    @Override
+    public void onPress(Player player) {
+        unsheat(player);
+    }
 
-        @Override
-        public void onLongPress(Player player) {
-            SkillCore.onSkillExecute(player);
-        }
-    };
+    @Override
+    public void onLongPress(Player player) {
+        SkillCore.onSkillExecute(player);
+    }
 }

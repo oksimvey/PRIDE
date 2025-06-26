@@ -1,6 +1,6 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.mechanics.MikiriCounter;
 import com.robson.pride.api.utils.ProgressionUtils;
@@ -40,7 +40,7 @@ public class onSpellDamage {
                 }
             }
             for (byte i = 1; true; i++){
-                ElementData data = DataManager.getElementData(i);
+                ElementData data = ServerDataManager.getElementData(i);
                 if (data == null){
                     return;
                 }

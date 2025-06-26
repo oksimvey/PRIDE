@@ -5,9 +5,7 @@ import com.robson.pride.api.keybinding.BasicKey;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
-public interface KeyGuard {
-
-    BasicKey KEY = new BasicKey() {
+public class KeyGuard extends BasicKey{
 
         public void onPressTick(Player player){
             super.onPressTick(player);
@@ -27,5 +25,4 @@ public interface KeyGuard {
             SkillDataManager.addSkill(player, SkillDataManager.GUARD);
             player.sendSystemMessage(Component.literal("key pressed"));
         }
-    };
 }

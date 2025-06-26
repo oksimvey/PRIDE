@@ -15,7 +15,7 @@ import yesman.epicfight.client.particle.AnimationTrailParticle;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ParticleRegister {
-    public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Pride.MODID);
+    public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Pride.MOD_ID);
 
     public static final RegistryObject<SimpleParticleType> PERILOUS = PARTICLES.register("perilous", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> VULNERABLE = PARTICLES.register("vulnerable", () -> new SimpleParticleType(true));

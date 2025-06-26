@@ -1,13 +1,15 @@
 package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.types.WeaponData;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.progression.PlayerAttributeSetup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+
+import static com.robson.pride.api.data.player.ClientDataManager.CLIENT_DATA_MANAGER;
 
 public class ProgressionUtils {
 
@@ -31,9 +33,8 @@ public class ProgressionUtils {
     public static int getTotalLevel(Entity ent) {
         if (ent != null) {
             if (ent instanceof Player player) {
-                CompoundTag tag = TagsUtils.playerTags.get(player);
-                return (tag.getInt("StrengthLvl") + tag.getInt("DexterityLvl") + tag.getInt("VigorLvl") + tag.getInt("EnduranceLvl") + tag.getInt("MindLvl")) / 5;
-            }
+                return CLIENT_DATA_MANAGER.get(player).getProgressionData().getTotalLevel();
+           }
         }
         return 0;
     }
@@ -94,7 +95,7 @@ public class ProgressionUtils {
     public static boolean haveReqs(Player player) {
         if (player != null) {
             ItemStack weapon = player.getMainHandItem();
-            WeaponData data = DataManager.getWeaponData(weapon);
+            WeaponData data = ServerDataManager.getWeaponData(weapon);
             if (data != null) {
                 WeaponData.AttributeReqs reqs = data.getAttributeReqs();
                 boolean mindreqs = true;

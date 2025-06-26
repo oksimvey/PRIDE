@@ -1,5 +1,6 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.api.utils.math.PrideVec3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
@@ -17,9 +18,9 @@ public class TeleportUtils {
 
     public static void teleportEntityToEntityJoint(Entity entity1, Entity entity2, Joint joint, double offsetx, double offsety, double offsetz) {
         if (entity1 != null && entity2 != null) {
-            Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, entity2, joint);
+            PrideVec3f vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, entity2, joint);
             if (vec3 != null) {
-                entity1.teleportTo(vec3.x + (offsetx), entity2.getY() + (offsety), vec3.z + (offsetz));
+                entity1.teleportTo(vec3.x() + (offsetx), entity2.getY() + (offsety), vec3.z() + (offsetz));
             }
         }
     }

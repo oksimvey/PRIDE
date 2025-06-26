@@ -2,7 +2,7 @@ package com.robson.pride.api.elements;
 
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.utils.AttributeUtils;
 import com.robson.pride.api.utils.ElementalUtils;
@@ -21,7 +21,7 @@ import java.util.Random;
 
 public interface DarknessElement {
 
-    ElementData DATA = new ElementData("Darkness", DataManager.DARKNESS,ParticleTypes.SMOKE, ChatFormatting.BLACK, SoundEvents.PARROT_IMITATE_WITHER, (byte) 3, SchoolRegister.DARKNESS.get(),
+    ElementData DATA = new ElementData("Darkness", ServerDataManager.DARKNESS,ParticleTypes.SMOKE, ChatFormatting.BLACK, SoundEvents.PARROT_IMITATE_WITHER, (byte) 3, SchoolRegister.DARKNESS.get(),
             new ItemRenderingParams(new FixedRGB(0, 0, 0),
                     GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
                     GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
@@ -45,9 +45,9 @@ public interface DarknessElement {
             if (dmgent != null && ent != null) {
                 byte element = ElementalUtils.getElement(ent);
                 float multiplier = 1;
-                if (element == DataManager.MOON || element == DataManager.BLOOD) {
+                if (element == ServerDataManager.MOON || element == ServerDataManager.BLOOD) {
                     multiplier = 0.5f;
-                } else if (element == DataManager.LIGHT || element == DataManager.SUN) {
+                } else if (element == ServerDataManager.LIGHT || element == ServerDataManager.SUN) {
                     multiplier = 1.5f;
                 }
                 return MathUtils.getValueWithPercentageIncrease(multiplier *

@@ -1,6 +1,6 @@
 package com.robson.pride.api.data.manager;
 
-public interface DataManagerImpl<T> {
+public interface ServerDataManagerImpl<T> {
 
     T getByID(short id);
 }

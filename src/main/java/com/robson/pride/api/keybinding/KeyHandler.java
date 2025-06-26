@@ -1,9 +1,8 @@
 package com.robson.pride.api.keybinding;
 
 
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.utils.StaminaUtils;
-import com.robson.pride.keybinding.KeyDodge;
 import com.robson.pride.keybinding.KeyGuard;
 import com.robson.pride.keybinding.KeySwapHand;
 import com.robson.pride.keybinding.KeySpecial;
@@ -15,14 +14,26 @@ import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.client.events.engine.ControllEngine;
 import yesman.epicfight.client.input.EpicFightKeyMappings;
 
-public interface KeyHandler {
+public class KeyHandler {
 
-    static void tick(Player player) {
+    private final KeySpecial special;
+
+    private final KeySwapHand swapHand;
+
+    private final KeyGuard guard;
+
+    public KeyHandler() {
+        this.special = new KeySpecial();
+        this.swapHand = new KeySwapHand();
+        this.guard = new KeyGuard();
+    }
+
+    public void tick(Player player) {
         if (player != null) {
-            if (DataManager.getWeaponData(player.getMainHandItem()) != null) {
-                handleKeyInput(player, EpicFightKeyMappings.ATTACK, KeySpecial.KEY);
-                handleKeyInput(player, KeyRegister.SWAP_HAND, KeySwapHand.KEY);
-                handleKeyInput(player, EpicFightKeyMappings.GUARD, KeyGuard.KEY);
+            if (ServerDataManager.getWeaponData(player.getMainHandItem()) != null) {
+                handleKeyInput(player, EpicFightKeyMappings.ATTACK, this.special);
+                handleKeyInput(player, KeyRegister.SWAP_HAND, this.swapHand);
+                handleKeyInput(player, EpicFightKeyMappings.GUARD, this.guard);
             }
             if (StaminaUtils.getStamina(player) >= 3){
             }
@@ -41,7 +52,7 @@ public interface KeyHandler {
         }
     }
 
-    static byte getInputForDodge(){
+    public static byte getInputForDodge(){
         Options options  = Minecraft.getInstance().options;
         if (options.keyUp.isDown()) {
             return 1;

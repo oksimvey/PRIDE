@@ -1,7 +1,6 @@
 package com.robson.pride.mixins;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -17,7 +16,6 @@ import yesman.epicfight.client.renderer.EpicFightRenderTypes;
 import yesman.epicfight.client.renderer.shader.AnimationShaderInstance;
 import yesman.epicfight.client.renderer.shader.ShaderParser;
 import yesman.epicfight.config.ClientConfig;
-import yesman.epicfight.main.EpicFightMod;
 
 import java.util.List;
 import java.util.Map;
@@ -46,7 +44,7 @@ public abstract class AnimatedMeshMixin extends StaticMesh<SkinnedMesh.SkinnedMe
         if (ClientConfig.activateAnimationShader && playerStack == null || playerBuffer == null || playerBuffer != bufferSources || playerStack != poseStack && armature.getJointNumber() <= ShaderParser.SHADER_ARRAY_LIMIT) {
             renderType.setupRenderState();
             AnimationShaderInstance animationShader = EpicFightRenderTypes.getAnimationShader(renderType);
-            this.drawWithShader(poseStack, animationShader, packedLight, 1.0F, 1.0F, 1.0F, 1.0F, overlay, armature, poses);
+            this.drawWithShader(poseStack, animationShader, packedLight, 1F, 1F, 1.0F, 1.0F, overlay, armature, poses);
             renderType.clearRenderState();
             return;
         }

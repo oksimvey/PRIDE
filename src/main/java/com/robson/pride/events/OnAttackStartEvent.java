@@ -1,8 +1,10 @@
 package com.robson.pride.events;
 
+import com.robson.pride.api.data.player.ClientDataManager;
 import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.registries.AnimationsRegister;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 

@@ -1,8 +1,9 @@
 package com.robson.pride.effect;
 
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.api.utils.math.MathUtils;
+import com.robson.pride.api.utils.math.PrideVec3f;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.KeyRegister;
@@ -45,11 +46,11 @@ public class MobilityEffect extends PrideEffectBase {
 
     public void onEffectStart(LivingEntity ent) {
         if (ent instanceof Player) {
-            if (ElementalUtils.getElement(ent) == DataManager.THUNDER) {
+            if (ElementalUtils.getElement(ent) == ServerDataManager.THUNDER) {
                 ThunderMobility(ent);
                 return;
             }
-            if (ElementalUtils.getElement(ent) == DataManager.MOON) {
+            if (ElementalUtils.getElement(ent) == ServerDataManager.MOON) {
                 MoonMobility(ent);
                 return;
             }
@@ -71,11 +72,11 @@ public class MobilityEffect extends PrideEffectBase {
     public void ThunderMobility(LivingEntity entity) {
         entity.setDeltaMovement(entity.getDeltaMovement().x, 0 + Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector().y, entity.getDeltaMovement().z);
         CameraUtils.correctCamera();
-        List<Vec3> points = ArmatureUtils.getEntityArmatureVecsForParticle(Minecraft.getInstance().player, entity, 2, 0.1f);
+        List<PrideVec3f> points = ArmatureUtils.getEntityArmatureVecsForParticle(Minecraft.getInstance().player, entity, 2, 0.1f);
         TimerUtil.schedule(() -> {
             if (!points.isEmpty()) {
-                for (Vec3 point : points) {
-                    Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.ELECTRICITY_PARTICLE.get(), point.x, point.y, point.z, 0, 0, 0);
+                for (PrideVec3f point : points) {
+                    Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.ELECTRICITY_PARTICLE.get(), point.x(), point.y(), point.z(), 0, 0, 0);
                 }
             }
             CameraUtils.correctCamera();
@@ -117,8 +118,8 @@ public class MobilityEffect extends PrideEffectBase {
                 ent.setDeltaMovement(ent.getLookAngle().x, 0, ent.getLookAngle().z);
                 Vec3i vec3 = new Vec3i((int) ((int) ent.getLookAngle().scale(1.5).x + ent.getX()), (int) (ent.getY() - 1), (int) ((int) ent.getLookAngle().scale(1.5).z + ent.getZ()));
                 storeBlockPos(ent, vec3);
-                Vec3 legr = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.get().legR);
-                Vec3 legl = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.get().legL);
+                PrideVec3f legr = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.get().legR);
+                PrideVec3f legl = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.get().legL);
                 float max = 0.25f;
                 float min = -0.25f;
                 Random random = new Random();
@@ -128,13 +129,13 @@ public class MobilityEffect extends PrideEffectBase {
                 if (legr != null && legl != null) {
                     for (int i = 0; i < 5; i++) {
                         Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.SNOWFLAKE_PARTICLE.get(),
-                                random.nextFloat(max - min) + min + legr.x,
-                                random.nextFloat(max - min) + min + legr.y,
-                                random.nextFloat(max - min) + min + legr.z, 0, 0, 0);
+                                random.nextFloat(max - min) + min + legr.x(),
+                                random.nextFloat(max - min) + min + legr.y(),
+                                random.nextFloat(max - min) + min + legr.z(), 0, 0, 0);
                         Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.SNOWFLAKE_PARTICLE.get(),
-                                random.nextFloat(max - min) + min + legl.x,
-                                random.nextFloat(max - min) + min + legl.y,
-                                random.nextFloat(max - min) + min + legl.z, 0, 0, 0);
+                                random.nextFloat(max - min) + min + legl.x(),
+                                random.nextFloat(max - min) + min + legl.y(),
+                                random.nextFloat(max - min) + min + legl.z(), 0, 0, 0);
                     }
                 }
             }

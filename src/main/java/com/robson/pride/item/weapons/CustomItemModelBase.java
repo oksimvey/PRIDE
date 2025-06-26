@@ -2,7 +2,7 @@ package com.robson.pride.item.weapons;
 
 
 import com.robson.pride.api.data.types.GenericData;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.model.*;
@@ -50,7 +50,7 @@ public class CustomItemModelBase implements BakedModel {
         }, missing, Collections.emptyList()) {
 
             public BakedModel resolve(@NotNull BakedModel original, @NotNull ItemStack itemStack, @Nullable ClientLevel level, @Nullable LivingEntity livingEntity, int seed) {
-                    GenericData data = DataManager.getGenericData(itemStack);
+                    GenericData data = ServerDataManager.getGenericData(itemStack);
                     if (data != null) {
                             ModelManager manager = Minecraft.getInstance().getModelManager();
                             BakedModel missing = manager.getModel(ModelBakery.MISSING_MODEL_LOCATION);

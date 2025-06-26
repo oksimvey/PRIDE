@@ -1,6 +1,6 @@
 package com.robson.pride.skills.weaponarts;
 
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.data.types.WeaponSkillData;
@@ -12,7 +12,7 @@ import java.util.List;
 public interface Kick {
 
 
-    WeaponSkillData DATA = new WeaponSkillData("Kick", DataManager.KICK, "pride:models/item/scroll_wind", SkillCore.WeaponArtTier.COMMON, DataManager.NEUTRAL, 4, 1, "pierce_two_hand") {
+    WeaponSkillData DATA = new WeaponSkillData("Kick", ServerDataManager.KICK, "pride:models/item/scroll_wind", SkillCore.WeaponArtTier.COMMON, ServerDataManager.NEUTRAL, 4, 1, "pierce_two_hand") {
 
 
         public List<SkillAnimation> defineMotions(LivingEntity ent) {

@@ -1,6 +1,6 @@
 package com.robson.pride.skills.weaponarts;
 
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.data.types.WeaponSkillData;
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public interface FlameSlashSkill {
 
 
-    WeaponSkillData DATA = new WeaponSkillData( "Flame Slash", DataManager.FLAME_SLASH, "pride:models/item/scroll_sun", SkillCore.WeaponArtTier.EPIC, DataManager.SUN, 25, 5, "sweep") {
+    WeaponSkillData DATA = new WeaponSkillData( "Flame Slash", ServerDataManager.FLAME_SLASH, "pride:models/item/scroll_sun", SkillCore.WeaponArtTier.EPIC, ServerDataManager.SUN, 25, 5, "sweep") {
 
 
         public List<SkillAnimation> defineMotions(LivingEntity ent) {

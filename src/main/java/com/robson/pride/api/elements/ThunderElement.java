@@ -2,7 +2,7 @@ package com.robson.pride.api.elements;
 
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.*;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public interface ThunderElement {
 
-    ElementData DATA = new ElementData("Thunder", DataManager.THUNDER, ParticleRegistry.ELECTRICITY_PARTICLE.get(), ChatFormatting.AQUA, SoundRegistry.LIGHTNING_WOOSH_01.get(),
+    ElementData DATA = new ElementData("Thunder", ServerDataManager.THUNDER, ParticleRegistry.ELECTRICITY_PARTICLE.get(), ChatFormatting.AQUA, SoundRegistry.LIGHTNING_WOOSH_01.get(),
             (byte) 5, SchoolRegister.THUNDER.get(),  new ItemRenderingParams(new FixedRGB(0, 252, 227),
             GlintRenderTypes.createDirectGlint("direct_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png")),
             GlintRenderTypes.createDirectEntityGlint("direct_entity_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png")))) {
@@ -90,9 +90,9 @@ public interface ThunderElement {
             if (dmgent != null && ent != null) {
                 byte element = ElementalUtils.getElement(ent);
                 float multiplier = 1;
-                if (element == DataManager.NATURE || element == DataManager.WIND) {
+                if (element == ServerDataManager.NATURE || element == ServerDataManager.WIND) {
                     multiplier = 0.5f;
-                } else if (element == DataManager.WATER || element == DataManager.ICE) {
+                } else if (element == ServerDataManager.WATER || element == ServerDataManager.ICE) {
                     multiplier = 1.5f;
                 }
                 return MathUtils.getValueWithPercentageIncrease(multiplier *

@@ -63,18 +63,18 @@ public class BezierCurvef {
         return (float) (Math.pow(1.0F - t, 3.0F) * start + 3.0F * t * Math.pow(1.0F - t, 2.0F) * a + 3.0F * t * t * (1.0F - t) * b + t * t * t * end);
     }
 
-    public static List<Vec3f> getBezierInterpolatedPoints(List<Vec3f> points, int interpolatedResults) {
+    public static List<PrideVec3f> getBezierInterpolatedPoints(List<PrideVec3f> points, int interpolatedResults) {
         return getBezierInterpolatedPoints(points, 0, points.size() - 1, interpolatedResults);
     }
 
-    public static List<Vec3f> getBezierInterpolatedPoints(List<Vec3f> points, int sliceBegin, int sliceEnd, int interpolatedResults) {
+    public static List<PrideVec3f> getBezierInterpolatedPoints(List<PrideVec3f> points, int sliceBegin, int sliceEnd, int interpolatedResults) {
         if (points.size() < 3) {
             return null;
         } else {
             sliceBegin = Math.max(sliceBegin, 0);
             sliceEnd = Math.min(sliceEnd, points.size() - 1);
             int size = points.size();
-            List<Vec3f> interpolatedPoints = Lists.newArrayList();
+            List<PrideVec3f> interpolatedPoints = Lists.newArrayList();
             FloatList x = new FloatArrayList();
             FloatList y = new FloatArrayList();
             FloatList z = new FloatArrayList();
@@ -100,8 +100,8 @@ public class BezierCurvef {
                     interpolatedPoints.remove(interpolatedPoints.size() - 1);
                 }
 
-                Vec3f start = points.get(i);
-                Vec3f end = points.get(i + 1);
+                PrideVec3f start = points.get(i);
+                PrideVec3f end = points.get(i + 1);
                 float x_av = x_a.getFloat(i);
                 float x_bv = x_b.getFloat(i);
                 float y_av = y_a.getFloat(i);
@@ -111,7 +111,7 @@ public class BezierCurvef {
 
                 for(int j = 0; j < interpolatedResults + 1; ++j) {
                     float t = (float) j / interpolatedResults;
-                    interpolatedPoints.add(new Vec3f(cubicBezier(start.x(), end.x(), x_av, x_bv, t), cubicBezier(start.y(), end.y(), y_av, y_bv, t), cubicBezier(start.z(), end.z(), z_av, z_bv, t)));
+                    interpolatedPoints.add(new PrideVec3f(cubicBezier(start.x(), end.x(), x_av, x_bv, t), cubicBezier(start.y(), end.y(), y_av, y_bv, t), cubicBezier(start.z(), end.z(), z_av, z_bv, t)));
                 }
             }
 

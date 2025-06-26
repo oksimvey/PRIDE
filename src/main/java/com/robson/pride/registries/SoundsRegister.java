@@ -16,7 +16,7 @@ public class SoundsRegister {
     public static final RegistryObject<SoundEvent> SHOGUN = registerSound("shogun");
 
     private static RegistryObject<SoundEvent> registerSound(String name) {
-        ResourceLocation res = new ResourceLocation(Pride.MODID, name);
+        ResourceLocation res = new ResourceLocation(Pride.MOD_ID, name);
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(res));
     }
 }

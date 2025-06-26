@@ -26,14 +26,14 @@ public interface MathUtils {
     }
 
     static float getTotalDistance(Vec3 vec1, Vec3 vec2) {
-        return getTotalDistance(Vec3f.fromVec3(vec1), Vec3f.fromVec3(vec2));
+        return getTotalDistance(PrideVec3f.fromVec3(vec1), PrideVec3f.fromVec3(vec2));
     }
 
     static float getTotalDistance(float deltax, float deltay, float deltaz) {
         return (float) Math.sqrt((deltax * deltax) + (deltay * deltay) + (deltaz * deltaz));
     }
 
-    static float getTotalDistance(Vec3f vec1, Vec3f vec2) {
+    static float getTotalDistance(PrideVec3f vec1, PrideVec3f vec2) {
         return getTotalDistance(vec1.x() - vec2.x(), vec1.y() - vec2.y(), vec1.z() - vec2.z());
     }
 
@@ -48,15 +48,15 @@ public interface MathUtils {
         return new Vec3(x, vec.y, z);
     }
 
-    static Vec3f rotate2DVector(Vec3f vec, float degrees) {
+    static PrideVec3f rotate2DVector(PrideVec3f vec, float degrees) {
         float theta = degreeToRadians(degrees);
         float x = (float) ((vec.x() * Math.cos(theta)) - (vec.z() * Math.sin(theta)));
         float z = (float) ((vec.x() * Math.sin(theta)) + (vec.z() * Math.cos(theta)));
-        return new Vec3f(x, vec.y(), z);
+        return new PrideVec3f(x, vec.y(), z);
     }
 
-    static List<Vec3f> getVectorsForHorizontalCircle(Vec3f radiusvec, int points) {
-        List<Vec3f> circlevecs = new ArrayList<>();
+    static List<PrideVec3f> getVectorsForHorizontalCircle(PrideVec3f radiusvec, int points) {
+        List<PrideVec3f> circlevecs = new ArrayList<>();
         if (radiusvec != null) {
             for (int i = 0; i <= 360; i += 360 / points) {
                 circlevecs.add(rotate2DVector(radiusvec, i));
@@ -66,8 +66,8 @@ public interface MathUtils {
     }
 
 
-    static List<Vec3f> getVectorsForHorizontalSpiral(Vec3f radiusvec, byte larps, int points, int scale) {
-        List<Vec3f> circlevecs = new ArrayList<>();
+    static List<PrideVec3f> getVectorsForHorizontalSpiral(PrideVec3f radiusvec, byte larps, int points, int scale) {
+        List<PrideVec3f> circlevecs = new ArrayList<>();
         if (radiusvec != null) {
             int totalangle = 360 * larps;
             for (int i = 0; i <= totalangle; i += totalangle / points) {

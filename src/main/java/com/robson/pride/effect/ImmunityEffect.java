@@ -4,6 +4,7 @@ import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.ManaUtils;
 import com.robson.pride.api.utils.TimerUtil;
+import com.robson.pride.api.utils.math.PrideVec3f;
 import com.robson.pride.registries.EffectRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -55,8 +56,8 @@ public class ImmunityEffect extends PrideEffectBase {
                 float max = 0.25f;
                 float min = -0.25f;
                 Random random = new Random();
-                List<Vec3> positions = new ArrayList<>();
-                Vec3 jointpos = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, joint);
+                List<PrideVec3f> positions = new ArrayList<>();
+                PrideVec3f jointpos = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, joint);
                 if (jointpos != null) {
                     for (int i = 0; i < ent.getBbHeight() * 10; i++) {
                         positions.add(jointpos.add(random.nextFloat(max - min) + min,
@@ -65,10 +66,10 @@ public class ImmunityEffect extends PrideEffectBase {
                     }
                 }
                 if (!positions.isEmpty()) {
-                    for (Vec3 pos : positions) {
+                    for (PrideVec3f pos : positions) {
                         ParticleOptions particle = ElementalUtils.getParticleByElement(ElementalUtils.getElement(ent));
                         if (particle != null) {
-                            loopParticleOnEnt(ent, Minecraft.getInstance().particleEngine.createParticle(particle, pos.x, pos.y, pos.z, ent.getDeltaMovement().x, ent.getDeltaMovement().y, ent.getDeltaMovement().z), ent.position().subtract(pos));
+                            loopParticleOnEnt(ent, Minecraft.getInstance().particleEngine.createParticle(particle, pos.x(), pos.y(), pos.z(), ent.getDeltaMovement().x, ent.getDeltaMovement().y, ent.getDeltaMovement().z), ent.position().subtract(pos.toVec3()));
                         }
                     }
                 }

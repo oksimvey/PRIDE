@@ -2,7 +2,7 @@ package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.data.types.WeaponData;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.epicfight.styles.PrideStyles;
@@ -21,6 +21,7 @@ import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
 import static com.robson.pride.keybinding.KeySwapHand.addModifierToStyle;
+
 
 public class ItemStackUtils {
 
@@ -67,7 +68,7 @@ public class ItemStackUtils {
 
     public static float getColliderSize(ItemStack item) {
         if (item != null) {
-            GenericData data = DataManager.getGenericData(item);
+            GenericData data = ServerDataManager.getGenericData(item);
             if (data != null) {
                 Matrix2f collider = data.getCollider();
                 if (collider != null) {
@@ -97,7 +98,7 @@ public class ItemStackUtils {
                 if (hand == InteractionHand.MAIN_HAND) {
                     itemStack = living.getMainHandItem();
                 } else itemStack = living.getOffhandItem();
-                WeaponData weaponData = DataManager.getWeaponData(itemStack);
+                WeaponData weaponData = ServerDataManager.getWeaponData(itemStack);
                 if (weaponData != null) {
                     return  weaponData.getWeight();
                 }
@@ -122,7 +123,7 @@ public class ItemStackUtils {
                     case MAIN_HAND -> living.getMainHandItem();
                     case OFF_HAND -> living.getOffhandItem();
                 };
-                return DataManager.getWeaponData(itemStack) != null;
+                return ServerDataManager.getWeaponData(itemStack) != null;
             }
         }
         return false;

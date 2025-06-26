@@ -3,6 +3,7 @@ package com.robson.pride.events;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.robson.pride.api.client.RenderScreens;
 import com.robson.pride.api.client.RenderingCore;
+import com.robson.pride.api.entity.PrideMob;
 import com.robson.pride.api.utils.ItemStackUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -42,8 +43,8 @@ public class onClientTick {
     public static void onRenderEntity(RenderLivingEvent.Pre event) {
         Minecraft client = Minecraft.getInstance();
         if (!client.isPaused()) {
-            if (event.getEntity() instanceof Player player) {
-                RenderingCore.entityRenderer(player);
+            if (event.getEntity() instanceof Player || event.getEntity() instanceof PrideMob) {
+                RenderingCore.entityRenderer(event.getEntity());
             }
         }
     }

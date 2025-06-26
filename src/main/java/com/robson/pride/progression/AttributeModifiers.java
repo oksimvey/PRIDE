@@ -1,7 +1,8 @@
 package com.robson.pride.progression;
 
+import com.robson.pride.api.data.player.ClientDataManager;
 import com.robson.pride.api.data.types.WeaponData;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.TagsUtils;
 import com.robson.pride.registries.WeaponSkillRegister;
@@ -69,7 +70,7 @@ public class AttributeModifiers {
 
     public static float calculateModifier(Player player, ItemStack item, float defaultmodifier) {
         if (item != null && player != null) {
-            WeaponData data = DataManager.getWeaponData(item);
+            WeaponData data = ServerDataManager.getWeaponData(item);
             if (data != null) {
                 float strmodifier = 0;
                 float dexmodifier = 0;
@@ -100,7 +101,7 @@ public class AttributeModifiers {
 
     public static float calculateWeaponAttributeModifier(Player player, ItemStack item, char scale, int required, String attribute) {
         if (player != null && item != null) {
-            CompoundTag playertag = TagsUtils.playerTags.get(player);
+            CompoundTag playertag = ClientDataManager.CLIENT_DATA_MANAGER.get(player).getPersistentData();
             if (playertag != null) {
                 int lvl = playertag.getInt(attribute + "Lvl");
                 if (attribute.equals("Mind") && scale_tiers.contains(item.getOrCreateTag().getString("scaleMind")) && item.getOrCreateTag().contains("requiredMind")) {

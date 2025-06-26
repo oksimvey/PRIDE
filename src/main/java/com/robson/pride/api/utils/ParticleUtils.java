@@ -1,5 +1,6 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.api.utils.math.PrideVec3f;
 import com.robson.pride.particles.StringParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -66,20 +67,16 @@ public class ParticleUtils {
     }
 
     public static void spawnParticleTracked(LocalPlayer renderer, Entity ent, Joint joint, ParticleOptions particle, Vec3f AABB, int particleDecrease) {
-        if (renderer != null && ent instanceof LivingEntity living && particle != null) {
-            if (renderer.level().isClientSide) {
-                int amount = (int) ItemStackUtils.getColliderSize(living.getMainHandItem()) - new Random().nextInt(particleDecrease);
-                if (amount > 0) {
-                    LivingEntityPatch entitypatch = EpicFightCapabilities.getEntityPatch(living, LivingEntityPatch.class);
-                    if (entitypatch != null) {
-                        for (int i = 0; i < amount; i++) {
-                            Vec3 vec = ArmatureUtils.getJointWithTranslation(renderer, living, AABB, joint);
-                            if (vec != null) {
-                                Vec3 delta = living.getDeltaMovement();
-                                renderer.level().addParticle(particle, vec.x, vec.y, vec.z, ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.x, (double) (((new Random()).nextFloat() - 0.5F) * 0.02F), ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.z);
-                            } else break;
-                        }
+        if (renderer != null && renderer.level().isClientSide && ent instanceof LivingEntity living) {
+            int amount = (int) ItemStackUtils.getColliderSize(living.getMainHandItem()) - new Random().nextInt(particleDecrease);
+            if (amount > 0) {
+                for (int i = 0; i < amount; i++) {
+                    PrideVec3f vec = ArmatureUtils.getJointWithTranslation(renderer, living, AABB, joint);
+                    if (vec != null) {
+                        Vec3 delta = living.getDeltaMovement();
+                        renderer.level().addParticle(particle, vec.x(), vec.y(), vec.z(), ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.x, (double) (((new Random()).nextFloat() - 0.5F) * 0.02F), ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.z);
                     }
+                    else break;
                 }
             }
         }

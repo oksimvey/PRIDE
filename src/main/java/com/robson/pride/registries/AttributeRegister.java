@@ -12,17 +12,17 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-@Mod.EventBusSubscriber(modid = Pride.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Pride.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class AttributeRegister {
 
-    private static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, Pride.MODID);
+    private static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, Pride.MOD_ID);
 
     public static void register(IEventBus eventBus) {
         ATTRIBUTES.register(eventBus);
     }
 
-    public static final RegistryObject<Attribute> MAX_WEIGHT = ATTRIBUTES.register("max_weight", () -> new RangedAttribute("attribute." + Pride.MODID + ".max_weight", 50.0D, 0.0D, 1024.0D).setSyncable(true));
-    public static final RegistryObject<Attribute> ARROW_POWER = ATTRIBUTES.register("arrow_power", () -> new RangedAttribute("attribute." + Pride.MODID + ".arrow_power", 100.0D, 0.0D, 1024.0D).setSyncable(true));
+    public static final RegistryObject<Attribute> MAX_WEIGHT = ATTRIBUTES.register("max_weight", () -> new RangedAttribute("attribute." + Pride.MOD_ID + ".max_weight", 50.0D, 0.0D, 1024.0D).setSyncable(true));
+    public static final RegistryObject<Attribute> ARROW_POWER = ATTRIBUTES.register("arrow_power", () -> new RangedAttribute("attribute." + Pride.MOD_ID + ".arrow_power", 100.0D, 0.0D, 1024.0D).setSyncable(true));
 
     public static final RegistryObject<Attribute> DARKNESS_RESIST = newResistanceAttribute("darkness");
     public static final RegistryObject<Attribute> LIGHT_RESIST = newResistanceAttribute("light");

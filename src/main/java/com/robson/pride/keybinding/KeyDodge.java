@@ -14,12 +14,14 @@ import yesman.epicfight.gameasset.Animations;
 
 import java.util.concurrent.TimeUnit;
 
-public interface KeyDodge {
-
-    LongPressKey KEY = new LongPressKey((byte) 5) {
+public  class KeyDodge extends LongPressKey {
 
 
-        @Override
+    public KeyDodge() {
+        super((byte) 5);
+    }
+
+    @Override
         public void onRelease(Player player){
             if (!this.longPressTriggered){
                 dodge(player);
@@ -61,4 +63,3 @@ public interface KeyDodge {
             }, 100, TimeUnit.MILLISECONDS);
         }
     };
-}

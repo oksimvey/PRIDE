@@ -1,6 +1,6 @@
 package com.robson.pride.api.data.types;
 
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
@@ -44,21 +44,21 @@ public abstract class WeaponSkillData extends GenericData {
     public static String getModelLocation(byte element) {
         return switch (element) {
 
-            case DataManager.DARKNESS -> "pride:item/scroll_darkness";
+            case ServerDataManager.DARKNESS -> "pride:item/scroll_darkness";
 
-            case DataManager.LIGHT -> "pride:item/scroll_light";
+            case ServerDataManager.LIGHT -> "pride:item/scroll_light";
 
-            case DataManager.THUNDER -> "pride:item/scroll_thunder";
+            case ServerDataManager.THUNDER -> "pride:item/scroll_thunder";
 
-            case DataManager.SUN -> "pride:item/scroll_sun";
+            case ServerDataManager.SUN -> "pride:item/scroll_sun";
 
-            case DataManager.MOON -> "pride:item/scroll_moon";
+            case ServerDataManager.MOON -> "pride:item/scroll_moon";
 
-            case DataManager.BLOOD -> "pride:item/scroll_blood";
+            case ServerDataManager.BLOOD -> "pride:item/scroll_blood";
 
-            case DataManager.NATURE -> "pride:item/scroll_nature";
+            case ServerDataManager.NATURE -> "pride:item/scroll_nature";
 
-            case DataManager.ICE, DataManager.WATER -> "pride:item/scroll_ice";
+            case ServerDataManager.ICE, ServerDataManager.WATER -> "pride:item/scroll_ice";
 
             default -> "pride:item/scroll_wind";
         };

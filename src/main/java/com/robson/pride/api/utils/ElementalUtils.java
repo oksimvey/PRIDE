@@ -1,8 +1,9 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.api.data.player.ClientDataManager;
 import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.data.types.WeaponData;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.WeaponSkillData;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.EffectRegister;
@@ -26,22 +27,22 @@ public class ElementalUtils {
     }
 
     public static ParticleOptions getParticleByElement(byte element) {
-        if (DataManager.getElementData(element) != null) {
-            return  DataManager.getElementData(element).getNormalParticleType();
+        if (ServerDataManager.getElementData(element) != null) {
+            return  ServerDataManager.getElementData(element).getNormalParticleType();
         }
         return null;
     }
 
     public static ChatFormatting getColorByElement(byte element) {
-        if (DataManager.getElementData(element) != null) {
-            return DataManager.getElementData(element).getChatColor();
+        if (ServerDataManager.getElementData(element) != null) {
+            return ServerDataManager.getElementData(element).getChatColor();
         }
         return ChatFormatting.GRAY;
     }
 
     public static void playSoundByElement(byte element, Entity ent, float volume) {
-        if (DataManager.getElementData(element) != null) {
-            DataManager.getElementData(element).playSound(ent, volume);
+        if (ServerDataManager.getElementData(element) != null) {
+            ServerDataManager.getElementData(element).playSound(ent, volume);
         }
     }
 
@@ -49,10 +50,10 @@ public class ElementalUtils {
         if (leftitem != null && rightitem != null) {
             byte leftelement = 0;
             if (leftitem.getTag().getBoolean("hasweaponart")) {
-                leftelement = DataManager.getWeaponSkillData(leftitem.getTag().getShort("weapon_art")).getElement();
+                leftelement = ServerDataManager.getWeaponSkillData(leftitem.getTag().getShort("weapon_art")).getElement();
             }
             else {
-                WeaponData data = DataManager.getWeaponData(leftitem);
+                WeaponData data = ServerDataManager.getWeaponData(leftitem);
                 if (data != null) {
                         WeaponSkillData skill = data.getSkill();
                         if (skill != null) {
@@ -60,7 +61,7 @@ public class ElementalUtils {
                         }
                 }
             }
-            return leftelement == DataManager.NEUTRAL || leftelement == rightitem.getTag().getByte("passive_element");
+            return leftelement == ServerDataManager.NEUTRAL || leftelement == rightitem.getTag().getByte("passive_element");
         }
         return false;
     }
@@ -69,7 +70,7 @@ public class ElementalUtils {
         if (leftitem != null && rightitem != null) {
             short rightelement = rightitem.getTag().getShort("weapon_art");
             byte leftelement = getItemElement(leftitem);
-            return rightelement == DataManager.NEUTRAL || leftelement == 0 || leftelement == rightelement;
+            return rightelement == ServerDataManager.NEUTRAL || leftelement == 0 || leftelement == rightelement;
         }
         return false;
     }
@@ -79,9 +80,9 @@ public class ElementalUtils {
         if (item != null) {
             if (item.getTag() != null) {
                 element = item.getTag().getByte("passive_element");
-                if (DataManager.INSTANCE.getByID(element) == null) {
-                    GenericData data = DataManager.getGenericData(item);
-                    if (data != null && DataManager.getElementData((data.getElement())) != null) {
+                if (ServerDataManager.INSTANCE.getByID(element) == null) {
+                    GenericData data = ServerDataManager.getGenericData(item);
+                    if (data != null && ServerDataManager.getElementData((data.getElement())) != null) {
                         element = data.getElement();
                     }
                 }
@@ -118,7 +119,7 @@ public class ElementalUtils {
     public static byte getElement(Entity ent) {
         if (ent != null) {
             if (ent instanceof Player player) {
-                CompoundTag tag = TagsUtils.playerTags.get(player);
+                CompoundTag tag = ClientDataManager.CLIENT_DATA_MANAGER.get(player).getPersistentData() ;
                 if (tag != null) {
                     return tag.getByte("Element");
                 }

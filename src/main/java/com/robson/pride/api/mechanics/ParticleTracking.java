@@ -1,11 +1,12 @@
 package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.data.types.GenericData;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.math.Matrix2f;
+import com.robson.pride.api.utils.math.PrideVec3f;
 import com.robson.pride.effect.ImbuementEffect;
 import com.robson.pride.registries.EffectRegister;
 import net.minecraft.client.Minecraft;
@@ -14,7 +15,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Armatures;
 
@@ -37,13 +37,13 @@ public class ParticleTracking {
         if (item != null && ent != null) {
             if (item.getTag() != null) {
                 byte element = ElementalUtils.getItemElement(item);
-                if (DataManager.getElementData(element) != null) {
-                    result = element != DataManager.SUN || shouldRenderSunParticle(ent);
+                if (ServerDataManager.getElementData(element) != null) {
+                    result = element != ServerDataManager.SUN || shouldRenderSunParticle(ent);
                 }
                 else if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMBUEMENT.get())) {
                     if (living.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect) {
-                        if (DataManager.getElementData(imbuementEffect.element) != null && imbuementEffect.active) {
-                            result = imbuementEffect.element != DataManager.SUN || shouldRenderSunParticle(ent);
+                        if (ServerDataManager.getElementData(imbuementEffect.element) != null && imbuementEffect.active) {
+                            result = imbuementEffect.element != ServerDataManager.SUN || shouldRenderSunParticle(ent);
                         }
                     }
                 }
@@ -56,9 +56,9 @@ public class ParticleTracking {
     }
 
     public static boolean shouldRenderSunParticle(Entity ent) {
-        Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolR);
+        PrideVec3f vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolR);
         if (vec3 != null) {
-            if (ElementalUtils.isNotInWater(ent, vec3)) {
+            if (ElementalUtils.isNotInWater(ent, vec3.toVec3())) {
                 togglefire.put(ent, true);
                 return true;
             }
@@ -77,12 +77,12 @@ public class ParticleTracking {
     public static ElementData getItemElementForImbuement(ItemStack item, LivingEntity ent) {
         if (item != null && ent != null) {
             byte element = ElementalUtils.getItemElement(item);
-            if (DataManager.getElementData(element) != null) {
-                return DataManager.getElementData(element);
+            if (ServerDataManager.getElementData(element) != null) {
+                return ServerDataManager.getElementData(element);
             } else if (ent.hasEffect(EffectRegister.IMBUEMENT.get()) &&
                     ent.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect &&
-                    DataManager.getElementData(imbuementEffect.element) != null) {
-                return DataManager.getElementData(imbuementEffect.element);
+                    ServerDataManager.getElementData(imbuementEffect.element) != null) {
+                return ServerDataManager.getElementData(imbuementEffect.element);
             }
         }
         return null;
@@ -90,7 +90,7 @@ public class ParticleTracking {
 
     public static Vec3f getAABBForImbuement(ItemStack item, Entity ent) {
         if (item != null && ent != null) {
-            GenericData data = DataManager.getGenericData(item);
+            GenericData data = ServerDataManager.getGenericData(item);
             if (data != null) {
                 Matrix2f collider = data.getCollider();
                 return new Vec3f((float) (((new Random()).nextFloat() + collider.x0()) * collider.x1()), (float) (((new Random()).nextFloat() + collider.y0()) * collider.y1() + (collider.y1() / 10)), (float) (-((new Random()).nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z0()));

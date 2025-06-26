@@ -1,6 +1,7 @@
 package com.robson.pride.api.utils;
 
 import com.robson.pride.api.utils.math.MathUtils;
+import com.robson.pride.api.utils.math.PrideVec3f;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,35 +20,39 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ArmatureUtils {
 
-    public static Vec3 getJointWithTranslation(LocalPlayer renderer, Entity ent, Vec3f translation, Joint joint) {
-        if (renderer != null && ent != null && translation != null && joint != null) {
-            if (renderer.level().isClientSide) {
-                LivingEntityPatch entitypatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-                if (entitypatch != null) {
-                    float interpolation = 0.0F;
-                    OpenMatrix4f transformMatrix;
-                    transformMatrix = entitypatch.getArmature().getBindedTransformFor(entitypatch.getAnimator().getPose(interpolation), joint);
-                    transformMatrix.translate(translation);
-                    OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) Math.toRadians((double) (((LivingEntity) entitypatch.getOriginal()).yBodyRotO + 180.0F))), new Vec3f(0.0F, 1.0F, 0.0F)), transformMatrix, transformMatrix);
-                    return new Vec3((double) transformMatrix.m30 + (entitypatch.getOriginal()).getX(), (double) transformMatrix.m31 + ((entitypatch.getOriginal()).getY() + (ent.getBbHeight() / 1.8) - 1), (double) transformMatrix.m32 + (entitypatch.getOriginal()).getZ());
-                }
+    private static final Vec3f DEFAULT_TRANSLATION = new Vec3f(0.0F, 1.0F, 0.0F);
+
+    private static final int interpolation = 0;
+
+    public static PrideVec3f getRawJoint(LocalPlayer renderer, Entity ent, Joint joint){
+        if (renderer != null && renderer.level().isClientSide && ent != null && joint != null){
+            LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (entityPatch != null){
+                OpenMatrix4f matrix4f = entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(interpolation), joint);
+                OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) Math.toRadians((double) (((LivingEntity) entityPatch.getOriginal()).yBodyRotO + 180.0F))), DEFAULT_TRANSLATION), matrix4f, matrix4f);
+                return new PrideVec3f(matrix4f.m30, matrix4f.m31, matrix4f.m32);
             }
         }
         return null;
     }
 
-    public static Vec3 getJoinPosition(LocalPlayer renderer, Entity ent, Joint joint) {
-        if (renderer != null && ent != null && joint != null) {
-            if (renderer.level().isClientSide) {
-                LivingEntityPatch entitypatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-                if (entitypatch != null) {
-                    float interpolation = 0.0F;
-                    OpenMatrix4f transformMatrix;
-                    transformMatrix = entitypatch.getArmature().getBindedTransformFor(entitypatch.getAnimator().getPose(interpolation), joint);
-                    OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) Math.toRadians((double) (((LivingEntity) entitypatch.getOriginal()).yBodyRotO + 180.0F))), new Vec3f(0.0F, 1.0F, 0.0F)), transformMatrix, transformMatrix);
-                    return new Vec3((double) transformMatrix.m30 + (entitypatch.getOriginal()).getX(), (double) transformMatrix.m31 + ((entitypatch.getOriginal()).getY() + (ent.getBbHeight() / 1.8) - 1), (double) transformMatrix.m32 + (entitypatch.getOriginal()).getZ());
-                }
+    public static PrideVec3f getJointWithTranslation(LocalPlayer renderer, Entity ent, Vec3f translation, Joint joint) {
+        if (renderer != null && translation != null && renderer.level().isClientSide && ent != null && joint != null){
+            LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (entityPatch != null){
+                OpenMatrix4f matrix4f = entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(interpolation), joint);
+                matrix4f.translate(translation);
+                OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) Math.toRadians((double) (((LivingEntity) entityPatch.getOriginal()).yBodyRotO + 180.0F))), DEFAULT_TRANSLATION), matrix4f, matrix4f);
+                return new PrideVec3f((float) (matrix4f.m30 + ent.getX()), (float) (matrix4f.m31 + ent.getY() * (ent.getBbHeight() / 1.8f)), (float) (matrix4f.m32 + ent.getZ()));
             }
+        }
+        return null;
+    }
+
+    public static PrideVec3f getJoinPosition(LocalPlayer renderer, Entity ent, Joint joint) {
+        PrideVec3f pos = getRawJoint(renderer, ent, joint);
+        if (pos != null) {
+            return pos.add(PrideVec3f.fromVec3(ent.position()));
         }
         return null;
     }
@@ -56,9 +61,9 @@ public class ArmatureUtils {
         ConcurrentHashMap<Joint, Float> jointposmap = new ConcurrentHashMap<>();
         List<Joint> joints = getArmatureJoints(ent);
         for (Joint joint : joints) {
-            Vec3 jointpos = getJoinPosition(renderer, ent, joint);
+            PrideVec3f jointpos = getJoinPosition(renderer, ent, joint);
             if (jointpos != null) {
-                jointposmap.put(joint, MathUtils.getTotalDistance(jointpos, pos));
+                jointposmap.put(joint, MathUtils.getTotalDistance(jointpos.toVec3(), pos));
             }
         }
         if (!jointposmap.isEmpty()) {
@@ -75,8 +80,8 @@ public class ArmatureUtils {
         return null;
     }
 
-    public static List<Vec3> getEntityArmatureVecsForParticle(LocalPlayer renderer, Entity ent, int points, float offset) {
-        List<Vec3> vec3List = new ArrayList<>();
+    public static List<PrideVec3f> getEntityArmatureVecsForParticle(LocalPlayer renderer, Entity ent, int points, float offset) {
+        List<PrideVec3f> vec3List = new ArrayList<>();
         List<Joint> joints = getArmatureJoints(ent);
         if (!joints.isEmpty()) {
             for (Joint joint : joints) {

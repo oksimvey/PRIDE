@@ -9,6 +9,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class GUIRegister {
-    public static final DeferredRegister<MenuType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Pride.MODID);
+    public static final DeferredRegister<MenuType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Pride.MOD_ID);
     public static final RegistryObject<MenuType<ProgressionGUI>> PROGRESSION_GUI = REGISTRY.register("progression_gui", () -> IForgeMenuType.create(ProgressionGUI::new));
 }

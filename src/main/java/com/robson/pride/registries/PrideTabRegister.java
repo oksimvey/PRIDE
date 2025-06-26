@@ -1,7 +1,7 @@
 package com.robson.pride.registries;
 
 import com.robson.pride.api.data.types.GenericData;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.item.weapons.CustomItem;
 import com.robson.pride.main.Pride;
 import net.minecraft.core.registries.Registries;
@@ -19,7 +19,7 @@ import static com.robson.pride.registries.EntityRegister.SPECIAL_ENTITIES;
 
 public class PrideTabRegister {
 
-    private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Pride.MODID);
+    private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Pride.MOD_ID);
 
     public static void register(IEventBus eventBus) {
         TABS.register(eventBus);
@@ -27,24 +27,24 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> EQUIPMENT_TAB = TABS.register("pride_equipment", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Equipment"))
-            .icon(() -> CustomItem.createItem(DataManager.EUROPEAN_LONGSWORD))
+            .icon(() -> CustomItem.createItem(ServerDataManager.EUROPEAN_LONGSWORD))
             .displayItems((enabledFeatures, entries) -> {
                 for (short i = 1000; true; i++){
-                    GenericData data = DataManager.getGenericData(i);
+                    GenericData data = ServerDataManager.getGenericData(i);
                     if (data == null){
                         break;
                     }
                     entries.accept(CustomItem.createItem(i));
                 }
                 for (short i = 2000; true; i++){
-                    GenericData data =  DataManager.getGenericData(i);
+                    GenericData data =  ServerDataManager.getGenericData(i);
                     if (data == null){
                         break;
                     }
                     entries.accept(CustomItem.createItem(i));
                 }
                 for (short i = 3000; true; i++){
-                    GenericData data =  DataManager.getGenericData(i);
+                    GenericData data =  ServerDataManager.getGenericData(i);
                     if (data == null){
                         return;
                     }
@@ -56,10 +56,10 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> MATERIALS_TAB = TABS.register("pride_materials", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Materials"))
-            .icon(() -> CustomItem.createItem(DataManager.DARKNESS))
+            .icon(() -> CustomItem.createItem(ServerDataManager.DARKNESS))
             .displayItems((enabledFeatures, entries) -> {
                 for (short i = 1; true; i++){
-                    GenericData data = DataManager.getGenericData(i);
+                    GenericData data = ServerDataManager.getGenericData(i);
                     if (data == null){
                         return;
                     }
@@ -71,10 +71,10 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> SKILLS_TAB = TABS.register("pride_weapon_arts", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Weapon Arts"))
-            .icon(() -> CustomItem.createItem(DataManager.DARKNESS_CUT))
+            .icon(() -> CustomItem.createItem(ServerDataManager.DARKNESS_CUT))
             .displayItems((parameters, output) -> {
                 for (short i = 4000; true; i++){
-                    GenericData data =  DataManager.getGenericData(i);
+                    GenericData data =  ServerDataManager.getGenericData(i);
                     if (data == null){
                         return;
                     }

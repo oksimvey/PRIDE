@@ -80,10 +80,6 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends HumanoidMobP
     }
 
     public void updateMotion(boolean considerInaction) {
-        if (true) {
-            currentLivingMotion = LivingMotions.BLOCK;
-            return;
-        }
         super.commonMobUpdateMotion(considerInaction);
     }
 

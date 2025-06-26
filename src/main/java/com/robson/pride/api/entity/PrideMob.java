@@ -1,6 +1,6 @@
 package com.robson.pride.api.entity;
 
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.item.weapons.CustomItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
@@ -26,7 +26,7 @@ public class PrideMob extends  Monster{
     @org.jetbrains.annotations.ApiStatus.OverrideOnly
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_21434_, DifficultyInstance p_21435_, MobSpawnType p_21436_, @Nullable SpawnGroupData p_21437_, @Nullable CompoundTag p_21438_) {
-       this.setItemSlot(EquipmentSlot.MAINHAND, CustomItem.createItem(DataManager.EUROPEAN_LONGSWORD));
+       this.setItemSlot(EquipmentSlot.MAINHAND, CustomItem.createItem(ServerDataManager.KURONAMI));
         return super.finalizeSpawn(p_21434_, p_21435_, p_21436_, p_21437_, p_21438_);
     }
 

@@ -12,23 +12,18 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
 @Mod("pride")
 public class Pride {
-    public static final Logger LOGGER = LogManager.getLogger(Pride.class);
-    public static final String MODID = "pride";
-    private static final String PROTOCOL_VERSION = "1";
+
     public static final String MOD_ID = "pride";
 
     public Pride() {
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         SoundsRegister.SOUNDS.register(bus);
         ItemsRegister.REGISTRY.register(bus);
         EntityRegister.ENTITIES.register(bus);
@@ -41,7 +36,7 @@ public class Pride {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(KeyRegister::registerKeyMappings);
         ParticleRegister.PARTICLES.register(bus);
         WeaponCategory.ENUM_MANAGER.registerEnumCls(MOD_ID, WeaponCategoriesEnum.class);
-        Style.ENUM_MANAGER.registerEnumCls(Pride.MODID, PrideStyles.class);
+        Style.ENUM_MANAGER.registerEnumCls(Pride.MOD_ID, PrideStyles.class);
         EffectRegister.MOB_EFFECTS.register(bus);
         PrideTabRegister.register(bus);
     }

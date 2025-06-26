@@ -2,7 +2,7 @@ package com.robson.pride.api.elements;
 
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.utils.AttributeUtils;
 import com.robson.pride.api.utils.ElementalUtils;
@@ -17,7 +17,7 @@ import net.minecraft.world.entity.Entity;
 
 public interface SunElement {
 
-    ElementData DATA = new ElementData("Sun", DataManager.SUN, ParticleRegistry.FIRE_PARTICLE.get(), ChatFormatting.GOLD, SoundRegistry.FIRE_BREATH_LOOP.get(),
+    ElementData DATA = new ElementData("Sun", ServerDataManager.SUN, ParticleRegistry.FIRE_PARTICLE.get(), ChatFormatting.GOLD, SoundRegistry.FIRE_BREATH_LOOP.get(),
             (byte) 20, SchoolRegister.SUN.get(), new ItemRenderingParams(new FixedRGB(252, 97, 0),
                     GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
             GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
@@ -33,9 +33,9 @@ public interface SunElement {
             if (ent != null && dmgent != null) {
                 byte element = ElementalUtils.getElement(ent);
                 float multiplier = 1;
-                if (element == DataManager.WATER || element == DataManager.NATURE) {
+                if (element == ServerDataManager.WATER || element == ServerDataManager.NATURE) {
                     multiplier = 0.5f;
-                } else if (element == DataManager.ICE || element == DataManager.MOON) {
+                } else if (element == ServerDataManager.ICE || element == ServerDataManager.MOON) {
                     multiplier = 1.5f;
                 }
                 return MathUtils.getValueWithPercentageIncrease(multiplier *

@@ -1,5 +1,6 @@
 package com.robson.pride.effect;
 
+import com.robson.pride.api.utils.math.PrideVec3f;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -45,14 +46,14 @@ public class DivineProtectionEffect extends PrideEffectBase {
                     if (ent.getPersistentData().getBoolean("resurrecting")) {
                         wingPoint.add(0, 0, -1.5f);
                     }
-                    Vec3 pos = getJointWithTranslation(
+                    PrideVec3f pos = getJointWithTranslation(
                             Minecraft.getInstance().player,
                             ent,
                             wingPoint,
                             Armatures.BIPED.get().torso);
                     if (pos != null) {
                         float yoffset = new Random().nextFloat(0.5f);
-                        Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.WISP_PARTICLE.get(), pos.x, pos.y + 0.4f - yoffset, pos.z, ent.getDeltaMovement().x, ent.getDeltaMovement().y, ent.getDeltaMovement().z);
+                        Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.WISP_PARTICLE.get(), pos.x(), pos.y() + 0.4f - yoffset, pos.z(), ent.getDeltaMovement().x, ent.getDeltaMovement().y, ent.getDeltaMovement().z);
                         if (particle != null) {
                             particle.scale(1.75f);
                             particle.setLifetime(1);

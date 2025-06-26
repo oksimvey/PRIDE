@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-public interface SkillDataManager extends DataManagerImpl<DurationSkillData> {
+public interface SkillDataManager extends ServerDataManagerImpl<DurationSkillData> {
 
     ConcurrentHashMap<LivingEntity, List<Byte>> ACTIVE_SKILLS = new ConcurrentHashMap<>();
 

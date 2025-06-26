@@ -17,12 +17,12 @@ import yesman.epicfight.api.forgeevent.EntityPatchRegistryEvent;
 import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.world.capabilities.entitypatch.mob.ZombiePatch;
 
-@Mod.EventBusSubscriber(modid = Pride.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Pride.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EntityRegister {
 
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Pride.MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Pride.MOD_ID);
 
-    public static final DeferredRegister<EntityType<?>> SPECIAL_ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Pride.MODID);
+    public static final DeferredRegister<EntityType<?>> SPECIAL_ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Pride.MOD_ID);
 
     public static final RegistryObject<EntityType<PrideMob>> PRIDE_MOB = make(false, new ResourceLocation("pride_mob"), PrideMob::new, MobCategory.MONSTER, 0.8f, 1.8f);
 

@@ -2,7 +2,7 @@ package com.robson.pride.api.data.types;
 
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.utils.math.FixedRGB;
 import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.mixins.WeaponTypeReloadListenerMixin;
@@ -117,7 +117,7 @@ public class WeaponData extends GenericData {
 
 
     public WeaponSkillData getSkill(){
-        return DataManager.getWeaponSkillData(this.skill);
+        return ServerDataManager.getWeaponSkillData(this.skill);
     }
 
     private static Map<Attribute, AttributeModifier> deserializeAttributes(float damage, float speed, float impact, int max_strikes, float armor_negation, int weight) {

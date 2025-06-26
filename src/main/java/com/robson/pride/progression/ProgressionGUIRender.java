@@ -1,6 +1,7 @@
 package com.robson.pride.progression;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.robson.pride.api.data.player.ClientDataManager;
 import com.robson.pride.api.utils.AttributeUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.ProgressionUtils;
@@ -64,7 +65,7 @@ public class ProgressionGUIRender extends AbstractContainerScreen<ProgressionGUI
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         if (player != null) {
-            CompoundTag variables = TagsUtils.playerTags.get(player);
+            CompoundTag variables = ClientDataManager.CLIENT_DATA_MANAGER.get(player).getPersistentData();
             byte element = ElementalUtils.getElement(player);
             if (variables == null){
                 return;

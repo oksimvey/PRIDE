@@ -1,6 +1,6 @@
 package com.robson.pride.skills.weaponarts;
 
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.data.types.WeaponSkillData;
@@ -8,7 +8,7 @@ import com.robson.pride.api.utils.HealthUtils;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.api.utils.TimerUtil;
-import com.robson.pride.api.utils.math.Vec3f;
+import com.robson.pride.api.utils.math.PrideVec3f;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,11 +22,11 @@ import java.util.concurrent.TimeUnit;
 public interface HeavensStrike {
 
 
-    WeaponSkillData DATA = new WeaponSkillData("Heaven's Strike", DataManager.HEAVENS_STRIKE, "pride:models/item/scroll_light", SkillCore.WeaponArtTier.LEGENDARY, DataManager.LIGHT, 1, 1, "total") {
+    WeaponSkillData DATA = new WeaponSkillData("Heaven's Strike", ServerDataManager.HEAVENS_STRIKE, "pride:models/item/scroll_light", SkillCore.WeaponArtTier.LEGENDARY, ServerDataManager.LIGHT, 1, 1, "total") {
 
         public List<SkillAnimation> defineMotions(LivingEntity ent) {
             return List.of(new SkillAnimation(Animations.AXE_AUTO1, () -> {
-                List<Vec3f> spiralpoints = MathUtils.getVectorsForHorizontalSpiral(Vec3f.fromVec3(ent.getLookAngle().scale(2)), (byte) 6, 50, 1);
+                List<PrideVec3f> spiralpoints = MathUtils.getVectorsForHorizontalSpiral(PrideVec3f.fromVec3(ent.getLookAngle().scale(2)), (byte) 6, 50, 1);
                 if (!spiralpoints.isEmpty()) {
                     summonSpiralPoint(ent.position(), spiralpoints, 1, ent.getBbHeight());
                 }
@@ -47,9 +47,9 @@ public interface HeavensStrike {
         }
 
 
-        public void summonSpiralPoint(Vec3 entpos, List<Vec3f> points, int currentloop, float height) {
+        public void summonSpiralPoint(Vec3 entpos, List<PrideVec3f> points, int currentloop, float height) {
             if (entpos != null && points != null && points.size() >= currentloop) {
-                Vec3f point = points.get(currentloop);
+                PrideVec3f point = points.get(currentloop);
                 Minecraft.getInstance().particleEngine.createParticle(ParticleRegistry.WISP_PARTICLE.get(), entpos.x + point.x(), entpos.y + (currentloop / (10f / height)),
                         entpos.z + point.z(), 0, 0, 0).scale(2);
                 TimerUtil.schedule(() -> summonSpiralPoint(entpos, points, currentloop + 1, height), 10, TimeUnit.MILLISECONDS);

@@ -1,12 +1,15 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.customtick.PlayerCustomTick;
+import com.robson.pride.api.data.player.ClientDataManager;
+import com.robson.pride.api.data.player.ClientProgressionData;
 import com.robson.pride.api.musiccore.PrideMusicManager;
 import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.api.utils.TagsUtils;
 import com.robson.pride.progression.NewCap;
 import com.robson.pride.progression.PlayerAttributeSetup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,7 +25,6 @@ public class PlayerSetup {
             player.getPersistentData().putBoolean("isParrying", false);
             playerCommonSetup(player);
             PlayerCustomTick.startTick(player);
-            TagsUtils.playerTags.put(player, player.getPersistentData());
         }
     }
 
@@ -39,9 +41,12 @@ public class PlayerSetup {
     @SubscribeEvent
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         Player player = event.getEntity();
+        if (player instanceof ServerPlayer player1) {
+            CompoundTag data = ClientProgressionData.toNBT(ClientDataManager.CLIENT_DATA_MANAGER.get(player).getProgressionData());
+            ClientDataManager.savePlayerDat(player1, data);
+        }
         if (player != null) {
             PlayerCustomTick.stopTick(player);
-            PrideMusicManager.playerMusicManagerThread.remove(player);
             player.getPersistentData().remove("pride:cooldown_skills");
         }
     }
@@ -49,8 +54,7 @@ public class PlayerSetup {
     @SubscribeEvent
     public static void clonePlayer(PlayerEvent.Clone event) {
         event.getOriginal().revive();
-        TagsUtils.playerTags.remove(event.getOriginal());
-        TagsUtils.playerTags.put(event.getOriginal(), event.getEntity().getPersistentData());
+        ClientDataManager.CLIENT_DATA_MANAGER.get(event.getOriginal()).setNbt(event.getEntity().getPersistentData());
         CompoundTag originaltag = event.getOriginal().getPersistentData();
         CompoundTag clonetag = event.getEntity().getPersistentData();
         NewCap.setupVariables(originaltag, clonetag);
@@ -65,5 +69,4 @@ public class PlayerSetup {
             }
         }
     }
-
 }

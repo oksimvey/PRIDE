@@ -2,6 +2,7 @@ package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.utils.*;
 import com.robson.pride.api.utils.math.MathUtils;
+import com.robson.pride.api.utils.math.PrideVec3f;
 import com.robson.pride.registries.AnimationsRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
@@ -109,9 +110,9 @@ public class MikiriCounter {
     public static void teleportProjectileToEntityHand(Entity owner, Entity projectile, Vec3 delta) {
         if (owner != null && projectile != null && delta != null) {
             projectile.setDeltaMovement(delta.x, 0.1, delta.z);
-            Vec3 vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, owner, Armatures.BIPED.get().handL);
+           PrideVec3f vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, owner, Armatures.BIPED.get().handL);
             if (vec3 != null) {
-                projectile.moveTo(vec3);
+                projectile.moveTo(vec3.toVec3());
                 TimerUtil.schedule(() -> teleportProjectileToEntityHand(owner, projectile, delta), 50, TimeUnit.MILLISECONDS);
             }
         }

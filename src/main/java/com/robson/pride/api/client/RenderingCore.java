@@ -34,11 +34,11 @@ public class RenderingCore {
                         ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolL, element2.getNormalParticleType(), ParticleTracking.getAABBForImbuement(ent.getOffhandItem(), ent), element2.getParticleAmount());
                     }
                 }
-                    for (byte value : SkillDataManager.getActiveSkills(ent)) {
-                        DurationSkillData data = SkillDataManager.INSTANCE.getByID(value);
-                        if (data != null) {
-                            data.onClientTick(ent);
-                        }
+                for (byte value : SkillDataManager.getActiveSkills(ent)) {
+                    DurationSkillData data = SkillDataManager.INSTANCE.getByID(value);
+                    if (data != null) {
+                        data.onClientTick(ent);
+                    }
                 }
             }
         }

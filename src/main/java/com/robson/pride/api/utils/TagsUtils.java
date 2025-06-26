@@ -17,6 +17,4 @@ public class TagsUtils {
         }
         return false;
     }
-
-     public static ConcurrentHashMap<Player, CompoundTag> playerTags = new ConcurrentHashMap<>();
 }

@@ -2,6 +2,7 @@ package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.utils.*;
 import com.robson.pride.api.utils.math.MathUtils;
+import com.robson.pride.api.utils.math.PrideVec3f;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.registries.AnimationsRegister;
 import net.minecraft.client.Minecraft;
@@ -169,8 +170,8 @@ public class Guard {
                 itemStack = player.getOffhandItem();
             }
             Vec3f vec3f = ParticleTracking.getAABBForImbuement(itemStack, player);
-            Vec3 vec3 = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, player, new Vec3f(0, 0, vec3f.z), joint);
-            Particle particle = Minecraft.getInstance().particleEngine.createParticle(EpicFightParticles.HIT_BLUNT.get(), vec3.x, vec3.y, vec3.z, 0, 0, 0);
+            PrideVec3f vec3 = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, player, new Vec3f(0, 0, vec3f.z), joint);
+            Particle particle = Minecraft.getInstance().particleEngine.createParticle(EpicFightParticles.HIT_BLUNT.get(), vec3.x(), vec3.y(), vec3.z(), 0, 0, 0);
             if (particle != null) {
                 particle.scale(scale);
             }

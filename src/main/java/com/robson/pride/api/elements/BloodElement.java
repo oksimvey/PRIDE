@@ -2,7 +2,7 @@ package com.robson.pride.api.elements;
 
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.api.utils.math.FixedRGB;
@@ -22,7 +22,7 @@ import static com.robson.pride.api.skillcore.SkillCore.stackablePassiveBase;
 
 public interface BloodElement {
 
-    ElementData DATA = new ElementData("Blood",DataManager.BLOOD, ParticleRegistry.BLOOD_PARTICLE.get(), ChatFormatting.DARK_RED,
+    ElementData DATA = new ElementData("Blood", ServerDataManager.BLOOD, ParticleRegistry.BLOOD_PARTICLE.get(), ChatFormatting.DARK_RED,
             SoundRegistry.BLOOD_NEEDLE_IMPACT.get(), (byte) 5, SchoolRegister.BLOOD.get(), new ItemRenderingParams(new FixedRGB(255, 100, 50),
                     GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
                     GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
@@ -42,9 +42,9 @@ public interface BloodElement {
             if (dmgent != null && ent != null) {
                 byte element = ElementalUtils.getElement(ent);
                 float multiplier = 1;
-                if (element == DataManager.LIGHT || element == DataManager.WATER) {
+                if (element == ServerDataManager.LIGHT || element == ServerDataManager.WATER) {
                     multiplier = 0.5f;
-                } else if (element == DataManager.NATURE || element == DataManager.THUNDER){
+                } else if (element == ServerDataManager.NATURE || element == ServerDataManager.THUNDER){
                     multiplier = 1.5f;
                 }
                 return MathUtils.getValueWithPercentageIncrease(multiplier *

@@ -1,12 +1,13 @@
 package com.robson.pride.skills.weaponarts;
 
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.data.types.WeaponSkillData;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.PlaySoundUtils;
 import com.robson.pride.api.utils.TimerUtil;
+import com.robson.pride.api.utils.math.PrideVec3f;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -27,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 public interface DarknessCut {
 
-    WeaponSkillData DATA = new WeaponSkillData("Darkness Cut", DataManager.DARKNESS_CUT, "irons_spellbooks:item/scroll_eldritch", SkillCore.WeaponArtTier.MYTHICAL,DataManager.DARKNESS, 50, 6, "total") {
+    WeaponSkillData DATA = new WeaponSkillData("Darkness Cut", ServerDataManager.DARKNESS_CUT, "irons_spellbooks:item/scroll_eldritch", SkillCore.WeaponArtTier.MYTHICAL, ServerDataManager.DARKNESS, 50, 6, "total") {
 
         public List<SkillAnimation> defineMotions(LivingEntity ent) {
             return List.of(new SkillAnimation(Animations.TACHI_AUTO3, () -> {
@@ -38,16 +39,16 @@ public interface DarknessCut {
                     if (!ent.level().isClientSide()) {
                         List<Entity> list = ent.level().getEntities(ent, new AABB(ent.getX() - 25, ent.getY() - 10, ent.getZ() - 25, ent.getX() + 25, ent.getY() + 20, ent.getZ() + 25));
                         for (int i = -20; i < 20; i++) {
-                            Vec3 vec = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, new Vec3f(0, (float) i / 2, 0), Armatures.BIPED.get().chest);
-                            double particleposx = vec.x;
-                            double particleposy = vec.y;
-                            double particleposz = vec.z;
+                            PrideVec3f vec = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, new Vec3f(0, (float) i / 2, 0), Armatures.BIPED.get().chest);
+                            double particleposx = vec.x();
+                            double particleposy = vec.y();
+                            double particleposz = vec.z();
                             Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.LARGE_SMOKE, particleposx, particleposy, particleposz, lookangle.x, -0.1, lookangle.z);
                             for (Entity entko : list) {
                                 if (particle != null && entko != null) {
                                     particle.setLifetime(200);
                                     particle.scale(1.25f);
-                                    SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, () -> DataManager.getElementData(DataManager.DARKNESS).onHit(entko, ent, 10, false));
+                                    SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, () -> ServerDataManager.getElementData(ServerDataManager.DARKNESS).onHit(entko, ent, 10, false));
                                 }
                             }
                         }

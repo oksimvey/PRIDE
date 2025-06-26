@@ -3,11 +3,11 @@ package com.robson.pride.particles;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.math.BezierCurvef;
-import com.robson.pride.api.utils.math.Vec3f;
+import com.robson.pride.api.utils.math.PrideVec3f;
 import com.robson.pride.item.weapons.CustomItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -45,8 +45,8 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
         if (item.getTag() == null) {
             return;
         }
-        if (item.getItem() instanceof CustomItem && DataManager.getWeaponData(item) != null){
-            trailInfo = DataManager.getWeaponData(item).getTrailInfo(trailInfo);
+        if (item.getItem() instanceof CustomItem && ServerDataManager.getWeaponData(item) != null){
+            trailInfo = ServerDataManager.getWeaponData(item).getTrailInfo(trailInfo);
         }
         int r = (int) trailInfo.rCol();
         int g = (int) trailInfo.gCol();
@@ -65,9 +65,9 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
         Pose prevPose = ((LivingEntityPatch)this.owner).getAnimator().getPose(0.0F);
         Pose middlePose = ((LivingEntityPatch)this.owner).getAnimator().getPose(0.5F);
         Pose currentPose = ((LivingEntityPatch)this.owner).getAnimator().getPose(1.0F);
-        Vec3f posOld = Vec3f.fromVec3(((LivingEntity)((LivingEntityPatch)this.owner).getOriginal()).getPosition(0.0F));
-        Vec3f posMid = Vec3f.fromVec3(((LivingEntity)((LivingEntityPatch)this.owner).getOriginal()).getPosition(0.5F));
-        Vec3f posCur = Vec3f.fromVec3(((LivingEntity)((LivingEntityPatch)this.owner).getOriginal()).getPosition(1.0F));
+        PrideVec3f posOld = PrideVec3f.fromVec3(((LivingEntity)((LivingEntityPatch)this.owner).getOriginal()).getPosition(0.0F));
+        PrideVec3f posMid = PrideVec3f.fromVec3(((LivingEntity)((LivingEntityPatch)this.owner).getOriginal()).getPosition(0.5F));
+        PrideVec3f posCur = PrideVec3f.fromVec3(((LivingEntity)((LivingEntityPatch)this.owner).getOriginal()).getPosition(1.0F));
         this.lastPose = currentPose;
         this.lastPos = posCur.toVec3();
         this.lastTransform = JointTransform.fromMatrix(((LivingEntityPatch)this.owner).getModelMatrix(1.0F));
@@ -122,9 +122,9 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
         Pose prevPose = this.lastPose;
         Pose currentPose = ((LivingEntityPatch) this.owner).getAnimator().getPose(1.0F);
         Pose middlePose = Pose.interpolatePose(prevPose, currentPose, 0.5F);
-        Vec3f posOld = Vec3f.fromVec3(this.lastPos);
-        Vec3f posCur = Vec3f.fromVec3(((LivingEntityPatch) this.owner).getOriginal().getPosition(1.0F));
-        Vec3f posMid = Vec3f.fromVec3(MathUtils.lerpVector(posOld.toVec3(), posCur.toVec3(), 0.5F));
+        PrideVec3f posOld = PrideVec3f.fromVec3(this.lastPos);
+        PrideVec3f posCur = PrideVec3f.fromVec3(((LivingEntityPatch) this.owner).getOriginal().getPosition(1.0F));
+        PrideVec3f posMid = PrideVec3f.fromVec3(MathUtils.lerpVector(posOld.toVec3(), posCur.toVec3(), 0.5F));
         OpenMatrix4f prevModelMatrix = this.lastTransform.toMatrix();
         OpenMatrix4f curModelMatrix = ((LivingEntityPatch) this.owner).getModelMatrix(1.0F);
         JointTransform currentTransform = JointTransform.fromMatrix(curModelMatrix);
@@ -134,14 +134,14 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
         OpenMatrix4f prevJointTf = ((LivingEntityPatch) this.owner).getArmature().getBindedTransformFor(prevPose, this.joint).mulFront(prvmodelTf);
         OpenMatrix4f middleJointTf = ((LivingEntityPatch) this.owner).getArmature().getBindedTransformFor(middlePose, this.joint).mulFront(middleModelTf);
         OpenMatrix4f currentJointTf = ((LivingEntityPatch) this.owner).getArmature().getBindedTransformFor(currentPose, this.joint).mulFront(curModelTf);
-        Vec3f prevStartPos = Vec3f.fromVec3(OpenMatrix4f.transform(prevJointTf, trailInfo.start()));
-        Vec3f prevEndPos = Vec3f.fromVec3(OpenMatrix4f.transform(prevJointTf, trailInfo.end()));
-        Vec3f middleStartPos = Vec3f.fromVec3(OpenMatrix4f.transform(middleJointTf, trailInfo.start()));
-        Vec3f middleEndPos = Vec3f.fromVec3(OpenMatrix4f.transform(middleJointTf, trailInfo.end()));
-        Vec3f currentStartPos = Vec3f.fromVec3(OpenMatrix4f.transform(currentJointTf, trailInfo.start()));
-        Vec3f currentEndPos = Vec3f.fromVec3(OpenMatrix4f.transform(currentJointTf, trailInfo.end()));
-        List<Vec3f> finalStartPositions;
-        List<Vec3f> finalEndPositions;
+        PrideVec3f prevStartPos = PrideVec3f.fromVec3(OpenMatrix4f.transform(prevJointTf, trailInfo.start()));
+        PrideVec3f prevEndPos = PrideVec3f.fromVec3(OpenMatrix4f.transform(prevJointTf, trailInfo.end()));
+        PrideVec3f middleStartPos = PrideVec3f.fromVec3(OpenMatrix4f.transform(middleJointTf, trailInfo.start()));
+        PrideVec3f middleEndPos = PrideVec3f.fromVec3(OpenMatrix4f.transform(middleJointTf, trailInfo.end()));
+        PrideVec3f currentStartPos = PrideVec3f.fromVec3(OpenMatrix4f.transform(currentJointTf, trailInfo.start()));
+        PrideVec3f currentEndPos = PrideVec3f.fromVec3(OpenMatrix4f.transform(currentJointTf, trailInfo.end()));
+        List<PrideVec3f> finalStartPositions;
+        List<PrideVec3f> finalEndPositions;
         boolean visibleTrail;
         if (isTrailInvisible) {
             finalStartPositions = Lists.newArrayList();
@@ -153,8 +153,8 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
             this.invisibleTrailEdges.clear();
             visibleTrail = false;
         } else {
-            List<Vec3f> startPosList = Lists.newArrayList();
-            List<Vec3f> endPosList = Lists.newArrayList();
+            List<PrideVec3f> startPosList = Lists.newArrayList();
+            List<PrideVec3f> endPosList = Lists.newArrayList();
             AbstractTrailParticle.TrailEdge edge1;
             AbstractTrailParticle.TrailEdge edge2;
             if (isFirstTrail) {
@@ -167,10 +167,10 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
                 ++edge2.lifetime;
             }
 
-            startPosList.add(Vec3f.fromVec3(edge1.start));
-            endPosList.add(Vec3f.fromVec3(edge1.end));
-            startPosList.add(Vec3f.fromVec3(edge2.start));
-            endPosList.add(Vec3f.fromVec3(edge2.end));
+            startPosList.add(PrideVec3f.fromVec3(edge1.start));
+            endPosList.add(PrideVec3f.fromVec3(edge1.end));
+            startPosList.add(PrideVec3f.fromVec3(edge2.start));
+            endPosList.add(PrideVec3f.fromVec3(edge2.end));
             startPosList.add(middleStartPos);
             endPosList.add(middleEndPos);
             startPosList.add(currentStartPos);
@@ -190,7 +190,7 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
         this.lastTransform = currentTransform;
     }
 
-    protected void makeTrailEdge(List<Vec3f> startPositions, List<Vec3f> endPositions, List<TrailEdge> dest) {
+    protected void makeTrailEdge(List<PrideVec3f> startPositions, List<PrideVec3f> endPositions, List<TrailEdge> dest) {
         for (int i = 0; i < startPositions.size(); ++i) {
             dest.add(new TrailEdge(startPositions.get(i).toVec3(), endPositions.get(i).toVec3(), this.trailInfo.trailLifetime()));
         }

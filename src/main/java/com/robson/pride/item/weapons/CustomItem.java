@@ -1,7 +1,7 @@
 package com.robson.pride.item.weapons;
 
 import com.robson.pride.api.data.types.GenericData;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.registries.ItemsRegister;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -53,7 +53,7 @@ public class CustomItem extends SwordItem {
     @Override
     public int getMaxStackSize(ItemStack stack) {
         if (stack != null){
-            GenericData data = DataManager.getGenericData(stack);
+            GenericData data = ServerDataManager.getGenericData(stack);
             if (data != null){
                 return data.getStacks();
             }
@@ -63,7 +63,7 @@ public class CustomItem extends SwordItem {
 
     @Override
     public @NotNull Component getName(ItemStack stack) {
-        GenericData data = DataManager.getGenericData(stack);
+        GenericData data = ServerDataManager.getGenericData(stack);
         return data != null ? data.getName() : super.getName(stack);
     }
 }

@@ -7,8 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PrideMusicManager {
 
-    public static ConcurrentHashMap<Player, PrideMusicManager> playerMusicManagerThread = new ConcurrentHashMap<>();
-
     private byte currentMusicPriority;
 
     private MusicManager musicManager;

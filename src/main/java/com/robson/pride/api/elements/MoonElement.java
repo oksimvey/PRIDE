@@ -2,7 +2,7 @@ package com.robson.pride.api.elements;
 
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.manager.DataManager;
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.utils.AttributeUtils;
 import com.robson.pride.api.utils.ElementalUtils;
@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public interface MoonElement {
-    ElementData DATA = new ElementData("Moon", DataManager.MOON, ParticleTypes.DRAGON_BREATH, ChatFormatting.DARK_PURPLE, SoundRegistry.TELEKINESIS_LOOP.get(),
+    ElementData DATA = new ElementData("Moon", ServerDataManager.MOON, ParticleTypes.DRAGON_BREATH, ChatFormatting.DARK_PURPLE, SoundRegistry.TELEKINESIS_LOOP.get(),
             (byte) 5, SchoolRegister.MOON.get(), new ItemRenderingParams(new FixedRGB(134, 0, 237),
             GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
             GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
@@ -31,9 +31,9 @@ public interface MoonElement {
             if (dmgent != null && ent != null) {
                 byte element = ElementalUtils.getElement(ent);
                 float multiplier = 1;
-                if (element == DataManager.LIGHT || element == DataManager.SUN) {
+                if (element == ServerDataManager.LIGHT || element == ServerDataManager.SUN) {
                     multiplier = 0.5f;
-                } else if (element == DataManager.THUNDER || element == DataManager.WATER) {
+                } else if (element == ServerDataManager.THUNDER || element == ServerDataManager.WATER) {
                     multiplier = 1.5f;
                 }
                 return MathUtils.getValueWithPercentageIncrease(multiplier *

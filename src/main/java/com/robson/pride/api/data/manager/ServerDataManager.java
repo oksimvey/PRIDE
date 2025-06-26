@@ -12,7 +12,7 @@ import com.robson.pride.skills.weaponarts.*;
 import com.robson.pride.skills.weaponskills.LongSwordWeaponSkill;
 import net.minecraft.world.item.ItemStack;
 
-public interface DataManager extends DataManagerImpl<GenericData> {
+public interface ServerDataManager extends ServerDataManagerImpl<GenericData> {
 
    //ELEMENTS ID's
 
@@ -74,7 +74,7 @@ public interface DataManager extends DataManagerImpl<GenericData> {
 
    short RONIN = 5000;
 
-   DataManager INSTANCE = id -> switch (id) {
+   ServerDataManager INSTANCE = id -> switch (id) {
 
       //ELEMENTS DATA
 
