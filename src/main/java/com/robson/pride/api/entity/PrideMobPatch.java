@@ -2,8 +2,11 @@ package com.robson.pride.api.entity;
 
 import com.robson.pride.api.ai.combat.HumanoidCombatActions;
 import com.robson.pride.api.utils.AnimUtils;
+import com.robson.pride.api.utils.LodTick;
 import com.robson.pride.api.utils.TimerUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.PathfinderMob;
@@ -25,8 +28,7 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends HumanoidMobP
     private boolean isHumanoid;
 
     private HumanoidCombatActions humanoidCombatActions;
-
-
+    
     private HumanoidCombatActions hurtHumanoidActions;
 
     private float stamina;
@@ -63,8 +65,10 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends HumanoidMobP
     @Override
     public void serverTick(LivingEvent.LivingTickEvent event) {
         super.serverTick(event);
-        if (this.getTarget() != null && AnimUtils.checkAttack(this.getTarget())) {
-            this.startBlocking(1000, false);
+        if (LodTick.canTick(this.getOriginal(), 2)) {
+           if( Minecraft.getInstance().player != null){
+               Minecraft.getInstance().player.sendSystemMessage(Component.literal("tick"));
+           }
         }
     }
 

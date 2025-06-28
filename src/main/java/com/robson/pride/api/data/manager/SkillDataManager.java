@@ -12,6 +12,8 @@ public interface SkillDataManager extends ServerDataManagerImpl<DurationSkillDat
 
     ConcurrentHashMap<LivingEntity, List<Byte>> ACTIVE_SKILLS = new ConcurrentHashMap<>();
 
+    ConcurrentHashMap<LivingEntity, Short> ACTIVE_WEAPON_SKILL = new ConcurrentHashMap<>();
+
     byte GUARD = 1;
 
    SkillDataManager INSTANCE = id -> switch (id){
@@ -28,6 +30,13 @@ public interface SkillDataManager extends ServerDataManagerImpl<DurationSkillDat
        }
        return new ArrayList<>();
    }
+
+    static Short getActiveWeaponSkills(LivingEntity ent) {
+        if (ent != null && ACTIVE_WEAPON_SKILL.get(ent) != null) {
+            return ACTIVE_WEAPON_SKILL.get(ent);
+        }
+        return 0;
+    }
 
    static boolean isSkillActive(LivingEntity ent, byte skillid) {
        return getActiveSkills(ent).contains(skillid);

@@ -13,6 +13,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -63,6 +64,10 @@ public abstract class WeaponSkillData extends GenericData {
             default -> "pride:item/scroll_wind";
         };
     }
+
+    public void onClientTick(LivingEntity ent){}
+
+    public void onHurt(LivingEntity ent, LivingHurtEvent event){}
 
     public static ChatFormatting colorByTier(SkillCore.WeaponArtTier tier){
         return switch (tier){

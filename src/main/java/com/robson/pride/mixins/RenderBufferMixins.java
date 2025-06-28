@@ -33,15 +33,14 @@ public class RenderBufferMixins {
         if (savedBufferSource == null) {
             System.out.println("First Override");
             RenderBuffers renderBuffers = ((RenderBuffers) (Object) this);
-
             SortedMap<RenderType, BufferBuilder> fixedBuffers = ((RenderBufferInterface) renderBuffers).getFixedBuffers();
             for (byte i = 1; true; i++){
                 ElementData element = ServerDataManager.getElementData(i);
-                if (element == null) {
-                    break;
+                if (element != null) {
+                    put(fixedBuffers, element.getItemRenderingParams().getDirectGlint());
+                    put(fixedBuffers, element.getItemRenderingParams().getDirectEntityGlint());
                 }
-                put(fixedBuffers, element.getItemRenderingParams().getDirectGlint());
-                put(fixedBuffers, element.getItemRenderingParams().getDirectEntityGlint());
+                else break;;
             }
             savedBufferSource = immediateWithBuffers(fixedBuffers, new BufferBuilder(256));
             savedOutlineBuffers = new OutlineBufferSource(savedBufferSource);

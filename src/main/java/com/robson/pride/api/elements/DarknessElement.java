@@ -21,7 +21,7 @@ import java.util.Random;
 
 public interface DarknessElement {
 
-    ElementData DATA = new ElementData("Darkness", ServerDataManager.DARKNESS,ParticleTypes.SMOKE, ChatFormatting.BLACK, SoundEvents.PARROT_IMITATE_WITHER, (byte) 3, SchoolRegister.DARKNESS.get(),
+    ElementData DATA = new ElementData("Darkness", ServerDataManager.DARKNESS ,ParticleTypes.SMOKE, ChatFormatting.BLACK, SoundEvents.PARROT_IMITATE_WITHER, (byte) 3, SchoolRegister.DARKNESS.get(),
             new ItemRenderingParams(new FixedRGB(0, 0, 0),
                     GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
                     GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {

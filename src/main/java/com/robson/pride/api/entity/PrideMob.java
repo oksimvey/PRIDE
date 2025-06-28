@@ -17,6 +17,7 @@ public class PrideMob extends  Monster{
 
     public PrideMob(EntityType<? extends PrideMob> type, Level world) {
         super(type, world);
+        this.setPersistenceRequired();
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             this.setDropChance(slot, 0);
         }

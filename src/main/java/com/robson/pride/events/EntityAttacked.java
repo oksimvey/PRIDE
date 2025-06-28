@@ -1,8 +1,10 @@
 package com.robson.pride.events;
 
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.data.types.DurationSkillData;
 import com.robson.pride.api.data.types.ElementData;
+import com.robson.pride.api.data.types.WeaponSkillData;
 import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.effect.ImmunityEffect;
@@ -64,31 +66,17 @@ public class EntityAttacked {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void OnFinalAttack(LivingAttackEvent event) {
-        if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
-            Entity ent = event.getEntity();
-            Entity ddmgent = event.getSource().getDirectEntity();
-            if (ddmgent instanceof LivingEntity liv) {
-                if (liv.hasEffect(EffectRegister.HYPNOTIZED.get())) {
-                    event.setCanceled(true);
-                    CloneSkill.summonPassiveClone(ent, ddmgent, true);
-                    TimerUtil.schedule(() -> TeleportUtils.teleportEntityRelativeToEntity(ent, ddmgent, 0, -ddmgent.getBbHeight() * 1.5), 100, TimeUnit.MILLISECONDS);
-                    PlaySoundUtils.playSound(ent, SoundEvents.ENDERMAN_TELEPORT, 1, 1);
-                    liv.removeEffect(EffectRegister.HYPNOTIZED.get());
-                }
-            }
-            if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMMUNITY.get())) {
-                ImmunityEffect.onDamage(event, ent);
-            }
-        }
-    }
-
     @SubscribeEvent
     public static void hurtEnt(LivingHurtEvent event) {
         if (event.getSource().getDirectEntity() != null && event.getSource().getEntity() != null) {
             if (event.getSource().getDirectEntity() instanceof AbstractArrow) {
                 event.setAmount(event.getAmount() + AttributeUtils.getAttributeValue(event.getSource().getEntity(), "pride:arrow_power"));
+            }
+            if (SkillDataManager.ACTIVE_WEAPON_SKILL.get(event.getEntity()) != null){
+                WeaponSkillData data = ServerDataManager.getWeaponSkillData(SkillDataManager.ACTIVE_WEAPON_SKILL.get(event.getEntity()));
+                if (data != null) {
+                    data.onHurt(event.getEntity(), event);
+                }
             }
             InteractionHand hand = ItemStackUtils.checkAttackingHand(event.getSource().getDirectEntity());
             if (hand != null) {
