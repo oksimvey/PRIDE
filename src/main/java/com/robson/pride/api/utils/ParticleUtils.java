@@ -21,7 +21,6 @@ import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-@Mod.EventBusSubscriber
 public class ParticleUtils {
 
     public static Particle spawnStringParticle(Entity ent, String text, StringParticle.StringParticleTypes type, int lifetime) {
