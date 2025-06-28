@@ -40,14 +40,13 @@ public class KeyHandler {
         }
     }
 
-    static void handleKeyInput(Player player, KeyMapping key, BasicKey keyAction){
 
-        boolean currentpressed = ControllEngine.isKeyDown(key);
-        if (currentpressed) {
+    static void handleKeyInput(Player player, KeyMapping key, BasicKey keyAction){
+        if (ControllEngine.isKeyDown(key)) {
             keyAction.onPressTick(player);
+            return;
         }
-        else if(keyAction.isPressed()) {
-            keyAction.isPressed = false;
+        if (keyAction.isPressed()){
             keyAction.onRelease(player);
         }
     }

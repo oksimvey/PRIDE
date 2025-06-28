@@ -33,7 +33,8 @@ public interface ClientDataManager {
         Path file = getPlayerCustomDatFile(player);
         try (OutputStream out = Files.newOutputStream(file)) {
             NbtIo.writeCompressed(tag, out);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -43,7 +44,8 @@ public interface ClientDataManager {
         if (!Files.exists(file)) return new CompoundTag();
         try (InputStream in = Files.newInputStream(file)) {
             return NbtIo.readCompressed(in);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
             return new CompoundTag();
         }

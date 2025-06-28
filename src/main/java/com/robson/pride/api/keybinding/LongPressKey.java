@@ -27,8 +27,7 @@ public abstract class LongPressKey extends BasicKey {
     }
 
     @Override
-    public void onRelease(Player player){
-        super.onRelease(player);
+    public void onReleaseAction(Player player){
         this.presscounter = 0;
         this.longPressTriggered = false;
     }

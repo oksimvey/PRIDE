@@ -25,8 +25,8 @@ public interface SkillDataManager extends ServerDataManagerImpl<DurationSkillDat
 
 
    static List<Byte> getActiveSkills(LivingEntity ent) {
-       if (ent != null && ACTIVE_SKILLS.get(ent) != null) {
-           return ACTIVE_SKILLS.get(ent);
+       if (ent != null) {
+           return ACTIVE_SKILLS.getOrDefault(ent, new ArrayList<>());
        }
        return new ArrayList<>();
    }
@@ -45,7 +45,7 @@ public interface SkillDataManager extends ServerDataManagerImpl<DurationSkillDat
    static void removeSkill(LivingEntity ent, byte data) {
        if (ent != null){
            List<Byte> list = getActiveSkills(ent);
-           list.remove(data);
+           list.remove((Byte) data);
            INSTANCE.getByID(data).onEnd(ent);
            ACTIVE_SKILLS.put(ent, list);
        }

@@ -6,9 +6,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 public abstract class DurationSkillData {
 
-    int activeTicks = 0;
+    private ConcurrentHashMap<LivingEntity, Integer> activeTicksMap = new ConcurrentHashMap<>();
 
     public abstract void onStart(LivingEntity ent);
 
@@ -17,8 +19,13 @@ public abstract class DurationSkillData {
     public abstract void onHurt(LivingEntity ent, LivingHurtEvent event);
 
     @OnlyIn(Dist.CLIENT)
-    public abstract void onClientTick(LivingEntity ent);
+    public  void onClientTick(LivingEntity ent){
+        activeTicksMap.putIfAbsent(ent, 0);
+        activeTicksMap.computeIfPresent(ent, (k, v) -> v + 1);
+    }
 
-    public abstract void onEnd(LivingEntity ent);
+    public void onEnd(LivingEntity ent){
+        this.activeTicksMap.remove(ent);
+    }
 
 }

@@ -21,13 +21,6 @@ public  class KeyDodge extends LongPressKey {
         super((byte) 5);
     }
 
-    @Override
-        public void onRelease(Player player){
-            if (!this.longPressTriggered){
-                dodge(player);
-            }
-            super.onRelease(player);
-        }
 
         @Override
         public void onPress(Player player) {

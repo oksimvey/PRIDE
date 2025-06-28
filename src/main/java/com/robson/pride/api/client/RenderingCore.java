@@ -14,6 +14,7 @@ import com.robson.pride.epicfight.styles.PrideStyles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.gameasset.Armatures;
 
 import java.util.List;

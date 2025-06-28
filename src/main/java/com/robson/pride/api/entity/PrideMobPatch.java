@@ -1,44 +1,61 @@
 package com.robson.pride.api.entity;
 
-import com.robson.pride.api.ai.combat.HumanoidCombatActions;
+import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.LodTick;
 import com.robson.pride.api.utils.TimerUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.Animator;
 import yesman.epicfight.api.animation.LivingMotions;
+import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.client.animation.ClientAnimator;
 import yesman.epicfight.api.utils.math.OpenMatrix4f;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.network.EpicFightNetworkManager;
 import yesman.epicfight.network.server.SPEntityPacket;
 import yesman.epicfight.world.capabilities.entitypatch.Factions;
-import yesman.epicfight.world.capabilities.entitypatch.HumanoidMobPatch;
+import yesman.epicfight.world.capabilities.entitypatch.MobPatch;
+import yesman.epicfight.world.damagesource.StunType;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class PrideMobPatch <PrideMob extends PathfinderMob> extends HumanoidMobPatch<PrideMob> {
-
-    private boolean isHumanoid;
-
-    private HumanoidCombatActions humanoidCombatActions;
-    
-    private HumanoidCombatActions hurtHumanoidActions;
-
-    private float stamina;
-
-    private boolean isBlocking;
-
-    private boolean canParry;
+public class PrideMobPatch <PrideMob extends PathfinderMob> extends MobPatch<PrideMob> {
 
     public PrideMobPatch() {
         super(Factions.NEUTRAL);
+    }
+
+    public AnimationManager.AnimationAccessor<? extends StaticAnimation> getHitAnimation(StunType stunType) {
+        if (((PathfinderMob)this.original).getVehicle() != null) {
+            return Animations.BIPED_HIT_ON_MOUNT;
+        } else {
+            switch (stunType) {
+                case LONG -> {
+                    return Animations.BIPED_HIT_LONG;
+                }
+                case SHORT, HOLD -> {
+                    return Animations.BIPED_HIT_SHORT;
+                }
+                case KNOCKDOWN -> {
+                    return Animations.BIPED_KNOCKDOWN;
+                }
+                case NEUTRALIZE -> {
+                    return Animations.BIPED_COMMON_NEUTRALIZED;
+                }
+                case FALL -> {
+                    return Animations.BIPED_LANDING;
+                }
+                default -> {
+                    return null;
+                }
+            }
+        }
     }
 
     public void onStartTracking(ServerPlayer trackingPlayer) {
@@ -57,6 +74,24 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends HumanoidMobP
         animator.setCurrentMotionsAsDefault();
     }
 
+    protected final void commonMobAnimatorInit(Animator animator) {
+        animator.addLivingAnimation(LivingMotions.IDLE, Animations.BIPED_IDLE);
+        animator.addLivingAnimation(LivingMotions.WALK, Animations.BIPED_WALK);
+        animator.addLivingAnimation(LivingMotions.FALL, Animations.BIPED_FALL);
+        animator.addLivingAnimation(LivingMotions.MOUNT, Animations.BIPED_MOUNT);
+        animator.addLivingAnimation(LivingMotions.DEATH, Animations.BIPED_DEATH);
+    }
+
+    protected final void commonAggresiveMobAnimatorInit(Animator animator) {
+        animator.addLivingAnimation(LivingMotions.IDLE, Animations.BIPED_IDLE);
+        animator.addLivingAnimation(LivingMotions.WALK, Animations.BIPED_WALK);
+        animator.addLivingAnimation(LivingMotions.CHASE, Animations.BIPED_WALK);
+        animator.addLivingAnimation(LivingMotions.FALL, Animations.BIPED_FALL);
+        animator.addLivingAnimation(LivingMotions.MOUNT, Animations.BIPED_MOUNT);
+        animator.addLivingAnimation(LivingMotions.DEATH, Animations.BIPED_DEATH);
+    }
+
+
     @Override
     public OpenMatrix4f getModelMatrix(float partialTicks) {
         return super.getModelMatrix(partialTicks).scale(1, 1, 1);
@@ -66,8 +101,23 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends HumanoidMobP
     public void serverTick(LivingEvent.LivingTickEvent event) {
         super.serverTick(event);
         if (LodTick.canTick(this.getOriginal(), 2)) {
-           if( Minecraft.getInstance().player != null){
-               Minecraft.getInstance().player.sendSystemMessage(Component.literal("tick"));
+            if (this.getTarget() == null || !this.getTarget().isAlive()){
+                this.setAttakTargetSync(null);
+                return;
+            }
+            if (AnimUtils.checkAttack(this.getTarget())){
+                SkillDataManager.addSkill(this.getOriginal(), SkillDataManager.GUARD);
+                TimerUtil.schedule(()-> {
+                    SkillDataManager.removeSkill(this.getOriginal(), SkillDataManager.GUARD);
+                }, 1000, TimeUnit.MILLISECONDS);
+            }
+           if (!this.getEntityState().attacking() && this.getEntityState().canBasicAttack()){
+               AnimationManager.AnimationAccessor<? extends StaticAnimation> animation = switch (new Random().nextInt(2)) {
+                   case 0 -> Animations.GREATSWORD_AUTO1;
+                   case 1 -> Animations.GREATSWORD_AUTO2;
+                   default -> Animations.GREATSWORD_DASH;
+               };
+               AnimUtils.playAnim(this.getOriginal(), animation, 0);
            }
         }
     }
@@ -85,14 +135,8 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends HumanoidMobP
 
     public void updateMotion(boolean considerInaction) {
         super.commonMobUpdateMotion(considerInaction);
-    }
-
-    public void startBlocking(int duration, boolean canParry){
-        this.isBlocking = true;
-        this.canParry = canParry;
-        TimerUtil.schedule(()-> {
-            this.isBlocking = false;
-            this.canParry = false;
-        }, duration, TimeUnit.MILLISECONDS);
+        if (this.original.isUsingItem()){
+            this.currentLivingMotion = LivingMotions.BLOCK;
+        }
     }
 }

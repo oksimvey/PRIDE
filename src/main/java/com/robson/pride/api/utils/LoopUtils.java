@@ -31,19 +31,15 @@ public interface LoopUtils {
         }, 0, intervalMillis);
     }
 
-    static void loopByConditional(LoopAction action, int maxLoops, int intervalMillis) {
+    static void loopByConditional(LoopAction action, int intervalMillis) {
         Timer timer = new Timer();
         final int[] current = {0};
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (current[0] >= maxLoops) {
-                    timer.cancel();
-                    return;
-                }
-                boolean continuar = action.run(current[0]);
+                boolean shouldcontinue = action.run(current[0]);
                 current[0]++;
-                if (!continuar) {
+                if (!shouldcontinue) {
                     timer.cancel();
                 }
             }

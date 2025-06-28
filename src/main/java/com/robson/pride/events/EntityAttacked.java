@@ -35,33 +35,11 @@ public class EntityAttacked {
     public static void OnAnyAttack(LivingAttackEvent event) {
         if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
             LivingEntity ent = event.getEntity();
-            Entity ddmgent = event.getSource().getDirectEntity();
             for (byte skill : SkillDataManager.getActiveSkills(ent)){
                 DurationSkillData data = SkillDataManager.INSTANCE.getByID(skill);
                 if (data != null) {
                     data.onAttacked(ent, event);
                 }
-            }
-            if (ddmgent instanceof Projectile) {
-                if (ddmgent instanceof AbstractArrow arrow && ent.getPersistentData().getBoolean("mikiri_dodge")) {
-                    MikiriCounter.onArrowMikiri(ent, arrow, event);
-                }
-            }
-            GuardBreak.checkForGuardBreak(ent, ddmgent);
-            if (ent.getPersistentData().getBoolean("isVulnerable")) {
-                GuardBreak.onVulnerableDamage(ent, event);
-            }
-            if (PerilousAttack.checkPerilous(ent)) {
-                event.setCanceled(true);
-            }
-            if (PerilousAttack.checkPerilous(ddmgent)) {
-                PerilousAttack.onPerilous(ent, ddmgent, event);
-            } else Guard.checkGuard(ent, ddmgent, event);
-            if (ddmgent instanceof ServerPlayer player && event.getAmount() > 0) {
-                ProgressionUtils.addXp(player, "Strength", (int) event.getAmount());
-            }
-            if (ddmgent.getPersistentData().getBoolean("passive_clone")) {
-                event.setCanceled(true);
             }
         }
     }

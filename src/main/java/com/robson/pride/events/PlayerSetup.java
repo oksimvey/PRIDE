@@ -3,9 +3,7 @@ package com.robson.pride.events;
 import com.robson.pride.api.customtick.PlayerCustomTick;
 import com.robson.pride.api.data.player.ClientDataManager;
 import com.robson.pride.api.data.player.ClientProgressionData;
-import com.robson.pride.api.musiccore.PrideMusicManager;
 import com.robson.pride.api.utils.StaminaUtils;
-import com.robson.pride.api.utils.TagsUtils;
 import com.robson.pride.progression.NewCap;
 import com.robson.pride.progression.PlayerAttributeSetup;
 import net.minecraft.nbt.CompoundTag;
@@ -22,8 +20,6 @@ public class PlayerSetup {
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getEntity();
         if (player != null) {
-            player.getPersistentData().putBoolean("isParrying", false);
-            playerCommonSetup(player);
             PlayerCustomTick.startTick(player);
         }
     }
@@ -34,7 +30,6 @@ public class PlayerSetup {
         if (player != null) {
             PlayerCustomTick.startRespawnTick(player);
             PlayerAttributeSetup.setupPlayerAttributes(player);
-            playerCommonSetup(player);
         }
     }
 
@@ -58,15 +53,5 @@ public class PlayerSetup {
         CompoundTag originaltag = event.getOriginal().getPersistentData();
         CompoundTag clonetag = event.getEntity().getPersistentData();
         NewCap.setupVariables(originaltag, clonetag);
-    }
-
-    public static void playerCommonSetup(Player player) {
-        if (player != null) {
-            CompoundTag tag = player.getPersistentData();
-            StaminaUtils.resetStamina(player);
-            if (!NewCap.haveVariables(tag)) {
-                NewCap.startVariables(player, tag);
-            }
-        }
     }
 }

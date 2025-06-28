@@ -15,6 +15,6 @@ public class GuardAction extends ActionBase {
     }
 
     protected void start(PrideMobPatch<?> ent) {
-       ent.startBlocking(duration, canParry);
+
     }
 }

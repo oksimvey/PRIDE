@@ -52,10 +52,9 @@ public class ClientData {
         if (player instanceof ServerPlayer player1) {
             data.setNbt(player.getPersistentData());
             CompoundTag tag = ClientDataManager.readPlayerDat(player1);
-            if (tag == null) {
-                tag = new CompoundTag();
-                tag.putByteArray("lvl", new byte[]{0, 0, 0, 0, 0});
-                tag.putByteArray("skills", new byte[]{0});
+            if (tag.getByteArray("lvl").length == 0 || tag.getByteArray("skills").length == 0 || tag.getIntArray("xp").length == 0) {
+                tag.putByteArray("lvl", new byte[]{1, 1, 1, 1, 1});
+                tag.putByteArray("skills", new byte[]{});
                 tag.putIntArray("xp", new int[]{0, 0, 0, 0, 0});
 
             }

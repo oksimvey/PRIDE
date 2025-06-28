@@ -7,29 +7,27 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.animation.Joint;
+import yesman.epicfight.api.animation.types.DynamicAnimation;
 import yesman.epicfight.api.utils.math.OpenMatrix4f;
 import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ArmatureUtils {
 
     private static final Vec3f DEFAULT_TRANSLATION = new Vec3f(0.0F, 1.0F, 0.0F);
 
-    private static final int interpolation = 0;
+    private static final byte INTERPOLATION = 0;
 
     public static PrideVec3f getRawJoint(LocalPlayer renderer, Entity ent, Joint joint){
         if (renderer != null && renderer.level().isClientSide && ent != null && joint != null){
             LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (entityPatch != null){
-                OpenMatrix4f matrix4f = entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(interpolation), joint);
-                OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) Math.toRadians((double) (((LivingEntity) entityPatch.getOriginal()).yBodyRotO + 180.0F))), DEFAULT_TRANSLATION), matrix4f, matrix4f);
+                OpenMatrix4f matrix4f = entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(INTERPOLATION), joint);
+                OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) Math.toRadians(entityPatch.getOriginal().yBodyRotO + 180.0F)), DEFAULT_TRANSLATION), matrix4f, matrix4f);
                 return new PrideVec3f(matrix4f.m30, matrix4f.m31, matrix4f.m32);
             }
         }
@@ -40,9 +38,9 @@ public class ArmatureUtils {
         if (renderer != null && translation != null && renderer.level().isClientSide && ent != null && joint != null){
             LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (entityPatch != null){
-                OpenMatrix4f matrix4f = entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(interpolation), joint);
+                OpenMatrix4f matrix4f = entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(INTERPOLATION), joint);
                 matrix4f.translate(translation);
-                OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) Math.toRadians((double) (((LivingEntity) entityPatch.getOriginal()).yBodyRotO + 180.0F))), DEFAULT_TRANSLATION), matrix4f, matrix4f);
+                OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) Math.toRadians(entityPatch.getOriginal().yBodyRotO + 180.0F)), DEFAULT_TRANSLATION), matrix4f, matrix4f);
                 return new PrideVec3f((float) (matrix4f.m30 + ent.getX()), (float) (matrix4f.m31 + ent.getY() * (ent.getBbHeight() / 1.8f)), (float) (matrix4f.m32 + ent.getZ()));
             }
         }
@@ -55,6 +53,24 @@ public class ArmatureUtils {
             return pos.add(PrideVec3f.fromVec3(ent.position()));
         }
         return null;
+    }
+
+    public static List<PrideVec3f> getJointInterpolatedMovement(LocalPlayer renderer, Entity ent, int interpolation , Joint joint) {
+        List<PrideVec3f> list = new ArrayList<>();
+        if (renderer != null && renderer.level().isClientSide && ent != null && joint != null){
+            LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (entityPatch != null){
+                DynamicAnimation animation = Objects.requireNonNull(entityPatch.getAnimator().getPlayerFor(null)).getAnimation().orElse(null);
+                if (animation != null) {
+                    for (int i = 0; i < interpolation; i++) {
+                        OpenMatrix4f matrix4f = entityPatch.getArmature().getBindedTransformFor(animation.getPoseByTime(entityPatch, animation.getTotalTime() * ((float) i / interpolation), INTERPOLATION), joint);
+                        OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) Math.toRadians(entityPatch.getOriginal().yBodyRotO + 180.0F)), DEFAULT_TRANSLATION), matrix4f, matrix4f);
+                        list.add(new PrideVec3f(matrix4f.m30, matrix4f.m31, matrix4f.m32));
+                    }
+                }
+            }
+        }
+        return list;
     }
 
     public static Joint getNearestJoint(LocalPlayer renderer, Entity ent, Vec3 pos) {
