@@ -1,6 +1,5 @@
 package com.robson.pride.api.data.player;
 
-import com.robson.pride.api.keybinding.BasicKey;
 import com.robson.pride.api.keybinding.KeyHandler;
 import com.robson.pride.api.musiccore.PrideMusicManager;
 import com.robson.pride.api.utils.TargetUtil;
@@ -17,7 +16,7 @@ import java.util.List;
 
 public class ClientData {
 
-    private ClientProgressionData progressionData;
+    private ClientSavedData progressionData;
 
     private KeyHandler keyHandler;
 
@@ -58,7 +57,7 @@ public class ClientData {
                 tag.putIntArray("xp", new int[]{0, 0, 0, 0, 0});
 
             }
-            ClientProgressionData datap = ClientProgressionData.fromNBT(tag);
+            ClientSavedData datap = ClientSavedData.fromNBT(tag);
             data.setProgressionData(datap);
             ClientDataManager.deletePlayerDat(player1);
             data.setMusicManager(new PrideMusicManager((byte) 0, Minecraft.getInstance().getMusicManager()));
@@ -84,7 +83,7 @@ public class ClientData {
         this.nbt = tag;
     }
 
-    public void setProgressionData(ClientProgressionData progressionData){
+    public void setProgressionData(ClientSavedData progressionData){
         this.progressionData = progressionData;
     }
 
@@ -93,7 +92,7 @@ public class ClientData {
         this.musicManager = musicManager;
     }
 
-    public ClientProgressionData getProgressionData() {
+    public ClientSavedData getProgressionData() {
         return progressionData;
     }
 }

@@ -2,8 +2,7 @@ package com.robson.pride.events;
 
 import com.robson.pride.api.customtick.PlayerCustomTick;
 import com.robson.pride.api.data.player.ClientDataManager;
-import com.robson.pride.api.data.player.ClientProgressionData;
-import com.robson.pride.api.utils.StaminaUtils;
+import com.robson.pride.api.data.player.ClientSavedData;
 import com.robson.pride.progression.NewCap;
 import com.robson.pride.progression.PlayerAttributeSetup;
 import net.minecraft.nbt.CompoundTag;
@@ -37,7 +36,7 @@ public class PlayerSetup {
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         Player player = event.getEntity();
         if (player instanceof ServerPlayer player1) {
-            CompoundTag data = ClientProgressionData.toNBT(ClientDataManager.CLIENT_DATA_MANAGER.get(player).getProgressionData());
+            CompoundTag data = ClientSavedData.toNBT(ClientDataManager.CLIENT_DATA_MANAGER.get(player).getProgressionData());
             ClientDataManager.savePlayerDat(player1, data);
         }
         if (player != null) {

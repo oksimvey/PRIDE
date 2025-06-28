@@ -12,6 +12,8 @@ public interface MathUtils {
 
     Random random = new Random();
 
+    float PIf = 3.141592f;
+
     static float getValueWithPercentageIncrease(double number, double percentage) {
         return (float) (number + (number * percentage / 100));
     }
@@ -38,7 +40,7 @@ public interface MathUtils {
     }
 
     static float degreeToRadians(float degree) {
-        return 3.14f * (degree / 180);
+        return PIf * (degree / 180f);
     }
 
     static Vec3 rotate2DVector(Vec3 vec, float degrees) {

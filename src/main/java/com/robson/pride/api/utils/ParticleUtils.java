@@ -69,11 +69,11 @@ public class ParticleUtils {
         if (renderer != null && renderer.level().isClientSide && ent instanceof LivingEntity living) {
             int amount = (int) ItemStackUtils.getColliderSize(living.getMainHandItem()) - new Random().nextInt(particleDecrease);
             if (amount > 0) {
+                Vec3 delta = living.getDeltaMovement();
                 for (int i = 0; i < amount; i++) {
                     PrideVec3f vec = ArmatureUtils.getJointWithTranslation(renderer, living, AABB, joint);
                     if (vec != null) {
-                        Vec3 delta = living.getDeltaMovement();
-                        renderer.level().addParticle(particle, vec.x(), vec.y(), vec.z(),
+                       renderer.level().addParticle(particle, vec.x(), vec.y(), vec.z(),
                                 ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.x,
                                 ((new Random()).nextFloat() - 0.5F) * 0.02F,
                                 ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.z);

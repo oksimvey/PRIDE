@@ -2,7 +2,9 @@ package com.robson.pride.api.data.player;
 
 import net.minecraft.nbt.CompoundTag;
 
-public class ClientProgressionData {
+import java.util.UUID;
+
+public class ClientSavedData {
 
     public static final byte Strength = 0;
     public static final byte Dexterity = 1;
@@ -16,7 +18,9 @@ public class ClientProgressionData {
 
     private byte[] skillList;
 
-    private ClientProgressionData(byte[] lvl, int[] xp, byte[] skillList) {
+    private UUID mount;
+
+    private ClientSavedData(byte[] lvl, int[] xp, byte[] skillList) {
        this.lvl = lvl;
        this.xp = xp;
         this.skillList = skillList;
@@ -30,9 +34,9 @@ public class ClientProgressionData {
         return (byte) (total / this.lvl.length);
     }
 
-    public static ClientProgressionData fromNBT(CompoundTag tag) {
+    public static ClientSavedData fromNBT(CompoundTag tag) {
         if (tag != null) {
-            return new ClientProgressionData(
+            return new ClientSavedData(
                    tag.getByteArray("lvl"),
                     tag.getIntArray("xp"),
                     tag.getByteArray("skills"));
@@ -76,7 +80,7 @@ public class ClientProgressionData {
         this.lvl[stat] = level;
     }
 
-    public static CompoundTag toNBT(ClientProgressionData data) {
+    public static CompoundTag toNBT(ClientSavedData data) {
         CompoundTag tag = new CompoundTag();
         tag.putByteArray("lvl", data.lvl);
         tag.putIntArray("xp", data.xp);

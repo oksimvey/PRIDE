@@ -1,5 +1,6 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.api.utils.math.BezierCurvef;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.PrideVec3f;
 import net.minecraft.client.player.LocalPlayer;
@@ -7,6 +8,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.animation.Joint;
+import yesman.epicfight.api.animation.Pose;
+import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.DynamicAnimation;
 import yesman.epicfight.api.utils.math.OpenMatrix4f;
 import yesman.epicfight.api.utils.math.Vec3f;
@@ -27,7 +30,7 @@ public class ArmatureUtils {
             LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (entityPatch != null){
                 OpenMatrix4f matrix4f = entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(INTERPOLATION), joint);
-                OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) Math.toRadians(entityPatch.getOriginal().yBodyRotO + 180.0F)), DEFAULT_TRANSLATION), matrix4f, matrix4f);
+                OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) MathUtils.degreeToRadians(entityPatch.getOriginal().yBodyRotO + 180.0F)), DEFAULT_TRANSLATION), matrix4f, matrix4f);
                 return new PrideVec3f(matrix4f.m30, matrix4f.m31, matrix4f.m32);
             }
         }
@@ -40,7 +43,7 @@ public class ArmatureUtils {
             if (entityPatch != null){
                 OpenMatrix4f matrix4f = entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(INTERPOLATION), joint);
                 matrix4f.translate(translation);
-                OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) Math.toRadians(entityPatch.getOriginal().yBodyRotO + 180.0F)), DEFAULT_TRANSLATION), matrix4f, matrix4f);
+                OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) MathUtils.degreeToRadians(entityPatch.getOriginal().yBodyRotO + 180.0F)), DEFAULT_TRANSLATION), matrix4f, matrix4f);
                 return new PrideVec3f((float) (matrix4f.m30 + ent.getX()), (float) (matrix4f.m31 + ent.getY() * (ent.getBbHeight() / 1.8f)), (float) (matrix4f.m32 + ent.getZ()));
             }
         }
@@ -55,22 +58,29 @@ public class ArmatureUtils {
         return null;
     }
 
-    public static List<PrideVec3f> getJointInterpolatedMovement(LocalPlayer renderer, Entity ent, int interpolation , Joint joint) {
+    public static List<PrideVec3f> getJointInterpolatedMovement(LocalPlayer renderer, Entity ent, float scale) {
         List<PrideVec3f> list = new ArrayList<>();
-        if (renderer != null && renderer.level().isClientSide && ent != null && joint != null){
+        if (renderer != null && renderer.level().isClientSide && ent != null){
             LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (entityPatch != null){
                 DynamicAnimation animation = Objects.requireNonNull(entityPatch.getAnimator().getPlayerFor(null)).getAnimation().orElse(null);
-                if (animation != null) {
-                    for (int i = 0; i < interpolation; i++) {
-                        OpenMatrix4f matrix4f = entityPatch.getArmature().getBindedTransformFor(animation.getPoseByTime(entityPatch, animation.getTotalTime() * ((float) i / interpolation), INTERPOLATION), joint);
-                        OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) Math.toRadians(entityPatch.getOriginal().yBodyRotO + 180.0F)), DEFAULT_TRANSLATION), matrix4f, matrix4f);
-                        list.add(new PrideVec3f(matrix4f.m30, matrix4f.m31, matrix4f.m32));
+                if (animation instanceof AttackAnimation attackAnimation) {
+                    for (AttackAnimation.Phase phase : attackAnimation.phases) {
+                        float[] phasestime = new float[]{phase.preDelay, phase.contact, phase.recovery};
+                        for (float time : phasestime) {
+                            OpenMatrix4f matrix4f = entityPatch.getArmature().getBindedTransformFor(animation.getPoseByTime(entityPatch, time, INTERPOLATION), phase.colliders[0].getFirst());
+                            OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) MathUtils.degreeToRadians(entityPatch.getOriginal().yBodyRotO + 180.0F)), DEFAULT_TRANSLATION), matrix4f, matrix4f);
+                            list.add(new PrideVec3f(matrix4f.m30, matrix4f.m31, matrix4f.m32).scale(scale));
+                        }
                     }
                 }
             }
         }
         return list;
+    }
+
+    public static List<PrideVec3f> getJointInterpolatedBezier(LocalPlayer renderer, Entity ent, float scale){
+        return BezierCurvef.getBezierInterpolatedPoints(getJointInterpolatedMovement(renderer, ent, scale), (int) (scale * 4));
     }
 
     public static Joint getNearestJoint(LocalPlayer renderer, Entity ent, Vec3 pos) {
