@@ -1,6 +1,6 @@
 package com.robson.pride.api.ai.actions;
 
-import com.robson.pride.api.ai.dialogues.AnswerGUI;
+import com.robson.pride.gui.AnswerGUI;
 import com.robson.pride.api.entity.PrideMobPatch;
 import net.minecraft.world.entity.player.Player;
 

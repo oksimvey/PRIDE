@@ -3,9 +3,7 @@ package com.robson.pride.api.keybinding;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.utils.StaminaUtils;
-import com.robson.pride.keybinding.KeyGuard;
-import com.robson.pride.keybinding.KeySwapHand;
-import com.robson.pride.keybinding.KeySpecial;
+import com.robson.pride.keybinding.*;
 import com.robson.pride.registries.KeyRegister;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -22,20 +20,28 @@ public class KeyHandler {
 
     private final KeyGuard guard;
 
+    private final KeyMenu menu;
+
+    private final KeyDodge dodge;
+
     public KeyHandler() {
         this.special = new KeySpecial();
         this.swapHand = new KeySwapHand();
         this.guard = new KeyGuard();
+        this.menu = new KeyMenu();
+        this.dodge = new KeyDodge();
     }
 
     public void tick(Player player) {
         if (player != null) {
+            handleKeyInput(player, KeyRegister.MENU, this.menu);
             if (ServerDataManager.getWeaponData(player.getMainHandItem()) != null) {
                 handleKeyInput(player, EpicFightKeyMappings.ATTACK, this.special);
                 handleKeyInput(player, KeyRegister.SWAP_HAND, this.swapHand);
                 handleKeyInput(player, EpicFightKeyMappings.GUARD, this.guard);
             }
             if (StaminaUtils.getStamina(player) >= 3){
+                handleKeyInput(player, KeyRegister.DODGE, this.dodge);
             }
         }
     }

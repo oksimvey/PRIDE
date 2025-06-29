@@ -3,7 +3,6 @@ package com.robson.pride.events;
 import com.robson.pride.api.customtick.PlayerCustomTick;
 import com.robson.pride.api.data.player.ClientDataManager;
 import com.robson.pride.api.data.player.ClientSavedData;
-import com.robson.pride.progression.NewCap;
 import com.robson.pride.progression.PlayerAttributeSetup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -41,16 +40,6 @@ public class PlayerSetup {
         }
         if (player != null) {
             PlayerCustomTick.stopTick(player);
-            player.getPersistentData().remove("pride:cooldown_skills");
         }
-    }
-
-    @SubscribeEvent
-    public static void clonePlayer(PlayerEvent.Clone event) {
-        event.getOriginal().revive();
-        ClientDataManager.CLIENT_DATA_MANAGER.get(event.getOriginal()).setNbt(event.getEntity().getPersistentData());
-        CompoundTag originaltag = event.getOriginal().getPersistentData();
-        CompoundTag clonetag = event.getEntity().getPersistentData();
-        NewCap.setupVariables(originaltag, clonetag);
     }
 }

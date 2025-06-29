@@ -1,6 +1,7 @@
 package com.robson.pride.skills.weaponarts;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
+import com.robson.pride.api.mechanics.perilous.PerilousType;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.data.types.WeaponSkillData;
@@ -28,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 public interface DarknessCut {
 
-    WeaponSkillData DATA = new WeaponSkillData("Darkness Cut", ServerDataManager.DARKNESS_CUT, "irons_spellbooks:item/scroll_eldritch", SkillCore.WeaponArtTier.MYTHICAL, ServerDataManager.DARKNESS, 50, 6, "total") {
+    WeaponSkillData DATA = new WeaponSkillData("Darkness Cut", ServerDataManager.DARKNESS_CUT,  SkillCore.WeaponArtTier.MYTHICAL, ServerDataManager.DARKNESS, 50, 6, PerilousType.TOTAL) {
 
         public List<SkillAnimation> defineMotions(LivingEntity ent) {
             return List.of(new SkillAnimation(Animations.TACHI_AUTO3, () -> {

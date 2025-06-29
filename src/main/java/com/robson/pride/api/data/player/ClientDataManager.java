@@ -50,14 +50,4 @@ public interface ClientDataManager {
             return new CompoundTag();
         }
     }
-
-
-    static void deletePlayerDat(ServerPlayer player) {
-        Path file = getPlayerCustomDatFile(player);
-        try {
-            Files.deleteIfExists(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

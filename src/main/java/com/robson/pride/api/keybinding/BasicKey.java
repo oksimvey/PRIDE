@@ -21,7 +21,7 @@ public abstract class BasicKey {
         return this.isPressed;
     }
 
-    public final void onRelease(Player player) {
+    public void onRelease(Player player) {
         this.onReleaseAction(player);
         this.isPressed = false;
     }

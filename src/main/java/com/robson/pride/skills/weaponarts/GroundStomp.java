@@ -1,6 +1,7 @@
 package com.robson.pride.skills.weaponarts;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
+import com.robson.pride.api.mechanics.perilous.PerilousType;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.data.types.WeaponSkillData;
@@ -12,7 +13,7 @@ import java.util.List;
 public interface GroundStomp {
 
 
-    WeaponSkillData DATA = new WeaponSkillData( "Ground Stomp", ServerDataManager.GROUND_STOMP, "pride:models/item/scroll_wind", SkillCore.WeaponArtTier.UNCOMMON, (byte) 11, 4, 4, "pierce_two_hand") {
+    WeaponSkillData DATA = new WeaponSkillData( "Ground Stomp", ServerDataManager.GROUND_STOMP,  SkillCore.WeaponArtTier.UNCOMMON, (byte) 11, 4, 4, PerilousType.TOTAL) {
 
 
         public List<SkillAnimation> defineMotions(LivingEntity ent) {

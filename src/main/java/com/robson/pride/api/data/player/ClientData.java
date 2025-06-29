@@ -20,8 +20,6 @@ public class ClientData {
 
     private KeyHandler keyHandler;
 
-    private CompoundTag nbt;
-
     private PrideMusicManager musicManager;
 
     private List<LivingEntity> targetingEntities = new ArrayList<>();
@@ -49,9 +47,8 @@ public class ClientData {
     public static ClientData createDefault(Player player){
         ClientData data = new ClientData();
         if (player instanceof ServerPlayer player1) {
-            data.setNbt(player.getPersistentData());
             CompoundTag tag = ClientDataManager.readPlayerDat(player1);
-            if (tag.getByteArray("lvl").length == 0 || tag.getByteArray("skills").length == 0 || tag.getIntArray("xp").length == 0) {
+            if (tag.getByteArray("lvl").length == 0 || tag.getIntArray("xp").length == 0) {
                 tag.putByteArray("lvl", new byte[]{1, 1, 1, 1, 1});
                 tag.putByteArray("skills", new byte[]{});
                 tag.putIntArray("xp", new int[]{0, 0, 0, 0, 0});
@@ -59,7 +56,6 @@ public class ClientData {
             }
             ClientSavedData datap = ClientSavedData.fromNBT(tag);
             data.setProgressionData(datap);
-            ClientDataManager.deletePlayerDat(player1);
             data.setMusicManager(new PrideMusicManager((byte) 0, Minecraft.getInstance().getMusicManager()));
             data.setKeyHandler(new KeyHandler());
         }
@@ -70,18 +66,12 @@ public class ClientData {
         this.keyHandler = keyHandler;
     }
 
-    public CompoundTag getPersistentData(){
-        return this.nbt;
-    }
 
     public void tick(Player player){
         this.keyHandler.tick(player);
         targetingEntitiesTick(player);
     }
 
-    public void setNbt(CompoundTag tag){
-        this.nbt = tag;
-    }
 
     public void setProgressionData(ClientSavedData progressionData){
         this.progressionData = progressionData;

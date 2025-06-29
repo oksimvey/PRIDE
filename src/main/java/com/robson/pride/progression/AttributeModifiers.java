@@ -1,6 +1,7 @@
 package com.robson.pride.progression;
 
 import com.robson.pride.api.data.player.ClientDataManager;
+import com.robson.pride.api.data.player.ClientSavedData;
 import com.robson.pride.api.data.types.WeaponData;
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.utils.ElementalUtils;
@@ -14,6 +15,8 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static com.robson.pride.api.utils.ProgressionUtils.getStatLvl;
 
 public class AttributeModifiers {
 
@@ -78,15 +81,15 @@ public class AttributeModifiers {
                 byte modifiers = 0;
                 if (data.getAttributeReqs().requiredStrength() != 0) {
                     modifiers = (byte) (modifiers + 1);
-                    strmodifier = calculateWeaponAttributeModifier(player, item, data.getAttributeReqs().strengthScale(), data.getAttributeReqs().requiredStrength(), "Strength");
+                    strmodifier = calculateWeaponAttributeModifier(player, item, data.getAttributeReqs().strengthScale(), data.getAttributeReqs().requiredStrength(), ClientSavedData.Strength);
                 }
                 if (data.getAttributeReqs().requiredDexterity() != 0) {
                     modifiers = (byte) (modifiers + 1);
-                    dexmodifier = calculateWeaponAttributeModifier(player, item, data.getAttributeReqs().dexterityScale(), data.getAttributeReqs().requiredDexterity(), "Dexterity");
+                    dexmodifier = calculateWeaponAttributeModifier(player, item, data.getAttributeReqs().dexterityScale(), data.getAttributeReqs().requiredDexterity(), ClientSavedData.Dexterity);
                 }
                 if (data.getAttributeReqs().requiredMind() != 0 || item.getOrCreateTag().contains("requiredMind")) {
                     modifiers = (byte) (modifiers + 1);
-                    mindmofier = calculateWeaponAttributeModifier(player, item, data.getAttributeReqs().mindScale(), data.getAttributeReqs().requiredMind(), "Mind");
+                    mindmofier = calculateWeaponAttributeModifier(player, item, data.getAttributeReqs().mindScale(), data.getAttributeReqs().requiredMind(), ClientSavedData.Mind);
                 }
                 float agroup = mindmofier + dexmodifier + strmodifier;
                 float finalmodifier = agroup / modifiers / 2;
@@ -99,18 +102,15 @@ public class AttributeModifiers {
         return 0;
     }
 
-    public static float calculateWeaponAttributeModifier(Player player, ItemStack item, char scale, int required, String attribute) {
+    public static float calculateWeaponAttributeModifier(Player player, ItemStack item, char scale, int required, byte stat) {
         if (player != null && item != null) {
-            CompoundTag playertag = ClientDataManager.CLIENT_DATA_MANAGER.get(player).getPersistentData();
-            if (playertag != null) {
-                int lvl = playertag.getInt(attribute + "Lvl");
-                if (attribute.equals("Mind") && scale_tiers.contains(item.getOrCreateTag().getString("scaleMind")) && item.getOrCreateTag().contains("requiredMind")) {
+                int lvl = getStatLvl(player, stat);
+                if (stat == ClientSavedData.Mind && scale_tiers.contains(item.getOrCreateTag().getString("scaleMind")) && item.getOrCreateTag().contains("requiredMind")) {
                     required = item.getTag().getInt("requiredMind");
                     scale = item.getTag().getString("scaleMind").charAt(0);
                 }
                 float difference = lvl - required;
                 return difference < 0 ? difference / 10 : difference * getIncrementByScale(scale) / 2;
-            }
         }
         return 0;
     }

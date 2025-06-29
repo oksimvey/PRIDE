@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.robson.pride.api.data.player.ClientSavedData;
 import com.robson.pride.api.utils.ProgressionUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -35,8 +36,19 @@ public class AddXpCommand implements Command<CommandSourceStack> {
         Entity ent = EntityArgument.getEntity(context, "living_entity");
         String stat = StringArgumentType.getString(context, "stat");
         int amount = IntegerArgumentType.getInteger(context, "amount");
+        byte statid = switch (stat){
+            case "Strength" -> ClientSavedData.Strength;
+
+            case "Dexterity" -> ClientSavedData.Dexterity;
+
+            case "Vigor" -> ClientSavedData.Vigor;
+
+            case "Endurance" -> ClientSavedData.Endurance;
+
+            default -> ClientSavedData.Mind;
+        };
         if (ent instanceof Player player) {
-            ProgressionUtils.addXp(player, stat, amount);
+            ProgressionUtils.addXp(player, statid, amount);
         }
         return 1;
     }

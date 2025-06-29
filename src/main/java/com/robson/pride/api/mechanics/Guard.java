@@ -43,7 +43,7 @@ public class Guard {
             if (player.isUsingItem() && canBlock(ent, ddmgent, event.getSource()) && ItemStackUtils.getStyle(player) != PrideStyles.GUN_OFFHAND) {
                 checkParry(ent, ddmgent, event);
             } else {
-                ProgressionUtils.addXp(player, "Vigor", (int) event.getAmount());
+
             }
         } else {
 
@@ -54,13 +54,13 @@ public class Guard {
         if (ent instanceof Player player) {
             if (ent.getPersistentData().getBoolean("isParrying")) {
                 Parry.onParry(ent, ddmgent);
-                ProgressionUtils.addXp(player, "Endurance", (int) event.getAmount() * 2);
+
                 if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)) {
                     onAnyBlock(player, event, true);
                 }
             } else {
                 onGuard(ent, ddmgent, event);
-                ProgressionUtils.addXp(player, "Endurance", (int) event.getAmount());
+
                 if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)) {
                     onAnyBlock(player, event, false);
                 }
@@ -84,29 +84,7 @@ public class Guard {
     }
 
     public static StaticAnimation getGuardHitMotion(Player player) {
-        if (player != null) {
-            if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)) {
-                if (EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class).getAnimator() instanceof ClientAnimator) {
-                    StaticAnimation anim = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class).getClientAnimator().getCompositeLivingMotion(LivingMotions.BLOCK).orElse(null);
-                    if (anim == null){
-                        return Animations.SWORD_GUARD_HIT.get();
-                    }
-                    if (anim == Animations.SWORD_DUAL_GUARD) {
-                        return Animations.SWORD_DUAL_GUARD_HIT.get();
-                    } else if (anim == Animations.LONGSWORD_GUARD) {
-                        return Animations.LONGSWORD_GUARD_HIT.get();
-                    } else if (anim == Animations.GREATSWORD_GUARD) {
-                        return Animations.GREATSWORD_GUARD_HIT.get();
-                    } else if (anim == Animations.UCHIGATANA_GUARD) {
-                        return Animations.UCHIGATANA_GUARD_HIT.get();
-                    } else if (anim == Animations.SPEAR_GUARD) {
-                        return Animations.SPEAR_GUARD_HIT.get();
-                    }
-
-                }
-            }
-        }
-        return Animations.SWORD_GUARD_HIT.get();
+        return null;
     }
 
     public static StaticAnimation getParryMotion(Player player) {

@@ -3,7 +3,6 @@ package com.robson.pride.api.cam;
 import com.github.leawind.thirdperson.ThirdPerson;
 import com.github.leawind.thirdperson.config.AbstractConfig;
 import com.github.leawind.thirdperson.config.Config;
-import com.robson.pride.api.customtick.PlayerCustomTick;
 import com.robson.pride.api.data.player.ClientDataManager;
 import com.robson.pride.api.utils.CameraUtils;
 import com.robson.pride.api.utils.ItemStackUtils;
@@ -18,10 +17,11 @@ import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DynamicCam {
 
-
+    public static ConcurrentHashMap<Player, AbstractConfig.PlayerRotateMode> modifier = new ConcurrentHashMap<>();
 
     public static void dynamicCamTick(Player player) {
         if (player != null) {
@@ -34,7 +34,7 @@ public class DynamicCam {
             float xmodifier = -0.12f + (zmodifier / 50);
             float ymodifier = -0.02f;
             List<LivingEntity> targets = ClientDataManager.CLIENT_DATA_MANAGER.get(player).getTargetingEntities();
-           correctCameraRot(config, ismounted, targets);
+           CameraUtils.changeRotateMode(config, modifier.getOrDefault(player, correctCameraRot(ismounted, targets)));
             if (targets != null && !(targets.isEmpty())) {
                 if (!ismounted) {
                     xmodifier = 0;
@@ -61,12 +61,11 @@ public class DynamicCam {
         }
     }
 
-    public static void correctCameraRot(Config config, boolean ismounted, List<LivingEntity> targets) {
+    public static AbstractConfig.PlayerRotateMode correctCameraRot(boolean ismounted, List<LivingEntity> targets) {
         if (ismounted || targets == null || targets.isEmpty()) {
-            CameraUtils.changeRotateMode(config, AbstractConfig.PlayerRotateMode.INTEREST_POINT);
-            return;
+            return AbstractConfig.PlayerRotateMode.INTEREST_POINT;
         }
-        CameraUtils.changeRotateMode(config, AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA);
+       return AbstractConfig.PlayerRotateMode.PARALLEL_WITH_CAMERA;
     }
 
     public static float getDefaultZModifier(Player player) {

@@ -22,7 +22,7 @@ public class onSpellDamage {
             Entity ent = event.getEntity();
             AbstractSpell spell = event.getSpellDamageSource().spell();
             if (event.getSpellDamageSource().getEntity() instanceof Player player && event.getAmount() > 0) {
-                ProgressionUtils.addXp(player, "Mind", (int) event.getAmount());
+
             }
             if (MikiriCounter.isDodgeCounterableSpell(event.getSpellDamageSource().getDirectEntity())) {
                 if (MikiriCounter.canMobMikiri(ent, event.getSpellDamageSource().getEntity(), "Dodge")) {

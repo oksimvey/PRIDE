@@ -119,10 +119,7 @@ public class ElementalUtils {
     public static byte getElement(Entity ent) {
         if (ent != null) {
             if (ent instanceof Player player) {
-                CompoundTag tag = ClientDataManager.CLIENT_DATA_MANAGER.get(player).getPersistentData() ;
-                if (tag != null) {
-                    return tag.getByte("Element");
-                }
+                return ClientDataManager.CLIENT_DATA_MANAGER.get(player).getProgressionData().getElement() ;
             }
         }
         return 0;

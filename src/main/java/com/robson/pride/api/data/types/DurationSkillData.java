@@ -10,22 +10,25 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class DurationSkillData {
 
-    private ConcurrentHashMap<LivingEntity, Integer> activeTicksMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<LivingEntity, Integer> tickwhenStarted = new ConcurrentHashMap<>();
 
-    public abstract void onStart(LivingEntity ent);
+    public void onStart(LivingEntity ent){
+        this.tickwhenStarted.put(ent, ent.tickCount - 20);
+    }
 
     public abstract void onAttacked(LivingEntity ent, LivingAttackEvent event);
 
     public abstract void onHurt(LivingEntity ent, LivingHurtEvent event);
 
+    public int getActiveTicks(LivingEntity ent){
+        return ent.tickCount - this.tickwhenStarted.getOrDefault(ent, 0);
+    }
+
     @OnlyIn(Dist.CLIENT)
-    public  void onClientTick(LivingEntity ent){
-        activeTicksMap.putIfAbsent(ent, 0);
-        activeTicksMap.computeIfPresent(ent, (k, v) -> v + 1);
+    public void onClientTick(LivingEntity ent){
     }
 
     public void onEnd(LivingEntity ent){
-        this.activeTicksMap.remove(ent);
+        this.tickwhenStarted.remove(ent);
     }
-
 }

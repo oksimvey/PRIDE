@@ -1,4 +1,4 @@
-package com.robson.pride.api.ai.dialogues;
+package com.robson.pride.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

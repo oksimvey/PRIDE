@@ -1,5 +1,6 @@
 package com.robson.pride.progression;
 
+import com.robson.pride.api.data.player.ClientSavedData;
 import com.robson.pride.api.utils.ManaUtils;
 import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.registries.AttributeRegister;
@@ -9,14 +10,16 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 
+import static com.robson.pride.api.utils.ProgressionUtils.getStatLvl;
+
 public class PlayerAttributeSetup {
 
     public static void setupPlayerAttributes(Player player) {
         if (player != null) {
-            setupVigor(player, player.getPersistentData().getInt("VigorLvl"));
-            setupDexterity(player, player.getPersistentData().getInt("DexterityLvl"));
-            setupEndurance(player, player.getPersistentData().getInt("EnduranceLvl"));
-            setupMind(player, player.getPersistentData().getInt("MindLvl"));
+            setupVigor(player, getStatLvl(player, ClientSavedData.Vigor));
+            setupDexterity(player, getStatLvl(player, ClientSavedData.Dexterity));
+            setupEndurance(player, getStatLvl(player, ClientSavedData.Endurance));
+            setupMind(player, getStatLvl(player, ClientSavedData.Mind));
         }
     }
 

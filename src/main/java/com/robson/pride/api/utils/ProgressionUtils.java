@@ -1,5 +1,7 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.api.data.player.ClientData;
+import com.robson.pride.api.data.player.ClientSavedData;
 import com.robson.pride.api.data.types.WeaponData;
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.progression.PlayerAttributeSetup;
@@ -39,55 +41,21 @@ public class ProgressionUtils {
         return 0;
     }
 
-    public static void addXp(Player player, String stat, int amount) {
+    public static byte getStatLvl(Player player, byte stat) {
+        if (player != null){
+            ClientData data = CLIENT_DATA_MANAGER.get(player);
+            if (data != null){
+                return data.getProgressionData().getLevel(stat);
+            }
+        }
+        return 0;
+    }
+
+    public static void addXp(Player player, byte stat, int amount) {
         if (player != null) {
-            CompoundTag variables = player.getPersistentData();
-            int[] newvariables;
-            switch (stat) {
-                case "Strength" -> {
-                    newvariables = addXpBase(variables.getInt("StrengthLvl"), variables.getInt("StrengthXp"), variables.getInt("StrengthMaxXp"), amount);
-                    if (newvariables[0] != variables.getInt("StrengthLvl")) {
-                        variables.putInt("StrengthLvl", newvariables[0]);
-                        variables.putInt("StrengthMaxXp", newvariables[2]);
-                    }
-                    variables.putInt("StrengthXp", newvariables[1]);
-                }
-                case "Dexterity" -> {
-                    newvariables = addXpBase(variables.getInt("DexterityLvl"), variables.getInt("DexterityXp"), variables.getInt("DexterityMaxXp"), amount);
-                    if (newvariables[0] != variables.getInt("DexterityLvl")) {
-                        PlayerAttributeSetup.setupDexterity(player, newvariables[0]);
-                        variables.putInt("DexterityLvl", newvariables[0]);
-                        variables.putInt("DexterityMaxXp", newvariables[2]);
-                    }
-                    variables.putInt("DexterityXp", newvariables[1]);
-                }
-                case "Vigor" -> {
-                    newvariables = addXpBase(variables.getInt("VigorLvl"), variables.getInt("VigorXp"), variables.getInt("VigorMaxXp"), amount);
-                    if (newvariables[0] != variables.getInt("VigorLvl")) {
-                        PlayerAttributeSetup.setupVigor(player, newvariables[0]);
-                        variables.putInt("VigorLvl", newvariables[0]);
-                        variables.putInt("VigorMaxXp", newvariables[2]);
-                    }
-                    variables.putInt("VigorXp", newvariables[1]);
-                }
-                case "Endurance" -> {
-                    newvariables = addXpBase(variables.getInt("EnduranceLvl"), variables.getInt("EnduranceXp"), variables.getInt("EnduranceMaxXp"), amount);
-                    if (newvariables[0] != variables.getInt("EnduranceLvl")) {
-                        PlayerAttributeSetup.setupEndurance(player, newvariables[0]);
-                        variables.putInt("EnduranceLvl", newvariables[0]);
-                        variables.putInt("EnduranceMaxXp", newvariables[2]);
-                    }
-                    variables.putInt("EnduranceXp", newvariables[1]);
-                }
-                case "Mind" -> {
-                    newvariables = addXpBase(variables.getInt("MindLvl"), variables.getInt("MindXp"), variables.getInt("MindMaxXp"), amount);
-                    if (newvariables[0] != variables.getInt("MindLvl")) {
-                        PlayerAttributeSetup.setupMind(player, newvariables[0]);
-                        variables.putInt("MindLvl", newvariables[0]);
-                        variables.putInt("MindMaxXp", newvariables[2]);
-                    }
-                    variables.putInt("MindXp", newvariables[1]);
-                }
+            ClientData data = CLIENT_DATA_MANAGER.get(player);
+            if (data != null){
+                data.getProgressionData().addXP(stat, amount);
             }
         }
     }
@@ -102,15 +70,15 @@ public class ProgressionUtils {
                 boolean strreqs = true;
                 boolean dexreqs = true;
                 if (reqs.requiredStrength() != 0) {
-                    strreqs = reqs.requiredStrength() <= player.getPersistentData().getInt("StrengthLvl");
+                    strreqs = reqs.requiredStrength() <= getStatLvl(player, ClientSavedData.Strength);
                 }
                 if (reqs.requiredDexterity() != 0) {
-                    dexreqs = reqs.requiredDexterity() <= player.getPersistentData().getInt("DexterityLvl");
+                    dexreqs = reqs.requiredDexterity() <= getStatLvl(player, ClientSavedData.Dexterity);
                 }
                 if (weapon.getTag().contains("requiredMind")) {
-                    mindreqs = weapon.getTag().getDouble("requiredMind") <= player.getPersistentData().getInt("MindLvl");
+                    mindreqs = weapon.getTag().getDouble("requiredMind") <= getStatLvl(player, ClientSavedData.Mind);
                 } else if (reqs.requiredMind() != 0) {
-                    mindreqs = reqs.requiredMind() <= player.getPersistentData().getInt("MindLvl");
+                    mindreqs = reqs.requiredMind() <= getStatLvl(player, ClientSavedData.Mind);
                 }
                 return mindreqs && strreqs && dexreqs;
             }
@@ -118,22 +86,4 @@ public class ProgressionUtils {
         return false;
     }
 
-    public static int[] addXpBase(int lvl, int xp, int maxxp, int amount) {
-        xp = xp + amount;
-        while (xp >= maxxp) {
-            xp = xp - maxxp;
-            lvl = lvl + 1;
-            maxxp = setMaxXp(lvl);
-            if (lvl >= 100) {
-                lvl = 100;
-                xp = 0;
-                maxxp = 100;
-            }
-        }
-        return new int[]{lvl, xp, maxxp};
-    }
-
-    public static int setMaxXp(int lvl) {
-        return (int) Math.round(100 * Math.pow(1.05, (lvl - 1)));
-    }
 }

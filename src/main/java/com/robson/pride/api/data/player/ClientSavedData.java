@@ -18,12 +18,15 @@ public class ClientSavedData {
 
     private byte[] skillList;
 
+    private byte element;
+
     private UUID mount;
 
-    private ClientSavedData(byte[] lvl, int[] xp, byte[] skillList) {
+    private ClientSavedData(byte[] lvl, int[] xp, byte[] skillList, byte element) {
        this.lvl = lvl;
        this.xp = xp;
-        this.skillList = skillList;
+       this.skillList = skillList;
+       this.element = element;
     }
 
     public byte getTotalLevel() {
@@ -39,7 +42,8 @@ public class ClientSavedData {
             return new ClientSavedData(
                    tag.getByteArray("lvl"),
                     tag.getIntArray("xp"),
-                    tag.getByteArray("skills"));
+                    tag.getByteArray("skills"),
+                    tag.getByte("element"));
         }
         return null;
     }
@@ -62,6 +66,10 @@ public class ClientSavedData {
 
     public void setXP(byte stat, int amount) {
         this.xp[stat] = amount;
+    }
+
+    public byte getElement() {
+        return this.element;
     }
 
     public int getXP(byte stat) {

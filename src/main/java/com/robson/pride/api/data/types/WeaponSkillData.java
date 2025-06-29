@@ -2,6 +2,7 @@ package com.robson.pride.api.data.types;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.mechanics.PerilousAttack;
+import com.robson.pride.api.mechanics.perilous.PerilousType;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.ManaUtils;
@@ -25,10 +26,10 @@ public abstract class WeaponSkillData extends GenericData {
     private final int ManaConsumption;
     private final float StaminaConsumption;
     private List<SkillAnimation> motions;
-    private final String perilousType;
+    private final PerilousType perilousType;
     private final short id;
 
-    public WeaponSkillData(String name, short id, String model, SkillCore.WeaponArtTier tier, byte SkillElement, int ManaConsumption, float StaminaConsumption, String perilousType) {
+    public WeaponSkillData(String name, short id, SkillCore.WeaponArtTier tier, byte SkillElement, int ManaConsumption, float StaminaConsumption, PerilousType perilousType) {
         super(Component.literal(name + " Weapon Art(" + tier.name() + ")").withStyle(colorByTier(tier)),
                 getModelLocation(SkillElement),
                 new Matrix2f(-0.1f, -0.1f, -0.1f, 0.1f, 0.1f, 0.1f), SkillElement, (byte) 64);
@@ -40,6 +41,10 @@ public abstract class WeaponSkillData extends GenericData {
 
     public short getId() {
         return id;
+    }
+
+    public PerilousType getPerilousType() {
+        return perilousType;
     }
 
     public static String getModelLocation(byte element) {
@@ -101,7 +106,6 @@ public abstract class WeaponSkillData extends GenericData {
         if (currentAnim == 0) {
             SkillCore.performingSkillEntities.add(ent);
             this.motions = defineMotions(ent);
-            ent.getPersistentData().putString("Perilous", this.perilousType);
             if (TargetUtil.getTarget(ent) instanceof Player player) {
                 PerilousAttack.playPerilous(player);
             }
@@ -111,11 +115,9 @@ public abstract class WeaponSkillData extends GenericData {
             int duration = animation.getDuration(ent);
             animation.play(ent);
             TimerUtil.schedule(() -> onExecution(ent, currentAnim + 1), duration, TimeUnit.MILLISECONDS);
-        } else {
+        }
+        else {
             SkillCore.performingSkillEntities.remove(ent);
-            if (ent != null) {
-                ent.getPersistentData().remove("Perilous");
-            }
         }
         ;
     }

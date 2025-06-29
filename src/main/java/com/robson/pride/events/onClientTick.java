@@ -2,15 +2,8 @@ package com.robson.pride.events;
 
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.robson.pride.api.client.RenderScreens;
 import com.robson.pride.api.client.RenderingCore;
-import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.entity.PrideMob;
-import com.robson.pride.api.utils.ItemStackUtils;
-import com.robson.pride.item.weapons.CustomItem;
-import net.minecraft.CrashReport;
-import net.minecraft.CrashReportCategory;
-import net.minecraft.ReportedException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -29,7 +22,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.joml.Matrix4f;
-import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 @Mod.EventBusSubscriber
 public class onClientTick {
@@ -84,13 +76,6 @@ public class onClientTick {
                 guiid != VanillaGuiOverlay.PLAYER_HEALTH.id() &&
                 guiid != VanillaGuiOverlay.MOUNT_HEALTH.id() &&
                 guiid != VanillaGuiOverlay.FOOD_LEVEL.id();
-    }
-
-    @SubscribeEvent
-    public static void onTick(TickEvent.ClientTickEvent event) {
-        if (Minecraft.getInstance().player != null) {
-            RenderScreens.renderPlayerScreens(Minecraft.getInstance());
-        }
     }
 
     @SubscribeEvent

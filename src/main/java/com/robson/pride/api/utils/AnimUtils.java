@@ -10,15 +10,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.Joint;
+import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.DynamicAnimation;
 import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.api.client.animation.ClientAnimator;
 import yesman.epicfight.api.utils.math.OpenMatrix4f;
 import yesman.epicfight.network.server.SPMoveAndPlayAnimation;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.HumanoidMobPatch;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.damagesource.StunType;
 
 import java.util.ArrayList;
@@ -88,6 +91,13 @@ public class AnimUtils {
                 }
             }, animationduration, TimeUnit.MILLISECONDS);
         }
+    }
+
+    public static StaticAnimation getBlockMotion(LivingEntityPatch<?> livingEntityPatch){
+        if (livingEntityPatch != null && livingEntityPatch.getAnimator() instanceof ClientAnimator animator){
+            return animator.getCompositeLivingMotion(LivingMotions.BLOCK).orElse(null);
+        }
+        return null;
     }
 
     public static int getAnimationDurationInMilliseconds(Entity ent, StaticAnimation animation) {

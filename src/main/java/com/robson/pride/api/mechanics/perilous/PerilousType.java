@@ -1,32 +1,31 @@
 package com.robson.pride.api.mechanics.perilous;
 
-import com.robson.pride.api.mechanics.mikiricounter.MikiriType;
-import net.minecraft.world.entity.Entity;
+import com.robson.pride.api.utils.AnimUtils;
+import net.minecraft.world.entity.LivingEntity;
+import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.gameasset.Animations;
 
-import java.util.concurrent.ConcurrentHashMap;
+public abstract class PerilousType {
 
-public class PerilousType {
+    public abstract boolean canTargetCounter(LivingEntity target);
 
-    private static ConcurrentHashMap<Entity, PerilousType> perilousTypeMap = new ConcurrentHashMap<>();
+    public abstract void onCountered(LivingEntity dmgent, LivingEntity target);
 
-    private MikiriType mikiriType;
-
-    public PerilousType(MikiriType mikiriType) {
-        this.mikiriType = mikiriType;
-    }
-
-    public MikiriType getMikiriType() {
-        return this.mikiriType;
-    }
-
-    public boolean isPerilous(Entity entity) {
-        return entity != null && perilousTypeMap.get(entity) != null;
-    }
-
-    public PerilousType getEntityPerilous(Entity entity) {
-        if (entity != null) {
-            return perilousTypeMap.get(entity);
+    private static boolean commonPierceCondition(LivingEntity target){
+        if (target != null){
+            StaticAnimation motion = AnimUtils.getCurrentAnimation(target);
+            return motion != null && motion == Animations.BIPED_STEP_FORWARD;
         }
-        return null;
+        return false;
     }
+
+    public static PerilousType TOTAL = new PerilousType() {
+        @Override
+        public boolean canTargetCounter(LivingEntity target) {
+            return false;
+        }
+        @Override
+        public void onCountered(LivingEntity dmgent, LivingEntity target) {}
+    };
 }
+

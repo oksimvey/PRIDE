@@ -50,6 +50,18 @@ public class ArmatureUtils {
         return null;
     }
 
+
+    public static PrideVec3f getJointWithTranslation(LocalPlayer renderer, LivingEntityPatch<?> ent, Vec3f translation, Joint joint) {
+        if (renderer != null && translation != null && renderer.level().isClientSide && ent != null && joint != null){
+                OpenMatrix4f matrix4f = ent.getArmature().getBindedTransformFor(ent.getAnimator().getPose(INTERPOLATION), joint);
+                matrix4f.translate(translation);
+                OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) MathUtils.degreeToRadians(ent.getOriginal().yBodyRotO + 180.0F)), DEFAULT_TRANSLATION), matrix4f, matrix4f);
+                return new PrideVec3f((float) (matrix4f.m30 + ent.getOriginal().getX()), (float) (matrix4f.m31 + ent.getOriginal().getY() * (ent.getOriginal().getBbHeight() / 1.8f)), (float) (matrix4f.m32 + ent.getOriginal().getZ()));
+        }
+        return null;
+    }
+
+
     public static PrideVec3f getJoinPosition(LocalPlayer renderer, Entity ent, Joint joint) {
         PrideVec3f pos = getRawJoint(renderer, ent, joint);
         if (pos != null) {
@@ -77,6 +89,17 @@ public class ArmatureUtils {
             }
         }
         return list;
+    }
+
+    public class SlashParticleParameters {
+        public final PrideVec3f pos;
+
+        public final int time;
+
+        public SlashParticleParameters(PrideVec3f pos, int time){
+            this.pos = pos;
+            this.time = time;
+        }
     }
 
     public static List<PrideVec3f> getJointInterpolatedBezier(LocalPlayer renderer, Entity ent, float scale){

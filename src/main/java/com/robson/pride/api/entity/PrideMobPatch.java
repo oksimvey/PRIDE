@@ -74,24 +74,6 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends MobPatch<Pri
         animator.setCurrentMotionsAsDefault();
     }
 
-    protected final void commonMobAnimatorInit(Animator animator) {
-        animator.addLivingAnimation(LivingMotions.IDLE, Animations.BIPED_IDLE);
-        animator.addLivingAnimation(LivingMotions.WALK, Animations.BIPED_WALK);
-        animator.addLivingAnimation(LivingMotions.FALL, Animations.BIPED_FALL);
-        animator.addLivingAnimation(LivingMotions.MOUNT, Animations.BIPED_MOUNT);
-        animator.addLivingAnimation(LivingMotions.DEATH, Animations.BIPED_DEATH);
-    }
-
-    protected final void commonAggresiveMobAnimatorInit(Animator animator) {
-        animator.addLivingAnimation(LivingMotions.IDLE, Animations.BIPED_IDLE);
-        animator.addLivingAnimation(LivingMotions.WALK, Animations.BIPED_WALK);
-        animator.addLivingAnimation(LivingMotions.CHASE, Animations.BIPED_WALK);
-        animator.addLivingAnimation(LivingMotions.FALL, Animations.BIPED_FALL);
-        animator.addLivingAnimation(LivingMotions.MOUNT, Animations.BIPED_MOUNT);
-        animator.addLivingAnimation(LivingMotions.DEATH, Animations.BIPED_DEATH);
-    }
-
-
     @Override
     public OpenMatrix4f getModelMatrix(float partialTicks) {
         return super.getModelMatrix(partialTicks).scale(1, 1, 1);
@@ -109,9 +91,10 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends MobPatch<Pri
                 SkillDataManager.addSkill(this.getOriginal(), SkillDataManager.GUARD);
                 TimerUtil.schedule(()-> {
                     SkillDataManager.removeSkill(this.getOriginal(), SkillDataManager.GUARD);
-                }, 1000, TimeUnit.MILLISECONDS);
+                }, 2000, TimeUnit.MILLISECONDS);
+                return;
             }
-           if (!this.getEntityState().attacking() && this.getEntityState().canBasicAttack()){
+           if (!this.getEntityState().attacking() && this.getEntityState().canBasicAttack() && !SkillDataManager.isSkillActive(this.getOriginal(), SkillDataManager.GUARD)){
                AnimationManager.AnimationAccessor<? extends StaticAnimation> animation = switch (new Random().nextInt(2)) {
                    case 0 -> Animations.GREATSWORD_AUTO1;
                    case 1 -> Animations.GREATSWORD_AUTO2;
