@@ -1,16 +1,19 @@
 package com.robson.pride.skills.special;
 
+import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.data.types.DurationSkillData;
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.*;
+import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.PrideVec3f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.network.chat.Component;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import yesman.epicfight.api.animation.AnimationManager;
@@ -22,8 +25,11 @@ import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
+import yesman.epicfight.world.capabilities.item.Style;
+import yesman.epicfight.world.capabilities.item.WeaponCategory;
+import yesman.epicfight.world.damagesource.EpicFightDamageType;
 
-import javax.swing.text.Style;
 import java.util.Map;
 
 public interface GuardSkill {
@@ -36,10 +42,13 @@ public interface GuardSkill {
             Map.entry(Animations.UCHIGATANA_GUARD.get(), Animations.UCHIGATANA_GUARD_HIT),
             Map.entry(Animations.SPEAR_GUARD.get(), Animations.SPEAR_GUARD_HIT));
 
+    Map<WeaponCategory, Map<Style, AnimationManager.AnimationAccessor<? extends StaticAnimation>[]>> PER_WEAPON_PARRY_MOTIONS = Map.ofEntries(
 
-    Map<Style, AnimationManager.AnimationAccessor<? extends StaticAnimation>> PARRY_MOTIONS = Map.ofEntries();
+    );
 
     DurationSkillData DATA = new DurationSkillData() {
+
+        private boolean toggle = false;
 
         @Override
         public void onStart(LivingEntity ent) {
@@ -47,35 +56,89 @@ public interface GuardSkill {
             ent.startUsingItem(InteractionHand.MAIN_HAND);
         }
 
+        public boolean canBlock(LivingEntity ent, DamageSource damageSource){
+            if (ent != null && damageSource != null) {
+                boolean isFront = false;
+                Vec3 sourceLocation = damageSource.getSourcePosition();
+                if (sourceLocation != null) {
+                    Vec3 viewVector = ent.getViewVector(1.0F);
+                    viewVector = viewVector.subtract(0, viewVector.y, 0).normalize();
+                    Vec3 toSourceLocation = sourceLocation.subtract(ent.position()).normalize();
+                    if (toSourceLocation.dot(viewVector) > 0.0D) {
+                        isFront = true;
+                    }
+                }
+                if (isFront) {
+                    return !damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)
+                            && !damageSource.is(EpicFightDamageType.PARTIAL_DAMAGE)
+                            && !damageSource.is(DamageTypeTags.BYPASSES_ARMOR)
+                            && !damageSource.is(DamageTypeTags.IS_EXPLOSION)
+                            && !damageSource.is(DamageTypes.MAGIC)
+                            && !damageSource.is(DamageTypeTags.IS_FIRE);
+                }
+            }
+            return false;
+        }
+
         @Override
         public void onAttacked(LivingEntity ent, LivingAttackEvent event) {
-            if (getActiveTicks(ent) <= 10) {
-
+            if (!canBlock(ent, event.getSource()) || (event.getSource().getDirectEntity() instanceof LivingEntity living && SkillDataManager.ACTIVE_WEAPON_SKILL.get(living) != null)){
+                SkillDataManager.removeSkill(ent, SkillDataManager.GUARD);
+                return;
+            }
+            event.setCanceled(true);
+            if (getActiveTicks(ent) <= 8) {
+                tryParry(ent, event);
+                return;
             }
             tryBlock(ent, event);
         }
 
-        public void tryBlock(LivingEntity ent, LivingAttackEvent event){
+        public void tryBlock(LivingEntity ent, LivingAttackEvent event) {
             LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (entityPatch != null) {
-                event.setCanceled(true);
-                StaticAnimation currentguard = AnimUtils.getBlockMotion(entityPatch);
-                if (currentguard != null){
-                    AnimationManager.AnimationAccessor<? extends StaticAnimation> guardhitmotion = GUARD_HIT_MOTIONS.getOrDefault(currentguard, Animations.SWORD_GUARD_HIT);
-                    entityPatch.playAnimationSynchronized(guardhitmotion, 0);
-                }
-                PlaySoundUtils.playSound(ent, EpicFightSounds.CLASH.get(), 2 * 3 - 1, 1);
-                Vec3f trans = ParticleTracking.getAABBForImbuement(ent.getUseItem(), ent);
-                PrideVec3f vec = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, entityPatch, trans, Armatures.BIPED.get().toolR);
-                if (vec != null){
-                    ParticleUtils.spawnParticle(EpicFightParticles.HIT_BLUNT.get(), vec, 0,0 ,0).scale(1.5f);
+               onBlock(entityPatch, event, Animations.SWORD_GUARD_HIT, false);
+            }
+        }
+
+        public void tryParry(LivingEntity ent, LivingAttackEvent event) {
+            LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (entityPatch != null) {
+                AnimationManager.AnimationAccessor<? extends StaticAnimation> motion = toggle ? Animations.SWORD_GUARD_ACTIVE_HIT1 : Animations.SWORD_GUARD_ACTIVE_HIT2;
+                toggle = !toggle;
+                onBlock(entityPatch, event, motion, true);
+            }
+        }
+
+        public void onBlock(LivingEntityPatch<?> ent, LivingAttackEvent event, AnimationManager.AnimationAccessor<? extends StaticAnimation> motion, boolean isParry) {
+            if (motion != null && ent != null) {
+                ent.playAnimationSynchronized(motion, 0);
+                PlaySoundUtils.playSound(ent.getOriginal(), EpicFightSounds.CLASH.get(), 2 * 3 - 1, 1);
+                Vec3f trans = ParticleTracking.getAABBForImbuementDivided(ent.getOriginal().getUseItem(), ent.getOriginal(), 99, 99, 5);
+                PrideVec3f vec = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent.getOriginal(), trans, Armatures.BIPED.get().toolR);
+                if (vec != null) {
+                    ParticleUtils.spawnParticle(EpicFightParticles.HIT_BLUNT.get(), vec, 0, 0, 0).scale(1.5f);
                 }
             }
         }
 
-        public void tryParry(LivingEntity ent, LivingAttackEvent event){
-
+        public static void guardKnockBack(Entity ent, Entity dmgent, boolean isparry) {
+            if (ent != null && dmgent != null) {
+                float impact = AttributeUtils.getAttributeValue(dmgent, "epicfight:impact");
+                if (isparry) {
+                    impact = impact / 2;
+                }
+                impact = MathUtils.getValueWithPercentageDecrease(impact, AttributeUtils.getAttributeValue(ent, "epicfight:weight") / 2);
+                if (impact < 0) {
+                    impact = 0;
+                }
+                PlayerPatch livingEntity = EpicFightCapabilities.getEntityPatch(ent, PlayerPatch.class);
+                if (livingEntity != null) {
+                    livingEntity.knockBackEntity(dmgent.position(), impact);
+                }
+            }
         }
+
 
         @Override
         public void onHurt(LivingEntity ent, LivingHurtEvent event) {

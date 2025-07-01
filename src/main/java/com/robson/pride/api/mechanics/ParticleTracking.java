@@ -8,7 +8,6 @@ import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.api.utils.math.PrideVec3f;
 import com.robson.pride.effect.ImbuementEffect;
-import com.robson.pride.registries.EffectRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -39,13 +38,6 @@ public class ParticleTracking {
                 byte element = ElementalUtils.getItemElement(item);
                 if (ServerDataManager.getElementData(element) != null) {
                     result = element != ServerDataManager.SUN || shouldRenderSunParticle(ent);
-                }
-                else if (ent instanceof LivingEntity living && living.hasEffect(EffectRegister.IMBUEMENT.get())) {
-                    if (living.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect) {
-                        if (ServerDataManager.getElementData(imbuementEffect.element) != null && imbuementEffect.active) {
-                            result = imbuementEffect.element != ServerDataManager.SUN || shouldRenderSunParticle(ent);
-                        }
-                    }
                 }
             }
         }
@@ -79,10 +71,6 @@ public class ParticleTracking {
             byte element = ElementalUtils.getItemElement(item);
             if (ServerDataManager.getElementData(element) != null) {
                 return ServerDataManager.getElementData(element);
-            } else if (ent.hasEffect(EffectRegister.IMBUEMENT.get()) &&
-                    ent.getEffect(EffectRegister.IMBUEMENT.get()).getEffect() instanceof ImbuementEffect imbuementEffect &&
-                    ServerDataManager.getElementData(imbuementEffect.element) != null) {
-                return ServerDataManager.getElementData(imbuementEffect.element);
             }
         }
         return null;
@@ -94,6 +82,17 @@ public class ParticleTracking {
             if (data != null) {
                 Matrix2f collider = data.getCollider();
                 return new Vec3f((float) (((new Random()).nextFloat() + collider.x0()) * collider.x1()), (float) (((new Random()).nextFloat() + collider.y0()) * collider.y1() + (collider.y1() / 10)), (float) (-((new Random()).nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z0()));
+            }
+        }
+        return new Vec3f(((new Random()).nextFloat() - 0.5F) * 0.2F, ((new Random()).nextFloat() - 0.3F) * 0.3F, ((new Random()).nextFloat() - 0.5F) * 0.2F);
+    }
+
+    public static Vec3f getAABBForImbuementDivided(ItemStack item, Entity ent, float dx, float dy, float dz){
+        if (item != null && ent != null) {
+            GenericData data = ServerDataManager.getGenericData(item);
+            if (data != null) {
+                Matrix2f collider = data.getCollider();
+                return new Vec3f((float) (((new Random()).nextFloat() + (collider.x1() / dx)) * collider.x1()), (float) (((new Random()).nextFloat() +(collider.y1() / dy ))* collider.y1() + (collider.y1() / 10)), (float) (-((new Random()).nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z1() / dz));
             }
         }
         return new Vec3f(((new Random()).nextFloat() - 0.5F) * 0.2F, ((new Random()).nextFloat() - 0.3F) * 0.3F, ((new Random()).nextFloat() - 0.5F) * 0.2F);

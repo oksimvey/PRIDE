@@ -3,8 +3,6 @@ package com.robson.pride.events;
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.mechanics.MikiriCounter;
-import com.robson.pride.api.utils.ProgressionUtils;
-import com.robson.pride.registries.EffectRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import net.minecraft.world.entity.Entity;
@@ -29,9 +27,7 @@ public class onSpellDamage {
                     MikiriCounter.onSpellMikiri(event, spell);
                 }
                 if (ent instanceof LivingEntity living) {
-                    if (living.hasEffect(EffectRegister.DARKNESS_WRATH.get())) {
 
-                    }
                 }
             }
             if (MikiriCounter.isJumpCounterableSpell(event.getSpellDamageSource().spell())) {

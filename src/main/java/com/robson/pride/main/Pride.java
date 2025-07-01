@@ -35,7 +35,6 @@ public class Pride {
         ParticleRegister.PARTICLES.register(bus);
         WeaponCategory.ENUM_MANAGER.registerEnumCls(MOD_ID, WeaponCategoriesEnum.class);
         Style.ENUM_MANAGER.registerEnumCls(Pride.MOD_ID, PrideStyles.class);
-        EffectRegister.MOB_EFFECTS.register(bus);
         PrideTabRegister.register(bus);
     }
 

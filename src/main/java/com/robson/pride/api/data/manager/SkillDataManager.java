@@ -31,7 +31,7 @@ public interface SkillDataManager extends ServerDataManagerImpl<DurationSkillDat
        return new ArrayList<>();
    }
 
-    static Short getActiveWeaponSkills(LivingEntity ent) {
+    static short getActiveWeaponSkills(LivingEntity ent) {
         if (ent != null && ACTIVE_WEAPON_SKILL.get(ent) != null) {
             return ACTIVE_WEAPON_SKILL.get(ent);
         }

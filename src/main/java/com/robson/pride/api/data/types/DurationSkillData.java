@@ -13,7 +13,7 @@ public abstract class DurationSkillData {
     private ConcurrentHashMap<LivingEntity, Integer> tickwhenStarted = new ConcurrentHashMap<>();
 
     public void onStart(LivingEntity ent){
-        this.tickwhenStarted.put(ent, ent.tickCount - 20);
+        this.tickwhenStarted.put(ent, ent.tickCount);
     }
 
     public abstract void onAttacked(LivingEntity ent, LivingAttackEvent event);

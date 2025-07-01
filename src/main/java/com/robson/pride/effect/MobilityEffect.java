@@ -5,7 +5,6 @@ import com.robson.pride.api.utils.*;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.PrideVec3f;
 import com.robson.pride.registries.AnimationsRegister;
-import com.robson.pride.registries.EffectRegister;
 import com.robson.pride.registries.KeyRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
@@ -57,7 +56,7 @@ public class MobilityEffect extends PrideEffectBase {
             this.effecttick++;
             serverTick(ent);
             if (!ControllEngine.isKeyDown(KeyRegister.MOBILITY)) {
-                ent.removeEffect(EffectRegister.MOBILITY.get());
+
                 return;
             }
             TimerUtil.schedule(() -> onEffectStart(ent), 100, TimeUnit.MILLISECONDS);

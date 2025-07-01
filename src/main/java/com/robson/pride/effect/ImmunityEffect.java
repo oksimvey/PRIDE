@@ -5,7 +5,6 @@ import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.ManaUtils;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.api.utils.math.PrideVec3f;
-import com.robson.pride.registries.EffectRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.particles.ParticleOptions;
@@ -44,7 +43,7 @@ public class ImmunityEffect extends PrideEffectBase {
         if (event != null && ent != null) {
             if (ent instanceof Player player) {
                 if (ManaUtils.getMana(player) < 10) {
-                    player.removeEffect(EffectRegister.IMMUNITY.get());
+
                     return;
                 }
                 ManaUtils.consumeMana(player, 10);

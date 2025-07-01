@@ -6,11 +6,9 @@ import com.robson.pride.api.data.types.WeaponData;
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.WeaponSkillData;
 import com.robson.pride.api.utils.math.MathUtils;
-import com.robson.pride.registries.EffectRegister;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -128,7 +126,7 @@ public class ElementalUtils {
     public static boolean isNotInWater(Entity ent, Vec3 vec3) {
         if (ent instanceof LivingEntity living && vec3 != null) {
             BlockPos pos = new BlockPos((int) vec3.x, (int) vec3.y, (int) vec3.z);
-            return !ent.level().getBlockState(pos).is(Blocks.WATER) && !ent.level().isRainingAt(pos) && !living.hasEffect(EffectRegister.WET.get());
+            return !ent.level().getBlockState(pos).is(Blocks.WATER) && !ent.level().isRainingAt(pos);
         }
         return false;
     }

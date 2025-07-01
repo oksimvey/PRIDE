@@ -40,11 +40,6 @@ public class Guard {
 
     public static void checkGuard(Entity ent, Entity ddmgent, LivingAttackEvent event) {
         if (ent instanceof ServerPlayer player) {
-            if (player.isUsingItem() && canBlock(ent, ddmgent, event.getSource()) && ItemStackUtils.getStyle(player) != PrideStyles.GUN_OFFHAND) {
-                checkParry(ent, ddmgent, event);
-            } else {
-
-            }
         } else {
 
         }
@@ -53,7 +48,6 @@ public class Guard {
     public static void checkParry(Entity ent, Entity ddmgent, LivingAttackEvent event) {
         if (ent instanceof Player player) {
             if (ent.getPersistentData().getBoolean("isParrying")) {
-                Parry.onParry(ent, ddmgent);
 
                 if (ItemStackUtils.checkWeapon(player, InteractionHand.MAIN_HAND)) {
                     onAnyBlock(player, event, true);
@@ -156,29 +150,6 @@ public class Guard {
         }
     }
 
-    public static boolean canBlock(Entity ent, Entity dmgent, DamageSource damageSource) {
-        if (ent != null && dmgent != null) {
-            boolean isFront = false;
-            Vec3 sourceLocation = damageSource.getSourcePosition();
-            if (sourceLocation != null) {
-                Vec3 viewVector = ent.getViewVector(1.0F);
-                viewVector = viewVector.subtract(0, viewVector.y, 0).normalize();
-                Vec3 toSourceLocation = sourceLocation.subtract(ent.position()).normalize();
-                if (toSourceLocation.dot(viewVector) > 0.0D) {
-                    isFront = true;
-                }
-            }
-            if (isFront) {
-                return !damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)
-                        && !damageSource.is(EpicFightDamageType.PARTIAL_DAMAGE)
-                        && !damageSource.is(DamageTypeTags.BYPASSES_ARMOR)
-                        && !damageSource.is(DamageTypeTags.IS_EXPLOSION)
-                        && !damageSource.is(DamageTypes.MAGIC)
-                        && !damageSource.is(DamageTypeTags.IS_FIRE);
-            }
-        }
-        return false;
-    }
 
     public static void onOffHandShieldGuard(Entity ent, Entity ddmgent, LivingAttackEvent event) {
         float weight = ItemStackUtils.getWeaponWeight(ent, InteractionHand.OFF_HAND, EquipmentSlot.OFFHAND);

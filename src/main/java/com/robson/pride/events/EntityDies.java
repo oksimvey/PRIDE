@@ -1,7 +1,6 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.utils.math.MathUtils;
-import com.robson.pride.registries.EffectRegister;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -14,15 +13,6 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber
 public class EntityDies {
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void entityDiesEvent(LivingDeathEvent event) {
-        LivingEntity living = event.getEntity();
-        if (living.hasEffect(EffectRegister.DIVINE_PROTECTION.get())) {
-            event.setCanceled(true);
-
-        }
-    }
-
     @SubscribeEvent
     public static void playerDeath(PlayerEvent.Clone event) {
         if (event.isWasDeath()) {
@@ -31,9 +21,6 @@ public class EntityDies {
                 if (entity instanceof Mob mob && mob.getHealth() > 0) {
                     mob.setHealth(mob.getMaxHealth());
                 }
-            }
-            if (living.hasEffect(EffectRegister.DIVINE_PROTECTION.get())) {
-                event.setCanceled(true);
             }
         }
     }

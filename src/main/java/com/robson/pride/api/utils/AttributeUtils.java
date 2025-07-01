@@ -66,13 +66,4 @@ public class AttributeUtils {
             }
         }
     }
-
-    public static void addModifierWithDuration(Entity ent, String attributename, float amount, int duration, AttributeModifier.Operation operation) {
-        if (ent != null) {
-            addModifier((LivingEntity) ent, attributename, "63104183-c72f-4f0b-9c98-b06743e886de", amount, operation);
-            TimerUtil.schedule(() -> {
-                removeModifier((LivingEntity) ent, attributename, "63104183-c72f-4f0b-9c98-b06743e886de");
-            }, duration, TimeUnit.MILLISECONDS);
-        }
-    }
 }
