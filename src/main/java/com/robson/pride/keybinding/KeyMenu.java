@@ -9,10 +9,6 @@ public class KeyMenu extends BasicKey {
 
     @Override
     public void onPress(Player player) {
-        if (Minecraft.getInstance().screen instanceof ProgressionGUI){
-            Minecraft.getInstance().setScreen(null);
-            return;
-        }
         Minecraft.getInstance().setScreen(new ProgressionGUI(player, Minecraft.getInstance()));
     }
 }

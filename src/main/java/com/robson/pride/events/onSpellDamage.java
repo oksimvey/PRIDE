@@ -1,6 +1,8 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
+import com.robson.pride.api.data.manager.SkillDataManager;
+import com.robson.pride.api.data.types.DurationSkillData;
 import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.mechanics.MikiriCounter;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
@@ -17,22 +19,12 @@ public class onSpellDamage {
     @SubscribeEvent
     public static void onSpellDmg(SpellDamageEvent event) {
         if (event.getEntity() != null && event.getSpellDamageSource().spell() != null) {
-            Entity ent = event.getEntity();
+            LivingEntity ent = event.getEntity();
             AbstractSpell spell = event.getSpellDamageSource().spell();
-            if (event.getSpellDamageSource().getEntity() instanceof Player player && event.getAmount() > 0) {
-
-            }
-            if (MikiriCounter.isDodgeCounterableSpell(event.getSpellDamageSource().getDirectEntity())) {
-                if (MikiriCounter.canMobMikiri(ent, event.getSpellDamageSource().getEntity(), "Dodge")) {
-                    MikiriCounter.onSpellMikiri(event, spell);
-                }
-                if (ent instanceof LivingEntity living) {
-
-                }
-            }
-            if (MikiriCounter.isJumpCounterableSpell(event.getSpellDamageSource().spell())) {
-                if (MikiriCounter.canMobMikiri(ent, event.getSpellDamageSource().getEntity(), "Jump")) {
-                    event.setCanceled(true);
+            for (byte skill : SkillDataManager.getActiveSkills(ent)){
+                DurationSkillData data = SkillDataManager.INSTANCE.getByID(skill);
+                if (data != null) {
+                    data.onSpellDamage(ent, event);
                 }
             }
             for (byte i = 1; true; i++){
@@ -43,7 +35,6 @@ public class onSpellDamage {
                 if (data.getSchool() == spell.getSchoolType()) {
                     event.setAmount(data.onHit(ent, event.getSpellDamageSource().getEntity(), event.getOriginalAmount(), true));
                 }
-
             }
         }
     }

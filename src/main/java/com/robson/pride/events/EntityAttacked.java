@@ -2,6 +2,7 @@ package com.robson.pride.events;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
+import com.robson.pride.api.data.player.ClientSavedData;
 import com.robson.pride.api.data.types.DurationSkillData;
 import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.data.types.WeaponSkillData;
@@ -26,10 +27,15 @@ public class EntityAttacked {
     public static void OnAnyAttack(LivingAttackEvent event) {
         if (event.getEntity() != null && event.getSource().getDirectEntity() != null) {
             LivingEntity ent = event.getEntity();
-            for (byte skill : SkillDataManager.getActiveSkills(ent)){
-                DurationSkillData data = SkillDataManager.INSTANCE.getByID(skill);
-                if (data != null) {
-                    data.onAttacked(ent, event);
+            if (event.getSource().getDirectEntity() instanceof Player player) {
+                ProgressionUtils.addXp(player, ClientSavedData.Strength, (int) event.getAmount());
+            }
+            if (!ent.level().isClientSide){
+                for (byte skill : SkillDataManager.getActiveSkills(ent)) {
+                    DurationSkillData data = SkillDataManager.INSTANCE.getByID(skill);
+                    if (data != null) {
+                        data.onAttacked(ent, event);
+                    }
                 }
             }
         }
@@ -42,38 +48,39 @@ public class EntityAttacked {
                 event.setAmount(event.getAmount() + AttributeUtils.getAttributeValue(event.getSource().getEntity(), "pride:arrow_power"));
             }
             if (SkillDataManager.ACTIVE_WEAPON_SKILL.get(event.getEntity()) != null){
-                WeaponSkillData data = ServerDataManager.getWeaponSkillData(SkillDataManager.ACTIVE_WEAPON_SKILL.get(event.getEntity()));
-                if (data != null) {
-                    data.onHurt(event.getEntity(), event);
-                }
+                event.setCanceled(true);
+                return;
             }
-            InteractionHand hand = ItemStackUtils.checkAttackingHand(event.getSource().getDirectEntity());
-            if (hand != null) {
-                float damage = event.getAmount();
-                if (event.getSource().getDirectEntity() instanceof Player player) {
-                    if (hand == InteractionHand.MAIN_HAND) {
-                        damage += AttributeModifiers.calculateModifier(player, player.getMainHandItem(), damage);
-                    } else if (hand == InteractionHand.OFF_HAND) {
-                        damage += AttributeModifiers.calculateModifier(player, player.getOffhandItem(), damage);
-                    }
+            if (event.getSource().getDirectEntity() instanceof LivingEntity living) {
+                if (SkillDataManager.ACTIVE_WEAPON_SKILL.get(living) != null){
+                    SkillDataManager.ACTIVE_WEAPON_SKILL.get(living).onHurt(living, event.getEntity(), event);
                 }
-                if (event.getSource().getDirectEntity() instanceof LivingEntity living) {
-                    if (hand == InteractionHand.MAIN_HAND) {
-                        if (ItemStackUtils.getStyle(living) != PrideStyles.GUN_OFFHAND) {
-                            ElementData elementBase = ParticleTracking.getItemElementForImbuement(living.getMainHandItem(), living);
+                InteractionHand hand = ItemStackUtils.checkAttackingHand(living);
+                if (hand != null) {
+                    float damage = event.getAmount();
+                    if (living instanceof Player player) {
+                        if (hand == InteractionHand.MAIN_HAND) {
+                            damage += AttributeModifiers.calculateModifier(player, player.getMainHandItem(), damage);
+                        } else if (hand == InteractionHand.OFF_HAND) {
+                            damage += AttributeModifiers.calculateModifier(player, player.getOffhandItem(), damage);
+                        }
+                    }
+                        if (hand == InteractionHand.MAIN_HAND) {
+                            if (ItemStackUtils.getStyle(living) != PrideStyles.GUN_OFFHAND) {
+                                ElementData elementBase = ParticleTracking.getItemElementForImbuement(living.getMainHandItem(), living);
+                                if (elementBase != null && elementBase.createDamageSource(living) != event.getSource()) {
+                                    damage = elementBase.onHit(event.getEntity(), living, damage, false);
+                                }
+                            }
+                        }
+                        if (hand == InteractionHand.OFF_HAND) {
+                            ElementData elementBase = ParticleTracking.getItemElementForImbuement(living.getOffhandItem(), living);
                             if (elementBase != null && elementBase.createDamageSource(living) != event.getSource()) {
                                 damage = elementBase.onHit(event.getEntity(), living, damage, false);
                             }
                         }
-                    }
-                    if (hand == InteractionHand.OFF_HAND) {
-                        ElementData elementBase = ParticleTracking.getItemElementForImbuement(living.getOffhandItem(), living);
-                        if (elementBase != null && elementBase.createDamageSource(living) != event.getSource()) {
-                            damage = elementBase.onHit(event.getEntity(), living, damage, false);
-                        }
-                    }
+                    event.setAmount(damage);
                 }
-                event.setAmount(damage);
             }
         }
     }

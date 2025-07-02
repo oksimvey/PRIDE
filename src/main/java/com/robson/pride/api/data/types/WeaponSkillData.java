@@ -1,6 +1,7 @@
 package com.robson.pride.api.data.types;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
+import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.api.mechanics.perilous.PerilousType;
 import com.robson.pride.api.skillcore.SkillAnimation;
@@ -70,9 +71,12 @@ public abstract class WeaponSkillData extends GenericData {
         };
     }
 
-    public void onClientTick(LivingEntity ent){}
+    public void onClientTick(LivingEntity ent){
 
-    public void onHurt(LivingEntity ent, LivingHurtEvent event){}
+    }
+
+    public void onHurt(LivingEntity dmgent, LivingEntity ent, LivingHurtEvent event){
+    }
 
     public static ChatFormatting colorByTier(SkillCore.WeaponArtTier tier){
         return switch (tier){
@@ -89,7 +93,7 @@ public abstract class WeaponSkillData extends GenericData {
 
 
     public void tryToExecute(LivingEntity ent) {
-        if (ent != null && !SkillCore.performingSkillEntities.contains(ent)) {
+        if (ent != null && SkillDataManager.ACTIVE_WEAPON_SKILL.get(ent) == null) {
             if (ent instanceof Player player) {
                 if (StaminaUtils.getStamina(player) >= this.StaminaConsumption && ManaUtils.getMana(player) >= this.ManaConsumption && haveReqs(player)) {
                     StaminaUtils.consumeStamina(ent, this.StaminaConsumption);
@@ -104,7 +108,7 @@ public abstract class WeaponSkillData extends GenericData {
 
     public void onExecution(LivingEntity ent, int currentAnim) {
         if (currentAnim == 0) {
-            SkillCore.performingSkillEntities.add(ent);
+            SkillDataManager.ACTIVE_WEAPON_SKILL.put(ent, this);
             this.motions = defineMotions(ent);
             if (TargetUtil.getTarget(ent) instanceof Player player) {
                 PerilousAttack.playPerilous(player);
@@ -116,9 +120,8 @@ public abstract class WeaponSkillData extends GenericData {
             animation.play(ent);
             TimerUtil.schedule(() -> onExecution(ent, currentAnim + 1), duration, TimeUnit.MILLISECONDS);
         }
-        else {
-            SkillCore.performingSkillEntities.remove(ent);
+        else if (ent != null) {
+            SkillDataManager.ACTIVE_WEAPON_SKILL.remove(ent);
         }
-        ;
     }
 }

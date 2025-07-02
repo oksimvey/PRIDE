@@ -35,7 +35,7 @@ public class RenderingCore {
                     ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, entityPatch, Armatures.BIPED.get().toolR, element.getNormalParticleType(), ParticleTracking.getAABBForImbuement(ent.getMainHandItem(), ent), element.getParticleAmount());
                 }
                 if (ItemStackUtils.getStyle(ent) == PrideStyles.DUAL_WIELD) {
-                    ElementData element2 = ParticleTracking.getItemElementForImbuement(ent.getMainHandItem());
+                    ElementData element2 = ParticleTracking.getItemElementForImbuement(ent.getOffhandItem());
                     if (element2 != null) {
                         ParticleUtils.spawnParticleTracked(Minecraft.getInstance().player, entityPatch, Armatures.BIPED.get().toolL, element2.getNormalParticleType(), ParticleTracking.getAABBForImbuement(ent.getOffhandItem(), ent), element2.getParticleAmount());
                     }
@@ -47,7 +47,7 @@ public class RenderingCore {
                     }
                 }
                 if (SkillDataManager.ACTIVE_WEAPON_SKILL.get(ent) != null) {
-                    WeaponSkillData data = ServerDataManager.getWeaponSkillData(SkillDataManager.ACTIVE_WEAPON_SKILL.get(ent));
+                    WeaponSkillData data = SkillDataManager.ACTIVE_WEAPON_SKILL.get(ent);
                     if (data != null) {
                         data.onClientTick(ent);
                     }

@@ -28,8 +28,6 @@ public class SkillCore {
         COMMON;
     }
 
-    public static List<Entity> performingSkillEntities = new ArrayList<>();
-
     public static void onSkillExecute(LivingEntity ent) {
         if (ent != null) {
             if (ent.getMainHandItem().getTag().getBoolean("hasweaponart")) {

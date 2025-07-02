@@ -1,6 +1,7 @@
 package com.robson.pride.api.data.manager;
 
 import com.robson.pride.api.data.types.DurationSkillData;
+import com.robson.pride.api.data.types.WeaponSkillData;
 import com.robson.pride.skills.special.GuardSkill;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -12,7 +13,7 @@ public interface SkillDataManager extends ServerDataManagerImpl<DurationSkillDat
 
     ConcurrentHashMap<LivingEntity, List<Byte>> ACTIVE_SKILLS = new ConcurrentHashMap<>();
 
-    ConcurrentHashMap<LivingEntity, Short> ACTIVE_WEAPON_SKILL = new ConcurrentHashMap<>();
+    ConcurrentHashMap<LivingEntity, WeaponSkillData> ACTIVE_WEAPON_SKILL = new ConcurrentHashMap<>();
 
     byte GUARD = 1;
 
@@ -30,13 +31,6 @@ public interface SkillDataManager extends ServerDataManagerImpl<DurationSkillDat
        }
        return new ArrayList<>();
    }
-
-    static short getActiveWeaponSkills(LivingEntity ent) {
-        if (ent != null && ACTIVE_WEAPON_SKILL.get(ent) != null) {
-            return ACTIVE_WEAPON_SKILL.get(ent);
-        }
-        return 0;
-    }
 
    static boolean isSkillActive(LivingEntity ent, byte skillid) {
        return getActiveSkills(ent).contains(skillid);

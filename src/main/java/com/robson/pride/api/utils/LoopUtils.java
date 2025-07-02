@@ -8,10 +8,8 @@ public interface LoopUtils {
 
     @FunctionalInterface
     interface LoopAction {
-
         boolean run(int currentLoop);
     }
-
 
     static void loopByTimes(IntConsumer action, int maxLoops, int intervalMillis) {
         Timer timer = new Timer();

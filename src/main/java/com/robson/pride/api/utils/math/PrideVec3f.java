@@ -32,10 +32,10 @@ public record PrideVec3f(float x, float y, float z) {
         return (float) Math.sqrt((distancex * distancex) + (distancey * distancey) + (distancez * distancez));
     }
 
-    public boolean willHit(PrideVec3f origin, PrideVec3f point, float radius){
-        float distanceToPoint = origin.distanceTo(point) ;
-        PrideVec3f scaledDelta = this.scale(distanceToPoint);
-        return scaledDelta.distanceTo(point) <= radius;
+    public boolean willHit(PrideVec3f origin, PrideVec3f point){
+        float distanceToPoint = origin.distanceTo(point);
+        float distanceToPointScaled = origin.add(this).distanceTo(point);
+        return distanceToPointScaled < distanceToPoint;
     }
 
     public PrideVec3f normalize(){

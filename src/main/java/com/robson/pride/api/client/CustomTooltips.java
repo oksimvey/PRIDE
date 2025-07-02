@@ -4,12 +4,15 @@ import com.robson.pride.api.data.types.WeaponData;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.progression.AttributeModifiers;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
+import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 public class CustomTooltips {
 
@@ -19,17 +22,19 @@ public class CustomTooltips {
             for (int i = 0; i < event.getToolTip().size(); i++) {
                 Component line = event.getToolTip().get(i);
                 if (line.getString().contains("Damage")){
-                    float modifier = AttributeModifiers.calculateModifier(event.getEntity(), item, Float.parseFloat(line.getString().replace("Attack Damage", "")));
-                    if (modifier != 0) {
-                        MutableComponent name = Component.literal(line.getString() + " ").withStyle(ChatFormatting.WHITE);
-                        MutableComponent modifiertext = Component.literal(AttributeModifiers.getSignal(modifier) + MathUtils.setDecimalsOnFloat(modifier, (byte) 2)).withStyle(AttributeModifiers.getModifierColor(item, modifier));
+                    CapabilityItem itemcap = EpicFightCapabilities.getItemStackCapability(item);
+                    if (itemcap != null) {
+                        float originaldamage = (float) itemcap.getDamageAttributesInCondition(itemcap.getStyle(EpicFightCapabilities.getEntityPatch(Minecraft.getInstance().player, PlayerPatch.class))).get(Attributes.ATTACK_DAMAGE).getAmount();
+                        float modifier = AttributeModifiers.calculateModifier(event.getEntity(), item, originaldamage);
+                        MutableComponent name = Component.literal(" " + originaldamage + " Attack Damage ").withStyle(ChatFormatting.WHITE);
+                        MutableComponent modifiertext = Component.literal( AttributeModifiers.getSignal(modifier)  + MathUtils.setDecimalsOnFloat(modifier, (byte) 2)).withStyle(AttributeModifiers.getModifierColor(item, modifier));
                         event.getToolTip().set(i, name.append(modifiertext));
                     }
                     break;
                 }
             }
             if (data.getWeight() != 0) {
-                        event.getToolTip().add(index, Component.literal(" " + data.getWeight() + " Weight"));
+                event.getToolTip().add(index, Component.literal(" " + data.getWeight() + " Weight"));
             }
             if (item.getTag().contains("scaleMind")) {
                 event.getToolTip().add(index + 1, Component.literal(" " + item.getTag().getString("scaleMind") + " Mind Scale").withStyle(ChatFormatting.DARK_BLUE));
@@ -56,35 +61,4 @@ public class CustomTooltips {
             }
         }
     }
-
-    private static Object findComponentArgument(Component component, String key) {
-        ComponentContents var4 = component.getContents();
-        if (var4 instanceof TranslatableContents contents) {
-            if (contents.getKey().equals(key)) {
-                return component;
-            }
-
-            if (contents.getArgs() != null) {
-                for(Object arg : contents.getArgs()) {
-                    if (arg instanceof Component) {
-                        Component argComponent = (Component)arg;
-                        Object ret = findComponentArgument(argComponent, key);
-                        if (ret != null) {
-                            return ret;
-                        }
-                    }
-                }
-            }
-        }
-
-        for(Component siblingComponent : component.getSiblings()) {
-            Object ret = findComponentArgument(siblingComponent, key);
-            if (ret != null) {
-                return ret;
-            }
-        }
-
-        return null;
-    }
-
 }

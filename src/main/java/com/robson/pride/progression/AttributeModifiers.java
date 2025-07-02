@@ -24,12 +24,14 @@ public class AttributeModifiers {
 
     public static void setModifierForImbuement(ItemStack item) {
         if (item != null) {
-            int newtier = getValueOfDefaultAttribute(item, "scale", "Mind") + 3;
-            if (newtier > 5) {
-                newtier = 5;
-            }
-            item.getOrCreateTag().putString("scaleMind", String.valueOf(scale_tiers.get(newtier)));
-            item.getOrCreateTag().putInt("requiredMind", (int) ((getValueOfDefaultAttribute(item, "required", "Strength") + getValueOfDefaultAttribute(item, "required", "Dexterity")) / 1.5f) + getValueOfDefaultAttribute(item, "required", "Mind"));
+                WeaponData data = ServerDataManager.getWeaponData(item);
+                if (data != null) {
+                    byte newtier = (byte) (Math.max(scale_tiers.indexOf(data.getAttributeReqs().mindScale()) + 3, 5));
+                   item.getOrCreateTag().putString("scaleMind", String.valueOf(scale_tiers.get(newtier)));
+                    item.getOrCreateTag().putInt("requiredMind",
+                            (int) ((data.getAttributeReqs().requiredStrength()  +
+                                    data.getAttributeReqs().requiredDexterity()  / 1.5f) + data.getAttributeReqs().requiredMind()));
+                }
         }
     }
 
@@ -45,23 +47,6 @@ public class AttributeModifiers {
             }
         }
         return ChatFormatting.WHITE;
-    }
-
-    public static int getValueOfDefaultAttribute(ItemStack item, String type, String stat) {
-        if (item != null) {
-            CompoundTag tag = null;
-            if (tag != null) {
-                if (tag.contains(type + stat)) {
-                    if (type.equals("required")) {
-                        return tag.getInt(type + stat);
-                    }
-                    else if (type.equals("scale")) {
-                        return scale_tiers.indexOf(tag.getString(type + stat));
-                    }
-                }
-            }
-        }
-        return 0;
     }
 
     public static String getSignal(float number) {
@@ -80,15 +65,15 @@ public class AttributeModifiers {
                 float mindmofier = 0;
                 byte modifiers = 0;
                 if (data.getAttributeReqs().requiredStrength() != 0) {
-                    modifiers = (byte) (modifiers + 1);
+                    modifiers  += 1;
                     strmodifier = calculateWeaponAttributeModifier(player, item, data.getAttributeReqs().strengthScale(), data.getAttributeReqs().requiredStrength(), ClientSavedData.Strength);
                 }
                 if (data.getAttributeReqs().requiredDexterity() != 0) {
-                    modifiers = (byte) (modifiers + 1);
+                    modifiers += 1;
                     dexmodifier = calculateWeaponAttributeModifier(player, item, data.getAttributeReqs().dexterityScale(), data.getAttributeReqs().requiredDexterity(), ClientSavedData.Dexterity);
                 }
                 if (data.getAttributeReqs().requiredMind() != 0 || item.getOrCreateTag().contains("requiredMind")) {
-                    modifiers = (byte) (modifiers + 1);
+                    modifiers += 1;
                     mindmofier = calculateWeaponAttributeModifier(player, item, data.getAttributeReqs().mindScale(), data.getAttributeReqs().requiredMind(), ClientSavedData.Mind);
                 }
                 float agroup = mindmofier + dexmodifier + strmodifier;
@@ -104,7 +89,7 @@ public class AttributeModifiers {
 
     public static float calculateWeaponAttributeModifier(Player player, ItemStack item, char scale, int required, byte stat) {
         if (player != null && item != null) {
-                int lvl = getStatLvl(player, stat);
+                byte lvl = getStatLvl(player, stat);
                 if (stat == ClientSavedData.Mind && scale_tiers.contains(item.getOrCreateTag().getString("scaleMind")) && item.getOrCreateTag().contains("requiredMind")) {
                     required = item.getTag().getInt("requiredMind");
                     scale = item.getTag().getString("scaleMind").charAt(0);

@@ -33,7 +33,7 @@ public class KeyHandler {
     }
 
     public void tick(Player player) {
-        if (player != null) {
+        if (player != null && Minecraft.getInstance().screen == null) {
             handleKeyInput(player, KeyRegister.MENU, this.menu);
             if (ServerDataManager.getWeaponData(player.getMainHandItem()) != null) {
                 handleKeyInput(player, EpicFightKeyMappings.ATTACK, this.special);

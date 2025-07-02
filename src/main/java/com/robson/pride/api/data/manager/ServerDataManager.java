@@ -8,6 +8,7 @@ import com.robson.pride.api.data.types.WeaponSkillData;
 import com.robson.pride.item.weapons.CustomItem;
 import com.robson.pride.item.weapons.EuropeanLongsword;
 import com.robson.pride.item.weapons.Kuronami;
+import com.robson.pride.item.weapons.Pyroscourge;
 import com.robson.pride.skills.weaponarts.*;
 import com.robson.pride.skills.weaponskills.LongSwordWeaponSkill;
 import net.minecraft.world.item.ItemStack;
@@ -47,6 +48,8 @@ public interface ServerDataManager extends ServerDataManagerImpl<GenericData> {
    short KURONAMI = 2000;
 
    short EUROPEAN_LONGSWORD = 2001;
+
+   short PYROSCOURGE = 2002;
 
    //OTHER EQUIPMENTS ID's
 
@@ -103,6 +106,8 @@ public interface ServerDataManager extends ServerDataManagerImpl<GenericData> {
       case KURONAMI -> Kuronami.WEAPON_DATA;
 
       case EUROPEAN_LONGSWORD -> EuropeanLongsword.WEAPON_DATA;
+
+      case PYROSCOURGE -> Pyroscourge.WEAPON_DATA;
 
       //WEAPON ARTS DATA
 

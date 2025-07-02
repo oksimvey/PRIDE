@@ -1,29 +1,18 @@
 package com.robson.pride.registries;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import yesman.epicfight.api.animation.AnimationClip;
 import yesman.epicfight.api.animation.AnimationManager;
-import yesman.epicfight.api.animation.Joint;
 import yesman.epicfight.api.animation.types.*;
 import yesman.epicfight.gameasset.Armatures;
-import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.model.armature.HumanoidArmature;
 
 public class AnimationsRegister {
 
-    public static DirectStaticAnimation EMPTY_ANIMATION = new DirectStaticAnimation() {
-        public void loadAnimation() {
-        }
-
-        public AnimationClip getAnimationClip() {
-            return AnimationClip.EMPTY_CLIP;
-        }
-    };
-
+    public static AnimationManager.AnimationAccessor<StaticAnimation> SHIELD_PARRY_MAIN_HAND;
+    public static AnimationManager.AnimationAccessor<StaticAnimation> SHIELD_PARRY_OFF_HAND;
     public static AnimationManager.AnimationAccessor<LongHitAnimation> MIKIRI_JUMP;
     public static AnimationManager.AnimationAccessor<LongHitAnimation> MIKIRI_STEP;
     public static AnimationManager.AnimationAccessor<LongHitAnimation> PERILOUS_TWO_HAND;
-    public static AnimationManager.AnimationAccessor<LongHitAnimation> PERILOUS_DUAL_WIELD;
     public static AnimationManager.AnimationAccessor<LongHitAnimation> PERILOUS_ONE_HAND;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> DUAL_TACHI_AUTO1;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> DUAL_TACHI_AUTO2;
@@ -32,12 +21,10 @@ public class AnimationsRegister {
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> DUAL_TACHI_SKILL1;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> DUAL_TACHI_SKILL2;
     public static AnimationManager.AnimationAccessor<StaticAnimation> KATANA_IDLE;
-    public static AnimationManager.AnimationAccessor<StaticAnimation> RECHARGE;
-    public static AnimationManager.AnimationAccessor<StaticAnimation> PROJECTILE_COUNTER;
-    public static AnimationManager.AnimationAccessor<StaticAnimation> MOB_EAT_MAINHAND;
+    public static AnimationManager.AnimationAccessor<LongHitAnimation> PROJECTILE_COUNTER;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> EXECUTE;
-    public static AnimationManager.AnimationAccessor<StaticAnimation> ELECTROCUTATE;
-    public static AnimationManager.AnimationAccessor<StaticAnimation> DIVINE_RESURRECTION;
+    public static AnimationManager.AnimationAccessor<LongHitAnimation> ELECTROCUTATE;
+    public static AnimationManager.AnimationAccessor<LongHitAnimation> DIVINE_RESURRECTION;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> SHORTSWORD_AUTO1;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> SHORTSWORD_AUTO2;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> SHORTSWORD_AUTO3;
@@ -46,7 +33,7 @@ public class AnimationsRegister {
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> SHORTSWORD_DUAL_AUTO2;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> SHORTSWORD_DUAL_AUTO3;
     public static AnimationManager.AnimationAccessor<StaticAnimation> GREATSWORD_HOLD;
-    public static AnimationManager.AnimationAccessor<StaticAnimation> GREATSWORD_RUN;
+    public static AnimationManager.AnimationAccessor<MovementAnimation> GREATSWORD_RUN;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> SWORD_ONEHAND_AUTO1;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> SWORD_ONEHAND_AUTO2;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> SWORD_ONEHAND_AUTO3;
@@ -54,8 +41,8 @@ public class AnimationsRegister {
     public static AnimationManager.AnimationAccessor<StaticAnimation> MAUL_HOLD;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> SPEAR_ONEHAND;
     public static AnimationManager.AnimationAccessor<StaticAnimation> DUAL_GS_IDLE;
-    public static AnimationManager.AnimationAccessor<StaticAnimation> DUAL_GS_WALK;
-    public static AnimationManager.AnimationAccessor<StaticAnimation> DUAL_GS_RUN;
+    public static AnimationManager.AnimationAccessor<MovementAnimation> DUAL_GS_WALK;
+    public static AnimationManager.AnimationAccessor<MovementAnimation> DUAL_GS_RUN;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> DUAL_GREATSWORD_AUTO1;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> DUAL_GREATSWORD_AUTO2;
     public static AnimationManager.AnimationAccessor<BasicAttackAnimation> DUAL_GREATSWORD_AUTO3;
@@ -90,24 +77,17 @@ public class AnimationsRegister {
         STEP_LEFT = builder.nextAccessor("biped/skill/enderstep_left", (acessor)-> new DodgeAnimation(0.1f, acessor, 0.5f, 0.5f, biped));
         STEP_RIGHT = builder.nextAccessor("biped/skill/enderstep_right", (acessor)-> new DodgeAnimation(0.1f, acessor, 0.5f, 0.5f, biped));
         STEP_BACKWARD = builder.nextAccessor("biped/skill/enderstep_backward", (acessor)->new DodgeAnimation(0.1f, acessor, 0.5f, 0.5f, biped));
-        DUAL_TACHI_AIRSLASH = builder.nextAccessor("biped/combat/scythe/dual_tachi_airslash", (acessor)-> new AirSlashAnimation(0.1F, 0.15F, 0.26F, 0.5F, ColliderPreset.DUAL_SWORD_AIR_SLASH, biped.get().torso, acessor, biped));
-       DUAL_SCYTHE_AUTO2 = createMotion(builder,"biped/combat/scythe/dual_tachi_auto2", 0.05f, 0.2f, 0.3f, 0.5f, 0.5f, biped.get().toolR);
-
-        DUAL_SCYTHE_AUTO3 = createMotion(builder, "biped/combat/scythe/dual_tachi_auto3", 0.16f, 0.1f, 0.15f, 0.45f, 0.45f, biped.get().toolR);
-       DUAL_SCYTHE_AUTO4 = createMotion(builder, "biped/combat/scythe/dual_tachi_auto4", 0.1f,0.5f, 0.6f, 1.1f, 1.167f, biped.get().toolR);
-
-       GREAT_TACHI_AUTO1 = createMotion(builder, "biped/combat/katana/great_tachi_auto1", 0.1f, 0.1f, 0.25f, 0.5f, 0.5f, biped.get().toolR);
-        GREAT_TACHI_AUTO2 = createMotion(builder, "biped/combat/katana/great_tachi_auto2", 0.1f, 0.1f, 0.25f, 0.5f, 0.55f, biped.get().toolR);
-        GREAT_TACHI_AUTO3 = createMotion(builder, "biped/combat/katana/great_tachi_auto3", 0.1f, 0.1f, 0.15f, 0.3f, 0.35f, biped.get().toolR);
-        GREAT_TACHI_AUTO4 = createMotion(builder, "biped/combat/katana/great_tachi_auto4", 0.1f, 0.1f, 0.5f, 0.95f, 1.5f, biped.get().toolR);
-      DUAL_GREATSWORD_AUTO1 = createMotion(builder, "biped/combat/colossalsword/greatsword_dual_auto_1", 0.25f, 0.2f, 0.4f, 0.45f, 0.45f, biped.get().toolL);
-        DUAL_GREATSWORD_AUTO2 =  createMotion(builder, "biped/combat/colossalsword/greatsword_dual_auto_1", 0.25f, 0.2f, 0.4f, 0.45f, 0.45f, biped.get().toolL);
-        DUAL_GREATSWORD_AUTO3 =  createMotion(builder, "biped/combat/colossalsword/greatsword_dual_auto_1", 0.25f, 0.2f, 0.4f, 0.45f, 0.45f, biped.get().toolL);
-
-    }
-
-    private static AnimationManager.AnimationAccessor<BasicAttackAnimation> createMotion(AnimationManager.AnimationBuilder builder, String id, float convert, float antecipation, float predelay, float contact, float recovery, Joint joint){
-        return builder.nextAccessor(id, (acessor)-> new BasicAttackAnimation(convert, antecipation, predelay, contact, recovery, null, joint, acessor, Armatures.BIPED));
+        SHIELD_PARRY_MAIN_HAND = builder.nextAccessor("biped/combat/shield_parry1", (acessor)-> new StaticAnimation(0.05f, true, acessor, biped));
+        SHIELD_PARRY_OFF_HAND = builder.nextAccessor("biped/combat/shield_parry2", (acessor)-> new StaticAnimation(0.05f, true, acessor, biped));
+        MIKIRI_JUMP = builder.nextAccessor("biped/skill/mikiri_jump", (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
+        MIKIRI_STEP = builder.nextAccessor("biped/skill/mikiri_step", (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
+        PERILOUS_ONE_HAND = builder.nextAccessor("biped/skill/perilous_pierce_one_hand" , (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
+        PERILOUS_TWO_HAND = builder.nextAccessor("biped/skill/perilous_pierce_two_hand" , (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
+        KATANA_IDLE = builder.nextAccessor("biped/combat/katana/hold_bokken", (acessor)-> new StaticAnimation(0.05f, true, acessor, biped));
+        PROJECTILE_COUNTER = builder.nextAccessor("biped/skill/projectile_counter" , (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
+        DIVINE_RESURRECTION = builder.nextAccessor("biped/skill/divine_resurrection" , (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
+       ELECTROCUTATE = builder.nextAccessor("biped/skill/electrocuted" , (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
+        GREATSWORD_HOLD = builder.nextAccessor("biped/combat/shield_parry1", (acessor)-> new StaticAnimation(0.05f, true, acessor, biped));
 
     }
 }
