@@ -11,8 +11,8 @@ public class KeyGuard extends BasicKey {
         SkillDataManager.addSkill(player, SkillDataManager.GUARD);
      }
 
-
     @Override
     protected void onReleaseAction(Player player){
         SkillDataManager.removeSkill(player, SkillDataManager.GUARD);
-    }}
+    }
+}

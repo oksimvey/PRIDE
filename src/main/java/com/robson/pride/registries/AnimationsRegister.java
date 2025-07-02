@@ -77,8 +77,8 @@ public class AnimationsRegister {
         STEP_LEFT = builder.nextAccessor("biped/skill/enderstep_left", (acessor)-> new DodgeAnimation(0.1f, acessor, 0.5f, 0.5f, biped));
         STEP_RIGHT = builder.nextAccessor("biped/skill/enderstep_right", (acessor)-> new DodgeAnimation(0.1f, acessor, 0.5f, 0.5f, biped));
         STEP_BACKWARD = builder.nextAccessor("biped/skill/enderstep_backward", (acessor)->new DodgeAnimation(0.1f, acessor, 0.5f, 0.5f, biped));
-        SHIELD_PARRY_MAIN_HAND = builder.nextAccessor("biped/combat/shield_parry1", (acessor)-> new StaticAnimation(0.05f, true, acessor, biped));
-        SHIELD_PARRY_OFF_HAND = builder.nextAccessor("biped/combat/shield_parry2", (acessor)-> new StaticAnimation(0.05f, true, acessor, biped));
+        SHIELD_PARRY_MAIN_HAND = builder.nextAccessor("biped/combat/shield_parry1", (acessor)-> new StaticAnimation(0.05f, false, acessor, biped));
+        SHIELD_PARRY_OFF_HAND = builder.nextAccessor("biped/combat/shield_parry2", (acessor)-> new StaticAnimation(0.05f, false, acessor, biped));
         MIKIRI_JUMP = builder.nextAccessor("biped/skill/mikiri_jump", (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
         MIKIRI_STEP = builder.nextAccessor("biped/skill/mikiri_step", (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
         PERILOUS_ONE_HAND = builder.nextAccessor("biped/skill/perilous_pierce_one_hand" , (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
@@ -87,7 +87,6 @@ public class AnimationsRegister {
         PROJECTILE_COUNTER = builder.nextAccessor("biped/skill/projectile_counter" , (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
         DIVINE_RESURRECTION = builder.nextAccessor("biped/skill/divine_resurrection" , (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
        ELECTROCUTATE = builder.nextAccessor("biped/skill/electrocuted" , (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
-        GREATSWORD_HOLD = builder.nextAccessor("biped/combat/shield_parry1", (acessor)-> new StaticAnimation(0.05f, true, acessor, biped));
-
+       
     }
 }

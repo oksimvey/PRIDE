@@ -8,6 +8,7 @@
   },
   "refmap": "mixins.pride.refmap.json",
   "client": [
+    "AbstractClientPlayerPatchMixin",
     "AnimatedMeshMixin",
     "ItemRenderBaseMixin",
     "ItemRendererMixin",

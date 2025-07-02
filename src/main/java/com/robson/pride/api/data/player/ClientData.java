@@ -52,7 +52,7 @@ public class ClientData {
                 tag.putByteArray("lvl", new byte[]{1, 1, 1, 1, 1});
                 tag.putByteArray("skills", new byte[]{});
                 tag.putIntArray("xp", new int[]{0, 0, 0, 0, 0});
-
+                tag.putString("mount", "");
             }
             ClientSavedData datap = ClientSavedData.fromNBT(tag);
             data.setProgressionData(datap);

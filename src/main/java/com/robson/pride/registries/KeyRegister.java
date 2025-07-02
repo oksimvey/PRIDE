@@ -15,6 +15,7 @@ public class KeyRegister {
     public static KeyMapping IMMUNITY;
     public static KeyMapping AWAKENING;
     public static KeyMapping MOBILITY;
+    public static KeyMapping MOUNT;
 
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         SPECIAL = new KeyMapping("key.pride.special", InputConstants.Type.MOUSE, 0, "key.categories.misc");
@@ -26,6 +27,8 @@ public class KeyRegister {
         KILLER_AURA = new KeyMapping("key.pride.aura", InputConstants.Type.KEYSYM, InputConstants.KEY_C, "key.categories.misc");
         AWAKENING = new KeyMapping("key.pride.awakening", InputConstants.Type.KEYSYM, InputConstants.KEY_V, "key.categories.misc");
         MOBILITY = new KeyMapping("key.pride.mobility", InputConstants.Type.KEYSYM, InputConstants.KEY_F, "key.categories.misc");
+        MOUNT = new KeyMapping("key.pride.mount", InputConstants.Type.KEYSYM, InputConstants.KEY_H, "key.categories.misc");
+        event.register(MOUNT);
         event.register(SPECIAL);
         event.register(DODGE);
         event.register(MENU);

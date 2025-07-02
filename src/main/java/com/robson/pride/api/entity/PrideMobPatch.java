@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -99,9 +100,10 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends MobPatch<Pri
     public void serverTick(LivingEvent.LivingTickEvent event) {
         super.serverTick(event);
         for (Entity ent : this.getOriginal().level().getEntities(getOriginal(), MathUtils.createAABBAroundEnt(getOriginal(), 10))){
-            if (ent instanceof AbstractArrow arrow && arrow.getDeltaMovement().length() > 0.75) {
+            if (ent instanceof Projectile arrow && arrow.getDeltaMovement().length() > 0.75) {
                 PrideVec3f delta = PrideVec3f.fromVec3(arrow.getDeltaMovement());
-                if (delta.willHit(PrideVec3f.fromVec3(arrow.position()), PrideVec3f.fromVec3(this.getOriginal().position()))) {
+                if (delta.willHit(PrideVec3f.fromVec3(arrow.position()), PrideVec3f.fromVec3(this.getOriginal().position()),
+                        this.getOriginal().getBbWidth() + arrow.getBbWidth(), this.getOriginal().getBbHeight() + arrow.getBbHeight())) {
                     this.rotateTo(arrow, 999999, false);
                     SkillDataManager.addSkill(this.getOriginal(), SkillDataManager.GUARD);
                     TimerUtil.schedule(() -> {
