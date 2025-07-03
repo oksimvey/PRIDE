@@ -2,19 +2,15 @@ package com.robson.pride.registries;
 
 import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.item.weapons.CustomItem;
+import com.robson.pride.api.item.CustomItem;
 import com.robson.pride.main.Pride;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-
-import static com.robson.pride.registries.EntityRegister.ENTITIES;
-import static com.robson.pride.registries.EntityRegister.SPECIAL_ENTITIES;
 
 
 public class PrideTabRegister {
@@ -86,23 +82,15 @@ public class PrideTabRegister {
 
     public static final RegistryObject<CreativeModeTab> ENTITIES_TAB = TABS.register("pride_entities", () -> CreativeModeTab.builder()
             .title(Component.literal("Pride Entities"))
-            .icon(() -> new ItemStack(ItemsRegister.SPAWN_EGG.get()))
+            .icon(() -> CustomItem.createItem(ServerDataManager.RONIN))
             .displayItems((enabledFeatures, entries) -> {
-                ENTITIES.getEntries().forEach(entry -> {
-                    ItemStack item = new ItemStack(ItemsRegister.SPAWN_EGG.get());
-                    assert entry.getKey() != null;
-                    String entity = entry.getId().toString();
-                    item.getOrCreateTag().putString("spawn_egg", entity);
-                    entries.accept(item);
-                });
-                SPECIAL_ENTITIES.getEntries().forEach(entry -> {
-                    ItemStack item = new ItemStack(ItemsRegister.SPAWN_EGG.get());
-                    assert entry.getKey() != null;
-                    String entity = entry.getId().toString();
-                    item.getOrCreateTag().putString("spawn_egg", entity);
-                    entries.accept(item);
-                });
-
+                for (short i = 5000; true; i++){
+                    GenericData data =  ServerDataManager.getGenericData(i);
+                    if (data == null){
+                        return;
+                    }
+                    entries.accept(CustomItem.createItem(i));
+                }
             })
             .withTabsBefore(SKILLS_TAB.getKey())
             .build());

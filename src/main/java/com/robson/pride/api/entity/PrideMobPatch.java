@@ -1,7 +1,8 @@
 package com.robson.pride.api.entity;
 
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
-import com.robson.pride.api.utils.AnimUtils;
+import com.robson.pride.api.data.types.MobData;
 import com.robson.pride.api.utils.LodTick;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.api.utils.math.MathUtils;
@@ -12,7 +13,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.UseAnim;
@@ -35,17 +35,35 @@ import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.damagesource.StunType;
 
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class PrideMobPatch <PrideMob extends PathfinderMob> extends MobPatch<PrideMob> {
 
-    private float stamina;
+    private byte staminaregaindelay = 0;
 
-    private float maxStamina;
+    private float stamina = 0;
+
+    private float maxStamina = 100;
 
     public PrideMobPatch() {
         super(Factions.NEUTRAL);
+    }
+
+    public void setMaxStamina(float maxStamina) {
+        this.maxStamina = maxStamina;
+    }
+
+    public float getMaxStamina() {
+        return this.maxStamina;
+    }
+
+    public void consumeStamina(float amount) {
+        this.stamina -= amount;
+        this.staminaregaindelay = 60;
+    }
+
+    public float getStamina() {
+        return this.stamina;
     }
 
     public AnimationManager.AnimationAccessor<? extends StaticAnimation> getHitAnimation(StunType stunType) {
@@ -99,6 +117,16 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends MobPatch<Pri
     @Override
     public void serverTick(LivingEvent.LivingTickEvent event) {
         super.serverTick(event);
+        if (this.stamina < 0){
+            this.stamina = 0;
+        }
+        if (this.stamina >= maxStamina){
+            this.stamina = maxStamina;
+        }
+        else if (this.staminaregaindelay == 0){
+            this.stamina += 0.01f;
+        }
+        else this.staminaregaindelay--;
         for (Entity ent : this.getOriginal().level().getEntities(getOriginal(), MathUtils.createAABBAroundEnt(getOriginal(), 10))){
             if (ent instanceof Projectile arrow && arrow.getDeltaMovement().length() > 0.75) {
                 PrideVec3f delta = PrideVec3f.fromVec3(arrow.getDeltaMovement());
@@ -126,12 +154,10 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends MobPatch<Pri
                 return;
             }
             if (this.getTarget() != null &&!this.getEntityState().attacking() && this.getEntityState().canBasicAttack()) {
-                AnimationManager.AnimationAccessor<? extends StaticAnimation> animation = switch (new Random().nextInt(2)) {
-                    case 0 -> Animations.GREATSWORD_AUTO1;
-                    case 1 -> Animations.GREATSWORD_AUTO2;
-                    default -> Animations.GREATSWORD_DASH;
-                };
-                AnimUtils.playAnim(this.getOriginal(), animation, 0);
+                MobData data = ServerDataManager.getMobData((com.robson.pride.api.entity.PrideMob) this.getOriginal());
+                if (data != null){
+                    data.getCombatActions().trySelect(this);
+                }
             }
         }
     }

@@ -9,9 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.Entity;
-
-import java.util.List;
 
 public class DialogueAction extends ActionBase {
 
@@ -34,7 +31,6 @@ public class DialogueAction extends ActionBase {
        if (this.subtitle != null){
            ClientLevel level = Minecraft.getInstance().level;
            LocalPlayer player = Minecraft.getInstance().player;
-           Particle stringParticle = null;
            if (player != null && level != null) {
                float volumeMultiplier = 5;
                if (this.sound != null && !this.sound.isEmpty()){
@@ -42,7 +38,7 @@ public class DialogueAction extends ActionBase {
                    PlaySoundUtils.playNonRegisteredSound(ent.getOriginal(), this.sound, volumeMultiplier, 1);
                }
               if (ent.getOriginal().distanceTo(player) < ent.getOriginal().getBbHeight() * volumeMultiplier) {
-                   stringParticle = ParticleUtils.spawnStringParticle(ent.getOriginal(), this.subtitle, StringParticle.StringParticleTypes.WHITE, duration / 50 - 1);
+                   ParticleUtils.spawnStringParticle(ent.getOriginal(), this.subtitle, StringParticle.StringParticleTypes.WHITE, duration / 50 - 1);
                }
            }
        }

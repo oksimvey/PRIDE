@@ -10,6 +10,7 @@ import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.registries.AnimationsRegister;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -36,6 +37,7 @@ import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
+import yesman.epicfight.world.damagesource.EpicFightDamageSource;
 import yesman.epicfight.world.damagesource.EpicFightDamageType;
 
 import java.util.List;
@@ -152,6 +154,9 @@ public interface GuardSkill {
 
         public void onBlock(LivingEntityPatch<?> ent, LivingAttackEvent event, AnimationManager.AnimationAccessor<? extends StaticAnimation> motion, boolean isParry) {
             if (motion != null && ent != null) {
+                if (event.getSource() instanceof EpicFightDamageSource epicFightDamageSource && ent instanceof PlayerPatch playerPatch) {
+                    playerPatch.getOriginal().sendSystemMessage(Component.literal("impact " + epicFightDamageSource.getImpact()));
+                }
                 ent.playAnimationSynchronized(motion, 0);
                 PlaySoundUtils.playSound(ent.getOriginal(), EpicFightSounds.CLASH.get(), 2 * 3 - 1, 1);
                 Vec3f trans = ParticleTracking.getAABBForImbuementDivided(ent.getOriginal().getUseItem(), ent.getOriginal(), 99, 99, 5);
@@ -162,7 +167,7 @@ public interface GuardSkill {
             }
         }
 
-        public static void guardKnockBack(Entity ent, Entity dmgent, boolean isparry) {
+        public static void guardKnockBack(LivingEntity ent, Entity dmgent, boolean isparry) {
             if (ent != null && dmgent != null) {
                 float impact = AttributeUtils.getAttributeValue(dmgent, "epicfight:impact");
                 if (isparry) {

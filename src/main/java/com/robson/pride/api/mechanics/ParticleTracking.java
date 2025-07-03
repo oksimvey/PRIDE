@@ -7,7 +7,6 @@ import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.api.utils.math.PrideVec3f;
-import com.robson.pride.effect.ImbuementEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;

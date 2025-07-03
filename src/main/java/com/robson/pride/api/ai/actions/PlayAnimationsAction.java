@@ -3,12 +3,10 @@ package com.robson.pride.api.ai.actions;
 import com.robson.pride.api.ai.combat.ActionBase;
 import com.robson.pride.api.entity.PrideMobPatch;
 import com.robson.pride.api.utils.AnimUtils;
-import com.robson.pride.api.utils.TimerUtil;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class PlayAnimationsAction extends ActionBase {
 
@@ -24,13 +22,15 @@ public class PlayAnimationsAction extends ActionBase {
     }
 
     protected void start(PrideMobPatch<?> ent) {
-        if (ent != null && currentAnimation <= animations.size()) {
+        if (ent != null) {
+            if (currentAnimation >= animations.size()){
+                currentAnimation = 0;
+            }
             AnimationManager.AnimationAccessor<? extends StaticAnimation> animation = animations.get(currentAnimation);
             if (animation != null) {
-                ent.playAnimation(animation, convert);
+                AnimUtils.playAnim(ent.getOriginal(), animation, convert);
                 currentAnimation++;
-                TimerUtil.schedule(()-> start(ent), AnimUtils.getAnimationDurationInMilliseconds(ent.getOriginal(), animation.get()), TimeUnit.MILLISECONDS);
-            }
+              }
         }
     }
 }

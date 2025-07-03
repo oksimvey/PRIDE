@@ -1,4 +1,4 @@
-package com.robson.pride.item.weapons;
+package com.robson.pride.api.item;
 
 
 import com.robson.pride.api.data.types.GenericData;

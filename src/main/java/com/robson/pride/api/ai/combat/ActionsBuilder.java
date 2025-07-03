@@ -16,7 +16,7 @@ public class ActionsBuilder {
 
     public void trySelect(PrideMobPatch<?> ent){
         if (ent != null && this.actions != null){
-            if (pointer > actions.size()){
+            if (pointer >= actions.size()){
                 pointer = 0;
             }
             boolean result = actions.get(pointer).tryStart(ent);

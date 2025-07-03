@@ -99,8 +99,8 @@ public abstract class WeaponSkillData extends GenericData {
                     StaminaUtils.consumeStamina(ent, this.StaminaConsumption);
                     ManaUtils.consumeMana(ent, this.ManaConsumption);
                     onExecution(ent, 0);
-                    return;
                 }
+                return;
             }
             onExecution(ent, 0);
         }

@@ -8,7 +8,7 @@ import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.math.BezierCurvef;
 import com.robson.pride.api.utils.math.PrideVec3f;
-import com.robson.pride.item.weapons.CustomItem;
+import com.robson.pride.api.item.CustomItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.texture.AbstractTexture;

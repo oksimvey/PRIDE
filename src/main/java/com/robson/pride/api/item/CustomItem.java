@@ -1,14 +1,22 @@
-package com.robson.pride.item.weapons;
+package com.robson.pride.api.item;
 
 import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.data.manager.ServerDataManager;
+import com.robson.pride.api.data.types.MobData;
+import com.robson.pride.api.entity.PrideMob;
+import com.robson.pride.registries.EntityRegister;
 import com.robson.pride.registries.ItemsRegister;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class CustomItem extends SwordItem {
@@ -47,6 +55,28 @@ public class CustomItem extends SwordItem {
         ItemStack Item = new ItemStack(ItemsRegister.CUSTOM_WEAPON_ITEM.get());
         Item.getOrCreateTag().putShort("pride_id", id);
         return Item;
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext useContext) {
+        if (ServerDataManager.getMobType(useContext.getItemInHand().getTag().getShort("pride_id")) == null) {
+            return InteractionResult.FAIL;
+        }
+        Level worldIn = useContext.getLevel();
+        if (!(worldIn instanceof ServerLevel)) {
+            return InteractionResult.SUCCESS;
+        }
+        else {
+            ItemStack itemStack = useContext.getItemInHand();
+            BlockPos pos = useContext.getClickedPos();
+            PrideMob entity = new PrideMob(EntityRegister.PRIDE_MOB.get(), worldIn);
+            entity.setType(itemStack.getTag().getShort("pride_id"));
+            entity.setPos(pos.above().getCenter());
+            worldIn.addFreshEntity(entity);
+            MobData data = ServerDataManager.getMobData(entity);
+            if (data != null) data.onSpawn(entity);
+        }
+        return InteractionResult.CONSUME;
     }
 
 

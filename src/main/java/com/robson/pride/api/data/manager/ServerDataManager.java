@@ -1,11 +1,10 @@
 package com.robson.pride.api.data.manager;
 
-import com.robson.pride.api.data.types.ElementData;
-import com.robson.pride.api.data.types.GenericData;
-import com.robson.pride.api.data.types.WeaponData;
+import com.robson.pride.api.data.types.*;
 import com.robson.pride.api.elements.*;
-import com.robson.pride.api.data.types.WeaponSkillData;
-import com.robson.pride.item.weapons.CustomItem;
+import com.robson.pride.api.entity.PrideMob;
+import com.robson.pride.entities.Ronin;
+import com.robson.pride.api.item.CustomItem;
 import com.robson.pride.item.weapons.EuropeanLongsword;
 import com.robson.pride.item.weapons.Kuronami;
 import com.robson.pride.item.weapons.Pyroscourge;
@@ -125,6 +124,10 @@ public interface ServerDataManager extends ServerDataManagerImpl<GenericData> {
 
       case LONGSWORD_PIERCE -> LongSwordWeaponSkill.DATA;
 
+      //ENTITIES DATA
+
+      case RONIN -> Ronin.DATA;
+
       default -> null;
    };;
 
@@ -177,6 +180,27 @@ public interface ServerDataManager extends ServerDataManagerImpl<GenericData> {
    static WeaponSkillData getWeaponSkillData(ItemStack stack){
       if (getGenericData(stack) instanceof WeaponSkillData data){
          return data;
+      }
+      return null;
+   }
+
+   static MobTypeData getMobType(short id){
+      if (getGenericData(id) instanceof MobTypeData data){
+         return data;
+      }
+      return null;
+   }
+
+   static MobTypeData getMobType(PrideMob mob){
+      if (mob != null){
+         return getMobType(mob.getTypeID());
+      }
+      return null;
+   }
+
+   static MobData getMobData(PrideMob mob){
+      if (mob != null && getMobType(mob) != null){
+         return getMobType(mob).getDataByVariant(mob.getTypeVariant());
       }
       return null;
    }
