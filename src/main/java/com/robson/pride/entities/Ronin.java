@@ -17,7 +17,9 @@ import java.util.List;
 public interface Ronin {
 
     MobData MOB_DATA = new MobData(ResourceLocation.fromNamespaceAndPath("pride", "textures/entities/japanese/ronin1.png"), new ActionsBuilder(
-            List.of(new ConditionalAction(
+            List.of(new ConditionalAction(List.of(new CooldownCondition(7000)),
+                    new ExecuteWeaponSkillAction(ServerDataManager.LONGSWORD_PIERCE)),
+                    new ConditionalAction(
                     List.of(new DistanceCondition((byte) 0, (byte) 10)),
                     new PlayAnimationsAction(List.of(
                             Animations.UCHIGATANA_AUTO1,
@@ -27,9 +29,7 @@ public interface Ronin {
                     new ConditionalAction(
                             List.of(new DistanceCondition((byte) 10, (byte) 20)),
                             new PlayAnimationsAction(List.of(Animations.UCHIGATANA_SHEATHING_DASH), 0)
-                    ),
-                    new ConditionalAction(List.of(new ChanceCondition((byte) 50)),
-                            new ExecuteWeaponSkillAction(ServerDataManager.LONGSWORD_PIERCE))))) {
+                    )))) {
         @Override
         public void onSpawn(PrideMob mob){
             mob.setItemSlot(EquipmentSlot.MAINHAND, CustomItem.createItem(ServerDataManager.KURONAMI));

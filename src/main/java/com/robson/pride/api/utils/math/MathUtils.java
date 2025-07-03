@@ -18,8 +18,8 @@ public interface MathUtils {
         return (float) (number + (number * percentage / 100));
     }
 
-    static float getValueWithPercentageDecrease(double number, double percentage) {
-        return (float) (number - (number * percentage / 100));
+    static float getValueWithPercentageDecrease(float number, float percentage) {
+        return number - (number * percentage / 100);
     }
 
 

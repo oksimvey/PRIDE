@@ -27,7 +27,7 @@ public class AttributeModification {
         if (event.getEntity() != null) {
             if (event.getEntity() instanceof Player ent) {
                 if (!armorslots.contains(event.getSlot())) {
-                    AttributeUtils.addModifier(ent, "epicfight:weight", "b4c793f6-b421-43cb-81e8-754fdfe278e4", ItemStackUtils.getWeaponWeight(ent, InteractionHand.OFF_HAND, EquipmentSlot.OFFHAND), AttributeModifier.Operation.ADDITION);
+                    AttributeUtils.addModifier(ent, "epicfight:weight", "b4c793f6-b421-43cb-81e8-754fdfe278e4", ItemStackUtils.getWeaponWeight(ent.getOffhandItem()), AttributeModifier.Operation.ADDITION);
                     addModifierToStyle(ent);
                     float modifier = AttributeModifiers.calculateModifier(ent, ent.getMainHandItem(), 1);
                     if (modifier <= 0.1f) {

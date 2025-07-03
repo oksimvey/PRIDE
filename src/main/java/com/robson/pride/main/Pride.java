@@ -23,7 +23,6 @@ public class Pride {
 
     public Pride() {
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        SoundsRegister.SOUNDS.register(bus);
         ItemsRegister.REGISTRY.register(bus);
         EntityRegister.ENTITIES.register(bus);
         EntityRegister.SPECIAL_ENTITIES.register(bus);

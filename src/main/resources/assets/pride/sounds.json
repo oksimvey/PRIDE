@@ -7,6 +7,18 @@
       }
     ]
   },
+  "short_whistle": {
+    "sounds": [
+      {
+        "name": "pride:misc/short_whistle1",
+        "stream": false
+      },
+      {
+        "name": "pride:misc/short_whistle2",
+        "stream": false
+      }
+    ]
+  },
   "dry_fire": {
     "sounds": [
       {

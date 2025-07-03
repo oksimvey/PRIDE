@@ -1,7 +1,11 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.api.entity.PrideMob;
+import com.robson.pride.api.entity.PrideMobPatch;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import yesman.epicfight.gameasset.EpicFightSkills;
+import yesman.epicfight.skill.Skill;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
@@ -10,15 +14,13 @@ public class StaminaUtils {
 
     public static float getStamina(Entity ent) {
         if (ent != null) {
-            if (ent instanceof Player) {
-                PlayerPatch playerPatch = EpicFightCapabilities.getEntityPatch(ent, PlayerPatch.class);
-                if (playerPatch != null) {
+            LivingEntityPatch<?> mobPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (mobPatch != null) {
+                if (mobPatch instanceof PlayerPatch<?> playerPatch) {
                     return playerPatch.getStamina();
                 }
-            } else {
-                LivingEntityPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-                if (mobPatch != null) {
-
+                else if (mobPatch instanceof PrideMobPatch<?> prideMobPatch){
+                    return prideMobPatch.getStamina();
                 }
             }
         }
@@ -27,15 +29,13 @@ public class StaminaUtils {
 
     public static float getMaxStamina(Entity ent) {
         if (ent != null) {
-            if (ent instanceof Player) {
-                PlayerPatch playerPatch = EpicFightCapabilities.getEntityPatch(ent, PlayerPatch.class);
-                if (playerPatch != null) {
+            LivingEntityPatch<?> mobPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (mobPatch != null) {
+                if (mobPatch instanceof PlayerPatch<?> playerPatch) {
                     return playerPatch.getMaxStamina();
                 }
-            } else {
-                LivingEntityPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-                if (mobPatch != null) {
-
+                else if (mobPatch instanceof PrideMobPatch<?> prideMobPatch){
+                    return prideMobPatch.getMaxStamina();
                 }
             }
         }
@@ -44,15 +44,13 @@ public class StaminaUtils {
 
     public static void setStamina(Entity ent, float amount) {
         if (ent != null) {
-            if (ent instanceof Player) {
-                PlayerPatch playerPatch = EpicFightCapabilities.getEntityPatch(ent, PlayerPatch.class);
-                if (playerPatch != null) {
+            LivingEntityPatch<?> mobPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (mobPatch != null) {
+                if (mobPatch instanceof PlayerPatch<?> playerPatch) {
                     playerPatch.setStamina(amount);
                 }
-            } else {
-                LivingEntityPatch mobPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-                if (mobPatch != null) {
-
+                else if (mobPatch instanceof PrideMobPatch<?> prideMobPatch){
+                    prideMobPatch.setStamina(amount);
                 }
             }
         }
@@ -63,7 +61,17 @@ public class StaminaUtils {
     }
 
     public static void consumeStamina(Entity ent, float amount) {
-        setStamina(ent, (getStamina(ent) - amount));
+        if (ent != null) {
+            LivingEntityPatch<?> mobPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (mobPatch != null) {
+                if (mobPatch instanceof PlayerPatch<?> playerPatch) {
+                     playerPatch.consumeForSkill(EpicFightSkills.BASIC_ATTACK, Skill.Resource.STAMINA, amount);
+                }
+                else if (mobPatch instanceof PrideMobPatch<?> prideMobPatch){
+                    prideMobPatch.consumeStamina(amount);
+                }
+            }
+        }
     }
 
     public static void resetStamina(Entity ent) {

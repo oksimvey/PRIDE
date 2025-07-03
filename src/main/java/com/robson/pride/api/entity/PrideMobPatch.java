@@ -66,6 +66,10 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends MobPatch<Pri
         return this.stamina;
     }
 
+    public void setStamina(float stamina) {
+        this.stamina = stamina;
+    }
+
     public AnimationManager.AnimationAccessor<? extends StaticAnimation> getHitAnimation(StunType stunType) {
         if (((PathfinderMob)this.original).getVehicle() != null) {
             return Animations.BIPED_HIT_ON_MOUNT;

@@ -14,26 +14,17 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class PlaySoundUtils {
 
     public static void playSound(Entity ent, SoundEvent sound, float volume, float pitch) {
-        if (ent != null) {
-            if (!ent.level().isClientSide()) {
-                ServerLevel world = (ServerLevel) ent.level();
-                if (world != null) {
-                    world.playSound(null, BlockPos.containing(ent.getX(), ent.getY(), ent.getZ()), sound, SoundSource.NEUTRAL, volume, pitch);
-                }
-            }
+        if (ent != null && ent.level() instanceof ServerLevel world && sound != null) {
+            world.playSound(null, BlockPos.containing(ent.getX(), ent.getY(), ent.getZ()), sound, SoundSource.NEUTRAL, volume, pitch);
         }
     }
 
     public static void playSoundByString(Entity ent, String soundid, float volume, float pitch) {
         if (ent != null) {
-            playSound(ent, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(soundid)), volume, pitch);
+            Holder<SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation(soundid)));
+            if (Minecraft.getInstance().level != null)
+                Minecraft.getInstance().level.playSound(Minecraft.getInstance().player, ent, holder.get(), SoundSource.NEUTRAL, volume, pitch);
         }
-    }
-
-    public static void playNonRegisteredSound(Entity ent, String soundid, float volume, float pitch) {
-        Holder<SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation(soundid)));
-        if (Minecraft.getInstance().level != null)
-            Minecraft.getInstance().level.playSound(Minecraft.getInstance().player, ent, holder.get(), SoundSource.NEUTRAL, volume, pitch);
     }
 
     public static Music getMusicByString(String musicid) {

@@ -50,6 +50,7 @@ public class PerilousAttack {
         if (livingEntityPatch != null) {
             PlaySoundUtils.playSoundByString(livingEntityPatch.getTarget(), "pride:perilous", 3, 1);
         }
+        perilousParticle(ent);
     }
 
     public static void perilousParticle(Entity player) {

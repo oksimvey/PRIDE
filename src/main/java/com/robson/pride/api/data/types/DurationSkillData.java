@@ -18,7 +18,7 @@ public abstract class DurationSkillData {
 
     public abstract void onAttacked(LivingEntity ent, LivingAttackEvent event);
 
-    public abstract void onSpellDamage(LivingEntity ent, SpellDamageEvent event);
+    public void onSpellDamage(LivingEntity ent, SpellDamageEvent event){}
 
     public int getActiveTicks(LivingEntity ent){
         return ent.tickCount - this.tickwhenStarted.getOrDefault(ent, 0);

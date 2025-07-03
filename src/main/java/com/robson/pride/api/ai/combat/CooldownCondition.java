@@ -13,7 +13,7 @@ public class CooldownCondition extends Condition {
 
     public CooldownCondition(int cooldown) {
         this.cooldown = cooldown;
-        boolean waiting = false;
+        waiting = false;
     }
 
     public boolean isTrue(PrideMobPatch<?> ent) {

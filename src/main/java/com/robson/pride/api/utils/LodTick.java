@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 
 public interface LodTick {
+
     static boolean canTick(Entity entity, float multiplier){
         Minecraft client = Minecraft.getInstance();
         if (client.player != null && entity != null) {
@@ -12,5 +13,4 @@ public interface LodTick {
         }
         return false;
     }
-
 }

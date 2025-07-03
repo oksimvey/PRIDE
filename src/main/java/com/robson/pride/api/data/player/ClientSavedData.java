@@ -22,7 +22,7 @@ public class ClientSavedData {
 
     private String mountid;
 
-    private long[] allies;
+    private String[] allies;
 
     private ClientSavedData(byte[] lvl, int[] xp, byte[] skillList, byte element, String mountid) {
        this.lvl = lvl;

@@ -2,12 +2,15 @@ package com.robson.pride.registries;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import yesman.epicfight.api.animation.AnimationManager;
+import yesman.epicfight.api.animation.property.AnimationEvent;
+import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.*;
 import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.model.armature.HumanoidArmature;
 
 public class AnimationsRegister {
 
+    public static AnimationManager.AnimationAccessor<StaticAnimation> SHORT_WHISTLE;
     public static AnimationManager.AnimationAccessor<StaticAnimation> SHIELD_PARRY_MAIN_HAND;
     public static AnimationManager.AnimationAccessor<StaticAnimation> SHIELD_PARRY_OFF_HAND;
     public static AnimationManager.AnimationAccessor<LongHitAnimation> MIKIRI_JUMP;
@@ -73,6 +76,7 @@ public class AnimationsRegister {
     private static void build(AnimationManager.AnimationBuilder builder) {
 
         Armatures.ArmatureAccessor<HumanoidArmature> biped = Armatures.BIPED;
+        SHORT_WHISTLE = builder.nextAccessor("biped/skill/short_whistle", (acessor)-> new StaticAnimation(0.05f, false, acessor, biped).addProperty(AnimationProperty.StaticAnimationProperty.FIXED_HEAD_ROTATION, true));
         STEP_FORWARD = builder.nextAccessor("biped/skill/enderstep_forward", (acessor)-> new DodgeAnimation(0.1f, acessor, 0.5f, 0.5f, biped));
         STEP_LEFT = builder.nextAccessor("biped/skill/enderstep_left", (acessor)-> new DodgeAnimation(0.1f, acessor, 0.5f, 0.5f, biped));
         STEP_RIGHT = builder.nextAccessor("biped/skill/enderstep_right", (acessor)-> new DodgeAnimation(0.1f, acessor, 0.5f, 0.5f, biped));

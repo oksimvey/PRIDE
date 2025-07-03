@@ -91,17 +91,11 @@ public class ItemStackUtils {
         return CapabilityItem.Styles.COMMON;
     }
 
-    public static float getWeaponWeight(Entity ent, InteractionHand hand, EquipmentSlot slot) {
-        if (ent != null) {
-            if (ent instanceof LivingEntity living) {
-                ItemStack itemStack;
-                if (hand == InteractionHand.MAIN_HAND) {
-                    itemStack = living.getMainHandItem();
-                } else itemStack = living.getOffhandItem();
-                WeaponData weaponData = ServerDataManager.getWeaponData(itemStack);
+    public static float getWeaponWeight(ItemStack item) {
+        if (item != null) {
+                WeaponData weaponData = ServerDataManager.getWeaponData(item);
                 if (weaponData != null) {
                     return  weaponData.getWeight();
-                }
             }
         }
         return 0;

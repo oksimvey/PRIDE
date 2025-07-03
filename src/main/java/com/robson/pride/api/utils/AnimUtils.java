@@ -1,7 +1,5 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.utils.math.PrideVec3f;
-import com.robson.pride.registries.ItemsRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -9,23 +7,17 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.animation.AnimationManager;
-import yesman.epicfight.api.animation.Joint;
 import yesman.epicfight.api.animation.LivingMotions;
-import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.DynamicAnimation;
 import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.client.animation.ClientAnimator;
-import yesman.epicfight.api.utils.math.OpenMatrix4f;
-import yesman.epicfight.network.server.SPMoveAndPlayAnimation;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.HumanoidMobPatch;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.damagesource.StunType;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -33,6 +25,15 @@ import static com.robson.pride.api.mechanics.PerilousAttack.perilousParticle;
 import static com.robson.pride.api.mechanics.PerilousAttack.playPerilous;
 
 public class AnimUtils {
+
+    public static void rotatePlayer(Player player, float degrees){
+        if (player != null){
+            PlayerPatch<?> playerPatch = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
+            if (playerPatch != null){
+                playerPatch.setModelYRot(Minecraft.getInstance().gameRenderer.getMainCamera().getYRot() + degrees, true);
+            }
+        }
+    }
 
     public static void playAnim(Entity ent, AnimationManager.AnimationAccessor animation, float convert) {
         TimerUtil.schedule(() -> {

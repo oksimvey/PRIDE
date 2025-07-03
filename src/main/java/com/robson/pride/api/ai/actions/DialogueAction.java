@@ -35,7 +35,7 @@ public class DialogueAction extends ActionBase {
                float volumeMultiplier = 5;
                if (this.sound != null && !this.sound.isEmpty()){
                    volumeMultiplier *= this.volume;
-                   PlaySoundUtils.playNonRegisteredSound(ent.getOriginal(), this.sound, volumeMultiplier, 1);
+                   PlaySoundUtils.playSoundByString(ent.getOriginal(), this.sound, volumeMultiplier, 1);
                }
               if (ent.getOriginal().distanceTo(player) < ent.getOriginal().getBbHeight() * volumeMultiplier) {
                    ParticleUtils.spawnStringParticle(ent.getOriginal(), this.subtitle, StringParticle.StringParticleTypes.WHITE, duration / 50 - 1);
