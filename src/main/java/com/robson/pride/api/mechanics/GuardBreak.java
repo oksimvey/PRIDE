@@ -44,7 +44,6 @@ public interface GuardBreak {
     }
 
     static void onVulnerableDamage(LivingEntity living) {
-        AnimUtils.playAnim(living, Animations.BIPED_HIT_SHORT, 1);
         PlaySoundUtils.playSoundByString(living, "pride:execution", 1, 1);
         EXECUTING.remove(living);
     }

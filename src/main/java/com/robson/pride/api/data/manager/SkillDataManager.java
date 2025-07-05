@@ -1,8 +1,7 @@
 package com.robson.pride.api.data.manager;
 
 import com.robson.pride.api.data.types.DurationSkillData;
-import com.robson.pride.api.data.types.WeaponSkillData;
-import com.robson.pride.api.mechanics.perilous.PerilousType;
+import com.robson.pride.api.mechanics.PerilousType;
 import com.robson.pride.skills.special.GuardSkill;
 import net.minecraft.world.entity.LivingEntity;
 

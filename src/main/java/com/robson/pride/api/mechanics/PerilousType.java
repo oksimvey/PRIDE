@@ -1,4 +1,4 @@
-package com.robson.pride.api.mechanics.perilous;
+package com.robson.pride.api.mechanics;
 
 public enum PerilousType {
     PIERCE_ONE_HAND,

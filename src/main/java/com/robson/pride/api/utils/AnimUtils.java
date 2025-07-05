@@ -7,7 +7,6 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.animation.AnimationManager;
-import yesman.epicfight.api.animation.Joint;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.DynamicAnimation;
 import yesman.epicfight.api.animation.types.EntityState;
@@ -26,19 +25,13 @@ import static com.robson.pride.api.mechanics.PerilousAttack.playPerilous;
 
 public interface AnimUtils {
 
-    static void rotateToEntity(LivingEntity ent, Entity target) {
+    static void rotateToEntity(Entity ent, Entity target) {
         if (ent != null && target != null) {
             LivingEntityPatch<?> livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (livingEntityPatch != null) {
                 livingEntityPatch.rotateTo(target, 1000, false);
                 livingEntityPatch.updateEntityState();
             }
-        }
-    }
-
-    static void traceEntityOnEntityJoint(LivingEntity ent, Entity targetToTrace, Joint joint) {
-        if (ent != null && targetToTrace != null && joint != null){
-            ArmatureUtils.getRawJoint(Minecraft.getInstance().player, ent, joint);
         }
     }
 
@@ -198,14 +191,6 @@ public interface AnimUtils {
             return livingent.getEntityState().attacking();
         }
         return false;
-    }
-
-    static void rotateToEntity(Entity ent1, Entity ent2) {
-        LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent1, LivingEntityPatch.class);
-        if (livingEntityPatch != null && ent2 != null) {
-            livingEntityPatch.rotateTo(ent2, 1000, false);
-            livingEntityPatch.updateEntityState();
-        }
     }
 
     static void cancelMotion(Entity ent) {

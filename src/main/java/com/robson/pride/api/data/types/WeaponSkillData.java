@@ -3,7 +3,7 @@ package com.robson.pride.api.data.types;
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.mechanics.PerilousAttack;
-import com.robson.pride.api.mechanics.perilous.PerilousType;
+import com.robson.pride.api.mechanics.PerilousType;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.ManaUtils;

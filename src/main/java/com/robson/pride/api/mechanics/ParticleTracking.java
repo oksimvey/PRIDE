@@ -87,6 +87,17 @@ public class ParticleTracking {
         return new Vec3f((ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F, (ThreadLocalRandom.current().nextFloat() - 0.3F) * 0.3F, (ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F);
     }
 
+    public static Vec3f getAABBHalf(ItemStack item, Entity ent) {
+        if (item != null && ent != null) {
+            GenericData data = ServerDataManager.getGenericData(item);
+            if (data != null) {
+                Matrix2f collider = data.getCollider();
+                return new Vec3f(collider.x1() + collider.x0(), collider.y1() + collider.y0(), (collider.z1() / 2) + collider.z0());
+            }
+        }
+        return new Vec3f((ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F, (ThreadLocalRandom.current().nextFloat() - 0.3F) * 0.3F, (ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F);
+    }
+
     public static Vec3f getAABBForImbuementDivided(ItemStack item, Entity ent, float dx, float dy, float dz){
         if (item != null && ent != null) {
             GenericData data = ServerDataManager.getGenericData(item);

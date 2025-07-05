@@ -1,8 +1,10 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.math.BezierCurvef;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.PrideVec3f;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -89,6 +91,22 @@ public class ArmatureUtils {
             }
         }
         return list;
+    }
+
+    public static void traceEntityOnEntityJoint(LivingEntity ent, Entity targetToTrace, Joint toTeleportJoint, Joint targetjoint, boolean shouldrotate, boolean changey, int interval, int maxtries) {
+        LoopUtils.loopByTimes(i -> {
+            if (ent != null && targetToTrace != null && targetjoint != null && toTeleportJoint != null) {
+                if (shouldrotate) {
+                    AnimUtils.rotateToEntity(targetToTrace, ent);
+                }
+                PrideVec3f toteleport = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, ParticleTracking.getAABBHalf(ent.getMainHandItem(), ent), toTeleportJoint);
+                PrideVec3f teleportoffset = ArmatureUtils.getRawJoint(Minecraft.getInstance().player, targetToTrace, targetjoint);
+                if (toteleport != null && teleportoffset != null) {
+                    Vec3 pos = toteleport.toVec3().add(teleportoffset.toVec3());
+                    targetToTrace.teleportTo(pos.x, ent.getY(), pos.z);
+                }
+            }
+        }, maxtries, interval);
     }
 
     public class SlashParticleParameters {

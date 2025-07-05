@@ -1,10 +1,11 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.mechanics.GuardBreak;
-import com.robson.pride.api.utils.AnimUtils;
-import com.robson.pride.api.utils.math.PrideVec2f;
+import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.registries.AnimationsRegister;
-import net.minecraft.world.phys.Vec3;
+import yesman.epicfight.api.animation.AnimationManager;
+import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
@@ -14,10 +15,20 @@ public class OnAttackStartEvent {
         if (entitypatch != null && entitypatch.getTarget() != null) {
             LivingEntityPatch<?> target = EpicFightCapabilities.getEntityPatch(entitypatch.getTarget(), LivingEntityPatch.class);
             if (target != null && GuardBreak.isNeutralized(target.getOriginal())) {
-                PrideVec2f vec2f = PrideVec2f.toPlaneVector(target.getOriginal().getLookAngle()).normalize().scale(target.getOriginal().getBbWidth() + 1);
-                Vec3 pos = target.getOriginal().position().add(vec2f.x(), 0, vec2f.y());
-                entitypatch.getOriginal().teleportTo(pos.x, pos.y, pos.z);
-                AnimUtils.playAnim(entitypatch.getOriginal(), AnimationsRegister.EXECUTE, 0);
+                GuardBreak.EXECUTING.add(entitypatch.getOriginal());
+                AnimationManager.AnimationAccessor<? extends StaticAnimation> motion = AnimationsRegister.EXECUTE;
+                int duration = (int) ((motion.get().getTotalTime() / motion.get().getPlaySpeed(entitypatch, motion.get())) * 50f);
+                ArmatureUtils.traceEntityOnEntityJoint(
+                        entitypatch.getOriginal(),
+                        target.getOriginal(),
+                        Armatures.BIPED.get().toolR,
+                        Armatures.BIPED.get().rootJoint,
+                        true,
+                        false,
+                        100,
+                        duration
+                );
+                entitypatch.playAnimationSynchronized(motion, 0);
             }
         }
     }

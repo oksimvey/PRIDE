@@ -1,14 +1,11 @@
 package com.robson.pride.skills.special;
 
-import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.data.types.DurationSkillData;
-import com.robson.pride.api.data.types.WeaponSkillData;
-import com.robson.pride.api.mechanics.perilous.PerilousType;
+import com.robson.pride.api.mechanics.PerilousType;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 

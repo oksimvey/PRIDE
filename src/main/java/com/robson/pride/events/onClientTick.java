@@ -80,7 +80,7 @@ public class onClientTick {
 
     @SubscribeEvent
     public static void onRenderPlayer(RenderPlayerEvent.Pre event) {
-        if (event != null && playerStack != event.getPoseStack() && playerBuffer != event.getMultiBufferSource()) {
+        if ( playerStack != event.getPoseStack() && playerBuffer != event.getMultiBufferSource()) {
             playerBuffer = event.getMultiBufferSource();
             playerStack = event.getPoseStack();
         }

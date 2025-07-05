@@ -1,6 +1,6 @@
 package com.robson.pride.skills.special;
 
-import com.robson.pride.api.mechanics.perilous.PerilousType;
+import com.robson.pride.api.mechanics.PerilousType;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.entity.spells.ExtendedWitherSkull;
