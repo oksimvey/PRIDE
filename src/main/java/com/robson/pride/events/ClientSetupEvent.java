@@ -51,7 +51,7 @@ public class ClientSetupEvent {
 
     @SubscribeEvent
     public static void replaceItemModels(ModelEvent.ModifyBakingResult event) {
-        ModelResourceLocation key = new ModelResourceLocation(new ResourceLocation("pride:weapon"), "inventory");
+        ModelResourceLocation key = new ModelResourceLocation(new ResourceLocation("pride:item"), "inventory");
         event.getModels().compute(key, (k, oldModel) -> new CustomItemModelBase(oldModel, event.getModelBakery()));
     }
 }

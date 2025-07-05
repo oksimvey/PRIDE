@@ -81,7 +81,7 @@ public class WeaponData extends GenericData {
         builder.texture(info.texturePath());
         builder.time(info.startTime(), info.endTime());
         builder.startPos(new Vec3(0, 0, getCollider().z0()));
-        builder.endPos(new Vec3(0, 0.2f, (-getCollider().z1() * (getCollider().z1() - 1.75))- getCollider().z0()));
+        builder.endPos(new Vec3(0, 0.2f, (-getCollider().z1() + getCollider().z0())));
         builder.r(this.trailcolor.r());
         builder.g(this.trailcolor.g());
         builder.b(this.trailcolor.b());

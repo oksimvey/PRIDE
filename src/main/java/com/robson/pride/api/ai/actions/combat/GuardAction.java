@@ -1,6 +1,6 @@
-package com.robson.pride.api.ai.actions;
+package com.robson.pride.api.ai.actions.combat;
 
-import com.robson.pride.api.ai.combat.ActionBase;
+import com.robson.pride.api.ai.actions.ActionBase;
 import com.robson.pride.api.entity.PrideMobPatch;
 
 public class GuardAction extends ActionBase {
@@ -14,7 +14,7 @@ public class GuardAction extends ActionBase {
        this.canParry = canParry;
     }
 
-    protected void start(PrideMobPatch<?> ent) {
+    public void start(PrideMobPatch<?> ent) {
 
     }
 }

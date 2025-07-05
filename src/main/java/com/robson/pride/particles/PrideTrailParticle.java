@@ -35,6 +35,7 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
     protected final List<AbstractTrailParticle.TrailEdge> invisibleTrailEdges;
     protected Pose lastPose;
     protected JointTransform lastTransform;
+    protected TrailInfo trailInfo;
 
     public PrideTrailParticle(ClientLevel level, LivingEntityPatch<?> owner, Joint joint, AssetAccessor<? extends StaticAnimation> animation, TrailInfo trailInfo) {
         super(level, owner, trailInfo);
@@ -47,6 +48,7 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
         }
         if (item.getItem() instanceof CustomItem && ServerDataManager.getWeaponData(item) != null){
             trailInfo = ServerDataManager.getWeaponData(item).getTrailInfo(trailInfo);
+            this.trailInfo = trailInfo;
         }
         int r = (int) trailInfo.rCol();
         int g = (int) trailInfo.gCol();

@@ -16,8 +16,15 @@ import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 public class CustomTooltips {
 
+    public static void hideGenericTooltips(ItemTooltipEvent event) {
+        if (event == null) {
+            return;
+        }
+        event.getToolTip().removeIf(line -> line.getString().contains("Hit") || line.getString().contains("Attack"));
+    }
+
     public static void deserializeWeaponTooltip(ItemStack item, WeaponData data, ItemTooltipEvent event) {
-        if (item != null && event != null && data != null && item.getTag() != null) {
+        if (item != null && data != null && item.getTag() != null) {
             byte index = 5;
             for (int i = 0; i < event.getToolTip().size(); i++) {
                 Component line = event.getToolTip().get(i);

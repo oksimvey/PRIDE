@@ -19,6 +19,9 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
+import yesman.epicfight.world.damagesource.StunType;
 
 @Mod.EventBusSubscriber
 public class EntityAttacked {
@@ -44,20 +47,27 @@ public class EntityAttacked {
     @SubscribeEvent
     public static void hurtEnt(LivingHurtEvent event) {
         if (event.getSource().getDirectEntity() != null && event.getSource().getEntity() != null) {
+            float damage = event.getAmount();
+            if (GuardBreak.isNeutralized(event.getEntity())) {
+                GuardBreak.onVulnerableDamage(event.getEntity());
+                damage *= 2;
+            }
             if (event.getSource().getDirectEntity() instanceof AbstractArrow) {
                 event.setAmount(event.getAmount() + AttributeUtils.getAttributeValue(event.getSource().getEntity(), "pride:arrow_power"));
             }
-            if (SkillDataManager.ACTIVE_WEAPON_SKILL.get(event.getEntity()) != null){
+            if (SkillDataManager.PERILOUS_MAP.get(event.getEntity()) != null){
                 event.setCanceled(true);
                 return;
             }
             if (event.getSource().getDirectEntity() instanceof LivingEntity living) {
                 if (SkillDataManager.ACTIVE_WEAPON_SKILL.get(living) != null){
-                    SkillDataManager.ACTIVE_WEAPON_SKILL.get(living).onHurt(living, event.getEntity(), event);
+                    WeaponSkillData data = ServerDataManager.getWeaponSkillData(SkillDataManager.ACTIVE_WEAPON_SKILL.get(living));
+                   if (data != null){
+                       data.onHurt(living, event.getEntity(), event);
+                   }
                 }
                 InteractionHand hand = ItemStackUtils.checkAttackingHand(living);
                 if (hand != null) {
-                    float damage = event.getAmount();
                     if (living instanceof Player player) {
                         if (hand == InteractionHand.MAIN_HAND) {
                             damage += AttributeModifiers.calculateModifier(player, player.getMainHandItem(), damage);

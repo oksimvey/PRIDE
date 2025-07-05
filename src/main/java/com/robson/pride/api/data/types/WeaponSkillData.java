@@ -44,10 +44,6 @@ public abstract class WeaponSkillData extends GenericData {
         return id;
     }
 
-    public PerilousType getPerilousType() {
-        return perilousType;
-    }
-
     public static String getModelLocation(byte element) {
         return switch (element) {
 
@@ -108,7 +104,8 @@ public abstract class WeaponSkillData extends GenericData {
 
     public void onExecution(LivingEntity ent, int currentAnim) {
         if (currentAnim == 0) {
-            SkillDataManager.ACTIVE_WEAPON_SKILL.put(ent, this);
+            SkillDataManager.ACTIVE_WEAPON_SKILL.put(ent, this.getId());
+            SkillDataManager.PERILOUS_MAP.put(ent, this.perilousType);
             this.motions = defineMotions(ent);
             if (TargetUtil.getTarget(ent) instanceof Player player) {
                 PerilousAttack.playPerilous(player);
@@ -122,6 +119,7 @@ public abstract class WeaponSkillData extends GenericData {
         }
         else if (ent != null) {
             SkillDataManager.ACTIVE_WEAPON_SKILL.remove(ent);
+            SkillDataManager.PERILOUS_MAP.remove(ent);
         }
     }
 }

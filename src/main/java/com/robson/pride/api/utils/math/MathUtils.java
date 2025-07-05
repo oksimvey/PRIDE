@@ -1,20 +1,24 @@
 package com.robson.pride.api.utils.math;
 
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.lwjgl.system.ThreadLocalUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public interface MathUtils {
 
-    Random random = new Random();
+    double GRAVITY_CONSTANT = -0.0784000015258789;
 
     float PIf = 3.141592f;
 
     static float getValueWithPercentageIncrease(double number, double percentage) {
+        ThreadLocalRandom.current();
         return (float) (number + (number * percentage / 100));
     }
 
@@ -24,7 +28,7 @@ public interface MathUtils {
 
 
     static int getRandomInt(int bound) {
-        return random.nextInt(bound);
+        return ThreadLocalRandom.current().nextInt(bound);
     }
 
     static float getTotalDistance(Vec3 vec1, Vec3 vec2) {

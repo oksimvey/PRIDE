@@ -2,6 +2,7 @@ package com.robson.pride.keybinding;
 
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.keybinding.BasicKey;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
 public class KeyGuard extends BasicKey {

@@ -2,7 +2,9 @@ package com.robson.pride.skills.special;
 
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.data.types.DurationSkillData;
+import com.robson.pride.api.mechanics.GuardBreak;
 import com.robson.pride.api.mechanics.ParticleTracking;
+import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.PrideVec3f;
@@ -109,7 +111,7 @@ public interface GuardSkill {
 
         @Override
         public void onAttacked(LivingEntity ent, LivingAttackEvent event) {
-            if (!canBlock(ent, event.getSource()) || (event.getSource().getDirectEntity() instanceof LivingEntity living && SkillDataManager.ACTIVE_WEAPON_SKILL.get(living) != null)){
+            if (!canBlock(ent, event.getSource()) || GuardBreak.isNeutralized(ent) || (event.getSource().getDirectEntity() instanceof LivingEntity living && SkillDataManager.PERILOUS_MAP.get(living) != null)){
                 onEnd(ent);
                 return;
             }
@@ -132,10 +134,7 @@ public interface GuardSkill {
                         hitMotion = GUARD_HIT_MOTIONS.getOrDefault(currerntmotion.get(), Animations.SWORD_GUARD_HIT);
                     }
                 }
-                else hitMotion = switch (ent.getUsedItemHand()){
-                    case MAIN_HAND -> Animations.BIPED_HIT_SHIELD.get().original;
-                    case OFF_HAND -> Animations.BIPED_HIT_SHIELD.get().mirror;
-                };
+                else hitMotion = Animations.BIPED_HIT_SHIELD;
                 onBlock(entityPatch, event, hitMotion, false, isshield);
             };
         }
@@ -183,10 +182,8 @@ public interface GuardSkill {
                 }
                String sound = isshield ? isParry ? "pride:shieldparry" : "minecraft:item.shield.block" : "epicfight:entity.hit.clash";
                 PlaySoundUtils.playSoundByString(ent.getOriginal(), sound, scale, 1);
-                Joint joint = switch (ent.getOriginal().getUsedItemHand()){
-                    case MAIN_HAND -> Armatures.BIPED.get().toolR;
-                    case OFF_HAND -> Armatures.BIPED.get().toolL;
-                };
+                Joint joint = ent.getOriginal().getUsedItemHand() == InteractionHand.OFF_HAND || motion == Animations.SWORD_GUARD_ACTIVE_HIT3 ?
+                        Armatures.BIPED.get().toolL : Armatures.BIPED.get().toolR;
                 ent.playAnimationSynchronized(motion, 0);
                 guardStamina(ent, impact, isParry, isshield);
                 if (isParry){
@@ -215,7 +212,7 @@ public interface GuardSkill {
                if (weightinstance != null){
                    weight = (float) weightinstance.getValue();
                }
-               ent.knockBackEntity(dmgent.position(), MathUtils.getValueWithPercentageDecrease(impact, weight));
+               ent.knockBackEntity(dmgent.position(), impact - (0.005f * weight));
             }
         }
 

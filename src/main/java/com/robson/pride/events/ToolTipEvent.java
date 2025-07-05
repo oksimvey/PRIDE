@@ -16,5 +16,8 @@ public class ToolTipEvent {
         if (ServerDataManager.getWeaponData(item) != null) {
             CustomTooltips.deserializeWeaponTooltip(item, ServerDataManager.getWeaponData(item), event);
         }
+        else if (ServerDataManager.getGenericData(item) != null) {
+            CustomTooltips.hideGenericTooltips(event);
+        }
     }
 }

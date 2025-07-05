@@ -1,5 +1,7 @@
-package com.robson.pride.api.ai.combat;
+package com.robson.pride.api.ai.actions.builder;
 
+import com.robson.pride.api.ai.actions.ActionBase;
+import com.robson.pride.api.ai.conditions.Condition;
 import com.robson.pride.api.entity.PrideMobPatch;
 
 import java.util.List;

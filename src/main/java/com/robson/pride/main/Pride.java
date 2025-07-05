@@ -30,7 +30,7 @@ public class Pride {
         AttributeRegister.register(bus);
         SchoolRegister.register(bus);
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(KeyRegister::registerKeyMappings);
+        bus.addListener(KeyRegister::registerKeyMappings);
         ParticleRegister.PARTICLES.register(bus);
         WeaponCategory.ENUM_MANAGER.registerEnumCls(MOD_ID, WeaponCategoriesEnum.class);
         Style.ENUM_MANAGER.registerEnumCls(Pride.MOD_ID, PrideStyles.class);

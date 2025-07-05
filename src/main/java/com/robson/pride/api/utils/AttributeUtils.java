@@ -42,27 +42,22 @@ public class AttributeUtils {
         return 0f;
     }
 
-    public static void addModifier(LivingEntity ent, String attributename, String uuid, double amount, AttributeModifier.Operation operation) {
+    public static void addModifier(LivingEntity ent, Attribute attribute, String uuid, double amount, AttributeModifier.Operation operation) {
         if (ent != null) {
-            Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attributename));
-            if (attribute != null) {
-                AttributeInstance attributeInstance = ent.getAttribute(attribute);
-                if (attributeInstance != null) {
-                    removeModifier(ent, attributename, uuid);
-                    attributeInstance.addPermanentModifier(((new AttributeModifier(UUID.fromString(uuid), "modifier", amount, operation))));
-                }
+            AttributeInstance attributeInstance = ent.getAttribute(attribute);
+            if (attributeInstance != null) {
+                removeModifier(ent, attribute, uuid);
+                attributeInstance.addPermanentModifier(((new AttributeModifier(UUID.fromString(uuid), "modifier", amount, operation))));
             }
         }
     }
 
-    public static void removeModifier(LivingEntity ent, String attributename, String uuid) {
+    public static void removeModifier(LivingEntity ent, Attribute attribute, String uuid) {
         if (ent != null) {
-            Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attributename));
-            if (attribute != null) {
-                AttributeInstance attributeInstance = ent.getAttribute(attribute);
-                if (attributeInstance != null) {
-                    attributeInstance.removePermanentModifier(UUID.fromString(uuid));
-                }
+            AttributeInstance attributeInstance = ent.getAttribute(attribute);
+            if (attributeInstance != null) {
+                attributeInstance.removePermanentModifier(UUID.fromString(uuid));
+
             }
         }
     }

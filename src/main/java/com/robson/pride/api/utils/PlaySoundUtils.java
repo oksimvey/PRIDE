@@ -21,9 +21,11 @@ public class PlaySoundUtils {
 
     public static void playSoundByString(Entity ent, String soundid, float volume, float pitch) {
         if (ent != null) {
-            Holder<SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation(soundid)));
-            if (Minecraft.getInstance().level != null)
-                Minecraft.getInstance().level.playSound(Minecraft.getInstance().player, ent, holder.get(), SoundSource.NEUTRAL, volume, pitch);
+            SoundEvent event = SoundEvent.createVariableRangeEvent(ResourceLocation.parse(soundid));
+                Holder<SoundEvent> holder = Holder.direct(SoundEvent.createVariableRangeEvent(new ResourceLocation(soundid)));
+                if (Minecraft.getInstance().level != null) {
+                    Minecraft.getInstance().level.playSound(Minecraft.getInstance().player, ent, holder.get(), SoundSource.NEUTRAL, volume, pitch);
+                }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.robson.pride.api.ai.combat;
+package com.robson.pride.api.ai.conditions;
 
 import com.robson.pride.api.entity.PrideMobPatch;
 import com.robson.pride.api.utils.TimerUtil;

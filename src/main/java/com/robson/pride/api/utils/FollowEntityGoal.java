@@ -20,7 +20,7 @@ public class FollowEntityGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return target != null && !mob.isPassenger();
+        return target != null && target.isAlive() && mob != null && mob.isAlive() && !mob.isPassenger();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.robson.pride.api.ai.combat;
+package com.robson.pride.api.ai.actions.builder;
 
 import com.robson.pride.api.entity.PrideMobPatch;
 

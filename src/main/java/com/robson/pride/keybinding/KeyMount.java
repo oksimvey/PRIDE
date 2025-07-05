@@ -6,14 +6,20 @@ import com.robson.pride.api.keybinding.BasicKey;
 import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.FollowEntityGoal;
 import com.robson.pride.api.utils.PlaySoundUtils;
-import com.robson.pride.api.utils.math.BlockUtils;
+import com.robson.pride.api.utils.BlockUtils;
+import com.robson.pride.api.utils.math.PrideVec3f;
 import com.robson.pride.registries.AnimationsRegister;
+import com.robson.pride.skills.special.GuardSkill;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import yesman.epicfight.gameasset.Animations;
+import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class KeyMount extends BasicKey {
@@ -32,12 +38,12 @@ public class KeyMount extends BasicKey {
                 Entity mount = serverlevel.getEntity(UUID.fromString(data.getMount()));
                 if (mount instanceof PathfinderMob mountl && !mountl.level().isClientSide) {
                     if (mountl.distanceTo(player) > 20) {
-                        Vec3 vec3 = BlockUtils.randomDistantPos(player.position(), 15, 20);
+                        Vec3 vec3 = BlockUtils.tryToFindOwner(PrideVec3f.fromVec3(mountl.position()), PrideVec3f.fromVec3(player.position()), 15, 20);
                         int tries = 0;
                         int height = (int) Math.ceil(mountl.getBbHeight());
                         int radius = (int) Math.ceil(mountl.getBbWidth());
                         while (tries < 10 && !BlockUtils.isValidVec3(player.level(), BlockUtils.getValidVec3Height(player.level(), vec3, height), radius)){
-                            vec3 = BlockUtils.randomDistantPos(player.position(), 15, 20);
+                            vec3 = BlockUtils.tryToFindOwner(PrideVec3f.fromVec3(mountl.position()), PrideVec3f.fromVec3(player.position()), 15, 20);
                             tries++;
                         }
                         if (BlockUtils.isValidVec3(player.level(), BlockUtils.getValidVec3Height(player.level(), vec3, height), radius)) {

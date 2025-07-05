@@ -2,6 +2,7 @@ package com.robson.pride.api.data.manager;
 
 import com.robson.pride.api.data.types.DurationSkillData;
 import com.robson.pride.api.data.types.WeaponSkillData;
+import com.robson.pride.api.mechanics.perilous.PerilousType;
 import com.robson.pride.skills.special.GuardSkill;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -11,9 +12,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public interface SkillDataManager extends ServerDataManagerImpl<DurationSkillData> {
 
+    List<LivingEntity> PREVENTING_NORMAL_WEAPON_IMBUEMENT = new ArrayList<>();
+
     ConcurrentHashMap<LivingEntity, List<Byte>> ACTIVE_SKILLS = new ConcurrentHashMap<>();
 
-    ConcurrentHashMap<LivingEntity, WeaponSkillData> ACTIVE_WEAPON_SKILL = new ConcurrentHashMap<>();
+    ConcurrentHashMap<LivingEntity, Short> ACTIVE_WEAPON_SKILL = new ConcurrentHashMap<>();
+
+    ConcurrentHashMap<LivingEntity, PerilousType> PERILOUS_MAP = new ConcurrentHashMap<>();
 
     byte GUARD = 1;
 
@@ -39,9 +44,11 @@ public interface SkillDataManager extends ServerDataManagerImpl<DurationSkillDat
    static void removeSkill(LivingEntity ent, byte data) {
        if (ent != null){
            List<Byte> list = getActiveSkills(ent);
-           list.remove((Byte) data);
-           INSTANCE.getByID(data).onEnd(ent);
-           ACTIVE_SKILLS.put(ent, list);
+           if (list.contains(data) && INSTANCE.getByID(data) != null) {
+               list.remove((Byte) data);
+               INSTANCE.getByID(data).onEnd(ent);
+               ACTIVE_SKILLS.put(ent, list);
+           }
        }
    }
 

@@ -10,10 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
@@ -39,7 +36,6 @@ public class CustomItem extends SwordItem {
             public int getLevel() {
                 return 0;
             }
-
 
             public int getEnchantmentValue() {
                 return 2;
@@ -74,7 +70,9 @@ public class CustomItem extends SwordItem {
             entity.setPos(pos.above().getCenter());
             worldIn.addFreshEntity(entity);
             MobData data = ServerDataManager.getMobData(entity);
-            if (data != null) data.onSpawn(entity);
+            if (data != null){
+                data.equip(entity);
+            }
         }
         return InteractionResult.CONSUME;
     }

@@ -19,6 +19,7 @@ import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public interface ParticleUtils {
@@ -39,7 +40,7 @@ public interface ParticleUtils {
         return Minecraft.getInstance().particleEngine.createParticle(particle, x, y, z, dx, dy, dz);
     }
 
-    static Particle spawnStringParticle(Entity ent, String text, StringParticle.StringParticleTypes type, int lifetime) {
+    static StringParticle spawnStringParticle(Entity ent, String text, StringParticle.StringParticleTypes type, int lifetime) {
         if (ent != null) {
             Vec3 pos = new Vec3(new Random().nextFloat() - ent.getBbWidth() * ent.getBbWidth(), ent.getBbHeight() * 1.25, new Random().nextFloat() - ent.getBbWidth() * ent.getBbWidth());
             StringParticle particle = new StringParticle(Minecraft.getInstance().level, pos.x + ent.getX(), pos.y + ent.getY(), pos.z + ent.getZ(), 0, 0, type.ordinal());
@@ -90,9 +91,9 @@ public interface ParticleUtils {
                     PrideVec3f vec = ArmatureUtils.getJointWithTranslation(renderer, ent, AABB, joint);
                     if (vec != null) {
                        renderer.level().addParticle(particle, vec.x(), vec.y(), vec.z(),
-                                ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.x,
-                                ((new Random()).nextFloat() - 0.5F) * 0.02F,
-                                ((new Random()).nextFloat() - 0.5F) * 0.02F + delta.z);
+                                (ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.02F + delta.x,
+                                (ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.02F,
+                                (ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.02F + delta.z);
                     }
                     else break;
                 }

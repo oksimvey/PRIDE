@@ -37,10 +37,10 @@ public abstract class GenericMikiri extends DurationSkillData {
 
     @Override
     public void onAttacked(LivingEntity ent, LivingAttackEvent event) {
-        if (event.getSource().getDirectEntity() instanceof LivingEntity living && SkillDataManager.ACTIVE_WEAPON_SKILL.get(living) != null) {
-            WeaponSkillData data = SkillDataManager.ACTIVE_WEAPON_SKILL.get(living);
-            if (data != null && counterablePerilous.contains(data.getPerilousType())) {
-                onPerilousCountered(ent, living, data.getPerilousType(), event);
+        if (event.getSource().getDirectEntity() instanceof LivingEntity living && SkillDataManager.PERILOUS_MAP.get(living) != null) {
+           PerilousType type = SkillDataManager.PERILOUS_MAP.get(living);
+            if (type != null && counterablePerilous.contains(type)) {
+                onPerilousCountered(ent, living, type, event);
             }
         }
         if (isCounterableEntity(event.getSource().getDirectEntity())){

@@ -18,6 +18,7 @@ import yesman.epicfight.gameasset.Armatures;
 
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class ParticleTracking {
@@ -80,10 +81,10 @@ public class ParticleTracking {
             GenericData data = ServerDataManager.getGenericData(item);
             if (data != null) {
                 Matrix2f collider = data.getCollider();
-                return new Vec3f((float) (((new Random()).nextFloat() + collider.x0()) * collider.x1()), (float) (((new Random()).nextFloat() + collider.y0()) * collider.y1() + (collider.y1() / 10)), (float) (-((new Random()).nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z0()));
+                return new Vec3f((float) ((ThreadLocalRandom.current().nextFloat() + collider.x0()) * collider.x1()), (float) ((ThreadLocalRandom.current().nextFloat() + collider.y0()) * collider.y1() + (collider.y1() / 10)), (float) (-(ThreadLocalRandom.current().nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z0()));
             }
         }
-        return new Vec3f(((new Random()).nextFloat() - 0.5F) * 0.2F, ((new Random()).nextFloat() - 0.3F) * 0.3F, ((new Random()).nextFloat() - 0.5F) * 0.2F);
+        return new Vec3f((ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F, (ThreadLocalRandom.current().nextFloat() - 0.3F) * 0.3F, (ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F);
     }
 
     public static Vec3f getAABBForImbuementDivided(ItemStack item, Entity ent, float dx, float dy, float dz){
@@ -91,9 +92,9 @@ public class ParticleTracking {
             GenericData data = ServerDataManager.getGenericData(item);
             if (data != null) {
                 Matrix2f collider = data.getCollider();
-                return new Vec3f((float) (((new Random()).nextFloat() + (collider.x1() / dx)) * collider.x1()), (float) (((new Random()).nextFloat() +(collider.y1() / dy ))* collider.y1() + (collider.y1() / 10)), (float) (-((new Random()).nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z1() / dz));
+                return new Vec3f((float) ((ThreadLocalRandom.current().nextFloat() + (collider.x1() / dx)) * collider.x1()), (float) ((ThreadLocalRandom.current().nextFloat() +(collider.y1() / dy ))* collider.y1() + (collider.y1() / 10)), (float) (-(ThreadLocalRandom.current().nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z1() / dz));
             }
         }
-        return new Vec3f(((new Random()).nextFloat() - 0.5F) * 0.2F, ((new Random()).nextFloat() - 0.3F) * 0.3F, ((new Random()).nextFloat() - 0.5F) * 0.2F);
+        return new Vec3f((ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F, (ThreadLocalRandom.current().nextFloat() - 0.3F) * 0.3F, (ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F);
     }
 }

@@ -1,6 +1,6 @@
-package com.robson.pride.api.ai.actions;
+package com.robson.pride.api.ai.actions.interaction;
 
-import com.robson.pride.api.ai.combat.ActionBase;
+import com.robson.pride.api.ai.actions.ActionBase;
 import com.robson.pride.api.entity.PrideMobPatch;
 import com.robson.pride.api.utils.AnimUtils;
 import yesman.epicfight.api.animation.AnimationManager;
@@ -21,7 +21,7 @@ public class PlayAnimationsAction extends ActionBase {
         this.convert = convert;
     }
 
-    protected void start(PrideMobPatch<?> ent) {
+    public void start(PrideMobPatch<?> ent) {
         if (ent != null) {
             if (currentAnimation >= animations.size()){
                 currentAnimation = 0;

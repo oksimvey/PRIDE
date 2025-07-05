@@ -1,5 +1,6 @@
 package com.robson.pride.mixins;
 
+import com.robson.pride.api.mechanics.GuardBreak;
 import com.robson.pride.events.OnAttackStartEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -22,16 +23,15 @@ import java.util.function.BiFunction;
 @Mixin(AttackAnimation.class)
 public class AttackAnimationMixin extends ActionAnimation {
 
-
     public AttackAnimationMixin(float transitionTime, AnimationManager.AnimationAccessor<? extends ActionAnimation> accessor, AssetAccessor<? extends Armature> armature) {
         super(transitionTime, accessor, armature);
     }
 
     @Inject(at = @At(value = "TAIL"), method = "begin(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)V", remap = false)
     public void callEvent(LivingEntityPatch<?> entitypatch, CallbackInfo ci) {
-        AttackAnimation animation = (AttackAnimation)(Object) this;
-        if (entitypatch.getOriginal() != null && !entitypatch.getOriginal().level().isClientSide) {
-            OnAttackStartEvent.onAttackStart(entitypatch, animation);
+        if (entitypatch != null && !entitypatch.getOriginal().level().isClientSide && !GuardBreak.EXECUTING.contains(entitypatch.getOriginal())) {
+            GuardBreak.EXECUTING.add(entitypatch.getOriginal());
+            OnAttackStartEvent.onAttackStart(entitypatch);
         }
     }
 
@@ -44,8 +44,6 @@ public class AttackAnimationMixin extends ActionAnimation {
         HitParticleType particle =  attacker.getWeaponHitParticle(phase.hand);
         particle.spawnParticleWithArgument(world, (BiFunction)null, (BiFunction)null, hit, attacker.getOriginal());
     }
-
-
 
     /**
      * @author

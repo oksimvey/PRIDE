@@ -1,12 +1,24 @@
 package com.robson.pride.registries;
 
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.property.AnimationEvent;
 import yesman.epicfight.api.animation.property.AnimationProperty;
+import yesman.epicfight.api.animation.property.MoveCoordFunctions;
 import yesman.epicfight.api.animation.types.*;
+import yesman.epicfight.api.utils.TimePairList;
+import yesman.epicfight.api.utils.math.ValueModifier;
+import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.Armatures;
+import yesman.epicfight.gameasset.ColliderPreset;
+import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.model.armature.HumanoidArmature;
+import yesman.epicfight.particle.EpicFightParticles;
+import yesman.epicfight.world.damagesource.ExtraDamageInstance;
+import yesman.epicfight.world.damagesource.StunType;
+
+import java.util.Set;
 
 public class AnimationsRegister {
 
@@ -91,6 +103,6 @@ public class AnimationsRegister {
         PROJECTILE_COUNTER = builder.nextAccessor("biped/skill/projectile_counter" , (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
         DIVINE_RESURRECTION = builder.nextAccessor("biped/skill/divine_resurrection" , (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
        ELECTROCUTATE = builder.nextAccessor("biped/skill/electrocuted" , (acessor)-> new LongHitAnimation(0.05f, acessor, biped));
-       
+       EXECUTE =  builder.nextAccessor("biped/skill/execute", (accessor) -> (new BasicAttackAnimation(0.01F, accessor, Armatures.BIPED, (new AttackAnimation.Phase(0.0F, 0.75F, 0.51F, 0.95F, 3.1F, ((HumanoidArmature)Armatures.BIPED.get()).toolR, null)).addProperty(AnimationProperty.AttackPhaseProperty.DAMAGE_MODIFIER, ValueModifier.multiplier(0.1F)), (new AttackAnimation.Phase(3.0F, 3.05F, 3.15F, 6.0F, Float.MAX_VALUE, ((HumanoidArmature)Armatures.BIPED.get()).rootJoint, null)).addProperty(AnimationProperty.AttackPhaseProperty.HIT_SOUND, (SoundEvent) EpicFightSounds.EVISCERATE.get()))).addProperty(AnimationProperty.ActionAnimationProperty.NO_GRAVITY_TIME, TimePairList.create(new float[]{0.0F, Float.MAX_VALUE})).addProperty(AnimationProperty.ActionAnimationProperty.STOP_MOVEMENT, true).addProperty(AnimationProperty.ActionAnimationProperty.MOVE_ON_LINK, false).addState(EntityState.MOVEMENT_LOCKED, true).addState(EntityState.TURNING_LOCKED, true).addState(EntityState.LOCKON_ROTATE, true).addState(EntityState.CAN_SKILL_EXECUTION, false).addState(EntityState.CAN_BASIC_ATTACK, false).addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, Animations.ReusableSources.CONSTANT_ONE));
     }
 }

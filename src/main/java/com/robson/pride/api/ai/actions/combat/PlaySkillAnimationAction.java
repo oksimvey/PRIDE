@@ -1,6 +1,6 @@
-package com.robson.pride.api.ai.actions;
+package com.robson.pride.api.ai.actions.combat;
 
-import com.robson.pride.api.ai.combat.ActionBase;
+import com.robson.pride.api.ai.actions.ActionBase;
 import com.robson.pride.api.entity.PrideMobPatch;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.utils.AnimUtils;
@@ -19,7 +19,7 @@ public class PlaySkillAnimationAction extends ActionBase {
         this.animations = animations;
     }
 
-    protected void start(PrideMobPatch<?> ent) {
+    public void start(PrideMobPatch<?> ent) {
         if (ent != null && currentAnimation <= animations.size()) {
             SkillAnimation animation = animations.get(currentAnimation);
             if (animation != null) {
