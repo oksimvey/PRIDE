@@ -23,7 +23,7 @@ public class KeyGuard extends BasicKey {
                 true,
                 true,
                 100,
-                100
+                1000
         );
      }
 

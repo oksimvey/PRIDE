@@ -19,6 +19,14 @@
       }
     ]
   },
+  "japanese": {
+    "sounds": [
+      {
+        "name": "pride:musics/japanese",
+        "stream": false
+      }
+    ]
+  },
   "dry_fire": {
     "sounds": [
       {

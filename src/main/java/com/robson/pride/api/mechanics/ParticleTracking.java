@@ -92,7 +92,7 @@ public class ParticleTracking {
             GenericData data = ServerDataManager.getGenericData(item);
             if (data != null) {
                 Matrix2f collider = data.getCollider();
-                return new Vec3f(collider.x1() + collider.x0(), collider.y1() + collider.y0(), (collider.z1() / 2) + collider.z0());
+                return new Vec3f(0, 0, (collider.z1() / 2) + collider.z0());
             }
         }
         return new Vec3f((ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F, (ThreadLocalRandom.current().nextFloat() - 0.3F) * 0.3F, (ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F);

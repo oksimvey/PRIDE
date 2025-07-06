@@ -1,6 +1,7 @@
 package com.robson.pride.skills.special;
 
 import com.robson.pride.api.data.manager.SkillDataManager;
+import com.robson.pride.api.data.player.ClientSavedData;
 import com.robson.pride.api.data.types.DurationSkillData;
 import com.robson.pride.api.mechanics.GuardBreak;
 import com.robson.pride.api.mechanics.ParticleTracking;
@@ -195,6 +196,10 @@ public interface GuardSkill {
                     ParticleUtils.spawnParticle(EpicFightParticles.HIT_BLUNT.get(), vec, 0, 0, 0).scale(scale);
                 }
                 guardKnockBack(ent, event.getSource().getDirectEntity(), impact, isParry, isshield);
+                if (ent.getOriginal() instanceof Player player){
+                    int xp = (int) (isParry ? event.getAmount() * 2 : event.getAmount());
+                    ProgressionUtils.addXp(player, ClientSavedData.Endurance, xp);
+                }
             }
         }
 

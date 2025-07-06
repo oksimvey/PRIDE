@@ -9,6 +9,7 @@ import com.robson.pride.api.ai.conditions.DistanceCondition;
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.MobData;
 import com.robson.pride.api.data.types.MobTypeData;
+import com.robson.pride.api.data.types.ServerConstants;
 import com.robson.pride.api.entity.PrideMob;
 import com.robson.pride.api.item.CustomItem;
 import com.sun.tools.javac.Main;
@@ -39,7 +40,7 @@ public interface Ronin {
                     Map.entry(EquipmentSlot.MAINHAND, CustomItem.createItem(ServerDataManager.KURONAMI))
             )){};
 
-    MobTypeData DATA = new MobTypeData("Ronin", (byte) 0) {
+    MobTypeData DATA = new MobTypeData("Ronin", (byte) 0, ServerConstants.ASIAN_MUSIC, (byte) 1) {
 
         @Override
         public MobData getDataByVariant(byte variant) {

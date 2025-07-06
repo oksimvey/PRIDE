@@ -96,20 +96,23 @@ public class ArmatureUtils {
     public static void traceEntityOnEntityJoint(LivingEntity ent, Entity targetToTrace, Joint toTeleportJoint, Joint targetjoint, boolean shouldrotate, boolean changey, int interval, int maxtries) {
         LoopUtils.loopByTimes(i -> {
             if (ent != null && targetToTrace != null && targetjoint != null && toTeleportJoint != null) {
+                targetToTrace.setNoGravity(true);
                 if (shouldrotate) {
                     AnimUtils.rotateToEntity(targetToTrace, ent);
                 }
-                PrideVec3f toteleport = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, ParticleTracking.getAABBHalf(ent.getMainHandItem(), ent), toTeleportJoint);
                 PrideVec3f teleportoffset = ArmatureUtils.getRawJoint(Minecraft.getInstance().player, targetToTrace, targetjoint);
-                if (toteleport != null && teleportoffset != null) {
-                    Vec3 pos = toteleport.toVec3().add(teleportoffset.toVec3());
-                    targetToTrace.teleportTo(pos.x, ent.getY(), pos.z);
+                if (teleportoffset != null) {
+                    PrideVec3f toteleport = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, ParticleTracking.getAABBHalf(ent.getMainHandItem(), ent), toTeleportJoint);
+                    if (toteleport != null) {
+                        targetToTrace.teleportTo(toteleport.x(), ent.getY(), toteleport.z());
+                    }
                 }
             }
         }, maxtries, interval);
     }
 
     public class SlashParticleParameters {
+
         public final PrideVec3f pos;
 
         public final int time;
