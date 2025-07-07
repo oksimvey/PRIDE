@@ -1,4 +1,4 @@
-package com.robson.pride.entities;
+package com.robson.pride.entities.asian;
 
 import com.robson.pride.api.ai.actions.combat.ExecuteWeaponSkillAction;
 import com.robson.pride.api.ai.actions.interaction.PlayAnimationsAction;
@@ -7,12 +7,11 @@ import com.robson.pride.api.ai.actions.builder.ConditionalAction;
 import com.robson.pride.api.ai.conditions.CooldownCondition;
 import com.robson.pride.api.ai.conditions.DistanceCondition;
 import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.MobData;
-import com.robson.pride.api.data.types.MobTypeData;
-import com.robson.pride.api.data.types.ServerConstants;
-import com.robson.pride.api.entity.PrideMob;
+import com.robson.pride.api.data.types.entity.HumanoidMobDataPreset;
+import com.robson.pride.api.data.types.entity.MobData;
+import com.robson.pride.api.data.types.entity.MobTypeData;
 import com.robson.pride.api.item.CustomItem;
-import com.sun.tools.javac.Main;
+import com.robson.pride.api.utils.PlaySoundUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import yesman.epicfight.gameasset.Animations;
@@ -22,7 +21,7 @@ import java.util.Map;
 
 public interface Ronin {
 
-    MobData MOB_DATA = new MobData(ResourceLocation.fromNamespaceAndPath("pride", "textures/entities/japanese/ronin1.png"), new ActionsBuilder(
+    HumanoidMobDataPreset MOB_DATA = new HumanoidMobDataPreset(ResourceLocation.fromNamespaceAndPath("pride", "textures/entities/japanese/ronin1.png"), new ActionsBuilder(
             List.of(new ConditionalAction(List.of(new CooldownCondition(7000)),
                     new ExecuteWeaponSkillAction(ServerDataManager.LONGSWORD_PIERCE)),
                     new ConditionalAction(
@@ -40,7 +39,7 @@ public interface Ronin {
                     Map.entry(EquipmentSlot.MAINHAND, CustomItem.createItem(ServerDataManager.KURONAMI))
             )){};
 
-    MobTypeData DATA = new MobTypeData("Ronin", (byte) 0, ServerConstants.ASIAN_MUSIC, (byte) 1) {
+    MobTypeData DATA = new MobTypeData("Ronin", (byte) 0, PlaySoundUtils.getMusicByString("pride:japanese"), (byte) 2) {
 
         @Override
         public MobData getDataByVariant(byte variant) {

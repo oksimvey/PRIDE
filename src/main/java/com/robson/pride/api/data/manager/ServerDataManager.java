@@ -1,9 +1,14 @@
 package com.robson.pride.api.data.manager;
 
 import com.robson.pride.api.data.types.*;
+import com.robson.pride.api.data.types.entity.MobData;
+import com.robson.pride.api.data.types.entity.MobTypeData;
+import com.robson.pride.api.data.types.item.ElementData;
+import com.robson.pride.api.data.types.item.WeaponData;
+import com.robson.pride.api.data.types.skill.WeaponSkillData;
 import com.robson.pride.api.elements.*;
 import com.robson.pride.api.entity.PrideMob;
-import com.robson.pride.entities.Ronin;
+import com.robson.pride.entities.asian.Ronin;
 import com.robson.pride.api.item.CustomItem;
 import com.robson.pride.item.weapons.EuropeanLongsword;
 import com.robson.pride.item.weapons.Kuronami;

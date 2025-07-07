@@ -1,6 +1,7 @@
-package com.robson.pride.api.data.types;
+package com.robson.pride.api.data.types.item;
 
 import com.robson.pride.api.client.ItemRenderingParams;
+import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.utils.HealthUtils;
 import com.robson.pride.api.utils.math.Matrix2f;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;

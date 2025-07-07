@@ -2,17 +2,14 @@ package com.robson.pride.skills.special;
 
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.data.player.ClientSavedData;
-import com.robson.pride.api.data.types.DurationSkillData;
-import com.robson.pride.api.mechanics.GuardBreak;
+import com.robson.pride.api.data.types.skill.DurationSkillData;
 import com.robson.pride.api.mechanics.ParticleTracking;
-import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.PrideVec3f;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.registries.AnimationsRegister;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -112,7 +109,7 @@ public interface GuardSkill {
 
         @Override
         public void onAttacked(LivingEntity ent, LivingAttackEvent event) {
-            if (!canBlock(ent, event.getSource()) || GuardBreak.isNeutralized(ent) || (event.getSource().getDirectEntity() instanceof LivingEntity living && SkillDataManager.PERILOUS_MAP.get(living) != null)){
+            if (!canBlock(ent, event.getSource()) || Vulnerability.isVulnerable(ent) || (event.getSource().getDirectEntity() instanceof LivingEntity living && SkillDataManager.PERILOUS_MAP.get(living) != null)){
                 onEnd(ent);
                 return;
             }

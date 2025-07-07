@@ -1,8 +1,9 @@
 package com.robson.pride.api.data.manager;
 
-import com.robson.pride.api.data.types.DurationSkillData;
+import com.robson.pride.api.data.types.skill.DurationSkillData;
 import com.robson.pride.api.mechanics.PerilousType;
 import com.robson.pride.skills.special.GuardSkill;
+import com.robson.pride.skills.special.Vulnerability;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.ArrayList;
@@ -21,9 +22,13 @@ public interface SkillDataManager extends ServerDataManagerImpl<DurationSkillDat
 
     byte GUARD = 1;
 
+    byte VULNERABILITY = 2;
+
    SkillDataManager INSTANCE = id -> switch (id){
 
            case GUARD -> GuardSkill.DATA;
+
+           case VULNERABILITY -> Vulnerability.DATA;
 
            default -> null;
        };
@@ -34,6 +39,17 @@ public interface SkillDataManager extends ServerDataManagerImpl<DurationSkillDat
            return ACTIVE_SKILLS.getOrDefault(ent, new ArrayList<>());
        }
        return new ArrayList<>();
+   }
+
+   static List<DurationSkillData> getAll(LivingEntity entity){
+       List<DurationSkillData> list = new ArrayList<>();
+       for (byte id : getActiveSkills(entity)) {
+           DurationSkillData data = INSTANCE.getByID(id);
+           if (data != null) {
+               list.add(data);
+           }
+       }
+       return list;
    }
 
    static boolean isSkillActive(LivingEntity ent, byte skillid) {

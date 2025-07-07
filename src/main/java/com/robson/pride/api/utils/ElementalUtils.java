@@ -2,9 +2,9 @@ package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.player.ClientDataManager;
 import com.robson.pride.api.data.types.GenericData;
-import com.robson.pride.api.data.types.WeaponData;
+import com.robson.pride.api.data.types.item.WeaponData;
 import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.WeaponSkillData;
+import com.robson.pride.api.data.types.skill.WeaponSkillData;
 import com.robson.pride.api.utils.math.MathUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;

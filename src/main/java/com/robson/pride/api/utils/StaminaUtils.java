@@ -1,10 +1,8 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.entity.PrideMob;
 import com.robson.pride.api.entity.PrideMobPatch;
-import com.robson.pride.api.mechanics.GuardBreak;
+import com.robson.pride.skills.special.Vulnerability;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.gameasset.EpicFightSkills;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
@@ -68,7 +66,7 @@ public class StaminaUtils {
                 if (mobPatch instanceof PlayerPatch<?> playerPatch) {
                     if (playerPatch.getStamina() - amount <= 0){
                         playerPatch.setStamina(playerPatch.getMaxStamina());
-                        GuardBreak.onGuardBreak(playerPatch);
+                        Vulnerability.setVulnerable(playerPatch.getOriginal(), 3000, true);
                         return;
                     }
                     playerPatch.consumeForSkill(EpicFightSkills.BASIC_ATTACK, Skill.Resource.STAMINA, amount);
@@ -76,7 +74,7 @@ public class StaminaUtils {
                 else if (mobPatch instanceof PrideMobPatch<?> prideMobPatch){
                     if (prideMobPatch.getStamina() - amount <= 0){
                         prideMobPatch.setStamina(prideMobPatch.getMaxStamina());
-                        GuardBreak.onGuardBreak(prideMobPatch);
+                        Vulnerability.setVulnerable(prideMobPatch.getOriginal(), 3000, true);
                         return;
                     }
                     prideMobPatch.consumeStamina(amount);

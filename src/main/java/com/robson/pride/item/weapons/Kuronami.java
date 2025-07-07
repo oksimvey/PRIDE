@@ -1,6 +1,6 @@
 package com.robson.pride.item.weapons;
 
-import com.robson.pride.api.data.types.WeaponData;
+import com.robson.pride.api.data.types.item.WeaponData;
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.utils.math.FixedRGB;
 import com.robson.pride.api.utils.math.Matrix2f;

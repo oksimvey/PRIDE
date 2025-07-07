@@ -3,7 +3,7 @@ package com.robson.pride.api.elements;
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
 import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.ElementData;
+import com.robson.pride.api.data.types.item.ElementData;
 import com.robson.pride.api.utils.AttributeUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.math.FixedRGB;

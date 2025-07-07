@@ -1,10 +1,11 @@
-package com.robson.pride.api.data.types;
+package com.robson.pride.api.data.types.skill;
 
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,6 +16,8 @@ public abstract class DurationSkillData {
     public void onStart(LivingEntity ent){
         this.tickwhenStarted.put(ent, ent.tickCount);
     }
+
+    public void onHurtAnotherEntity(LivingEntity dmgent, LivingHurtEvent event){}
 
     public abstract void onAttacked(LivingEntity ent, LivingAttackEvent event);
 

@@ -2,10 +2,8 @@ package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.player.ClientData;
 import com.robson.pride.api.data.player.ClientSavedData;
-import com.robson.pride.api.data.types.WeaponData;
+import com.robson.pride.api.data.types.item.WeaponData;
 import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.progression.PlayerAttributeSetup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;

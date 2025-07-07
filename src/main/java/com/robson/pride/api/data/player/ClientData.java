@@ -22,27 +22,9 @@ public class ClientData {
 
     private PrideMusicManager musicManager;
 
-    private List<LivingEntity> targetingEntities = new ArrayList<>();
-
     public PrideMusicManager getMusicManager(){
         return this.musicManager;
     }
-
-    public void targetingEntitiesTick(Player player){
-        if (this.targetingEntities != null && !this.targetingEntities.isEmpty()){
-            this.targetingEntities.removeIf(entity -> entity == null || !entity.isAlive() || TargetUtil.getTarget(entity) != player);
-        }
-        for (Entity ent : player.level().getEntities(player, MathUtils.createAABBAroundEnt(player, 50))){
-            if (ent instanceof LivingEntity living && TargetUtil.getTarget(living) == player){
-                this.targetingEntities.add(living);
-            }
-        }
-    }
-
-    public List<LivingEntity> getTargetingEntities() {
-        return targetingEntities;
-    }
-
 
     public static ClientData createDefault(Player player){
         ClientData data = new ClientData();
@@ -69,14 +51,12 @@ public class ClientData {
 
     public void tick(Player player){
         this.keyHandler.tick(player);
-        targetingEntitiesTick(player);
     }
 
 
     public void setProgressionData(ClientSavedData progressionData){
         this.progressionData = progressionData;
     }
-
 
     public void setMusicManager(PrideMusicManager musicManager){
         this.musicManager = musicManager;

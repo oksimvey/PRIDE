@@ -3,7 +3,7 @@ package com.robson.pride.api.ai.actions.combat;
 import com.robson.pride.api.ai.actions.ActionBase;
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.entity.PrideMobPatch;
-import com.robson.pride.api.data.types.WeaponSkillData;
+import com.robson.pride.api.data.types.skill.WeaponSkillData;
 
 public class ExecuteWeaponSkillAction extends ActionBase {
 

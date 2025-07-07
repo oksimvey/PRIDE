@@ -1,5 +1,6 @@
-package com.robson.pride.api.data.types;
+package com.robson.pride.api.data.types.entity;
 
+import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.utils.math.Matrix2f;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.Music;

@@ -4,9 +4,12 @@ import com.robson.pride.api.cam.DynamicCam;
 import com.robson.pride.api.data.player.ClientData;
 import com.robson.pride.api.data.player.ClientDataManager;
 import com.robson.pride.api.musiccore.MusicCore;
+import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.epicfight.styles.SheatProvider;
+import com.robson.pride.skills.special.Vulnerability;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.concurrent.TimeUnit;
@@ -29,6 +32,10 @@ public class PlayerCustomTick {
             loopTick(player);
             if (!Minecraft.getInstance().isPaused()) {
                 CLIENT_DATA_MANAGER.get(player).tick(player);
+                Entity targfet = TargetUtil.getTarget(player);
+                if (targfet != null) {
+                    Vulnerability.renderCriticalParticle(player, targfet);
+                }
                 if (player.tickCount % 10 == 0) {
                     SheatProvider.provideSheat(player);
                     MusicCore.musicCore(player);

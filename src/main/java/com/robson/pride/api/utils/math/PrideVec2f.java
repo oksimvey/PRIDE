@@ -20,6 +20,10 @@ public record PrideVec2f(float x, float y) {
         return this.divide(this.length());
     }
 
+    public PrideVec2f rotate(float degrees){
+        return MathUtils.rotate2DVector(this, degrees);
+    }
+
     public PrideVec2f divide(float divisor){
         if (divisor == 0){
             return new PrideVec2f(0, 0);

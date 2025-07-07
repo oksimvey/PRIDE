@@ -1,11 +1,18 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.api.data.manager.SkillDataManager;
+import com.robson.pride.api.data.types.skill.DurationSkillData;
+import com.robson.pride.api.entity.PrideMobPatch;
+import com.robson.pride.api.utils.math.MathUtils;
+import com.robson.pride.events.OnAttackStartEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.DynamicAnimation;
@@ -25,11 +32,30 @@ import static com.robson.pride.api.mechanics.PerilousAttack.playPerilous;
 
 public interface AnimUtils {
 
+    static void changeDelta(Entity ent, Vec3 delta) {
+        if (ent != null && delta != null) {
+            ent.hurtMarked = true;
+            ent.hasImpulse = true;
+            ent.setDeltaMovement(delta);
+        }
+    }
+
     static void rotateToEntity(Entity ent, Entity target) {
         if (ent != null && target != null) {
             LivingEntityPatch<?> livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (livingEntityPatch != null) {
                 livingEntityPatch.rotateTo(target, 1000, false);
+                livingEntityPatch.updateEntityState();
+            }
+        }
+    }
+
+
+    static void rotateTo(Entity ent, float degrees) {
+        if (ent != null) {
+            LivingEntityPatch<?> livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (livingEntityPatch != null) {
+                livingEntityPatch.rotateTo(degrees, 1000, false);
                 livingEntityPatch.updateEntityState();
             }
         }
@@ -44,28 +70,11 @@ public interface AnimUtils {
         }
     }
 
-    static void playAnim(Entity ent, AnimationManager.AnimationAccessor animation, float convert) {
+    static void playAnim(Entity ent, AnimationManager.AnimationAccessor<? extends StaticAnimation> animation, float convert) {
         TimerUtil.schedule(() -> {
-            LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-            if (livingEntityPatch != null) {
-                if (animation != null) {
-                    if (livingEntityPatch instanceof HumanoidMobPatch AHPatch) {
-                        AHPatch.playAnimationSynchronized(animation, convert);
-                    } else livingEntityPatch.playAnimationSynchronized(animation, convert);
-                }
-            }
-        }, 10, TimeUnit.MILLISECONDS);
-    }
-
-    static void playAnim(Entity ent, StaticAnimation animation, float convert) {
-        TimerUtil.schedule(() -> {
-            LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-            if (livingEntityPatch != null) {
-                if (animation != null) {
-                    if (livingEntityPatch instanceof HumanoidMobPatch AHPatch) {
-                        AHPatch.playAnimationSynchronized(animation.getAccessor(), convert);
-                    } else livingEntityPatch.playAnimationSynchronized(animation.getAccessor(), convert);
-                }
+            LivingEntityPatch<?> livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (livingEntityPatch != null && animation != null) {
+                livingEntityPatch.playAnimationSynchronized(animation, convert);
             }
         }, 10, TimeUnit.MILLISECONDS);
     }
@@ -80,10 +89,6 @@ public interface AnimUtils {
         return false;
     }
 
-    static void playAnimWithPerilous(Entity ent, StaticAnimation animation, String perilous, float convert) {
-        AnimUtils.playAnim(ent, animation, convert);
-        addPerilousToAnim(ent, animation, perilous);
-    }
 
     static void addPerilousToAnim(Entity ent, StaticAnimation animation, String perilous) {
         if (ent != null && animation != null) {
@@ -138,14 +143,6 @@ public interface AnimUtils {
         return null;
     }
 
-    static void playAnimByString(Entity ent, String anim, float convert) {
-        StaticAnimation animation = AnimationManager.byKey(anim).orElse(null);
-        if (animation == null) {
-            return;
-        }
-        playAnim(ent, animation, convert);
-    }
-
 
     static void resizeBoundingBox(Entity ent, float width, float height) {
         if (ent != null) {
@@ -154,19 +151,6 @@ public interface AnimUtils {
                 livingEntityPatch.resetSize(new EntityDimensions(width, height, true));
             }
         }
-    }
-
-    static byte getDodgeType(Player player) {
-        if (Minecraft.getInstance().options.keyUp.isDown()) {
-            return 1;
-        }
-        if (Minecraft.getInstance().options.keyLeft.isDown()) {
-            return 2;
-        }
-        if (Minecraft.getInstance().options.keyRight.isDown()) {
-            return 3;
-        }
-        return 4;
     }
 
     static void preventAttack(Entity ent, int duration) {
@@ -178,10 +162,11 @@ public interface AnimUtils {
     }
 
     static void applyStun(Entity ent, StunType stuntype, float duration) {
-        LivingEntityPatch livingent = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-        if (livingent != null) {
-
-            livingent.applyStun(stuntype, duration);
+        if (ent != null) {
+            LivingEntityPatch<?> livingent = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (livingent != null) {
+                livingent.applyStun(stuntype, duration);
+            }
         }
     }
 

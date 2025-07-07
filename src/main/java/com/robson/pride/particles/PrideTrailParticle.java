@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.robson.pride.api.client.ItemRenderingParams;
 import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.ElementData;
+import com.robson.pride.api.data.types.item.ElementData;
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.math.BezierCurvef;
 import com.robson.pride.api.utils.math.PrideVec3f;

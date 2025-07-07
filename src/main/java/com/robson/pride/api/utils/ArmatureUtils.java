@@ -1,16 +1,14 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.math.BezierCurvef;
 import com.robson.pride.api.utils.math.MathUtils;
+import com.robson.pride.api.utils.math.PrideVec2f;
 import com.robson.pride.api.utils.math.PrideVec3f;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.animation.Joint;
-import yesman.epicfight.api.animation.Pose;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.DynamicAnimation;
 import yesman.epicfight.api.utils.math.OpenMatrix4f;
@@ -26,6 +24,12 @@ public class ArmatureUtils {
     private static final Vec3f DEFAULT_TRANSLATION = new Vec3f(0.0F, 1.0F, 0.0F);
 
     private static final byte INTERPOLATION = 0;
+
+    private static ConcurrentHashMap<LivingEntityPatch<?>, JointAnimParameters> PARAMETERS = new ConcurrentHashMap<>();
+
+    public record JointAnimParameters(Joint joint) {
+
+    }
 
     public static PrideVec3f getRawJoint(LocalPlayer renderer, Entity ent, Joint joint){
         if (renderer != null && renderer.level().isClientSide && ent != null && joint != null){
@@ -54,12 +58,12 @@ public class ArmatureUtils {
 
 
     public static PrideVec3f getJointWithTranslation(LocalPlayer renderer, LivingEntityPatch<?> ent, Vec3f translation, Joint joint) {
-        if (renderer != null && translation != null && renderer.level().isClientSide && ent != null && joint != null){
-                OpenMatrix4f matrix4f = ent.getArmature().getBindedTransformFor(ent.getAnimator().getPose(INTERPOLATION), joint);
-                matrix4f.translate(translation);
-                OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) MathUtils.degreeToRadians(ent.getOriginal().yBodyRotO + 180.0F)), DEFAULT_TRANSLATION), matrix4f, matrix4f);
-                return new PrideVec3f((float) (matrix4f.m30 + ent.getOriginal().getX()), (float) (matrix4f.m31 + ent.getOriginal().getY() * (ent.getOriginal().getBbHeight() / 1.8f)), (float) (matrix4f.m32 + ent.getOriginal().getZ()));
-        }
+        if (renderer != null && translation != null && renderer.level().isClientSide && ent != null && joint != null) {
+            OpenMatrix4f matrix4f = ent.getArmature().getBindedTransformFor(ent.getAnimator().getPose(INTERPOLATION), joint);
+            matrix4f.translate(translation);
+            OpenMatrix4f.mul((new OpenMatrix4f()).rotate(-((float) MathUtils.degreeToRadians(ent.getOriginal().yBodyRotO + 180.0F)), DEFAULT_TRANSLATION), matrix4f, matrix4f);
+            return new PrideVec3f((float) (matrix4f.m30 + ent.getOriginal().getX()), (float) (matrix4f.m31 + ent.getOriginal().getY() * (ent.getOriginal().getBbHeight() / 1.8f)), (float) (matrix4f.m32 + ent.getOriginal().getZ()));
+         }
         return null;
     }
 
@@ -93,23 +97,20 @@ public class ArmatureUtils {
         return list;
     }
 
-    public static void traceEntityOnEntityJoint(LivingEntity ent, Entity targetToTrace, Joint toTeleportJoint, Joint targetjoint, boolean shouldrotate, boolean changey, int interval, int maxtries) {
+    public static void traceEntityOnEntity(LivingEntity ent, Entity targetToTrace, float vectorrot, float entityrot, boolean shouldrotate, int interval, int maxtries) {
         LoopUtils.loopByTimes(i -> {
-            if (ent != null && targetToTrace != null && targetjoint != null && toTeleportJoint != null) {
-                targetToTrace.setNoGravity(true);
+            if (ent != null && targetToTrace != null) {
                 if (shouldrotate) {
-                    AnimUtils.rotateToEntity(targetToTrace, ent);
+                    AnimUtils.rotateTo(targetToTrace, ent.getYRot() + entityrot);
                 }
-                PrideVec3f teleportoffset = ArmatureUtils.getRawJoint(Minecraft.getInstance().player, targetToTrace, targetjoint);
-                if (teleportoffset != null) {
-                    PrideVec3f toteleport = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent, ParticleTracking.getAABBHalf(ent.getMainHandItem(), ent), toTeleportJoint);
-                    if (toteleport != null) {
-                        targetToTrace.teleportTo(toteleport.x(), ent.getY(), toteleport.z());
-                    }
-                }
+                PrideVec2f lookangle = new PrideVec2f(1, 1).rotate(vectorrot).normalize().scale(targetToTrace.getBbWidth());
+                AnimUtils.changeDelta(ent, new Vec3(0, 0 ,0));
+                targetToTrace.teleportTo(ent.getX() + lookangle.x(), ent.getY(), ent.getZ()  + lookangle.y());
+
             }
         }, maxtries, interval);
     }
+
 
     public class SlashParticleParameters {
 

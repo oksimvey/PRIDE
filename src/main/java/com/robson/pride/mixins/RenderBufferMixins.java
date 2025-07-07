@@ -3,7 +3,7 @@ package com.robson.pride.mixins;
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.ElementData;
+import com.robson.pride.api.data.types.item.ElementData;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.OutlineBufferSource;
 import net.minecraft.client.renderer.RenderBuffers;

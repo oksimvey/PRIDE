@@ -4,7 +4,7 @@ import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.mechanics.PerilousType;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
-import com.robson.pride.api.data.types.WeaponSkillData;
+import com.robson.pride.api.data.types.skill.WeaponSkillData;
 import com.robson.pride.api.utils.SpellUtils;
 import com.robson.pride.api.utils.TimerUtil;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;

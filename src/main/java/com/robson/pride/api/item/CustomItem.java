@@ -2,7 +2,7 @@ package com.robson.pride.api.item;
 
 import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.MobData;
+import com.robson.pride.api.data.types.entity.MobData;
 import com.robson.pride.api.entity.PrideMob;
 import com.robson.pride.registries.EntityRegister;
 import com.robson.pride.registries.ItemsRegister;

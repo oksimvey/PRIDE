@@ -1,7 +1,8 @@
-package com.robson.pride.api.data.types;
+package com.robson.pride.api.data.types.skill;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
+import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.api.mechanics.PerilousType;
 import com.robson.pride.api.skillcore.SkillAnimation;

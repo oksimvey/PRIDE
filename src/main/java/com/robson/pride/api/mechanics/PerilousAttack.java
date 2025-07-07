@@ -18,33 +18,6 @@ import java.util.concurrent.TimeUnit;
 
 public class PerilousAttack {
 
-    public static List<String> periloustypes = Arrays.asList("pierce_two_hand", "pierce_dual_wield", "pierce_one_hand", "sweep", "total");
-
-    public static boolean checkPerilous(Entity ent) {
-        if (ent != null) {
-            return periloustypes.contains(ent.getPersistentData().getString("Perilous"));
-        }
-        return false;
-    }
-
-    public static void onPerilous(Entity ent, Entity ddmgent, LivingAttackEvent event) {
-        String Perilous = ddmgent.getPersistentData().getString("Perilous");
-        if (Objects.equals(Perilous, "pierce_two_hand") || Objects.equals(Perilous, "pierce_dual_wield") || Objects.equals(Perilous, "pierce_one_hand")) {
-            if (MikiriCounter.canMobMikiri(ent, ddmgent, "Dodge")) {
-                MikiriCounter.onPierceMikiri(ent, ddmgent, Perilous);
-                event.setCanceled(true);
-            } else PerilousSucess(ent, event);
-        } else if (Perilous.equals("sweep")) {
-            if (MikiriCounter.canMobMikiri(ent, ddmgent, "Jump")) {
-                event.setCanceled(true);
-            } else {
-                PerilousSucess(ent, event);
-            }
-        } else {
-            PerilousSucess(ent, event);
-        }
-    }
-
     public static void playPerilous(Entity ent) {
         LivingEntityPatch livingEntityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
         if (livingEntityPatch != null) {

@@ -1,12 +1,15 @@
 package com.robson.pride.api.entity;
 
+import com.google.common.collect.Maps;
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
-import com.robson.pride.api.data.types.MobData;
+import com.robson.pride.api.data.types.entity.MobData;
 import com.robson.pride.api.utils.LodTick;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.PrideVec3f;
+import com.robson.pride.events.OnAttackStartEvent;
+import com.robson.pride.skills.special.Vulnerability;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -15,17 +18,22 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.Animator;
+import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.LivingMotions;
+import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.api.asset.AssetAccessor;
 import yesman.epicfight.api.client.animation.ClientAnimator;
 import yesman.epicfight.api.client.animation.Layer;
 import yesman.epicfight.api.utils.math.OpenMatrix4f;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.network.EpicFightNetworkManager;
+import yesman.epicfight.network.server.SPChangeLivingMotion;
 import yesman.epicfight.network.server.SPEntityPacket;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.Factions;
@@ -35,15 +43,18 @@ import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.damagesource.StunType;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class PrideMobPatch <PrideMob extends PathfinderMob> extends MobPatch<PrideMob> {
+public class PrideMobPatch <T extends PrideMob> extends MobPatch<T> {
 
     private byte staminaregaindelay = 0;
 
     private float stamina = 0;
 
-    private float maxStamina = 100;
+    private float maxStamina = 10;
 
     public PrideMobPatch() {
         super(Factions.NEUTRAL);
@@ -70,30 +81,52 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends MobPatch<Pri
         this.stamina = stamina;
     }
 
+    public boolean isHumanoid(){
+        return ServerDataManager.getMobData(this.original).isHumanoid();
+    }
+
     public AnimationManager.AnimationAccessor<? extends StaticAnimation> getHitAnimation(StunType stunType) {
         if (((PathfinderMob)this.original).getVehicle() != null) {
             return Animations.BIPED_HIT_ON_MOUNT;
-        } else {
-            switch (stunType) {
-                case LONG -> {
-                    return Animations.BIPED_HIT_LONG;
-                }
-                case SHORT, HOLD -> {
-                    return Animations.BIPED_HIT_SHORT;
-                }
-                case KNOCKDOWN -> {
-                    return Animations.BIPED_KNOCKDOWN;
-                }
-                case NEUTRALIZE -> {
-                    return Animations.BIPED_COMMON_NEUTRALIZED;
-                }
-                case FALL -> {
-                    return Animations.BIPED_LANDING;
-                }
-                default -> {
-                    return null;
-                }
+        }
+        return ServerDataManager.getMobData(this.original).stunMotions.get(stunType);
+    }
+
+    public void modifyLivingMotionByCurrentItem(boolean onStartTracking) {
+        Map<LivingMotion, AssetAccessor<? extends StaticAnimation>> oldLivingAnimations = this.getAnimator().getLivingAnimations();
+        Map<LivingMotion, AssetAccessor<? extends StaticAnimation>> newLivingAnimations = Maps.newHashMap();
+        CapabilityItem mainhandCap = this.getHoldingItemCapability(InteractionHand.MAIN_HAND);
+        CapabilityItem offhandCap = this.getAdvancedHoldingItemCapability(InteractionHand.OFF_HAND);
+        Map<LivingMotion, AssetAccessor<? extends StaticAnimation>> livingMotionModifiers = new HashMap(mainhandCap.getLivingMotionModifier(this, InteractionHand.MAIN_HAND));
+        livingMotionModifiers.putAll(offhandCap.getLivingMotionModifier(this, InteractionHand.OFF_HAND));
+        boolean hasChange = false;
+
+        for(Map.Entry<LivingMotion, AssetAccessor<? extends StaticAnimation>> entry : livingMotionModifiers.entrySet()) {
+            AssetAccessor<? extends StaticAnimation> aniamtion = (AssetAccessor)entry.getValue();
+            if (!oldLivingAnimations.containsKey(entry.getKey())) {
+                hasChange = true;
+            } else if (oldLivingAnimations.get(entry.getKey()) != aniamtion) {
+                hasChange = true;
             }
+
+            newLivingAnimations.put((LivingMotion)entry.getKey(), aniamtion);
+        }
+
+        for(LivingMotion oldLivingMotion : oldLivingAnimations.keySet()) {
+            if (!newLivingAnimations.containsKey(oldLivingMotion)) {
+                hasChange = true;
+                break;
+            }
+        }
+
+        if (hasChange || onStartTracking) {
+            this.getAnimator().resetLivingAnimations();
+            Animator var10001 = this.getAnimator();
+            Objects.requireNonNull(var10001);
+            newLivingAnimations.forEach(var10001::addLivingAnimation);
+            SPChangeLivingMotion msg = new SPChangeLivingMotion(((PathfinderMob)this.original).getId());
+            msg.putEntries(newLivingAnimations.entrySet());
+            EpicFightNetworkManager.sendToAllPlayerTrackingThisEntity(msg, this.original);
         }
     }
 
@@ -105,12 +138,18 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends MobPatch<Pri
         super.onStartTracking(trackingPlayer);
     }
 
-        public void processEntityPacket(FriendlyByteBuf buf) {
-        ClientAnimator animator = this.getClientAnimator();
-        animator.addLivingAnimation(LivingMotions.IDLE, Animations.BIPED_IDLE);
-        animator.addLivingAnimation(LivingMotions.WALK, Animations.BIPED_WALK);
-        animator.addLivingAnimation(LivingMotions.CHASE, Animations.BIPED_WALK);
-        animator.setCurrentMotionsAsDefault();
+    @Override
+    public void playAnimationSynchronized(AssetAccessor<? extends StaticAnimation> animation, float convert){
+        super.playAnimationSynchronized(animation, convert);
+        if (animation.get() instanceof AttackAnimation){
+            OnAttackStartEvent.onAttackStart(this);
+        }
+    }
+
+
+    public void updateHeldItem(CapabilityItem fromcap, CapabilityItem tocap, ItemStack oldItem, ItemStack newItem, InteractionHand hand){
+       super.updateHeldItem(fromcap, tocap, oldItem, newItem, hand);
+       this.modifyLivingMotionByCurrentItem(false);
     }
 
     @Override
@@ -145,7 +184,7 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends MobPatch<Pri
                 }
             }
         }
-        if (LodTick.canTick(this.getOriginal(), 2) &&
+        if (LodTick.canTick(this.getOriginal(), 2) && Vulnerability.isVulnerable(this.getOriginal()) &&
                 !SkillDataManager.isSkillActive(this.getOriginal(), SkillDataManager.GUARD)){
             if (this.getTarget() == null || !this.getTarget().isAlive() || (this.getTarget() instanceof Player player && player.isCreative())){
                 this.setAttakTargetSync(null);
@@ -166,12 +205,17 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends MobPatch<Pri
         }
     }
 
-    public boolean isBlocking() {
-        return SkillDataManager.isSkillActive(this.getOriginal(), SkillDataManager.GUARD);
+    @Override
+    public void processEntityPacket(FriendlyByteBuf buf) {
+        ClientAnimator animator = this.getClientAnimator();
+        setupMotions(animator);
+        animator.setCurrentMotionsAsDefault();
     }
 
-        public void initAnimator(Animator animator) {
-        super.initAnimator(animator);
+    public void setupMotions(Animator animator){
+        if (animator instanceof ClientAnimator && !this.original.level().isClientSide){
+            return;
+        }
         animator.addLivingAnimation(LivingMotions.IDLE, Animations.BIPED_IDLE);
         animator.addLivingAnimation(LivingMotions.WALK, Animations.BIPED_WALK);
         animator.addLivingAnimation(LivingMotions.CHASE, Animations.BIPED_RUN);
@@ -180,6 +224,15 @@ public class PrideMobPatch <PrideMob extends PathfinderMob> extends MobPatch<Pri
         animator.addLivingAnimation(LivingMotions.DEATH, Animations.BIPED_DEATH);
         animator.addLivingAnimation(LivingMotions.BLOCK, Animations.LONGSWORD_GUARD);
     }
+
+
+    public boolean isBlocking() {
+        return SkillDataManager.isSkillActive(this.getOriginal(), SkillDataManager.GUARD);
+    }
+        public void initAnimator(Animator animator) {
+            super.initAnimator(animator);
+               setupMotions(animator);
+        }
 
     public void updateMotion(boolean bol){
         if (this.original.getHealth() <= 0.0F) {

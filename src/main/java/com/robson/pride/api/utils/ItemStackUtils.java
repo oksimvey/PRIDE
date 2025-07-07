@@ -1,7 +1,7 @@
 package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.types.GenericData;
-import com.robson.pride.api.data.types.WeaponData;
+import com.robson.pride.api.data.types.item.WeaponData;
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.Matrix2f;
@@ -10,7 +10,6 @@ import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import com.robson.pride.epicfight.weapontypes.WeaponPresets;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

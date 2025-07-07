@@ -3,15 +3,17 @@ package com.robson.pride.events;
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.data.player.ClientSavedData;
-import com.robson.pride.api.data.types.DurationSkillData;
-import com.robson.pride.api.data.types.ElementData;
-import com.robson.pride.api.data.types.WeaponSkillData;
+import com.robson.pride.api.data.types.skill.DurationSkillData;
+import com.robson.pride.api.data.types.item.ElementData;
+import com.robson.pride.api.data.types.skill.WeaponSkillData;
 import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.progression.AttributeModifiers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -19,9 +21,12 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.damagesource.StunType;
+
+import java.util.concurrent.TimeUnit;
 
 @Mod.EventBusSubscriber
 public class EntityAttacked {
@@ -34,12 +39,9 @@ public class EntityAttacked {
                 ProgressionUtils.addXp(player, ClientSavedData.Strength, (int) event.getAmount());
             }
             if (!ent.level().isClientSide){
-                for (byte skill : SkillDataManager.getActiveSkills(ent)) {
-                    DurationSkillData data = SkillDataManager.INSTANCE.getByID(skill);
-                    if (data != null) {
-                        data.onAttacked(ent, event);
-                    }
-                }
+               for (DurationSkillData data : SkillDataManager.getAll(ent)){
+                   data.onAttacked(ent, event);
+               }
             }
         }
     }
@@ -48,10 +50,6 @@ public class EntityAttacked {
     public static void hurtEnt(LivingHurtEvent event) {
         if (event.getSource().getDirectEntity() != null && event.getSource().getEntity() != null) {
             float damage = event.getAmount();
-            if (GuardBreak.isNeutralized(event.getEntity())) {
-                GuardBreak.onVulnerableDamage(event.getEntity());
-                damage *= 2;
-            }
             if (event.getSource().getDirectEntity() instanceof AbstractArrow) {
                 event.setAmount(event.getAmount() + AttributeUtils.getAttributeValue(event.getSource().getEntity(), "pride:arrow_power"));
             }
@@ -66,6 +64,9 @@ public class EntityAttacked {
                        data.onHurt(living, event.getEntity(), event);
                    }
                 }
+               for (DurationSkillData data : SkillDataManager.getAll(living)){
+                   data.onHurtAnotherEntity(living, event);
+               }
                 InteractionHand hand = ItemStackUtils.checkAttackingHand(living);
                 if (hand != null) {
                     if (living instanceof Player player) {

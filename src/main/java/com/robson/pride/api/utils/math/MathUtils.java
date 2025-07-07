@@ -54,6 +54,13 @@ public interface MathUtils {
         return new Vec3(x, vec.y, z);
     }
 
+    static PrideVec2f rotate2DVector(PrideVec2f vec, float degrees) {
+        float theta = degreeToRadians(degrees);
+        float x = (float) ((vec.x() * Math.cos(theta)) - (vec.y() * Math.sin(theta)));
+        float z = (float) ((vec.x() * Math.sin(theta)) + (vec.y() * Math.cos(theta)));
+        return new PrideVec2f(x, z);
+    }
+
     static PrideVec3f rotate2DVector(PrideVec3f vec, float degrees) {
         float theta = degreeToRadians(degrees);
         float x = (float) ((vec.x() * Math.cos(theta)) - (vec.z() * Math.sin(theta)));

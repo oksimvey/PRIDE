@@ -24,6 +24,10 @@
       {
         "name": "pride:musics/japanese",
         "stream": false
+      },
+      {
+        "name": "pride:musics/shogun",
+        "stream": false
       }
     ]
   },
@@ -72,13 +76,6 @@
       {
         "name": "pride:battle/shield_parry",
         "stream": false
-      }
-    ]
-  },
-  "shogun": {
-    "sounds": [
-      {
-        "name": "pride:musics/shogun"
       }
     ]
   },

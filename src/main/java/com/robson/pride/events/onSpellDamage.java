@@ -2,14 +2,11 @@ package com.robson.pride.events;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
-import com.robson.pride.api.data.types.DurationSkillData;
-import com.robson.pride.api.data.types.ElementData;
-import com.robson.pride.api.mechanics.MikiriCounter;
+import com.robson.pride.api.data.types.skill.DurationSkillData;
+import com.robson.pride.api.data.types.item.ElementData;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 

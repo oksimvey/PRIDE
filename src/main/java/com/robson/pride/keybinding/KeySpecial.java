@@ -24,5 +24,6 @@ public class KeySpecial extends LongPressKey {
     @Override
     public void onLongPress(Player player) {
         SkillCore.onSkillExecute(player);
+        OnAttackStartEvent.onAttackStart(EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class));
     }
 }

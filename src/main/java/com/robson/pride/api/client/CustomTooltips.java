@@ -1,6 +1,6 @@
 package com.robson.pride.api.client;
 
-import com.robson.pride.api.data.types.WeaponData;
+import com.robson.pride.api.data.types.item.WeaponData;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.progression.AttributeModifiers;
 import net.minecraft.ChatFormatting;

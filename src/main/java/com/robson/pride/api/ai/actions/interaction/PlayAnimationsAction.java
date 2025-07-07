@@ -28,7 +28,7 @@ public class PlayAnimationsAction extends ActionBase {
             }
             AnimationManager.AnimationAccessor<? extends StaticAnimation> animation = animations.get(currentAnimation);
             if (animation != null) {
-                AnimUtils.playAnim(ent.getOriginal(), animation, convert);
+               ent.playAnimationSynchronized(animation, convert);
                 currentAnimation++;
               }
         }

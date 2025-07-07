@@ -1,19 +1,17 @@
 package com.robson.pride.api.entity;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.MobTypeData;
+import com.robson.pride.api.data.types.entity.MobTypeData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 
@@ -21,7 +19,6 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 public class PrideMob extends Monster {
-
 
     private static final EntityDataAccessor<Integer> TYPE =
             SynchedEntityData.defineId(PrideMob.class, EntityDataSerializers.INT);
@@ -55,8 +52,13 @@ public class PrideMob extends Monster {
         return super.finalizeSpawn(p_21434_, p_21435_, p_21436_, p_21437_, p_21438_);
     }
 
+    public void registerGoals() {
+        this.goalSelector.addGoal(1, new RandomStrollGoal(this, 1.0D));
+    }
+
     public static AttributeSupplier.Builder registerAttributes() {
         return Monster.createMonsterAttributes()
+
                 .add(Attributes.MAX_HEALTH, 100.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.23D)
                 .add(Attributes.ATTACK_DAMAGE, 2.0D)

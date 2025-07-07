@@ -14,9 +14,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DynamicCam {
+
     public static void dynamicCamTick(Player player) {
         if (player != null) {
             boolean ismounted = player.getVehicle() != null;
@@ -26,22 +28,22 @@ public class DynamicCam {
             }
             float xmodifier = -0.12f + (zmodifier / 50);
             float ymodifier = -0.02f;
-            List<LivingEntity> targets = ClientDataManager.CLIENT_DATA_MANAGER.get(player).getTargetingEntities();
+            List<LivingEntity> targets = new ArrayList<>();
+            for (Entity ent : player.level().getEntities(player, MathUtils.createAABBAroundEnt(player, 25))) {
+                if (ent != null && TargetUtil.getTarget(ent) == player) {
+                    targets.add((LivingEntity) ent);
+                }
+            }
            correctCameraRot(ismounted, targets);
-            if (targets != null && !(targets.isEmpty())) {
+            if (!targets.isEmpty()) {
                 if (!ismounted) {
                     xmodifier = 0;
                 }
                 float targetingSizeModifier = 0;
-                byte targetingEntities = 0;
+                byte targetingEntities = (byte) targets.size();
                 for (Entity ent : targets) {
                     if (ent != null && ent.getBbHeight() / 5 > targetingSizeModifier) {
                         targetingSizeModifier = ent.getBbHeight() / 5;
-                    }
-                }
-                for (Entity ent : player.level().getEntities(player, MathUtils.createAABBAroundEnt(player, 15))) {
-                    if (ent != null && TargetUtil.getTarget(ent) == player) {
-                        targetingEntities += 1;
                     }
                 }
                 if (targetingEntities > 5) {

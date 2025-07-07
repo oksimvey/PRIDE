@@ -1,7 +1,7 @@
 package com.robson.pride.api.entity;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.MobData;
+import com.robson.pride.api.data.types.entity.MobData;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

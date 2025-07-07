@@ -1,9 +1,9 @@
 package com.robson.pride.events;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.ElementData;
+import com.robson.pride.api.data.types.item.ElementData;
 import com.robson.pride.api.mechanics.ParticleTracking;
-import com.robson.pride.api.data.types.WeaponSkillData;
+import com.robson.pride.api.data.types.skill.WeaponSkillData;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.progression.AttributeModifiers;
 import net.minecraft.world.item.ItemStack;

@@ -1,7 +1,7 @@
 package com.robson.pride.skills.special;
 
 import com.robson.pride.api.data.manager.SkillDataManager;
-import com.robson.pride.api.data.types.DurationSkillData;
+import com.robson.pride.api.data.types.skill.DurationSkillData;
 import com.robson.pride.api.mechanics.PerilousType;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;

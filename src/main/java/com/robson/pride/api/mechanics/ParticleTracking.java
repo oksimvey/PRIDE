@@ -2,7 +2,7 @@ package com.robson.pride.api.mechanics;
 
 import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.ElementData;
+import com.robson.pride.api.data.types.item.ElementData;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.api.utils.math.Matrix2f;
@@ -16,7 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Armatures;
 
-import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 

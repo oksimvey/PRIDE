@@ -39,6 +39,10 @@ public record PrideVec3f(float x, float y, float z) {
         return origin.add(scaled).distanceTo(point) < baseradius + heightradius;
     }
 
+    public PrideVec3f translate(float x, float y, float z){
+        return new PrideVec3f(this.x + (x * this.x), this.y + (y * this.y), this.z + (z * this.z));
+    }
+
     public PrideVec3f normalize(){
         return this.divide(length());
     }
