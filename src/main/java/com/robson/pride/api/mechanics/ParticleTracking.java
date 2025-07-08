@@ -47,7 +47,7 @@ public class ParticleTracking {
     }
 
     public static boolean shouldRenderSunParticle(LivingEntity ent) {
-        PrideVec3f vec3 = ArmatureUtils.getJoinTPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolR);
+        PrideVec3f vec3 = ArmatureUtils.getJointPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolR);
         if (vec3 != null) {
             if (ElementalUtils.isNotInWater(ent, vec3.toVec3())) {
                 togglefire.put(ent, true);

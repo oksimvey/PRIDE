@@ -56,14 +56,6 @@ public interface MathUtils {
         return new Vec3(x, vec.y, z);
     }
 
-    static PrideVec3f getEntityGlobalJointPos(LivingEntity entity, PrideVec3f localpos) {
-        return new PrideVec3f(
-                (float) (entity.getX() + localpos.x()),
-                (float) (entity.getY() + localpos.y() * (entity.getBbHeight() / 1.8f)),
-                (float) (entity.getZ() + localpos.z())
-        );
-    }
-
     static PrideVec2f rotate2DVector(PrideVec2f vec, float degrees) {
         float theta = degreeToRadians(degrees);
         float x = (float) ((vec.x() * Math.cos(theta)) - (vec.y() * Math.sin(theta)));

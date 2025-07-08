@@ -33,7 +33,7 @@ public class ArmatureUtils {
         if (renderer != null && renderer.level().isClientSide && ent != null && joint != null){
             LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (entityPatch != null){
-                return PrideVec3f.fromMatrix(entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(INTERPOLATION), joint)).rotate(entityPatch.getOriginal());
+                return PrideVec3f.fromMatrix(entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(INTERPOLATION), joint)).correctRot(entityPatch.getOriginal());
             }
         }
         return null;
@@ -43,10 +43,8 @@ public class ArmatureUtils {
         if (renderer != null && translation != null && renderer.level().isClientSide && ent != null && joint != null){
             LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (entityPatch != null){
-                return MathUtils.getEntityGlobalJointPos(
-                        ent, PrideVec3f.fromTranslatedMatrix(entityPatch.getArmature().getBindedTransformFor(
-                                entityPatch.getAnimator().getPose(INTERPOLATION), joint), translation.x, translation.y, translation.z
-                        ).rotate(ent));
+                return PrideVec3f.fromTranslatedMatrix(entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(INTERPOLATION), joint),
+                                translation.x, translation.y, translation.z).toGlobalPosMatrix(ent);
               }
         }
         return null;
@@ -55,19 +53,17 @@ public class ArmatureUtils {
 
     public static PrideVec3f getJointWithTranslation(LocalPlayer renderer, LivingEntityPatch<?> ent, Vec3f translation, Joint joint) {
         if (renderer != null && translation != null && renderer.level().isClientSide && ent != null && joint != null) {
-            return MathUtils.getEntityGlobalJointPos(
-                    ent.getOriginal(), PrideVec3f.fromTranslatedMatrix(ent.getArmature().getBindedTransformFor(
-                            ent.getAnimator().getPose(INTERPOLATION), joint), translation.x, translation.y, translation.z
-                    ).rotate(ent.getOriginal()));
+            return PrideVec3f.fromTranslatedMatrix(ent.getArmature().getBindedTransformFor(ent.getAnimator().getPose(INTERPOLATION), joint),
+                    translation.x, translation.y, translation.z).toGlobalPosMatrix(ent.getOriginal());
         }
         return null;
     }
 
 
-    public static PrideVec3f getJoinTPosition(LocalPlayer renderer, LivingEntity ent, Joint joint) {
+    public static PrideVec3f getJointPosition(LocalPlayer renderer, LivingEntity ent, Joint joint) {
         PrideVec3f pos = getRawJoint(renderer, ent, joint);
         if (pos != null) {
-            return MathUtils.getEntityGlobalJointPos(ent, pos);
+            return pos.toGlobalPosMatrix(ent);
         }
         return null;
     }
@@ -82,9 +78,10 @@ public class ArmatureUtils {
                     for (AttackAnimation.Phase phase : attackAnimation.phases) {
                         float[] phasestime = new float[]{phase.preDelay, phase.contact, phase.recovery};
                         for (float time : phasestime) {
-                            list.add(PrideVec3f.fromMatrix(
+                            list.add(
+                                    PrideVec3f.fromMatrix(
                                     entityPatch.getArmature().getBindedTransformFor(animation.getPoseByTime(entityPatch, time, INTERPOLATION), phase.colliders[0].getFirst()))
-                                    .rotate(entityPatch.getOriginal()).scale(scale));
+                                            .correctRot(entityPatch.getOriginal()).scale(scale));
                         }
                     }
                 }
@@ -128,7 +125,7 @@ public class ArmatureUtils {
         ConcurrentHashMap<Joint, Float> jointposmap = new ConcurrentHashMap<>();
         List<Joint> joints = getArmatureJoints(ent);
         for (Joint joint : joints) {
-            PrideVec3f jointpos = getJoinTPosition(renderer, ent, joint);
+            PrideVec3f jointpos = getJointPosition(renderer, ent, joint);
             if (jointpos != null) {
                 jointposmap.put(joint, MathUtils.getTotalDistance(jointpos.toVec3(), pos));
             }
