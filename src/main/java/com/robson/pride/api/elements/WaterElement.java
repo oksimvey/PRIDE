@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 public interface WaterElement {
 
     ElementData DATA = new ElementData("Water", ServerDataManager.WATER,new DustParticleOptions(new Vec3(0.3f, 0.5f, 1).normalize().toVector3f(), 1f),
-            ChatFormatting.DARK_BLUE, SoundEvents.DROWNED_SWIM, (byte) 5, SchoolRegister.WATER.get(), new ItemRenderingParams(new FixedRGB(9, 96, 184),
+            ChatFormatting.DARK_BLUE, SoundEvents.DROWNED_SWIM, (byte) 5, SchoolRegister.WATER.get(), new ItemRenderingParams(new FixedRGB((short) 9, (short) 96, (short) 184),
             GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
             GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))){
 

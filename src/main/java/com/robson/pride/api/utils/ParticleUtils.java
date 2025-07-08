@@ -82,7 +82,7 @@ public interface ParticleUtils {
 
     }
 
-    static void spawnParticleTracked(LocalPlayer renderer, LivingEntityPatch<? extends LivingEntity> ent, Joint joint, ParticleOptions particle, Vec3f AABB, int particleDecrease) {
+    static void spawnParticleTracked(LocalPlayer renderer, LivingEntityPatch<? extends LivingEntity> ent, Joint joint, ParticleOptions particle, PrideVec3f AABB, int particleDecrease) {
         if (renderer != null && renderer.level().isClientSide && ent != null) {
             int amount = (int) ItemStackUtils.getColliderSize(ent.getOriginal().getMainHandItem()) - new Random().nextInt(particleDecrease);
             if (amount > 0) {

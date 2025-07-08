@@ -12,5 +12,5 @@ public interface Pyroscourge {
             new Matrix2f(-0.5f, -0.5f, -0.15f, 0.2f, 0.8f, 2.6f),
             ServerDataManager.FLAME_SLASH,
             new WeaponData.AttributeReqs('B', 'C', 'S', (byte) 10, (byte) 5, (byte) 10),
-            new FixedRGB(255, 50, 0));
+            new FixedRGB((short) 255, (short) 50, (short) 0));
 }

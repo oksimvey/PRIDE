@@ -13,7 +13,7 @@ public interface Kuronami {
             new Matrix2f(-0.5f, -0.5f, -0.15f, 0.2f, 0.8f, 1.5f),
             ServerDataManager.DARKNESS_CUT,
             new WeaponData.AttributeReqs('B', 'C', 'S', (byte) 10, (byte) 5, (byte) 10),
-            new FixedRGB(0, 0, 0));
+            new FixedRGB((short) 0, (short) 0, (short) 0));
 
 }
 

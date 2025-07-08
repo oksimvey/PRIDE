@@ -33,28 +33,28 @@ public class ArmatureUtils {
         if (renderer != null && renderer.level().isClientSide && ent != null && joint != null){
             LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (entityPatch != null){
-                return PrideVec3f.fromMatrix(entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(INTERPOLATION), joint)).correctRot(entityPatch.getOriginal());
+                return PrideVec3f.fromMatrix4f(entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(INTERPOLATION), joint)).correctRot(entityPatch.getOriginal());
             }
         }
         return null;
     }
 
-    public static PrideVec3f getJointWithTranslation(LocalPlayer renderer, LivingEntity ent, Vec3f translation, Joint joint) {
+    public static PrideVec3f getJointWithTranslation(LocalPlayer renderer, LivingEntity ent, PrideVec3f translation, Joint joint) {
         if (renderer != null && translation != null && renderer.level().isClientSide && ent != null && joint != null){
             LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (entityPatch != null){
                 return PrideVec3f.fromTranslatedMatrix(entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(INTERPOLATION), joint),
-                                translation.x, translation.y, translation.z).toGlobalPosMatrix(ent);
+                                translation.x(), translation.y(), translation.z()).toGlobalPosMatrix(ent);
               }
         }
         return null;
     }
 
 
-    public static PrideVec3f getJointWithTranslation(LocalPlayer renderer, LivingEntityPatch<?> ent, Vec3f translation, Joint joint) {
+    public static PrideVec3f getJointWithTranslation(LocalPlayer renderer, LivingEntityPatch<?> ent, PrideVec3f translation, Joint joint) {
         if (renderer != null && translation != null && renderer.level().isClientSide && ent != null && joint != null) {
             return PrideVec3f.fromTranslatedMatrix(ent.getArmature().getBindedTransformFor(ent.getAnimator().getPose(INTERPOLATION), joint),
-                    translation.x, translation.y, translation.z).toGlobalPosMatrix(ent.getOriginal());
+                    translation.x(), translation.y(), translation.z()).toGlobalPosMatrix(ent.getOriginal());
         }
         return null;
     }
@@ -79,7 +79,7 @@ public class ArmatureUtils {
                         float[] phasestime = new float[]{phase.preDelay, phase.contact, phase.recovery};
                         for (float time : phasestime) {
                             list.add(
-                                    PrideVec3f.fromMatrix(
+                                    PrideVec3f.fromMatrix4f(
                                     entityPatch.getArmature().getBindedTransformFor(animation.getPoseByTime(entityPatch, time, INTERPOLATION), phase.colliders[0].getFirst()))
                                             .correctRot(entityPatch.getOriginal()).scale(scale));
                         }
@@ -121,6 +121,16 @@ public class ArmatureUtils {
         return BezierCurvef.getBezierInterpolatedPoints(getJointInterpolatedMovement(renderer, ent, scale), (int) (scale * 4));
     }
 
+    public static float[] getXBodyRot(LivingEntity ent) {
+        if (ent != null) {
+            LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
+            if (entityPatch != null) {
+                    return new float[]{entityPatch.getOriginal().xRotO};
+            }
+        }
+        return new float[]{0};
+    }
+
     public static Joint getNearestJoint(LocalPlayer renderer, LivingEntity ent, Vec3 pos) {
         ConcurrentHashMap<Joint, Float> jointposmap = new ConcurrentHashMap<>();
         List<Joint> joints = getArmatureJoints(ent);
@@ -150,7 +160,7 @@ public class ArmatureUtils {
         if (!joints.isEmpty()) {
             for (Joint joint : joints) {
                 for (int i = 0; i < points; i++) {
-                    vec3List.add(getJointWithTranslation(renderer, ent, new Vec3f(((new Random()).nextFloat() - offset) * offset, ((new Random()).nextFloat() - offset) * offset, ((new Random()).nextFloat() - offset) * offset), joint));
+                    vec3List.add(getJointWithTranslation(renderer, ent, new PrideVec3f(((new Random()).nextFloat() - offset) * offset, ((new Random()).nextFloat() - offset) * offset, ((new Random()).nextFloat() - offset) * offset), joint));
                 }
             }
         }

@@ -24,7 +24,7 @@ public class DynamicCam {
             boolean ismounted = player.getVehicle() != null;
             float zmodifier = ismounted ? 1.5f : getDefaultZModifier(player);
             if (!player.level().canSeeSky(player.blockPosition())){
-                zmodifier *= 0.5f;
+               
             }
             float xmodifier = -0.12f + (zmodifier / 50);
             float ymodifier = -0.02f;

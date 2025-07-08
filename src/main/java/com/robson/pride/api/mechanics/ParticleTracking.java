@@ -75,36 +75,25 @@ public class ParticleTracking {
         return null;
     }
 
-    public static Vec3f getAABBForImbuement(ItemStack item, Entity ent) {
+    public static PrideVec3f getAABBForImbuement(ItemStack item, Entity ent) {
         if (item != null && ent != null) {
             GenericData data = ServerDataManager.getGenericData(item);
             if (data != null) {
                 Matrix2f collider = data.getCollider();
-                return new Vec3f((float) ((ThreadLocalRandom.current().nextFloat() + collider.x0()) * collider.x1()), (float) ((ThreadLocalRandom.current().nextFloat() + collider.y0()) * collider.y1() + (collider.y1() / 10)), (float) (-(ThreadLocalRandom.current().nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z0()));
+                return new PrideVec3f((float) ((ThreadLocalRandom.current().nextFloat() + collider.x0()) * collider.x1()), (float) ((ThreadLocalRandom.current().nextFloat() + collider.y0()) * collider.y1() + (collider.y1() / 10)), (float) (-(ThreadLocalRandom.current().nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z0()));
             }
         }
-        return new Vec3f((ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F, (ThreadLocalRandom.current().nextFloat() - 0.3F) * 0.3F, (ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F);
+        return new PrideVec3f((ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F, (ThreadLocalRandom.current().nextFloat() - 0.3F) * 0.3F, (ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F);
     }
 
-    public static Vec3f getAABBHalf(ItemStack item, Entity ent) {
+    public static PrideVec3f getAABBForImbuementDivided(ItemStack item, Entity ent, float dx, float dy, float dz){
         if (item != null && ent != null) {
             GenericData data = ServerDataManager.getGenericData(item);
             if (data != null) {
                 Matrix2f collider = data.getCollider();
-                return new Vec3f(0, 0, (collider.z1() / 2) + collider.z0());
+                return new PrideVec3f((float) ((ThreadLocalRandom.current().nextFloat() + (collider.x1() / dx)) * collider.x1()), (float) ((ThreadLocalRandom.current().nextFloat() +(collider.y1() / dy ))* collider.y1() + (collider.y1() / 10)), (float) (-(ThreadLocalRandom.current().nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z1() / dz));
             }
         }
-        return new Vec3f((ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F, (ThreadLocalRandom.current().nextFloat() - 0.3F) * 0.3F, (ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F);
-    }
-
-    public static Vec3f getAABBForImbuementDivided(ItemStack item, Entity ent, float dx, float dy, float dz){
-        if (item != null && ent != null) {
-            GenericData data = ServerDataManager.getGenericData(item);
-            if (data != null) {
-                Matrix2f collider = data.getCollider();
-                return new Vec3f((float) ((ThreadLocalRandom.current().nextFloat() + (collider.x1() / dx)) * collider.x1()), (float) ((ThreadLocalRandom.current().nextFloat() +(collider.y1() / dy ))* collider.y1() + (collider.y1() / 10)), (float) (-(ThreadLocalRandom.current().nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z1() / dz));
-            }
-        }
-        return new Vec3f((ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F, (ThreadLocalRandom.current().nextFloat() - 0.3F) * 0.3F, (ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F);
+        return new PrideVec3f((ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F, (ThreadLocalRandom.current().nextFloat() - 0.3F) * 0.3F, (ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.2F);
     }
 }

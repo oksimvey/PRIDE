@@ -18,7 +18,7 @@ public record PrideVec3f(float x, float y, float z) {
 
     }
 
-    public static PrideVec3f fromMatrix(OpenMatrix4f matrix4f) {
+    public static PrideVec3f fromMatrix4f(OpenMatrix4f matrix4f) {
         return new PrideVec3f(matrix4f.m30, matrix4f.m31, matrix4f.m32);
     }
 

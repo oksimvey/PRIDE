@@ -18,7 +18,7 @@ import net.minecraft.world.entity.Entity;
 public interface LightElement {
 
     ElementData DATA = new ElementData("Light", ServerDataManager.LIGHT, ParticleRegistry.WISP_PARTICLE.get(), ChatFormatting.YELLOW, SoundRegistry.CLOUD_OF_REGEN_LOOP.get(),
-            (byte) 2, SchoolRegister.DARKNESS.get(),  new ItemRenderingParams(new FixedRGB(225, 225, 50),
+            (byte) 2, SchoolRegister.DARKNESS.get(),  new ItemRenderingParams(new FixedRGB((short) 225, (short) 225, (short) 50),
             GlintRenderTypes.createDirectGlint("direct_light", new ResourceLocation("pride:textures/glints/light_glint.png")),
             GlintRenderTypes.createDirectEntityGlint("direct_entity_light", new ResourceLocation("pride:textures/glints/light_glint.png")))) {
         

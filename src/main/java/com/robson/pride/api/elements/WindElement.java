@@ -18,7 +18,7 @@ import net.minecraft.world.entity.Entity;
 public interface WindElement {
 
     ElementData DATA = new ElementData("Wind", ServerDataManager.WIND, ParticleTypes.CLOUD, ChatFormatting.WHITE, SoundRegistry.GUST_CAST.get(),
-            (byte) 5, SchoolRegister.WIND.get(),new ItemRenderingParams(new FixedRGB(225, 227, 227),
+            (byte) 5, SchoolRegister.WIND.get(),new ItemRenderingParams(new FixedRGB((short) 225, (short) 227, (short) 227),
             GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
             GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
 

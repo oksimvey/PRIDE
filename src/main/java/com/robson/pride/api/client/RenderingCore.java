@@ -18,7 +18,6 @@ import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 public class RenderingCore {
 
-
     public static void entityRenderer(LivingEntity ent) {
         if (ent != null && LodTick.canTick(ent, 1)) {
             LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);

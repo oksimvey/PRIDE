@@ -187,7 +187,7 @@ public interface GuardSkill {
                 if (isParry){
                     targetStamina(event.getSource().getDirectEntity(), isshield);
                 }
-                Vec3f trans = ParticleTracking.getAABBForImbuementDivided(ent.getOriginal().getUseItem(), ent.getOriginal(), 99, 99, 5);
+                PrideVec3f trans = ParticleTracking.getAABBForImbuementDivided(ent.getOriginal().getUseItem(), ent.getOriginal(), 99, 99, 5);
                 PrideVec3f vec = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, ent.getOriginal(), trans, joint);
                 if (vec != null) {
                     ParticleUtils.spawnParticle(EpicFightParticles.HIT_BLUNT.get(), vec, 0, 0, 0).scale(scale);

@@ -18,7 +18,7 @@ import net.minecraft.world.entity.Entity;
 public interface SunElement {
 
     ElementData DATA = new ElementData("Sun", ServerDataManager.SUN, ParticleRegistry.FIRE_PARTICLE.get(), ChatFormatting.GOLD, SoundRegistry.FIRE_BREATH_LOOP.get(),
-            (byte) 20, SchoolRegister.SUN.get(), new ItemRenderingParams(new FixedRGB(252, 97, 0),
+            (byte) 20, SchoolRegister.SUN.get(), new ItemRenderingParams(new FixedRGB((short) 252, (short) 97, (short) 0),
                     GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
             GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
 

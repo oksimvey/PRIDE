@@ -14,6 +14,6 @@ public interface EuropeanLongsword {
                 new Matrix2f(-0.5f, -0.5f, -0.15f, 0.2f, 0.8f, 1.5f),
                ServerDataManager.LONGSWORD_PIERCE,
                 new WeaponData.AttributeReqs('B', '\0', 'D', (byte) 10, (byte) 0, (byte) 5),
-                new FixedRGB(225, 227, 227));
+                new FixedRGB((short) 225, (short) 227, (short) 227));
 
 }

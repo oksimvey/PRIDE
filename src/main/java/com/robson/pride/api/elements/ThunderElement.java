@@ -26,7 +26,7 @@ import java.util.List;
 public interface ThunderElement {
 
     ElementData DATA = new ElementData("Thunder", ServerDataManager.THUNDER, ParticleRegistry.ELECTRICITY_PARTICLE.get(), ChatFormatting.AQUA, SoundRegistry.LIGHTNING_WOOSH_01.get(),
-            (byte) 5, SchoolRegister.THUNDER.get(),  new ItemRenderingParams(new FixedRGB(0, 252, 227),
+            (byte) 5, SchoolRegister.THUNDER.get(),  new ItemRenderingParams(new FixedRGB((short) 0, (short) 252, (short) 227),
             GlintRenderTypes.createDirectGlint("direct_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png")),
             GlintRenderTypes.createDirectEntityGlint("direct_entity_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png")))) {
 

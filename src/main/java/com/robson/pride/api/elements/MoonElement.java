@@ -17,7 +17,7 @@ import net.minecraft.world.entity.Entity;
 
 public interface MoonElement {
     ElementData DATA = new ElementData("Moon", ServerDataManager.MOON, ParticleTypes.DRAGON_BREATH, ChatFormatting.DARK_PURPLE, SoundRegistry.TELEKINESIS_LOOP.get(),
-            (byte) 5, SchoolRegister.MOON.get(), new ItemRenderingParams(new FixedRGB(134, 0, 237),
+            (byte) 5, SchoolRegister.MOON.get(), new ItemRenderingParams(new FixedRGB((short) 134, (short) 0, (short) 237),
             GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
             GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
 

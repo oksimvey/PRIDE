@@ -19,7 +19,7 @@ public class TeleportUtils {
 
     public static void teleportEntityToEntityJoint(LivingEntity entity1, LivingEntity entity2, Joint joint, double offsetx, double offsety, double offsetz) {
         if (entity1 != null && entity2 != null) {
-            PrideVec3f vec3 = ArmatureUtils.getJoinTPosition(Minecraft.getInstance().player, entity2, joint);
+            PrideVec3f vec3 = ArmatureUtils.getJointPosition(Minecraft.getInstance().player, entity2, joint);
             if (vec3 != null) {
                 entity1.teleportTo(vec3.x() + (offsetx), entity2.getY() + (offsety), vec3.z() + (offsetz));
             }

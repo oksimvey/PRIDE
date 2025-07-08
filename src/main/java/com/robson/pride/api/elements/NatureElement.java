@@ -18,7 +18,7 @@ import net.minecraft.world.entity.Entity;
 public interface NatureElement  {
 
     ElementData DATA = new ElementData("Nature", ServerDataManager.NATURE, ParticleTypes.COMPOSTER, ChatFormatting.DARK_GREEN, SoundRegistry.POISON_SPLASH_BEGIN.get(),
-            (byte) 5, SchoolRegister.NATURE.get(), new ItemRenderingParams(new FixedRGB(13, 145, 22),
+            (byte) 5, SchoolRegister.NATURE.get(), new ItemRenderingParams(new FixedRGB((short) 13, (short) 145, (short) 22),
             GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
             GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
 
