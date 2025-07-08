@@ -30,7 +30,7 @@ public class ParticleTracking {
         return item != null && itemParticleMap.get(item) != null;
     }
 
-    public static void tickParticleMapping(ItemStack item, Entity ent) {
+    public static void tickParticleMapping(ItemStack item, LivingEntity ent) {
         boolean result = false;
         if (item != null && ent != null) {
             if (item.getTag() != null) {
@@ -46,8 +46,8 @@ public class ParticleTracking {
         else itemParticleMap.put(item, getItemElementForImbuement(item, (LivingEntity) ent));
     }
 
-    public static boolean shouldRenderSunParticle(Entity ent) {
-        PrideVec3f vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolR);
+    public static boolean shouldRenderSunParticle(LivingEntity ent) {
+        PrideVec3f vec3 = ArmatureUtils.getJoinTPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolR);
         if (vec3 != null) {
             if (ElementalUtils.isNotInWater(ent, vec3.toVec3())) {
                 togglefire.put(ent, true);

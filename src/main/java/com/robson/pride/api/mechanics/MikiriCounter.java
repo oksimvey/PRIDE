@@ -25,12 +25,12 @@ import io.redspace.ironsspellbooks.spells.fire.HeatSurgeSpell;
 import io.redspace.ironsspellbooks.spells.ice.FrostwaveSpell;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import yesman.epicfight.gameasset.Armatures;
-import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 import java.util.concurrent.TimeUnit;
 
@@ -55,7 +55,7 @@ public class MikiriCounter {
         }, window, TimeUnit.MILLISECONDS);
     }
 
-    public static void onPierceMikiri(Entity ent, Entity ddmgent, String pierce_type) {
+    public static void onPierceMikiri(LivingEntity ent, LivingEntity ddmgent, String pierce_type) {
         String animation;
         if (ent instanceof Player) {
             CameraUtils.lockCamera(Minecraft.getInstance().player);
@@ -108,11 +108,8 @@ public class MikiriCounter {
     public static void teleportProjectileToEntityHand(Entity owner, Entity projectile, Vec3 delta) {
         if (owner != null && projectile != null && delta != null) {
             projectile.setDeltaMovement(delta.x, 0.1, delta.z);
-           PrideVec3f vec3 = ArmatureUtils.getJoinPosition(Minecraft.getInstance().player, owner, Armatures.BIPED.get().handL);
-            if (vec3 != null) {
-                projectile.moveTo(vec3.toVec3());
-                TimerUtil.schedule(() -> teleportProjectileToEntityHand(owner, projectile, delta), 50, TimeUnit.MILLISECONDS);
-            }
+
+
         }
     }
 

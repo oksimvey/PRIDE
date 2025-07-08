@@ -1,34 +1,59 @@
 package com.robson.pride.api.utils.math;
 
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
+import yesman.epicfight.api.utils.math.OpenMatrix4f;
 
-public record PrideVec3f(float x, float y, float z) {
+public class PrideVec3f extends PrideVector<PrideVec3f>  {
+
+    public PrideVec3f(float x, float y, float z) {
+        super(x, y, z);
+    }
+
+    @Override
+    protected PrideVec3f self(float... values) {
+        return new PrideVec3f(values[0], values[1], values[2]);
+    }
 
     public static PrideVec3f fromVec3(Vec3 vec3) {
         return new PrideVec3f((float) vec3.x, (float) vec3.y, (float) vec3.z);
+    }
+
+    public static PrideVec3f fromTranslatedMatrix(OpenMatrix4f matrix4f, float x, float y, float z){
+        float x1 = matrix4f.m30 + matrix4f.m00 * x + matrix4f.m10 * y + matrix4f.m20 * z;
+        float y1 = matrix4f.m31 + matrix4f.m01 * x + matrix4f.m11 * y + matrix4f.m21 * z;
+        float z1 = matrix4f.m32 + matrix4f.m02 * x + matrix4f.m12 * y + matrix4f.m22 * z;
+        return new PrideVec3f(x1, y1, z1);
+
+    }
+
+    public static PrideVec3f fromMatrix(OpenMatrix4f matrix4f){
+        return new PrideVec3f(matrix4f.m30, matrix4f.m31, matrix4f.m32);
+    }
+
+    public float x(){
+        return this.dimensions[0];
+    }
+
+    public float y(){
+        return this.dimensions[1];
+    }
+
+    public float z(){
+        return this.dimensions[2];
+    }
+
+    public Vec3 toVec3() {
+        return new Vec3(x(), y(), z());
     }
 
     public PrideVec3f getDirectionToVector(PrideVec3f vector){
         return vector.subtract(this).normalize();
     }
 
-    public PrideVec3f add(PrideVec3f vec3) {
-        return new PrideVec3f(x + vec3.x, y + vec3.y, z + vec3.z);
-    }
-
-    public PrideVec3f scale(float scale) {
-        return new PrideVec3f(x * scale, y * scale, z * scale);
-    }
-
-    public PrideVec3f subtract(PrideVec3f vec3) {
-        return new PrideVec3f(x - vec3.x, y - vec3.y, z - vec3.z);
-    }
-
     public float distanceTo(PrideVec3f vec3){
-        float distancex = vec3.x - x;
-        float distancey = vec3.y - y;
-        float distancez = vec3.z - z;
+        float distancex = vec3.x() - x();
+        float distancey = vec3.y() - y();
+        float distancez = vec3.z() - z();
         return (float) Math.sqrt((distancex * distancex) + (distancey * distancey) + (distancez * distancez));
     }
 
@@ -37,40 +62,5 @@ public record PrideVec3f(float x, float y, float z) {
         float distanceToPoint = origin.distanceTo(point);
         PrideVec3f scaled = direction.scale(distanceToPoint);
         return origin.add(scaled).distanceTo(point) < baseradius + heightradius;
-    }
-
-    public PrideVec3f translate(float x, float y, float z){
-        return new PrideVec3f(this.x + (x * this.x), this.y + (y * this.y), this.z + (z * this.z));
-    }
-
-    public PrideVec3f normalize(){
-        return this.divide(length());
-    }
-
-    public float length(){
-        return (float) Math.sqrt((x * x) + (y * y) + (z * z));
-    }
-
-    public PrideVec3f divide(float divisor){
-        if (divisor == 0) {
-            return new PrideVec3f(0, 0, 0);
-        }
-        return new PrideVec3f(x / divisor, y / divisor, z / divisor);
-    }
-
-    public PrideVec3f rotate(float degrees) {
-        return MathUtils.rotate2DVector(this, degrees);
-    }
-
-    public Vec3 toVec3() {
-        return new Vec3(x, y, z);
-    }
-
-    public Vector3f toVector3f() {
-        return new Vector3f(x, y, z);
-    }
-
-    public PrideVec3f add(float x, float y, float z) {
-        return new PrideVec3f(this.x - x, this.y - y, this.z - z);
     }
 }

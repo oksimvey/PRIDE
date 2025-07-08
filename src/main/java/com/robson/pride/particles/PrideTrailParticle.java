@@ -5,10 +5,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.robson.pride.api.client.ItemRenderingParams;
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.item.ElementData;
+import com.robson.pride.api.item.CustomItem;
 import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.math.BezierCurvef;
 import com.robson.pride.api.utils.math.PrideVec3f;
-import com.robson.pride.api.item.CustomItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.texture.AbstractTexture;
@@ -16,7 +16,10 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import yesman.epicfight.api.animation.*;
+import yesman.epicfight.api.animation.AnimationPlayer;
+import yesman.epicfight.api.animation.Joint;
+import yesman.epicfight.api.animation.JointTransform;
+import yesman.epicfight.api.animation.Pose;
 import yesman.epicfight.api.animation.types.DynamicAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.asset.AssetAccessor;
@@ -46,7 +49,7 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
         if (item.getTag() == null) {
             return;
         }
-        if (item.getItem() instanceof CustomItem && ServerDataManager.getWeaponData(item) != null){
+        if (item.getItem() instanceof CustomItem && ServerDataManager.getWeaponData(item) != null) {
             trailInfo = ServerDataManager.getWeaponData(item).getTrailInfo(trailInfo);
             this.trailInfo = trailInfo;
         }
@@ -64,21 +67,21 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
                 }
             }
         }
-        Pose prevPose = ((LivingEntityPatch)this.owner).getAnimator().getPose(0.0F);
-        Pose middlePose = ((LivingEntityPatch)this.owner).getAnimator().getPose(0.5F);
-        Pose currentPose = ((LivingEntityPatch)this.owner).getAnimator().getPose(1.0F);
-        PrideVec3f posOld = PrideVec3f.fromVec3(((LivingEntity)((LivingEntityPatch)this.owner).getOriginal()).getPosition(0.0F));
-        PrideVec3f posMid = PrideVec3f.fromVec3(((LivingEntity)((LivingEntityPatch)this.owner).getOriginal()).getPosition(0.5F));
-        PrideVec3f posCur = PrideVec3f.fromVec3(((LivingEntity)((LivingEntityPatch)this.owner).getOriginal()).getPosition(1.0F));
+        Pose prevPose = this.owner.getAnimator().getPose(0.0F);
+        Pose middlePose = this.owner.getAnimator().getPose(0.5F);
+        Pose currentPose = this.owner.getAnimator().getPose(1.0F);
+        PrideVec3f posOld = PrideVec3f.fromVec3(((LivingEntityPatch) this.owner).getOriginal().getPosition(0.0F));
+        PrideVec3f posMid = PrideVec3f.fromVec3(((LivingEntityPatch) this.owner).getOriginal().getPosition(0.5F));
+        PrideVec3f posCur = PrideVec3f.fromVec3(((LivingEntityPatch) this.owner).getOriginal().getPosition(1.0F));
         this.lastPose = currentPose;
         this.lastPos = posCur.toVec3();
-        this.lastTransform = JointTransform.fromMatrix(((LivingEntityPatch)this.owner).getModelMatrix(1.0F));
-        OpenMatrix4f prvmodelTf = OpenMatrix4f.createTranslation((float) posOld.x(), (float) posOld.y(), (float) posOld.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(((LivingEntityPatch)this.owner).getModelMatrix(0.0F));
-        OpenMatrix4f middleModelTf = OpenMatrix4f.createTranslation((float) posMid.x(), (float) posMid.y(), (float) posMid.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(((LivingEntityPatch)this.owner).getModelMatrix(0.5F));
-        OpenMatrix4f curModelTf = OpenMatrix4f.createTranslation((float) posCur.x(), (float) posCur.y(), (float) posCur.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(((LivingEntityPatch)this.owner).getModelMatrix(1.0F));
-        OpenMatrix4f prevJointTf = ((LivingEntityPatch)this.owner).getArmature().getBindedTransformFor(prevPose, this.joint).mulFront(prvmodelTf);
-        OpenMatrix4f middleJointTf = ((LivingEntityPatch)this.owner).getArmature().getBindedTransformFor(middlePose, this.joint).mulFront(middleModelTf);
-        OpenMatrix4f currentJointTf = ((LivingEntityPatch)this.owner).getArmature().getBindedTransformFor(currentPose, this.joint).mulFront(curModelTf);
+        this.lastTransform = JointTransform.fromMatrix(this.owner.getModelMatrix(1.0F));
+        OpenMatrix4f prvmodelTf = OpenMatrix4f.createTranslation(posOld.x(), posOld.y(), posOld.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(this.owner.getModelMatrix(0.0F));
+        OpenMatrix4f middleModelTf = OpenMatrix4f.createTranslation(posMid.x(), posMid.y(), posMid.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(this.owner.getModelMatrix(0.5F));
+        OpenMatrix4f curModelTf = OpenMatrix4f.createTranslation(posCur.x(), posCur.y(), posCur.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(this.owner.getModelMatrix(1.0F));
+        OpenMatrix4f prevJointTf = this.owner.getArmature().getBindedTransformFor(prevPose, this.joint).mulFront(prvmodelTf);
+        OpenMatrix4f middleJointTf = this.owner.getArmature().getBindedTransformFor(middlePose, this.joint).mulFront(middleModelTf);
+        OpenMatrix4f currentJointTf = this.owner.getArmature().getBindedTransformFor(currentPose, this.joint).mulFront(curModelTf);
         Vec3 prevStartPos = OpenMatrix4f.transform(prevJointTf, trailInfo.start());
         Vec3 prevEndPos = OpenMatrix4f.transform(prevJointTf, trailInfo.end());
         Vec3 middleStartPos = OpenMatrix4f.transform(middleJointTf, trailInfo.start());
@@ -103,17 +106,18 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
     }
 
     protected boolean canContinue() {
-        AnimationPlayer animPlayer = ((LivingEntityPatch)this.owner).getAnimator().getPlayerFor(this.animation);
-        return ((LivingEntity)((LivingEntityPatch)this.owner).getOriginal()).isAlive() && this.animation == animPlayer.getRealAnimation() && animPlayer.getElapsedTime() <= this.trailInfo.endTime();
+        AnimationPlayer animPlayer = this.owner.getAnimator().getPlayerFor(this.animation);
+        return ((LivingEntityPatch) this.owner).getOriginal().isAlive() && this.animation == animPlayer.getRealAnimation() && animPlayer.getElapsedTime() <= this.trailInfo.endTime();
     }
 
     protected boolean canCreateNextCurve() {
-        AnimationPlayer animPlayer = ((LivingEntityPatch)this.owner).getAnimator().getPlayerFor(this.animation);
-        return TrailInfo.isValidTime(this.trailInfo.fadeTime()) && this.trailInfo.endTime() < animPlayer.getElapsedTime() ? false : super.canCreateNextCurve();
+        AnimationPlayer animPlayer = this.owner.getAnimator().getPlayerFor(this.animation);
+        return (!TrailInfo.isValidTime(this.trailInfo.fadeTime()) || !(this.trailInfo.endTime() < animPlayer.getElapsedTime())) && super.canCreateNextCurve();
     }
+
     protected void createNextCurve() {
-        AnimationPlayer animPlayer = ((LivingEntityPatch) this.owner).getAnimator().getPlayerFor(this.animation);
-        boolean isTrailInvisible = ((DynamicAnimation) animPlayer.getAnimation().get()).isLinkAnimation() || animPlayer.getElapsedTime() <= this.trailInfo.startTime();
+        AnimationPlayer animPlayer = this.owner.getAnimator().getPlayerFor(this.animation);
+        boolean isTrailInvisible = animPlayer.getAnimation().get().isLinkAnimation() || animPlayer.getElapsedTime() <= this.trailInfo.startTime();
         boolean isFirstTrail = this.trailEdges.isEmpty();
         boolean needCorrection = !isTrailInvisible && isFirstTrail;
         if (needCorrection) {
@@ -122,20 +126,20 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
         }
         TrailInfo trailInfo = this.trailInfo;
         Pose prevPose = this.lastPose;
-        Pose currentPose = ((LivingEntityPatch) this.owner).getAnimator().getPose(1.0F);
+        Pose currentPose = this.owner.getAnimator().getPose(1.0F);
         Pose middlePose = Pose.interpolatePose(prevPose, currentPose, 0.5F);
         PrideVec3f posOld = PrideVec3f.fromVec3(this.lastPos);
         PrideVec3f posCur = PrideVec3f.fromVec3(((LivingEntityPatch) this.owner).getOriginal().getPosition(1.0F));
         PrideVec3f posMid = PrideVec3f.fromVec3(MathUtils.lerpVector(posOld.toVec3(), posCur.toVec3(), 0.5F));
         OpenMatrix4f prevModelMatrix = this.lastTransform.toMatrix();
-        OpenMatrix4f curModelMatrix = ((LivingEntityPatch) this.owner).getModelMatrix(1.0F);
+        OpenMatrix4f curModelMatrix = this.owner.getModelMatrix(1.0F);
         JointTransform currentTransform = JointTransform.fromMatrix(curModelMatrix);
-        OpenMatrix4f prvmodelTf = OpenMatrix4f.createTranslation((float) posOld.x(), (float) posOld.y(), (float) posOld.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(prevModelMatrix);
-        OpenMatrix4f middleModelTf = OpenMatrix4f.createTranslation((float) posMid.x(), (float) posMid.y(), (float) posMid.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(JointTransform.interpolate(this.lastTransform, currentTransform, 0.5F).toMatrix());
-        OpenMatrix4f curModelTf = OpenMatrix4f.createTranslation((float) posCur.x(), (float) posCur.y(), (float) posCur.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(curModelMatrix);
-        OpenMatrix4f prevJointTf = ((LivingEntityPatch) this.owner).getArmature().getBindedTransformFor(prevPose, this.joint).mulFront(prvmodelTf);
-        OpenMatrix4f middleJointTf = ((LivingEntityPatch) this.owner).getArmature().getBindedTransformFor(middlePose, this.joint).mulFront(middleModelTf);
-        OpenMatrix4f currentJointTf = ((LivingEntityPatch) this.owner).getArmature().getBindedTransformFor(currentPose, this.joint).mulFront(curModelTf);
+        OpenMatrix4f prvmodelTf = OpenMatrix4f.createTranslation(posOld.x(), posOld.y(), posOld.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(prevModelMatrix);
+        OpenMatrix4f middleModelTf = OpenMatrix4f.createTranslation(posMid.x(), posMid.y(), posMid.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(JointTransform.interpolate(this.lastTransform, currentTransform, 0.5F).toMatrix());
+        OpenMatrix4f curModelTf = OpenMatrix4f.createTranslation(posCur.x(), posCur.y(), posCur.z()).rotateDeg(180.0F, yesman.epicfight.api.utils.math.Vec3f.Y_AXIS).mulBack(curModelMatrix);
+        OpenMatrix4f prevJointTf = this.owner.getArmature().getBindedTransformFor(prevPose, this.joint).mulFront(prvmodelTf);
+        OpenMatrix4f middleJointTf = this.owner.getArmature().getBindedTransformFor(middlePose, this.joint).mulFront(middleModelTf);
+        OpenMatrix4f currentJointTf = this.owner.getArmature().getBindedTransformFor(currentPose, this.joint).mulFront(curModelTf);
         PrideVec3f prevStartPos = PrideVec3f.fromVec3(OpenMatrix4f.transform(prevJointTf, trailInfo.start()));
         PrideVec3f prevEndPos = PrideVec3f.fromVec3(OpenMatrix4f.transform(prevJointTf, trailInfo.end()));
         PrideVec3f middleStartPos = PrideVec3f.fromVec3(OpenMatrix4f.transform(middleJointTf, trailInfo.start()));
@@ -161,11 +165,11 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
             AbstractTrailParticle.TrailEdge edge2;
             if (isFirstTrail) {
                 int lastIdx = this.invisibleTrailEdges.size() - 1;
-                edge1 = (AbstractTrailParticle.TrailEdge) this.invisibleTrailEdges.get(lastIdx);
+                edge1 = this.invisibleTrailEdges.get(lastIdx);
                 edge2 = new AbstractTrailParticle.TrailEdge(prevStartPos.toVec3(), prevEndPos.toVec3(), -1);
             } else {
-                edge1 = (AbstractTrailParticle.TrailEdge) this.trailEdges.get(this.trailEdges.size() - (this.trailInfo.interpolateCount() / 2 + 1));
-                edge2 = (AbstractTrailParticle.TrailEdge) this.trailEdges.get(this.trailEdges.size() - 1);
+                edge1 = this.trailEdges.get(this.trailEdges.size() - (this.trailInfo.interpolateCount() / 2 + 1));
+                edge2 = this.trailEdges.get(this.trailEdges.size() - 1);
                 ++edge2.lifetime;
             }
 

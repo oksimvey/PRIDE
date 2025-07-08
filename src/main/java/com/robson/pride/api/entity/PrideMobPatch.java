@@ -4,11 +4,13 @@ import com.google.common.collect.Maps;
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.data.types.entity.MobData;
+import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.LodTick;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.PrideVec3f;
 import com.robson.pride.events.OnAttackStartEvent;
+import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.skills.special.Vulnerability;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -138,15 +140,6 @@ public class PrideMobPatch <T extends PrideMob> extends MobPatch<T> {
         super.onStartTracking(trackingPlayer);
     }
 
-    @Override
-    public void playAnimationSynchronized(AssetAccessor<? extends StaticAnimation> animation, float convert){
-        super.playAnimationSynchronized(animation, convert);
-        if (animation.get() instanceof AttackAnimation){
-            OnAttackStartEvent.onAttackStart(this);
-        }
-    }
-
-
     public void updateHeldItem(CapabilityItem fromcap, CapabilityItem tocap, ItemStack oldItem, ItemStack newItem, InteractionHand hand){
        super.updateHeldItem(fromcap, tocap, oldItem, newItem, hand);
        this.modifyLivingMotionByCurrentItem(false);
@@ -170,6 +163,9 @@ public class PrideMobPatch <T extends PrideMob> extends MobPatch<T> {
             this.stamina += 0.01f;
         }
         else this.staminaregaindelay--;
+        if (Vulnerability.isVulnerable(this.getOriginal())){
+            SkillDataManager.removeSkill(this.getOriginal(), SkillDataManager.GUARD);
+        }
         for (Entity ent : this.getOriginal().level().getEntities(getOriginal(), MathUtils.createAABBAroundEnt(getOriginal(), 10))){
             if (ent instanceof Projectile arrow && arrow.getDeltaMovement().length() > 0.75) {
                 PrideVec3f delta = PrideVec3f.fromVec3(arrow.getDeltaMovement());
@@ -179,21 +175,23 @@ public class PrideMobPatch <T extends PrideMob> extends MobPatch<T> {
                     SkillDataManager.addSkill(this.getOriginal(), SkillDataManager.GUARD);
                     TimerUtil.schedule(() -> {
                         SkillDataManager.removeSkill(this.getOriginal(), SkillDataManager.GUARD);
-                    }, 1000, TimeUnit.MILLISECONDS);
+                    }, 500, TimeUnit.MILLISECONDS);
                     return;
                 }
             }
         }
-        if (LodTick.canTick(this.getOriginal(), 2) && Vulnerability.isVulnerable(this.getOriginal()) &&
+        if (LodTick.canTick(this.getOriginal(), 2) &&
+                getTarget() != null && AnimUtils.getCurrentAnimation(getTarget()) != AnimationsRegister.EXECUTE.get()&& !Vulnerability.isVulnerable(this.getOriginal()) &&
                 !SkillDataManager.isSkillActive(this.getOriginal(), SkillDataManager.GUARD)){
             if (this.getTarget() == null || !this.getTarget().isAlive() || (this.getTarget() instanceof Player player && player.isCreative())){
                 this.setAttakTargetSync(null);
             }
-            if (EpicFightCapabilities.getEntityPatch(this.getTarget(), LivingEntityPatch.class) instanceof PlayerPatch<?> playerPatch && playerPatch.getEntityState().getLevel() > 0 ){
+            if (EpicFightCapabilities.getEntityPatch(this.getTarget(), LivingEntityPatch.class) instanceof PlayerPatch<?> playerPatch
+                    && playerPatch.getEntityState().getLevel() > 0 ){
                 SkillDataManager.addSkill(this.getOriginal(), SkillDataManager.GUARD);
                 TimerUtil.schedule(()-> {
                     SkillDataManager.removeSkill(this.getOriginal(), SkillDataManager.GUARD);
-                }, 3000, TimeUnit.MILLISECONDS);
+                }, 2000, TimeUnit.MILLISECONDS);
                 return;
             }
             if (this.getTarget() != null &&!this.getEntityState().attacking() && this.getEntityState().canBasicAttack()) {

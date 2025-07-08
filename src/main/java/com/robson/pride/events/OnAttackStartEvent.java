@@ -18,7 +18,7 @@ public class OnAttackStartEvent {
                 }
                 if (Vulnerability.isVulnerable(target.getOriginal())){
                     entitypatch.playAnimationSynchronized(AnimationsRegister.EXECUTE, 0);
-                    float rot = entitypatch.getOriginal().getYRot() + 45f;
+                    float rot = entitypatch.getOriginal().yBodyRot + 45f;
                     float entityrot = stealth ? 0 : 180f;
                     ArmatureUtils.traceEntityOnEntity(entitypatch.getOriginal(), target.getOriginal(), rot,  entityrot, true,100, 30);
                 }

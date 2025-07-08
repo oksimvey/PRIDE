@@ -17,7 +17,9 @@ public abstract class DurationSkillData {
         this.tickwhenStarted.put(ent, ent.tickCount);
     }
 
-    public void onHurtAnotherEntity(LivingEntity dmgent, LivingHurtEvent event){}
+    public float onHurtAnotherEntity(LivingEntity dmgent, LivingHurtEvent event){
+        return 0;
+    }
 
     public abstract void onAttacked(LivingEntity ent, LivingAttackEvent event);
 

@@ -72,7 +72,8 @@ public abstract class WeaponSkillData extends GenericData {
 
     }
 
-    public void onHurt(LivingEntity dmgent, LivingEntity ent, LivingHurtEvent event){
+    public float onHurt(LivingEntity dmgent, LivingEntity ent, LivingHurtEvent event){
+        return 0;
     }
 
     public static ChatFormatting colorByTier(SkillCore.WeaponArtTier tier){

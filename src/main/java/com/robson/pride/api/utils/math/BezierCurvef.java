@@ -79,10 +79,10 @@ public class BezierCurvef {
             FloatList y = new FloatArrayList();
             FloatList z = new FloatArrayList();
 
-            for(int idx = 0; idx < size; ++idx) {
-                x.add((points.get(idx)).x());
-                y.add((points.get(idx)).y());
-                z.add((points.get(idx)).z());
+            for (PrideVec3f point : points) {
+                x.add(point.x());
+                y.add(point.y());
+                z.add(point.z());
             }
 
             FloatList x_a = new FloatArrayList();

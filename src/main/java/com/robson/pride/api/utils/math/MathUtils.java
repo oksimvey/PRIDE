@@ -1,14 +1,12 @@
 package com.robson.pride.api.utils.math;
 
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.lwjgl.system.ThreadLocalUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public interface MathUtils {
@@ -16,6 +14,10 @@ public interface MathUtils {
     double GRAVITY_CONSTANT = -0.0784000015258789;
 
     float PIf = 3.141592f;
+
+    short CORRECT_HALF = 180;
+
+    byte CORRECT_QUARTER = 45;
 
     static float getValueWithPercentageIncrease(double number, double percentage) {
         ThreadLocalRandom.current();
@@ -52,6 +54,14 @@ public interface MathUtils {
         float x = (float) ((vec.x * Math.cos(theta)) - (vec.z * Math.sin(theta)));
         float z = (float) ((vec.x * Math.sin(theta)) + (vec.z * Math.cos(theta)));
         return new Vec3(x, vec.y, z);
+    }
+
+    static PrideVec3f getEntityGlobalJointPos(LivingEntity entity, PrideVec3f localpos) {
+        return new PrideVec3f(
+                (float) (entity.getX() + localpos.x()),
+                (float) (entity.getY() + localpos.y() * (entity.getBbHeight() / 1.8f)),
+                (float) (entity.getZ() + localpos.z())
+        );
     }
 
     static PrideVec2f rotate2DVector(PrideVec2f vec, float degrees) {
