@@ -4,13 +4,9 @@ package com.robson.pride.api.data.manager;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.TagParser;
+import net.minecraft.nbt.*;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Reader;
+import java.io.*;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,19 +14,40 @@ import java.nio.file.Paths;
 
 public class CompressServerData{
 
+    private static final String INPUT_DIR = "src/main/json_data";
+
+    private static final String OUTPUT_DIR = "src/main/resources/pride_data";
+
     public static void main(String[] args) throws IOException {
-            Path inputDir = Paths.get("src/main/json_data");
-            Path outputDir = Paths.get("src/main/resources/pride_data");
-            compress(inputDir, outputDir);
+            compressWeaponData();
     }
 
-    public static void compress(Path inputDir, Path outputDir) throws IOException {
-        if (inputDir == null || !Files.isDirectory(inputDir)) {
-            throw new IllegalArgumentException("invalid input directory: " + inputDir);
-        }
+    private static void compressBiomesData() throws IOException {
+        compress(ServerDataFileManager.BIOMES_DATA);
+    }
 
-        if (outputDir == null) {
-            throw new IllegalArgumentException("invalid output directory:");
+    private static void compressEntitiesData() throws IOException {
+        compress(ServerDataFileManager.ENTITIES);
+    }
+
+    private static void compressItemsData() throws IOException {
+        compress(ServerDataFileManager.ITEMS);
+    }
+
+    private static void compressWeaponSkillData() throws IOException {
+        compress(ServerDataFileManager.WEAPON_SKILLS);
+    }
+
+    private static void compressWeaponData() throws IOException {
+        compress(ServerDataFileManager.WEAPONS);
+    }
+
+    private static void compress(String datatype) throws IOException {
+        ListTag registries = new ListTag();
+        Path inputDir = Paths.get(INPUT_DIR + "/" + datatype);
+        Path outputDir = Paths.get(OUTPUT_DIR + "/" + datatype);
+        if (!Files.isDirectory(inputDir)) {
+            throw new IllegalArgumentException("invalid input directory: " + inputDir);
         }
 
         Files.createDirectories(outputDir);
@@ -38,15 +55,23 @@ public class CompressServerData{
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(inputDir, "*.json")) {
             for (Path jsonPath : stream) {
                 try {
-                    compressFile(jsonPath, outputDir);
+                    registries.add(StringTag.valueOf(compressFile(jsonPath, outputDir)));
                 } catch (Exception e) {
                     System.err.println("⚠️ error processing " + jsonPath + ": " + e.getMessage());
                 }
             }
         }
+
+        Path registryPath = Path.of(OUTPUT_DIR).resolve(datatype + "_registries.dat");
+
+        try (OutputStream out = Files.newOutputStream(registryPath)) {
+            CompoundTag registriesTag = new CompoundTag();
+            registriesTag.put("registries", registries);
+            NbtIo.writeCompressed(registriesTag, out);
+        }
     }
 
-    public static void compressFile(Path jsonPath, Path outputDir) throws IOException, CommandSyntaxException {
+    private static String compressFile(Path jsonPath, Path outputDir) throws IOException, CommandSyntaxException {
         if (jsonPath == null || !Files.exists(jsonPath)) {
             throw new IllegalArgumentException("invalid json file: " + jsonPath);
         }
@@ -68,5 +93,6 @@ public class CompressServerData{
         try (OutputStream out = Files.newOutputStream(outPath)) {
             NbtIo.writeCompressed(tag, out);
         }
+        return filename;
     }
 }

@@ -71,8 +71,6 @@ public record PrideVec3f(float x, float y, float z) {
         );
     }
 
-
-
     public Vec3 toVec3() {
         return new Vec3(x, y, z);
     }

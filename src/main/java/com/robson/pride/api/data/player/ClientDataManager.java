@@ -1,5 +1,6 @@
 package com.robson.pride.api.data.player;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.MinecraftServer;
@@ -25,18 +26,7 @@ public interface ClientDataManager {
     static Path getPlayerCustomDatFile(ServerPlayer player) {
         MinecraftServer server = player.getServer();
         UUID uuid = player.getUUID();
-
         return server.getWorldPath(LevelResource.PLAYER_DATA_DIR).resolve(uuid + "." + CLIENT_DATA + ".dat");
-    }
-
-    static void savePlayerDat(ServerPlayer player, CompoundTag tag) {
-        Path file = getPlayerCustomDatFile(player);
-        try (OutputStream out = Files.newOutputStream(file)) {
-            NbtIo.writeCompressed(tag, out);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     static CompoundTag readPlayerDat(ServerPlayer player) {
@@ -50,4 +40,15 @@ public interface ClientDataManager {
             return new CompoundTag();
         }
     }
+
+    static void savePlayerDat(ServerPlayer player, CompoundTag tag) {
+        Path file = getPlayerCustomDatFile(player);
+        try (OutputStream out = Files.newOutputStream(file)) {
+            NbtIo.writeCompressed(tag, out);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

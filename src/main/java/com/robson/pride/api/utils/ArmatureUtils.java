@@ -8,11 +8,15 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
+import yesman.epicfight.api.animation.AnimationPlayer;
+import yesman.epicfight.api.animation.AnimationVariables;
 import yesman.epicfight.api.animation.Joint;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.DynamicAnimation;
+import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.utils.math.OpenMatrix4f;
 import yesman.epicfight.api.utils.math.Vec3f;
+import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
@@ -53,8 +57,15 @@ public class ArmatureUtils {
 
     public static PrideVec3f getJointWithTranslation(LocalPlayer renderer, LivingEntityPatch<?> ent, PrideVec3f translation, Joint joint) {
         if (renderer != null && translation != null && renderer.level().isClientSide && ent != null && joint != null) {
-            return PrideVec3f.fromTranslatedMatrix(ent.getArmature().getBindedTransformFor(ent.getAnimator().getPose(INTERPOLATION), joint),
-                    translation.x(), translation.y(), translation.z()).toGlobalPosMatrix(ent.getOriginal());
+            AnimationPlayer player;
+            if (ent.getClientAnimator().currentCompositeMotion() != null){
+                player = ent.getClientAnimator().getPlayerFor(ent.getClientAnimator().getCompositeLivingMotion(ent.currentCompositeMotion));
+            }
+            else player = ent.getClientAnimator().getPlayerFor(null);
+            if (player != null && player.getAnimation().get() instanceof StaticAnimation animation && ent.getAnimator().getVariables().get(Animations.ReusableSources.TOOLS_IN_BACK, animation.getAccessor()).isEmpty()) {
+                return PrideVec3f.fromTranslatedMatrix(animation.getPoseByTime(ent, player.getElapsedTime(), INTERPOLATION).get(ent.getArmature().searchPathIndex(joint.getName())).toMatrix(),
+                        translation.x(), translation.y(), translation.z()).toGlobalPosMatrix(ent.getOriginal());
+            }
         }
         return null;
     }
