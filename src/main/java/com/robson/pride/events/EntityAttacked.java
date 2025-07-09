@@ -12,8 +12,6 @@ import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.progression.AttributeModifiers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -21,12 +19,6 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import yesman.epicfight.gameasset.EpicFightSounds;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
-import yesman.epicfight.world.damagesource.StunType;
-
-import java.util.concurrent.TimeUnit;
 
 @Mod.EventBusSubscriber
 public class EntityAttacked {

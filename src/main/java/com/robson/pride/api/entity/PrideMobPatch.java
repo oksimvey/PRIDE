@@ -9,7 +9,6 @@ import com.robson.pride.api.utils.LodTick;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.PrideVec3f;
-import com.robson.pride.events.OnAttackStartEvent;
 import com.robson.pride.registries.AnimationsRegister;
 import com.robson.pride.skills.special.Vulnerability;
 import net.minecraft.network.FriendlyByteBuf;
@@ -27,7 +26,6 @@ import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.Animator;
 import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.LivingMotions;
-import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.asset.AssetAccessor;
 import yesman.epicfight.api.client.animation.ClientAnimator;
@@ -84,7 +82,7 @@ public class PrideMobPatch <T extends PrideMob> extends MobPatch<T> {
     }
 
     public boolean isHumanoid(){
-        return ServerDataManager.getMobData(this.original).isHumanoid();
+        return true;
     }
 
     public AnimationManager.AnimationAccessor<? extends StaticAnimation> getHitAnimation(StunType stunType) {

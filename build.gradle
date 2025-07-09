@@ -114,7 +114,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     mavenCentral()
-    maven { url = "https://cursemaven.com" }
+    maven { url = "https://cursemaven.com"}
 }
 dependencies {
     // Specify the version of Minecraft to use.
@@ -130,8 +130,6 @@ dependencies {
     implementation fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:6488484")
     implementation fg.deobf("curse.maven:geckolib-388172:6027567")
      implementation fg.deobf("curse.maven:epic-fight-mod-rapier-moveset-addon-1036425:6602389")
-
-
 
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

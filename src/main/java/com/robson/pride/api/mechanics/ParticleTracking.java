@@ -1,7 +1,7 @@
 package com.robson.pride.api.mechanics;
 
-import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.data.manager.ServerDataManager;
+import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.data.types.item.ElementData;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
@@ -13,7 +13,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Armatures;
 
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,8 +1,8 @@
 package com.robson.pride.api.item;
 
 
-import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.data.manager.ServerDataManager;
+import com.robson.pride.api.data.types.GenericData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.model.*;

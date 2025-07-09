@@ -1,7 +1,7 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.data.manager.ServerDataManager;
+import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.item.CustomItemModelBase;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;

@@ -1,7 +1,7 @@
 package com.robson.pride.registries;
 
-import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.data.manager.ServerDataManager;
+import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.item.CustomItem;
 import com.robson.pride.main.Pride;
 import net.minecraft.core.registries.Registries;

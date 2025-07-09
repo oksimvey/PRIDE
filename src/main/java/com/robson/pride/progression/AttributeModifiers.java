@@ -1,8 +1,8 @@
 package com.robson.pride.progression;
 
+import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.player.ClientSavedData;
 import com.robson.pride.api.data.types.item.WeaponData;
-import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.utils.ElementalUtils;
 import com.robson.pride.registries.WeaponSkillRegister;
 import net.minecraft.ChatFormatting;
