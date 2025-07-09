@@ -63,7 +63,7 @@ public class ArmatureUtils {
             }
             else player = ent.getClientAnimator().getPlayerFor(null);
             if (player != null && player.getAnimation().get() instanceof StaticAnimation animation && ent.getAnimator().getVariables().get(Animations.ReusableSources.TOOLS_IN_BACK, animation.getAccessor()).isEmpty()) {
-                return PrideVec3f.fromTranslatedMatrix(animation.getPoseByTime(ent, player.getElapsedTime(), INTERPOLATION).get(ent.getArmature().searchPathIndex(joint.getName())).toMatrix(),
+                return PrideVec3f.fromTranslatedMatrix(ent.getArmature().getBindedTransformFor(animation.getPoseByTime(ent, player.getElapsedTime(), INTERPOLATION), joint),
                         translation.x(), translation.y(), translation.z()).toGlobalPosMatrix(ent.getOriginal());
             }
         }
