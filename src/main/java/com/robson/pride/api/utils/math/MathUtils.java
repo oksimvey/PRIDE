@@ -14,7 +14,9 @@ public interface MathUtils {
 
     double GRAVITY_CONSTANT = -0.0784000015258789;
 
-    float PIf = 3.141592f;
+    float PI = 3.141592f;
+
+    float EULER = 2.7182818f;
 
     short CORRECT_HALF = 180;
 
@@ -47,7 +49,7 @@ public interface MathUtils {
     }
 
     static float degreeToRadians(float degree) {
-        return PIf * (degree / 180f);
+        return PI * (degree / 180f);
     }
 
     static Vec3 rotate2DVector(Vec3 vec, float degrees) {

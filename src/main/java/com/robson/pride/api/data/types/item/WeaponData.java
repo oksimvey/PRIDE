@@ -12,12 +12,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.client.animation.property.TrailInfo;
 import yesman.epicfight.world.capabilities.item.*;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 
+import java.lang.instrument.Instrumentation;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -55,7 +57,7 @@ public class WeaponData extends GenericItemData {
         this.damage = tag.contains("damage") ? tag.getFloat("damage") : 0f ;
         this.speed = tag.contains("speed") ? tag.getFloat("speed") : 0.5f ;
         this.impact = tag.contains("impact") ? tag.getFloat("impact") : 1f ;
-        this.max_stikes = tag.contains("max_stikes") ? tag.getInt("max_stikes") : 1;
+        this.max_stikes = tag.contains("max_strikes") ? tag.getInt("max_strikes") : 1;
         this.armor_negation = tag.contains("armor_negation") ? tag.getFloat("armor_negation") : 0f;
         this.weight = tag.contains("weight") ? tag.getInt("weight") : 1;
         this.skill = tag.contains("skill") ? tag.getString("skill") : "";
@@ -63,14 +65,14 @@ public class WeaponData extends GenericItemData {
                 tag.contains("strength_scale") ? tag.getString("strength_scale").charAt(0) : '\0',
                 tag.contains("dexterity_scale") ? tag.getString("dexterity_scale").charAt(0) : '\0',
                 tag.contains("mind_scale") ? tag.getString("mind_scale").charAt(0) : '\0',
-                tag.contains("required_strength") ? tag.getByte("required_strength") : 0,
-                tag.contains("required_dexterity") ? tag.getByte("required_dexterity") : 0,
-                tag.contains("required_mind") ? tag.getByte("required_mind") : 0
+                tag.contains("required_strength") ? (byte) tag.getInt("required_strength") : 0,
+                tag.contains("required_dexterity") ? (byte) tag.getInt("required_dexterity") : 0,
+                tag.contains("required_mind") ? (byte) tag.getInt("required_mind") : 0
                 );
-        this.trailcolor = tag.contains("trail_color") && tag.getList("trail_color", CompoundTag.TAG_SHORT).size() >= 3 ?
-        new FixedRGB(tag.getList("trail_color", CompoundTag.TAG_SHORT).getShort(1),
-                tag.getList("trail_color", CompoundTag.TAG_SHORT).getShort(2),
-                tag.getList("trail_color", CompoundTag.TAG_SHORT).getShort(3)) :
+        this.trailcolor = tag.contains("trail_color") && tag.getList("trail_color", CompoundTag.TAG_INT).size() >= 3 ?
+        new FixedRGB((short) tag.getList("trail_color", CompoundTag.TAG_SHORT).getInt(1),
+                (short) tag.getList("trail_color", CompoundTag.TAG_SHORT).getInt(2),
+                (short) tag.getList("trail_color", CompoundTag.TAG_SHORT).getInt(3)) :
                 new FixedRGB((short) 255, (short) 255, (short) 255);
         itemcap = null;
         trailInfo = null;

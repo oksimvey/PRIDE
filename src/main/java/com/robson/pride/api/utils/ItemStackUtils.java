@@ -67,7 +67,7 @@ public class ItemStackUtils {
 
     public static float getColliderSize(ItemStack item) {
         if (item != null) {
-            GenericItemData data = ServerDataManager.getWeaponData(item);
+            WeaponData data = ServerDataManager.getWeaponData(item);
             if (data != null) {
                 Matrix2f collider = data.getCollider();
                 if (collider != null) {

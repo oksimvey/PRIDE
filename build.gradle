@@ -6,6 +6,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.7.+'
 }
 
+
 version = mod_version
 group = mod_group_id
 
@@ -147,6 +148,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
+
 mixin {
     // MixinGradle Settings
     add sourceSets.main, 'mixins.pride.refmap.json'
@@ -189,6 +191,15 @@ tasks.named('jar', Jar).configure {
     // This is the preferred method to reobfuscate your jar file
     finalizedBy 'reobfJar'
 }
+
+tasks.register('runMain', JavaExec) {
+    group = 'build'
+    description = 'compress the jsons'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.robson.pride.api.data.utils.CompressServerData'
+}
+
+jar.dependsOn(runMain)
 
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing:
 // tasks.named('publish').configure {

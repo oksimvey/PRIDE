@@ -23,13 +23,17 @@ public class GenericItemData extends GenericData {
         super(tag);
         this.name = tag.contains("name") ? Component.literal(tag.getString("name")) : Component.literal("");
         this.model = tag.contains("model") ? new ResourceLocation(tag.getString("model")) : ResourceLocation.fromNamespaceAndPath("pride", "item/item");
-        this.collider = tag.contains("collider") && tag.getList("collider", CompoundTag.TAG_FLOAT).size() >= 6 ?
-        new Matrix2f(tag.getList("collider", CompoundTag.TAG_FLOAT).getFloat(1),
-                tag.getList("collider", CompoundTag.TAG_FLOAT).getFloat(2),
-                tag.getList("collider", CompoundTag.TAG_FLOAT).getFloat(3),
-                tag.getList("collider", CompoundTag.TAG_FLOAT).getFloat(4),
-                tag.getList("collider", CompoundTag.TAG_FLOAT).getFloat(5),
-                tag.getList("collider", CompoundTag.TAG_FLOAT).getFloat(6)) : new Matrix2f(-0.1f, -0.1f, -0.1f, 0.1f, 0.1f, 0.1f);
+        if(tag.contains("collider")) {
+            CompoundTag colliderTag = tag.getCompound("collider");
+            float minX = colliderTag.getFloat("minX");
+            float minY = colliderTag.getFloat("minY");
+            float minZ = colliderTag.getFloat("minZ");
+            float maxX = colliderTag.getFloat("maxX");
+            float maxY = colliderTag.getFloat("maxY");
+            float maxZ = colliderTag.getFloat("maxZ");
+            this.collider = new Matrix2f(minX, minY, minZ, maxX, maxY, maxZ);
+        }
+        else this.collider = new Matrix2f(-0.1f, -0.1f, -0.1f, 0.1f, 0.1f, 0.1f);
         this.element = tag.contains("element") ? tag.getString("element") : "";
         this.stacks = tag.contains("stacks") ? tag.getByte("stacks") : (byte) 1;
     }

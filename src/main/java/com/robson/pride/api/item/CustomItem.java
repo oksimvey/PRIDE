@@ -49,7 +49,7 @@ public class CustomItem extends SwordItem {
 
     public static ItemStack createItem(String id){
         ItemStack Item = new ItemStack(ItemsRegister.CUSTOM_WEAPON_ITEM.get());
-        Item.getOrCreateTag().putString("pride_id", id);
+        Item.getOrCreateTag().putString("data_id", id);
         return Item;
     }
 
