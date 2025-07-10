@@ -1,6 +1,5 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.data.types.skill.DurationSkillData;
 import com.robson.pride.api.data.types.item.ElementData;
@@ -25,13 +24,7 @@ public class onSpellDamage {
                 }
             }
             for (byte i = 1; true; i++){
-                ElementData data = ServerDataManager.getElementData(i);
-                if (data == null){
-                    return;
-                }
-                if (data.getSchool() == spell.getSchoolType()) {
-                    event.setAmount(data.onHit(ent, event.getSpellDamageSource().getEntity(), event.getOriginalAmount(), true));
-                }
+
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.robson.pride.api.data.types.item;
 
 import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.types.GenericData;
+import com.robson.pride.api.data.types.GenericItemData;
 import com.robson.pride.api.utils.HealthUtils;
 import com.robson.pride.api.utils.math.Matrix2f;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
@@ -12,6 +12,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -19,7 +20,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 
-public abstract class ElementData extends GenericData {
+public abstract class ElementData extends GenericItemData {
 
     private final ParticleOptions particle;
 
@@ -33,8 +34,8 @@ public abstract class ElementData extends GenericData {
 
     private final SchoolType school;
 
-    public ElementData(String name, byte element, ParticleOptions particle, ChatFormatting color, SoundEvent sound, byte particleAmount, SchoolType school, ItemRenderingParams itemRenderingParams) {
-        super(Component.literal(name + " Gem").withStyle(color), "pride:item/" + name.toLowerCase() + "_gem", new Matrix2f(-0.1f, -0.1f, -0.1f, 0.1f, 0.1f, 0.1f), element, (byte) 64);
+    public ElementData(CompoundTag tag, String name, byte element, ParticleOptions particle, ChatFormatting color, SoundEvent sound, byte particleAmount, SchoolType school, ItemRenderingParams itemRenderingParams) {
+        super(tag);
         this.particle = particle;
         this.color = color;
         this.sound = sound;

@@ -1,6 +1,5 @@
 package com.robson.pride.skills.weaponarts;
 
-import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.mechanics.PerilousType;
 import com.robson.pride.api.skillcore.SkillAnimation;
 import com.robson.pride.api.skillcore.SkillCore;
@@ -13,6 +12,7 @@ import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 public interface DarknessCut {
 
-    WeaponSkillData DATA = new WeaponSkillData("Darkness Cut", ServerDataManager.DARKNESS_CUT,  SkillCore.WeaponArtTier.MYTHICAL, ServerDataManager.DARKNESS, 50, 6, PerilousType.TOTAL) {
+    WeaponSkillData DATA = new WeaponSkillData(new CompoundTag(),"Darkness Cut", (short) 0,  SkillCore.WeaponArtTier.MYTHICAL, (byte) 0, 50, 6, PerilousType.TOTAL) {
 
         public List<SkillAnimation> defineMotions(LivingEntity ent) {
             return List.of(new SkillAnimation(Animations.TACHI_AUTO3, () -> {
@@ -48,8 +48,7 @@ public interface DarknessCut {
                                 if (particle != null && entko != null) {
                                     particle.setLifetime(200);
                                     particle.scale(1.25f);
-                                    SkillCore.loopParticleHit(ent, entko, particle, new ArrayList<>(), 0.5f, () -> ServerDataManager.getElementData(ServerDataManager.DARKNESS).onHit(entko, ent, 10, false));
-                                }
+                                 }
                             }
                         }
                     }

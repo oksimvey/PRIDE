@@ -1,7 +1,6 @@
 package com.robson.pride.api.entity;
 
 import com.google.common.collect.Maps;
-import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.data.types.entity.MobData;
 import com.robson.pride.api.utils.AnimUtils;
@@ -89,7 +88,7 @@ public class PrideMobPatch <T extends PrideMob> extends MobPatch<T> {
         if (((PathfinderMob)this.original).getVehicle() != null) {
             return Animations.BIPED_HIT_ON_MOUNT;
         }
-        return ServerDataManager.getMobData(this.original).stunMotions.get(stunType);
+        return Animations.BIPED_HIT_SHORT;
     }
 
     public void modifyLivingMotionByCurrentItem(boolean onStartTracking) {
@@ -193,10 +192,7 @@ public class PrideMobPatch <T extends PrideMob> extends MobPatch<T> {
                 return;
             }
             if (this.getTarget() != null &&!this.getEntityState().attacking() && this.getEntityState().canBasicAttack()) {
-                MobData data = ServerDataManager.getMobData((com.robson.pride.api.entity.PrideMob) this.getOriginal());
-                if (data != null){
-                    data.getCombatActions().trySelect(this);
-                }
+
             }
         }
     }

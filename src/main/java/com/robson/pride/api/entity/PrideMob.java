@@ -1,6 +1,5 @@
 package com.robson.pride.api.entity;
 
-import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.entity.MobTypeData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -45,10 +44,7 @@ public class PrideMob extends Monster {
     @Deprecated
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_21434_, DifficultyInstance p_21435_, MobSpawnType p_21436_, @Nullable SpawnGroupData p_21437_, @Nullable CompoundTag p_21438_) {
-        MobTypeData data = ServerDataManager.getMobType(this.getTypeID());
-        if (data != null){
-            setTypeVariant((byte) new Random().nextInt(data.getMaxVariants()));
-        }
+
         return super.finalizeSpawn(p_21434_, p_21435_, p_21436_, p_21437_, p_21438_);
     }
 

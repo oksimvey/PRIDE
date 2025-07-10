@@ -1,7 +1,7 @@
 package com.robson.pride.api.item;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.GenericData;
+import com.robson.pride.api.data.types.GenericItemData;
 import com.robson.pride.api.data.types.entity.MobData;
 import com.robson.pride.api.entity.PrideMob;
 import com.robson.pride.registries.EntityRegister;
@@ -47,15 +47,15 @@ public class CustomItem extends SwordItem {
         }, 1, -3f, new Item.Properties());
     }
 
-    public static ItemStack createItem(short id){
+    public static ItemStack createItem(String id){
         ItemStack Item = new ItemStack(ItemsRegister.CUSTOM_WEAPON_ITEM.get());
-        Item.getOrCreateTag().putShort("pride_id", id);
+        Item.getOrCreateTag().putString("pride_id", id);
         return Item;
     }
 
     @Override
     public InteractionResult useOn(UseOnContext useContext) {
-        if (ServerDataManager.getMobType(useContext.getItemInHand().getTag().getShort("pride_id")) == null) {
+        if (false) {
             return InteractionResult.FAIL;
         }
         Level worldIn = useContext.getLevel();
@@ -69,10 +69,7 @@ public class CustomItem extends SwordItem {
             entity.setType(itemStack.getTag().getShort("pride_id"));
             entity.setPos(pos.above().getCenter());
             worldIn.addFreshEntity(entity);
-            MobData data = ServerDataManager.getMobData(entity);
-            if (data != null){
-                data.equip(entity);
-            }
+
         }
         return InteractionResult.CONSUME;
     }
@@ -81,17 +78,14 @@ public class CustomItem extends SwordItem {
     @Override
     public int getMaxStackSize(ItemStack stack) {
         if (stack != null){
-            GenericData data = ServerDataManager.getGenericData(stack);
-            if (data != null){
-                return data.getStacks();
-            }
+
         }
         return super.getMaxStackSize(stack);
     }
 
     @Override
     public @NotNull Component getName(ItemStack stack) {
-        GenericData data = ServerDataManager.getGenericData(stack);
+        GenericItemData data = ServerDataManager.getWeaponData(stack);
         return data != null ? data.getName() : super.getName(stack);
     }
 }

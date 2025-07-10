@@ -2,13 +2,12 @@ package com.robson.pride.api.data.types.item;
 
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
-import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.GenericData;
+import com.robson.pride.api.data.types.GenericItemData;
 import com.robson.pride.api.data.types.skill.WeaponSkillData;
 import com.robson.pride.api.utils.math.FixedRGB;
-import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.mixins.WeaponTypeReloadListenerMixin;
-import net.minecraft.network.chat.Component;
+import com.robson.pride.skills.weaponskills.LongSwordWeaponSkill;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -23,9 +22,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
-public class WeaponData extends GenericData {
+public class WeaponData extends GenericItemData {
 
-    private final short skill;
+    private final String skill;
 
     private final AttributeReqs attributeReqs;
 
@@ -50,18 +49,29 @@ public class WeaponData extends GenericData {
     private TrailInfo trailInfo;
 
 
-    public WeaponData(Component name, String category, float damage, float speed, float impact, float max_strikes, float armor_negation, int weight, String model, byte element, Matrix2f collider, short skill, AttributeReqs attributeReqs, FixedRGB trailcolor){
-        super(name, model, collider, element, (byte) 1);
-        this.category = category;
-        this.damage = damage;
-        this.speed = speed;
-        this.impact = impact;
-        this.max_stikes = (int) max_strikes;
-        this.armor_negation = armor_negation;
-        this.weight = weight;
-        this.skill = skill;
-        this.attributeReqs = attributeReqs;
-        this.trailcolor = trailcolor;
+    public WeaponData(CompoundTag tag){
+        super(tag);
+        this.category = tag.contains("category") ? tag.getString("category") : "sword" ;
+        this.damage = tag.contains("damage") ? tag.getFloat("damage") : 0f ;
+        this.speed = tag.contains("speed") ? tag.getFloat("speed") : 0.5f ;
+        this.impact = tag.contains("impact") ? tag.getFloat("impact") : 1f ;
+        this.max_stikes = tag.contains("max_stikes") ? tag.getInt("max_stikes") : 1;
+        this.armor_negation = tag.contains("armor_negation") ? tag.getFloat("armor_negation") : 0f;
+        this.weight = tag.contains("weight") ? tag.getInt("weight") : 1;
+        this.skill = tag.contains("skill") ? tag.getString("skill") : "";
+        this.attributeReqs = new AttributeReqs(
+                tag.contains("strength_scale") ? tag.getString("strength_scale").charAt(0) : '\0',
+                tag.contains("dexterity_scale") ? tag.getString("dexterity_scale").charAt(0) : '\0',
+                tag.contains("mind_scale") ? tag.getString("mind_scale").charAt(0) : '\0',
+                tag.contains("required_strength") ? tag.getByte("required_strength") : 0,
+                tag.contains("required_dexterity") ? tag.getByte("required_dexterity") : 0,
+                tag.contains("required_mind") ? tag.getByte("required_mind") : 0
+                );
+        this.trailcolor = tag.contains("trail_color") && tag.getList("trail_color", CompoundTag.TAG_SHORT).size() >= 3 ?
+        new FixedRGB(tag.getList("trail_color", CompoundTag.TAG_SHORT).getShort(1),
+                tag.getList("trail_color", CompoundTag.TAG_SHORT).getShort(2),
+                tag.getList("trail_color", CompoundTag.TAG_SHORT).getShort(3)) :
+                new FixedRGB((short) 255, (short) 255, (short) 255);
         itemcap = null;
         trailInfo = null;
     }
@@ -119,7 +129,7 @@ public class WeaponData extends GenericData {
 
 
     public WeaponSkillData getSkill(){
-        return ServerDataManager.getWeaponSkillData(this.skill);
+        return LongSwordWeaponSkill.DATA;
     }
 
     private static Map<Attribute, AttributeModifier> deserializeAttributes(float damage, float speed, float impact, int max_strikes, float armor_negation, int weight) {
@@ -134,8 +144,6 @@ public class WeaponData extends GenericData {
     }
 
 
-    public record AttributeReqs(char strengthScale, char mindScale, char dexterityScale, byte requiredStrength,
-                                byte requiredMind, byte requiredDexterity) {
+    public record AttributeReqs(char strengthScale, char dexterityScale, char mindScale, byte requiredStrength, byte requiredDexterity, byte requiredMind) {
     }
-
 }

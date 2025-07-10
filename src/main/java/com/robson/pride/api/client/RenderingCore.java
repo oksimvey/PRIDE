@@ -1,6 +1,5 @@
 package com.robson.pride.api.client;
 
-import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.data.types.skill.DurationSkillData;
 import com.robson.pride.api.data.types.item.ElementData;
@@ -41,10 +40,7 @@ public class RenderingCore {
                     }
                 }
                 if (SkillDataManager.ACTIVE_WEAPON_SKILL.get(ent) != null) {
-                    WeaponSkillData data = ServerDataManager.getWeaponSkillData(SkillDataManager.ACTIVE_WEAPON_SKILL.get(ent));
-                    if (data != null) {
-                        data.onClientTick(ent);
-                    }
+
                 }
             }
         }

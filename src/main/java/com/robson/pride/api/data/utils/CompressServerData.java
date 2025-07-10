@@ -1,9 +1,10 @@
-package com.robson.pride.api.data.manager;
+package com.robson.pride.api.data.utils;
 
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.robson.pride.api.data.manager.ServerDataFileManager;
 import net.minecraft.nbt.*;
 
 import java.io.*;
@@ -19,7 +20,7 @@ public class CompressServerData{
     private static final String OUTPUT_DIR = "src/main/resources/pride_data";
 
     public static void main(String[] args) throws IOException {
-            compressWeaponData();
+       compressWeaponData();
     }
 
     private static void compressBiomesData() throws IOException {

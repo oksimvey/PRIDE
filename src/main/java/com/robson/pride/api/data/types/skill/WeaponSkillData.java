@@ -1,8 +1,7 @@
 package com.robson.pride.api.data.types.skill;
 
-import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
-import com.robson.pride.api.data.types.GenericData;
+import com.robson.pride.api.data.types.GenericItemData;
 import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.api.mechanics.PerilousType;
 import com.robson.pride.api.skillcore.SkillAnimation;
@@ -13,6 +12,7 @@ import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.api.utils.TimerUtil;
 import com.robson.pride.api.utils.math.Matrix2f;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.robson.pride.api.utils.ProgressionUtils.haveReqs;
 
-public abstract class WeaponSkillData extends GenericData {
+public abstract class WeaponSkillData extends GenericItemData {
 
     private final int ManaConsumption;
     private final float StaminaConsumption;
@@ -31,10 +31,8 @@ public abstract class WeaponSkillData extends GenericData {
     private final PerilousType perilousType;
     private final short id;
 
-    public WeaponSkillData(String name, short id, SkillCore.WeaponArtTier tier, byte SkillElement, int ManaConsumption, float StaminaConsumption, PerilousType perilousType) {
-        super(Component.literal(name + " Weapon Art(" + tier.name() + ")").withStyle(colorByTier(tier)),
-                getModelLocation(SkillElement),
-                new Matrix2f(-0.1f, -0.1f, -0.1f, 0.1f, 0.1f, 0.1f), SkillElement, (byte) 64);
+    public WeaponSkillData(CompoundTag tag, String name, short id, SkillCore.WeaponArtTier tier, byte SkillElement, int ManaConsumption, float StaminaConsumption, PerilousType perilousType) {
+        super(tag);
         this.id = id;
         this.StaminaConsumption = StaminaConsumption;
         this.ManaConsumption = ManaConsumption;
@@ -48,21 +46,6 @@ public abstract class WeaponSkillData extends GenericData {
     public static String getModelLocation(byte element) {
         return switch (element) {
 
-            case ServerDataManager.DARKNESS -> "pride:item/scroll_darkness";
-
-            case ServerDataManager.LIGHT -> "pride:item/scroll_light";
-
-            case ServerDataManager.THUNDER -> "pride:item/scroll_thunder";
-
-            case ServerDataManager.SUN -> "pride:item/scroll_sun";
-
-            case ServerDataManager.MOON -> "pride:item/scroll_moon";
-
-            case ServerDataManager.BLOOD -> "pride:item/scroll_blood";
-
-            case ServerDataManager.NATURE -> "pride:item/scroll_nature";
-
-            case ServerDataManager.ICE, ServerDataManager.WATER -> "pride:item/scroll_ice";
 
             default -> "pride:item/scroll_wind";
         };

@@ -14,9 +14,6 @@ public class ExecuteWeaponSkillAction extends ActionBase {
     }
 
     public void start(PrideMobPatch<?> ent) {
-        WeaponSkillData skill = ServerDataManager.getWeaponSkillData(skillid);
-        if (skill != null){
-            skill.tryToExecute(ent.getOriginal());
-        }
+
     }
 }

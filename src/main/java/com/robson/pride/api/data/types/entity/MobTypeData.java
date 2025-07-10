@@ -1,11 +1,12 @@
 package com.robson.pride.api.data.types.entity;
 
-import com.robson.pride.api.data.types.GenericData;
+import com.robson.pride.api.data.types.GenericItemData;
 import com.robson.pride.api.utils.math.Matrix2f;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.Music;
 
-public abstract class MobTypeData extends GenericData {
+public abstract class MobTypeData extends GenericItemData {
 
     private final byte maxVariants;
 
@@ -13,8 +14,8 @@ public abstract class MobTypeData extends GenericData {
 
     private final byte music_priority;
 
-    public MobTypeData(String name, byte maxVariants, Music mobMusic, byte musicPriority) {
-        super(Component.literal(name), "minecraft:item/spawn_egg", new Matrix2f(-0.1f, -0.1f, -0.1f, 0.1f, 0.1f, 0.1f), (byte) 11, (byte) 1);
+    public MobTypeData(CompoundTag tag, String name, byte maxVariants, Music mobMusic, byte musicPriority) {
+        super(tag);
         this.maxVariants = maxVariants;
         this.mobMusic = mobMusic;
         music_priority = musicPriority;

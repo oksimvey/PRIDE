@@ -2,7 +2,6 @@ package com.robson.pride.api.elements;
 
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.item.ElementData;
 import com.robson.pride.api.utils.AttributeUtils;
 import com.robson.pride.api.utils.ElementalUtils;
@@ -12,12 +11,13 @@ import com.robson.pride.registries.SchoolRegister;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public interface IceElement {
 
-    ElementData DATA = new ElementData("Ice", ServerDataManager.ICE, ParticleRegistry.SNOWFLAKE_PARTICLE.get(), ChatFormatting.DARK_AQUA,
+    ElementData DATA = new ElementData(new CompoundTag(), "Ice", (byte) 7, ParticleRegistry.SNOWFLAKE_PARTICLE.get(), ChatFormatting.DARK_AQUA,
             SoundRegistry.CONE_OF_COLD_LOOP.get(), (byte) 5, SchoolRegister.ICE.get(), new ItemRenderingParams(new FixedRGB((short) 50, (short) 100, (short) 250),
             GlintRenderTypes.createDirectGlint("direct_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")),
             GlintRenderTypes.createDirectEntityGlint("direct_entity_darkness", new ResourceLocation("pride:textures/glints/darkness_glint.png")))) {
@@ -28,18 +28,7 @@ public interface IceElement {
         }
 
         public float calculateFinalDamage(Entity dmgent, Entity ent, float amount) {
-            if (dmgent != null && ent != null) {
-                byte element = ElementalUtils.getElement(ent);
-                float multiplier = 1;
-                if (element == ServerDataManager.SUN || element == ServerDataManager.THUNDER) {
-                    multiplier = 0.5f;
-                } else if (element == ServerDataManager.WATER || element == ServerDataManager.WIND) {
-                    multiplier = 1.5f;
-                }
-                return MathUtils.getValueWithPercentageIncrease(multiplier *
-                                MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:ice_resist")),
-                        AttributeUtils.getAttributeValue(dmgent, "pride:ice_power"));
-            }
+
             return amount;
         }
     };

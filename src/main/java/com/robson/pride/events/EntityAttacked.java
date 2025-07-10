@@ -1,6 +1,5 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.data.player.ClientSavedData;
 import com.robson.pride.api.data.types.skill.DurationSkillData;
@@ -51,10 +50,7 @@ public class EntityAttacked {
             }
             if (event.getSource().getDirectEntity() instanceof LivingEntity living) {
                 if (SkillDataManager.ACTIVE_WEAPON_SKILL.get(living) != null){
-                    WeaponSkillData data = ServerDataManager.getWeaponSkillData(SkillDataManager.ACTIVE_WEAPON_SKILL.get(living));
-                   if (data != null){
-                       data.onHurt(living, event.getEntity(), event);
-                   }
+
                 }
                for (DurationSkillData data : SkillDataManager.getAll(living)){
                    data.onHurtAnotherEntity(living, event);

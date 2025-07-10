@@ -1,20 +1,32 @@
 package com.robson.pride.main;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.robson.pride.api.data.manager.ServerDataFileManager;
 import com.robson.pride.command.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
 import com.robson.pride.epicfight.weapontypes.WeaponCategoriesEnum;
 import com.robson.pride.registries.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 @Mod("pride")
 public class Pride {
@@ -35,6 +47,11 @@ public class Pride {
         WeaponCategory.ENUM_MANAGER.registerEnumCls(MOD_ID, WeaponCategoriesEnum.class);
         Style.ENUM_MANAGER.registerEnumCls(Pride.MOD_ID, PrideStyles.class);
         PrideTabRegister.register(bus);
+        bus.addListener(Pride::setupData);
+    }
+
+    private static void setupData(FMLCommonSetupEvent event) {
+        event.enqueueWork(ServerDataFileManager::writeToInstance);
     }
 
     private void registerCommands(final RegisterCommandsEvent event) {

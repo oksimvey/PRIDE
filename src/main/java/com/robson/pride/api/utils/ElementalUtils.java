@@ -2,7 +2,7 @@ package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.player.ClientDataManager;
-import com.robson.pride.api.data.types.GenericData;
+import com.robson.pride.api.data.types.GenericItemData;
 import com.robson.pride.api.data.types.item.WeaponData;
 import com.robson.pride.api.data.types.skill.WeaponSkillData;
 import com.robson.pride.api.utils.math.MathUtils;
@@ -25,41 +25,34 @@ public class ElementalUtils {
     }
 
     public static ParticleOptions getParticleByElement(byte element) {
-        if (ServerDataManager.getElementData(element) != null) {
-            return  ServerDataManager.getElementData(element).getNormalParticleType();
-        }
+
         return null;
     }
 
     public static ChatFormatting getColorByElement(byte element) {
-        if (ServerDataManager.getElementData(element) != null) {
-            return ServerDataManager.getElementData(element).getChatColor();
-        }
+
         return ChatFormatting.GRAY;
     }
 
     public static void playSoundByElement(byte element, Entity ent, float volume) {
-        if (ServerDataManager.getElementData(element) != null) {
-            ServerDataManager.getElementData(element).playSound(ent, volume);
-        }
+
     }
 
     public static boolean canPutElementalPassive(ItemStack leftitem, ItemStack rightitem) {
         if (leftitem != null && rightitem != null) {
             byte leftelement = 0;
             if (leftitem.getTag().getBoolean("hasweaponart")) {
-                leftelement = ServerDataManager.getWeaponSkillData(leftitem.getTag().getShort("weapon_art")).getElement();
             }
             else {
                 WeaponData data = ServerDataManager.getWeaponData(leftitem);
                 if (data != null) {
                         WeaponSkillData skill = data.getSkill();
                         if (skill != null) {
-                            leftelement = skill.getElement();
+                            leftelement = Byte.parseByte(skill.getElement());
                         }
                 }
             }
-            return leftelement == ServerDataManager.NEUTRAL || leftelement == rightitem.getTag().getByte("passive_element");
+            return leftelement == rightitem.getTag().getByte("passive_element");
         }
         return false;
     }
@@ -68,7 +61,7 @@ public class ElementalUtils {
         if (leftitem != null && rightitem != null) {
             short rightelement = rightitem.getTag().getShort("weapon_art");
             byte leftelement = getItemElement(leftitem);
-            return rightelement == ServerDataManager.NEUTRAL || leftelement == 0 || leftelement == rightelement;
+            return  leftelement == 0 || leftelement == rightelement;
         }
         return false;
     }
@@ -78,12 +71,6 @@ public class ElementalUtils {
         if (item != null) {
             if (item.getTag() != null) {
                 element = item.getTag().getByte("passive_element");
-                if (ServerDataManager.INSTANCE.getByID(element) == null) {
-                    GenericData data = ServerDataManager.getGenericData(item);
-                    if (data != null && ServerDataManager.getElementData((data.getElement())) != null) {
-                        element = data.getElement();
-                    }
-                }
             }
         }
         return element;

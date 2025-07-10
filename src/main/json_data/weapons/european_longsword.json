@@ -1,0 +1,17 @@
+{
+  "name": "European Longsword",
+  "category": "longsword",
+  "model": "minecraft:item/longsword",
+  "skill": "longsword_pierce",
+  "damage": 7.5,
+  "speed": 0.75,
+  "impact": 2,
+  "max_strikes": 3,
+  "armor_negation": 2,
+  "required_strength": 10,
+  "required_dexterity": 5,
+  "strength_scale": "A",
+  "dexterity_scale": "C",
+  "trail_color": [227, 227, 227],
+  "collider": [-0.5, -0.5, -0.15, 0.2, 0.8, 1.5]
+}

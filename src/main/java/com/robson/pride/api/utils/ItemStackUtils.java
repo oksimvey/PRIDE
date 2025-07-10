@@ -1,7 +1,7 @@
 package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.GenericData;
+import com.robson.pride.api.data.types.GenericItemData;
 import com.robson.pride.api.data.types.item.WeaponData;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.Matrix2f;
@@ -67,7 +67,7 @@ public class ItemStackUtils {
 
     public static float getColliderSize(ItemStack item) {
         if (item != null) {
-            GenericData data = ServerDataManager.getGenericData(item);
+            GenericItemData data = ServerDataManager.getWeaponData(item);
             if (data != null) {
                 Matrix2f collider = data.getCollider();
                 if (collider != null) {

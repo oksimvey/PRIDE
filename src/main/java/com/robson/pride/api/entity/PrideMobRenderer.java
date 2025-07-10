@@ -1,6 +1,5 @@
 package com.robson.pride.api.entity;
 
-import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.entity.MobData;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -18,10 +17,7 @@ public class PrideMobRenderer extends HumanoidMobRenderer<PrideMob, HumanoidMode
 
     @Override
     public ResourceLocation getTextureLocation(PrideMob entity) {
-        MobData data = ServerDataManager.getMobData(entity);
-        if (data != null) {
-            return data.getTexture();
-        }
+
         return new ResourceLocation("pride:textures/special/empty.png");
     }
 }

@@ -63,10 +63,7 @@ public class SkillCore {
     }
 
     public static void weaponArtCore(LivingEntity ent, short weaponart) {
-        WeaponSkillData skill = ServerDataManager.getWeaponSkillData(weaponart);
-        if (skill != null) {
-            skill.tryToExecute(ent);
-        }
+
     }
 
     public static void loopParticleHit(Entity dmgent, Entity target, Particle particle, List<Entity> hitentities, float particleradius, Runnable function) {

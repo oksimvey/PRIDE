@@ -2,7 +2,6 @@ package com.robson.pride.api.elements;
 
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.manager.ServerDataManager;
 import com.robson.pride.api.data.types.item.ElementData;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.*;
@@ -15,6 +14,7 @@ import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public interface ThunderElement {
 
-    ElementData DATA = new ElementData("Thunder", ServerDataManager.THUNDER, ParticleRegistry.ELECTRICITY_PARTICLE.get(), ChatFormatting.AQUA, SoundRegistry.LIGHTNING_WOOSH_01.get(),
+    ElementData DATA = new ElementData(new CompoundTag(), "Thunder", (byte) 7, ParticleRegistry.ELECTRICITY_PARTICLE.get(), ChatFormatting.AQUA, SoundRegistry.LIGHTNING_WOOSH_01.get(),
             (byte) 5, SchoolRegister.THUNDER.get(),  new ItemRenderingParams(new FixedRGB((short) 0, (short) 252, (short) 227),
             GlintRenderTypes.createDirectGlint("direct_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png")),
             GlintRenderTypes.createDirectEntityGlint("direct_entity_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png")))) {
@@ -87,18 +87,7 @@ public interface ThunderElement {
         }
 
         public float calculateFinalDamage(Entity dmgent, Entity ent, float amount) {
-            if (dmgent != null && ent != null) {
-                byte element = ElementalUtils.getElement(ent);
-                float multiplier = 1;
-                if (element == ServerDataManager.NATURE || element == ServerDataManager.WIND) {
-                    multiplier = 0.5f;
-                } else if (element == ServerDataManager.WATER || element == ServerDataManager.ICE) {
-                    multiplier = 1.5f;
-                }
-                return MathUtils.getValueWithPercentageIncrease(multiplier *
-                                MathUtils.getValueWithPercentageDecrease(amount, AttributeUtils.getAttributeValue(ent, "pride:thunder_resist")),
-                        AttributeUtils.getAttributeValue(dmgent, "pride:thunder_power"));
-            }
+
             return amount;
         }
     };
