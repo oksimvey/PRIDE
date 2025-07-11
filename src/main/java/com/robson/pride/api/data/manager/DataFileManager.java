@@ -34,8 +34,7 @@ public class DataFileManager {
     public static final Path output = Minecraft.getInstance().gameDirectory.toPath().resolve("pride_data");
 
     public static boolean validItem(String datatype, String id) {
-        Path file = output.resolve(datatype + "/" + id + ".dat");
-        return Files.exists(file);
+        return id != null && !id.isEmpty();
     }
 
     public static CompoundTag getBiomeData(String id) {
@@ -67,7 +66,8 @@ public class DataFileManager {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
