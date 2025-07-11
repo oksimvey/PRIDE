@@ -15,7 +15,8 @@
     "RenderBufferInterface",
     "RenderBufferMixins",
     "TargetIndicatorMixin",
-    "TrailParticleMixin"
+    "TrailParticleMixin",
+    "VanillaHUDMixin"
   ],
   "mixins": [
     "AttackAnimationMixin",

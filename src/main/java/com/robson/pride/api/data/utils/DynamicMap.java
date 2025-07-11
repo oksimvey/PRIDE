@@ -38,8 +38,8 @@ public class DynamicMap<A, B extends GenericData> {
 
     private void put(A key, DynamicMapParameter<B> data){
         MAP.put(key, data);
-        this.size += data.expiretime / sizeDivisor;
-        MAP_THREADER.schedule(()->thread(key, data), data.expiretime, TimeUnit.MILLISECONDS);
+        this.size += data.expiration_time / sizeDivisor;
+        MAP_THREADER.schedule(()-> this.thread(key, data), data.expiration_time, TimeUnit.MILLISECONDS);
         if (Minecraft.getInstance().player != null){
             Minecraft.getInstance().player.sendSystemMessage(Component.literal("created data"));
         }
@@ -50,30 +50,31 @@ public class DynamicMap<A, B extends GenericData> {
         if (current == data) {
             if (current.accesses == 0) {
                 MAP.remove(key);
-                this.size -= current.expiretime / sizeDivisor;
+                this.size -= current.expiration_time / sizeDivisor;
                 if (Minecraft.getInstance().player != null) {
                     Minecraft.getInstance().player.sendSystemMessage(Component.literal("removed data"));
                 }
-            } else {
-                MAP_THREADER.schedule(() -> thread(key, current), (long) ((long) (current.expiretime * (Math.log((current.accesses - 1) + MathUtils.EULER))) / this.size), TimeUnit.MILLISECONDS);
-                MAP.get(key).accesses = 0;
-                if (Minecraft.getInstance().player != null) {
-                    Minecraft.getInstance().player.sendSystemMessage(Component.literal("updated data" + current.expiretime));
-                    Minecraft.getInstance().player.sendSystemMessage(Component.literal("rescheduled data"));
-                }
+                return;
             }
+            MAP_THREADER.schedule(() -> thread(key, current), (long) ((long) (current.expiration_time * (Math.log((current.accesses - 1) + MathUtils.EULER))) / this.size), TimeUnit.MILLISECONDS);
+            MAP.get(key).accesses = 0;
+            if (Minecraft.getInstance().player != null) {
+                Minecraft.getInstance().player.sendSystemMessage(Component.literal("updated data" + current.expiration_time));
+                Minecraft.getInstance().player.sendSystemMessage(Component.literal("rescheduled data"));
+            }
+
         }
     }
 
     public static class DynamicMapParameter<C> {
 
         private final C data;
-        public final long expiretime;
+        public final long expiration_time;
         public long accesses;
 
         public DynamicMapParameter(C data, long expiretime) {
             this.data = data;
-            this.expiretime = expiretime;
+            this.expiration_time = expiretime;
             this.accesses = 0;
         }
 
