@@ -12,7 +12,7 @@ import yesman.epicfight.world.damagesource.StunType;
 
 import java.util.Map;
 
-public class HumanoidMobDataPreset extends MobData {
+public class HumanoidMobDataPreset extends MobData2 {
 
     protected HumanoidMobDataPreset(ResourceLocation texture, ActionsBuilder combatActions, Map<EquipmentSlot, ItemStack> equipment) {
         super(texture, combatActions, equipment, true, Armatures.BIPED.get(),

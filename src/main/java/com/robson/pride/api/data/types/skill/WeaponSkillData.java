@@ -1,7 +1,7 @@
 package com.robson.pride.api.data.types.skill;
 
 import com.robson.pride.api.data.manager.SkillDataManager;
-import com.robson.pride.api.data.types.GenericItemData;
+import com.robson.pride.api.data.types.item.GenericItemData;
 import com.robson.pride.api.mechanics.PerilousAttack;
 import com.robson.pride.api.mechanics.PerilousType;
 import com.robson.pride.api.skillcore.SkillAnimation;
@@ -10,10 +10,8 @@ import com.robson.pride.api.utils.ManaUtils;
 import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.api.utils.TargetUtil;
 import com.robson.pride.api.utils.TimerUtil;
-import com.robson.pride.api.utils.math.Matrix2f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -23,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.robson.pride.api.utils.ProgressionUtils.haveReqs;
 
-public abstract class WeaponSkillData extends GenericItemData {
+public class WeaponSkillData extends GenericItemData {
 
     private final int ManaConsumption;
     private final float StaminaConsumption;
@@ -70,7 +68,9 @@ public abstract class WeaponSkillData extends GenericItemData {
         };
     }
 
-    public abstract List<SkillAnimation> defineMotions(LivingEntity ent);
+    public List<SkillAnimation> defineMotions(LivingEntity ent){
+        return List.of();
+    }
 
 
     public void tryToExecute(LivingEntity ent) {

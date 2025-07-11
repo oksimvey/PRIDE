@@ -18,6 +18,7 @@ public abstract class GenericMikiri extends DurationSkillData {
     private final List<AbstractSpell> counterableSpells;
 
     public GenericMikiri(List<PerilousType> counterablePerilous, List<AbstractSpell> counterableSpells) {
+        super(32);
         this.counterablePerilous = counterablePerilous;
         this.counterableSpells = counterableSpells;
     }

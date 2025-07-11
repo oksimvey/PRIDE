@@ -1,6 +1,6 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.data.manager.ServerDataManager;
+import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.data.player.ClientData;
 import com.robson.pride.api.data.player.ClientSavedData;
 import com.robson.pride.api.data.types.item.WeaponData;
@@ -61,7 +61,7 @@ public class ProgressionUtils {
     public static boolean haveReqs(Player player) {
         if (player != null) {
             ItemStack weapon = player.getMainHandItem();
-            WeaponData data = ServerDataManager.getWeaponData(weapon);
+            WeaponData data = WeaponDataManager.MANAGER.getByItem(weapon);
             if (data != null) {
                 WeaponData.AttributeReqs reqs = data.getAttributeReqs();
                 boolean mindreqs = true;

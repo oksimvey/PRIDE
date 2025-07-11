@@ -2,7 +2,6 @@ package com.robson.pride.api.entity;
 
 import com.google.common.collect.Maps;
 import com.robson.pride.api.data.manager.SkillDataManager;
-import com.robson.pride.api.data.types.entity.MobData;
 import com.robson.pride.api.utils.AnimUtils;
 import com.robson.pride.api.utils.LodTick;
 import com.robson.pride.api.utils.TimerUtil;

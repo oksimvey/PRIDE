@@ -1,6 +1,6 @@
 package com.robson.pride.events;
 
-import com.robson.pride.api.data.manager.ServerDataFileManager;
+import com.robson.pride.api.data.manager.DataFileManager;
 import com.robson.pride.api.item.CustomItemModelBase;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +18,7 @@ public class ClientSetupEvent {
 
     @SubscribeEvent
     public static void registerSpecialModels(ModelEvent.RegisterAdditional event) {
-        ServerDataFileManager.registerModels(event);
+        DataFileManager.registerModels(event);
     }
 
     @SubscribeEvent

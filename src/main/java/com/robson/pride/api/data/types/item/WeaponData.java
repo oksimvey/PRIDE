@@ -2,9 +2,9 @@ package com.robson.pride.api.data.types.item;
 
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
-import com.robson.pride.api.data.types.GenericItemData;
 import com.robson.pride.api.data.types.skill.WeaponSkillData;
 import com.robson.pride.api.utils.math.FixedRGB;
+import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.mixins.WeaponTypeReloadListenerMixin;
 import com.robson.pride.skills.weaponskills.LongSwordWeaponSkill;
 import net.minecraft.nbt.CompoundTag;
@@ -12,14 +12,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.client.animation.property.TrailInfo;
 import yesman.epicfight.world.capabilities.item.*;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 
-import java.lang.instrument.Instrumentation;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -68,12 +66,15 @@ public class WeaponData extends GenericItemData {
                 tag.contains("required_strength") ? (byte) tag.getInt("required_strength") : 0,
                 tag.contains("required_dexterity") ? (byte) tag.getInt("required_dexterity") : 0,
                 tag.contains("required_mind") ? (byte) tag.getInt("required_mind") : 0
-                );
-        this.trailcolor = tag.contains("trail_color") && tag.getList("trail_color", CompoundTag.TAG_INT).size() >= 3 ?
-        new FixedRGB((short) tag.getList("trail_color", CompoundTag.TAG_SHORT).getInt(1),
-                (short) tag.getList("trail_color", CompoundTag.TAG_SHORT).getInt(2),
-                (short) tag.getList("trail_color", CompoundTag.TAG_SHORT).getInt(3)) :
-                new FixedRGB((short) 255, (short) 255, (short) 255);
+        );
+        if(tag.contains("trail_color")) {
+            CompoundTag colorTag = tag.getCompound("trail_color");
+            short red = (short) colorTag.getInt("red");
+            short green = (short) colorTag.getInt("green");
+            short blue = (short) colorTag.getInt("blue");
+            this.trailcolor = new FixedRGB(red, green, blue);
+        }
+        else trailcolor = new FixedRGB((short) 255, (short) 255, (short) 255);
         itemcap = null;
         trailInfo = null;
     }

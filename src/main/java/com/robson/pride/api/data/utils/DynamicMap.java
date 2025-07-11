@@ -1,12 +1,13 @@
 package com.robson.pride.api.data.utils;
 
+import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.utils.math.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 
 import java.util.concurrent.*;
 
-public class DynamicMap<A extends String, B extends GenericData> {
+public class DynamicMap<A, B extends GenericData> {
 
     private static final ScheduledExecutorService MAP_THREADER = Executors.newScheduledThreadPool(1);
 
@@ -28,11 +29,14 @@ public class DynamicMap<A extends String, B extends GenericData> {
         return param.getData();
     }
 
-    public void put(A key, B value, long expiretime){
-       put(key, new DynamicMapParameter<>(value, expiretime));
+    public void put(A key, B value){
+        if (value == null){
+            return;
+        }
+       put(key, new DynamicMapParameter<>(value, value.getSize()));
     }
 
-    public void put(A key, DynamicMapParameter<B> data){
+    private void put(A key, DynamicMapParameter<B> data){
         MAP.put(key, data);
         this.size += data.expiretime / sizeDivisor;
         MAP_THREADER.schedule(()->thread(key, data), data.expiretime, TimeUnit.MILLISECONDS);
@@ -61,7 +65,7 @@ public class DynamicMap<A extends String, B extends GenericData> {
         }
     }
 
-    public static class DynamicMapParameter<C extends GenericData> {
+    public static class DynamicMapParameter<C> {
 
         private final C data;
         public final long expiretime;

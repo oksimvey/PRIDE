@@ -47,8 +47,15 @@ public class ArmatureUtils {
         if (renderer != null && translation != null && renderer.level().isClientSide && ent != null && joint != null){
             LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
             if (entityPatch != null){
-                return PrideVec3f.fromTranslatedMatrix(entityPatch.getArmature().getBindedTransformFor(entityPatch.getAnimator().getPose(INTERPOLATION), joint),
-                                translation.x(), translation.y(), translation.z()).toGlobalPosMatrix(ent);
+                AnimationPlayer player;
+                if (entityPatch.getClientAnimator().currentCompositeMotion() != null){
+                    player = entityPatch.getClientAnimator().getPlayerFor(entityPatch.getClientAnimator().getCompositeLivingMotion(entityPatch.currentCompositeMotion));
+                }
+                else player = entityPatch.getClientAnimator().getPlayerFor(null);
+                if (player != null && player.getAnimation().get() instanceof StaticAnimation animation) {
+                    return PrideVec3f.fromTranslatedMatrix(entityPatch.getArmature().getBindedTransformFor(animation.getPoseByTime(entityPatch, player.getElapsedTime(), INTERPOLATION), joint),
+                            translation.x(), translation.y(), translation.z()).toGlobalPosMatrix(ent);
+                }
               }
         }
         return null;

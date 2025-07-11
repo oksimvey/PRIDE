@@ -1,8 +1,7 @@
 package com.robson.pride.api.utils;
 
-import com.robson.pride.api.data.manager.ServerDataManager;
+import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.data.player.ClientDataManager;
-import com.robson.pride.api.data.types.GenericItemData;
 import com.robson.pride.api.data.types.item.WeaponData;
 import com.robson.pride.api.data.types.skill.WeaponSkillData;
 import com.robson.pride.api.utils.math.MathUtils;
@@ -44,7 +43,7 @@ public class ElementalUtils {
             if (leftitem.getTag().getBoolean("hasweaponart")) {
             }
             else {
-                WeaponData data = ServerDataManager.getWeaponData(leftitem);
+                WeaponData data = WeaponDataManager.MANAGER.getByItem(leftitem);
                 if (data != null) {
                         WeaponSkillData skill = data.getSkill();
                         if (skill != null) {

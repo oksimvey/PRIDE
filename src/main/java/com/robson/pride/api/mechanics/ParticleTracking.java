@@ -1,7 +1,7 @@
 package com.robson.pride.api.mechanics;
 
-import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.GenericItemData;
+import com.robson.pride.api.data.manager.WeaponDataManager;
+import com.robson.pride.api.data.types.item.GenericItemData;
 import com.robson.pride.api.data.types.item.ElementData;
 import com.robson.pride.api.data.types.item.WeaponData;
 import com.robson.pride.api.utils.ArmatureUtils;
@@ -73,7 +73,7 @@ public class ParticleTracking {
 
     public static PrideVec3f getAABBForImbuement(ItemStack item, Entity ent) {
         if (item != null && ent != null) {
-           WeaponData data = ServerDataManager.getWeaponData(item);
+           WeaponData data = WeaponDataManager.MANAGER.getByItem(item);
             if (data != null) {
                 Matrix2f collider = data.getCollider();
                 return new PrideVec3f((float) ((ThreadLocalRandom.current().nextFloat() + collider.x0()) * collider.x1()), (float) ((ThreadLocalRandom.current().nextFloat() + collider.y0()) * collider.y1() + (collider.y1() / 10)), (float) (-(ThreadLocalRandom.current().nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z0()));
@@ -84,7 +84,7 @@ public class ParticleTracking {
 
     public static PrideVec3f getAABBForImbuementDivided(ItemStack item, Entity ent, float dx, float dy, float dz){
         if (item != null && ent != null) {
-            GenericItemData data = ServerDataManager.getWeaponData(item);
+            GenericItemData data = WeaponDataManager.MANAGER.getByItem(item);
             if (data != null) {
                 Matrix2f collider = data.getCollider();
                 return new PrideVec3f((float) ((ThreadLocalRandom.current().nextFloat() + (collider.x1() / dx)) * collider.x1()), (float) ((ThreadLocalRandom.current().nextFloat() +(collider.y1() / dy ))* collider.y1() + (collider.y1() / 10)), (float) (-(ThreadLocalRandom.current().nextFloat() * (collider.z1() * ent.getBbHeight() / 1.8F)) + collider.z1() / dz));

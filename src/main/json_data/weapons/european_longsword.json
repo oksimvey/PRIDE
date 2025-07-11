@@ -12,7 +12,11 @@
   "required_dexterity": 5,
   "strength_scale": "A",
   "dexterity_scale": "C",
-  "trail_color": [227, 227, 227],
+  "trail_color": {
+    "red": 200,
+    "green": 200,
+    "blue": 200
+  },
   "collider": {
     "minX": -0.5,
     "minY": -0.5,

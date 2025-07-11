@@ -1,6 +1,6 @@
 package com.robson.pride.progression;
 
-import com.robson.pride.api.data.manager.ServerDataManager;
+import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.data.player.ClientSavedData;
 import com.robson.pride.api.data.types.item.WeaponData;
 import com.robson.pride.api.utils.ElementalUtils;
@@ -22,7 +22,7 @@ public class AttributeModifiers {
 
     public static void setModifierForImbuement(ItemStack item) {
         if (item != null) {
-                WeaponData data = ServerDataManager.getWeaponData(item);
+                WeaponData data = WeaponDataManager.MANAGER.getByItem(item);
                 if (data != null) {
                     byte newtier = (byte) (Math.max(scale_tiers.indexOf(data.getAttributeReqs().mindScale()) + 3, 5));
                    item.getOrCreateTag().putString("scaleMind", String.valueOf(scale_tiers.get(newtier)));
@@ -56,7 +56,7 @@ public class AttributeModifiers {
 
     public static float calculateModifier(Player player, ItemStack item, float defaultmodifier) {
         if (item != null && player != null) {
-            WeaponData data = ServerDataManager.getWeaponData(item);
+            WeaponData data = WeaponDataManager.MANAGER.getByItem(item);
             if (data != null) {
                 float strmodifier = 0;
                 float dexmodifier = 0;

@@ -7,7 +7,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelEvent;
@@ -18,7 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-public class ServerDataFileManager {
+public class DataFileManager {
 
     public static final String BIOMES_DATA = "biomes";
 
@@ -39,8 +38,28 @@ public class ServerDataFileManager {
         return Files.exists(file);
     }
 
+    public static CompoundTag getBiomeData(String id) {
+        return getGenericData(id, BIOMES_DATA);
+    }
+
+    public static CompoundTag getEntityData(String id) {
+        return getGenericData(id, ENTITIES);
+    }
+
+    public static CompoundTag getWeaponSkillData(String id) {
+        return getGenericData(id, WEAPON_SKILLS);
+    }
+
+    public static CompoundTag getGenericItemData(String id) {
+       return getGenericData(id, ITEMS);
+    }
+
     public static CompoundTag getWeaponData(String id) {
-        Path file = output.resolve(WEAPONS + "/" + id + ".dat");
+       return getGenericData(id, WEAPONS);
+    }
+
+    private static CompoundTag getGenericData(String id, String dataType){
+        Path file = output.resolve(dataType + "/" + id + ".dat");
         try {
             InputStream data = Files.newInputStream(file);
             try {

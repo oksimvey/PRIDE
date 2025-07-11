@@ -1,7 +1,7 @@
 package com.robson.pride.api.keybinding;
 
 
-import com.robson.pride.api.data.manager.ServerDataManager;
+import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.utils.StaminaUtils;
 import com.robson.pride.keybinding.*;
 import com.robson.pride.registries.KeyRegister;
@@ -40,7 +40,7 @@ public class KeyHandler {
         if (player != null && Minecraft.getInstance().screen == null) {
             handleKeyInput(player, KeyRegister.MOUNT,this.mount);
             handleKeyInput(player, KeyRegister.MENU, this.menu);
-            if (ServerDataManager.getWeaponData(player.getMainHandItem()) != null) {
+            if (WeaponDataManager.MANAGER.getByItem(player.getMainHandItem()) != null) {
                 handleKeyInput(player, EpicFightKeyMappings.ATTACK, this.special);
                 handleKeyInput(player, KeyRegister.SWAP_HAND, this.swapHand);
                 handleKeyInput(player, EpicFightKeyMappings.GUARD, this.guard);

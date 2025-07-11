@@ -67,7 +67,7 @@ public interface GuardSkill {
                     Animations.SWORD_GUARD_ACTIVE_HIT3
             )));
 
-    DurationSkillData DATA = new DurationSkillData() {
+    DurationSkillData DATA = new DurationSkillData(3) {
 
         private byte currentparry = 0;
 

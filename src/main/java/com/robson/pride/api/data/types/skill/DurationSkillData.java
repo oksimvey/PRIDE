@@ -1,5 +1,6 @@
 package com.robson.pride.api.data.types.skill;
 
+import com.robson.pride.api.data.types.GenericData;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
@@ -9,9 +10,13 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class DurationSkillData {
+public abstract class DurationSkillData extends GenericData {
 
     private ConcurrentHashMap<LivingEntity, Integer> tickwhenStarted = new ConcurrentHashMap<>();
+
+    protected DurationSkillData(long size) {
+        super(size);
+    }
 
     public void onStart(LivingEntity ent){
         this.tickwhenStarted.put(ent, ent.tickCount);

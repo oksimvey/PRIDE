@@ -2,11 +2,8 @@ package com.robson.pride.particles;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.item.ElementData;
+import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.item.CustomItem;
-import com.robson.pride.api.mechanics.ParticleTracking;
 import com.robson.pride.api.utils.math.BezierCurvef;
 import com.robson.pride.api.utils.math.PrideVec3f;
 import net.minecraft.client.Minecraft;
@@ -47,24 +44,14 @@ public class PrideTrailParticle extends AbstractTrailParticle<LivingEntityPatch<
         if (item.getTag() == null) {
             return;
         }
-        if (item.getItem() instanceof CustomItem && ServerDataManager.getWeaponData(item) != null) {
-            trailInfo = ServerDataManager.getWeaponData(item).getTrailInfo(trailInfo);
+        if (item.getItem() instanceof CustomItem && WeaponDataManager.MANAGER.getByItem(item) != null) {
+            trailInfo = WeaponDataManager.MANAGER.getByItem(item).getTrailInfo(trailInfo);
             this.trailInfo = trailInfo;
         }
-        int r = (int) trailInfo.rCol();
-        int g = (int) trailInfo.gCol();
-        int b = (int) trailInfo.bCol();
-        if (ParticleTracking.shouldRenderParticle(item)) {
-            ElementData element = ParticleTracking.getItemElementForImbuement(item);
-            if (element != null) {
-                ItemRenderingParams params = element.getItemRenderingParams();
-                if (params != null) {
-                    r = params.getColor().r();
-                    g = params.getColor().g();
-                    b = params.getColor().b();
-                }
-            }
-        }
+        int r = (int) (this.trailInfo.rCol());
+        int g = (int) (this.trailInfo.gCol());
+        int b = (int) (this.trailInfo.bCol());
+
         Pose prevPose = this.owner.getAnimator().getPose(0.0F);
         Pose middlePose = this.owner.getAnimator().getPose(0.5F);
         Pose currentPose = this.owner.getAnimator().getPose(1.0F);

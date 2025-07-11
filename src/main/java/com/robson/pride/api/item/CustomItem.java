@@ -1,8 +1,7 @@
 package com.robson.pride.api.item;
 
-import com.robson.pride.api.data.manager.ServerDataManager;
-import com.robson.pride.api.data.types.GenericItemData;
-import com.robson.pride.api.data.types.entity.MobData;
+import com.robson.pride.api.data.manager.WeaponDataManager;
+import com.robson.pride.api.data.types.item.GenericItemData;
 import com.robson.pride.api.entity.PrideMob;
 import com.robson.pride.registries.EntityRegister;
 import com.robson.pride.registries.ItemsRegister;
@@ -85,7 +84,7 @@ public class CustomItem extends SwordItem {
 
     @Override
     public @NotNull Component getName(ItemStack stack) {
-        GenericItemData data = ServerDataManager.getWeaponData(stack);
+        GenericItemData data = WeaponDataManager.MANAGER.getByItem(stack);
         return data != null ? data.getName() : super.getName(stack);
     }
 }

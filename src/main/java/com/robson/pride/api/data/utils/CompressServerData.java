@@ -4,7 +4,7 @@ package com.robson.pride.api.data.utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.robson.pride.api.data.manager.ServerDataFileManager;
+import com.robson.pride.api.data.manager.DataFileManager;
 import net.minecraft.nbt.*;
 
 import java.io.*;
@@ -24,23 +24,23 @@ public class CompressServerData{
     }
 
     private static void compressBiomesData() throws IOException {
-        compress(ServerDataFileManager.BIOMES_DATA);
+        compress(DataFileManager.BIOMES_DATA);
     }
 
     private static void compressEntitiesData() throws IOException {
-        compress(ServerDataFileManager.ENTITIES);
+        compress(DataFileManager.ENTITIES);
     }
 
     private static void compressItemsData() throws IOException {
-        compress(ServerDataFileManager.ITEMS);
+        compress(DataFileManager.ITEMS);
     }
 
     private static void compressWeaponSkillData() throws IOException {
-        compress(ServerDataFileManager.WEAPON_SKILLS);
+        compress(DataFileManager.WEAPON_SKILLS);
     }
 
     private static void compressWeaponData() throws IOException {
-        compress(ServerDataFileManager.WEAPONS);
+        compress(DataFileManager.WEAPONS);
     }
 
     private static void compress(String datatype) throws IOException {

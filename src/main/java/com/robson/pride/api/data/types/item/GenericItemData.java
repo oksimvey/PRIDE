@@ -1,13 +1,13 @@
-package com.robson.pride.api.data.types;
+package com.robson.pride.api.data.types.item;
 
 
-import com.robson.pride.api.data.utils.GenericData;
+import com.robson.pride.api.data.types.GenericNBTData;
 import com.robson.pride.api.utils.math.Matrix2f;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-public class GenericItemData extends GenericData {
+public class GenericItemData extends GenericNBTData {
 
     private final Component name;
 
