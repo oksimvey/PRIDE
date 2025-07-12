@@ -2,6 +2,7 @@ package com.robson.pride.api.item;
 
 import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.data.types.item.GenericItemData;
+import com.robson.pride.api.data.types.item.WeaponData;
 import com.robson.pride.api.entity.PrideMob;
 import com.robson.pride.registries.EntityRegister;
 import com.robson.pride.registries.ItemsRegister;
@@ -46,33 +47,11 @@ public class CustomItem extends SwordItem {
         }, 1, -3f, new Item.Properties());
     }
 
-    public static ItemStack createItem(String id){
+    public static ItemStack createItem(String id) {
         ItemStack Item = new ItemStack(ItemsRegister.CUSTOM_WEAPON_ITEM.get());
         Item.getOrCreateTag().putString("data_id", id);
         return Item;
     }
-
-    @Override
-    public InteractionResult useOn(UseOnContext useContext) {
-        if (false) {
-            return InteractionResult.FAIL;
-        }
-        Level worldIn = useContext.getLevel();
-        if (!(worldIn instanceof ServerLevel)) {
-            return InteractionResult.SUCCESS;
-        }
-        else {
-            ItemStack itemStack = useContext.getItemInHand();
-            BlockPos pos = useContext.getClickedPos();
-            PrideMob entity = new PrideMob(EntityRegister.PRIDE_MOB.get(), worldIn);
-            entity.setType(itemStack.getTag().getShort("pride_id"));
-            entity.setPos(pos.above().getCenter());
-            worldIn.addFreshEntity(entity);
-
-        }
-        return InteractionResult.CONSUME;
-    }
-
 
     @Override
     public int getMaxStackSize(ItemStack stack) {

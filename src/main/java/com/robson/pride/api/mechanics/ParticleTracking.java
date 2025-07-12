@@ -1,8 +1,9 @@
 package com.robson.pride.api.mechanics;
 
+import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.data.types.item.GenericItemData;
-import com.robson.pride.api.data.types.item.ElementData;
+import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.data.types.item.WeaponData;
 import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.ElementalUtils;
@@ -16,13 +17,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import yesman.epicfight.gameasset.Armatures;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 
 public class ParticleTracking {
 
-    private static ConcurrentHashMap<Entity, Boolean> togglefire = new ConcurrentHashMap<>();
+    private static List<LivingEntity> togglefire = new ArrayList<>();
 
     private static ConcurrentHashMap<ItemStack, ElementData> itemParticleMap = new ConcurrentHashMap<>();
 
@@ -31,29 +34,31 @@ public class ParticleTracking {
     }
 
     public static void tickParticleMapping(ItemStack item, LivingEntity ent) {
-        boolean result = false;
         if (item != null && ent != null) {
             if (item.getTag() != null) {
-                byte element = ElementalUtils.getItemElement(item);
-
+                String element = ElementalUtils.getItemElement(item);
+                if ((element.equals("Sun") && shouldRenderSunParticle(ent)) || ElementDataManager.VALID_ELEMENTS.contains(element)) {
+                    ElementData data = ElementDataManager.MANAGER.getByKey(element);
+                    if (data != null){
+                        itemParticleMap.put(item, data);
+                        return;
+                    }
+                }
             }
-        }
-        if (!result) {
             itemParticleMap.remove(item);
-        } 
-        else itemParticleMap.put(item, getItemElementForImbuement(item, (LivingEntity) ent));
+        }
     }
 
     public static boolean shouldRenderSunParticle(LivingEntity ent) {
         PrideVec3f vec3 = ArmatureUtils.getJointPosition(Minecraft.getInstance().player, ent, Armatures.BIPED.get().toolR);
         if (vec3 != null) {
             if (ElementalUtils.isNotInWater(ent, vec3.toVec3())) {
-                togglefire.put(ent, true);
+                togglefire.add(ent);
                 return true;
             }
-            if (togglefire.getOrDefault(ent, false)) {
+            if (togglefire.contains(ent)) {
                 Minecraft.getInstance().level.playSound(Minecraft.getInstance().player, ent, SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1, 1);
-                togglefire.put(ent, false);
+                togglefire.remove(ent);
             }
         }
         return false;
@@ -61,14 +66,6 @@ public class ParticleTracking {
 
     public static ElementData getItemElementForImbuement(ItemStack item) {
         return item != null && itemParticleMap.get(item) != null ? itemParticleMap.get(item) : null;
-    }
-
-    public static ElementData getItemElementForImbuement(ItemStack item, LivingEntity ent) {
-        if (item != null && ent != null) {
-            byte element = ElementalUtils.getItemElement(item);
-
-        }
-        return null;
     }
 
     public static PrideVec3f getAABBForImbuement(ItemStack item, Entity ent) {

@@ -20,7 +20,11 @@ import java.util.*;
 
 public class DataFileManager {
 
-    public static final String BIOMES_DATA = "biomes";
+    public static final String BIOMES = "biomes";
+
+    public static final String EQUIPMENT = "equipment";
+
+    public static final String PARTICLES = "particles";
 
     public static final String ENTITIES = "entities";
 
@@ -39,7 +43,7 @@ public class DataFileManager {
     }
 
     public static CompoundTag getBiomeData(String id) {
-        return getGenericData(id, BIOMES_DATA);
+        return getGenericData(id, BIOMES);
     }
 
     public static CompoundTag getEntityData(String id) {

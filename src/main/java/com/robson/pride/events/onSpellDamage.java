@@ -2,7 +2,6 @@ package com.robson.pride.events;
 
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.data.types.skill.DurationSkillData;
-import com.robson.pride.api.data.types.item.ElementData;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import net.minecraft.world.entity.LivingEntity;

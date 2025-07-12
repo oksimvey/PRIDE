@@ -18,13 +18,13 @@ public class ClientSavedData {
 
     private byte[] skillList;
 
-    private byte element;
+    private String element;
 
     private String mountid;
 
     private String[] allies;
 
-    private ClientSavedData(byte[] lvl, int[] xp, byte[] skillList, byte element, String mountid) {
+    private ClientSavedData(byte[] lvl, int[] xp, byte[] skillList, String element, String mountid) {
        this.lvl = lvl;
        this.xp = xp;
        this.skillList = skillList;
@@ -46,7 +46,7 @@ public class ClientSavedData {
                    tag.getByteArray("lvl"),
                     tag.getIntArray("xp"),
                     tag.getByteArray("skills"),
-                    tag.getByte("element"),
+                    tag.getString("element"),
                     tag.getString("mount"));
         }
         return null;
@@ -81,7 +81,7 @@ public class ClientSavedData {
         this.xp[stat] = amount;
     }
 
-    public byte getElement() {
+    public String getElement() {
         return this.element;
     }
 
@@ -106,7 +106,7 @@ public class ClientSavedData {
         tag.putByteArray("lvl", data.lvl);
         tag.putIntArray("xp", data.xp);
         tag.putByteArray("skills", data.skillList);
-        tag.putByte("element", data.element);
+        tag.putString("element", data.element);
         tag.putString("mount", data.mountid);
         return tag;
     }

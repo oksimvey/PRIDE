@@ -6,6 +6,7 @@
   "damage": 7.5,
   "speed": 0.75,
   "impact": 2,
+  "element": "Sun",
   "max_strikes": 3,
   "armor_negation": 2,
   "required_strength": 10,

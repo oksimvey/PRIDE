@@ -2,7 +2,7 @@ package com.robson.pride.mixins;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.robson.pride.api.data.types.item.ElementData;
+import com.robson.pride.api.data.types.ElementData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;

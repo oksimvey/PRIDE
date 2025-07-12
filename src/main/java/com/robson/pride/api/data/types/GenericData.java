@@ -2,13 +2,13 @@ package com.robson.pride.api.data.types;
 
 public abstract class GenericData {
 
-    private final long size;
+    private final int size;
 
-    protected GenericData(long size) {
+    protected GenericData(int size) {
         this.size = size;
     }
 
-    public long getSize() {
+    public int getSize() {
         return size;
     }
 }

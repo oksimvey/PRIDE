@@ -121,7 +121,6 @@ public class ItemStackUtils {
         return false;
     }
 
-
     public static boolean checkShield(Entity ent, InteractionHand hand) {
         if (ent != null) {
             WeaponCategory category = getWeaponCategory(ent, hand);
@@ -130,18 +129,5 @@ public class ItemStackUtils {
             }
         }
         return false;
-    }
-
-    public static String checkBlockType(Entity ent) {
-        if (checkShield(ent, InteractionHand.MAIN_HAND)) {
-            return "mainhandshield";
-        }
-        if (checkShield(ent, InteractionHand.OFF_HAND)) {
-            return "offhandshield";
-        }
-        if (checkWeapon(ent, InteractionHand.MAIN_HAND)) {
-            return "weapon";
-        }
-        return "";
     }
 }

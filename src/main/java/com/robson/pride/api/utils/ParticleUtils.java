@@ -84,7 +84,7 @@ public interface ParticleUtils {
 
     static void spawnParticleTracked(LocalPlayer renderer, LivingEntityPatch<? extends LivingEntity> ent, Joint joint, ParticleOptions particle, PrideVec3f AABB, int particleDecrease) {
         if (renderer != null && renderer.level().isClientSide && ent != null) {
-            int amount = (int) ItemStackUtils.getColliderSize(ent.getOriginal().getMainHandItem()) - new Random().nextInt(particleDecrease);
+            int amount = (int) ItemStackUtils.getColliderSize(ent.getOriginal().getMainHandItem()) - ThreadLocalRandom.current().nextInt(particleDecrease);
             if (amount > 0) {
                 Vec3 delta = ent.getOriginal().getDeltaMovement();
                 for (int i = 0; i < amount; i++) {

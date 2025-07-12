@@ -2,12 +2,14 @@ package com.robson.pride.api.elements;
 
 import com.robson.pride.api.client.GlintRenderTypes;
 import com.robson.pride.api.client.ItemRenderingParams;
-import com.robson.pride.api.data.types.item.ElementData;
+import com.robson.pride.api.data.manager.ElementDataManager;
+import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.skillcore.SkillCore;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.api.utils.math.FixedRGB;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.registries.AnimationsRegister;
+import com.robson.pride.registries.AttributeRegister;
 import com.robson.pride.registries.SchoolRegister;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
@@ -25,10 +27,12 @@ import java.util.List;
 
 public interface ThunderElement {
 
-    ElementData DATA = new ElementData(new CompoundTag(), "Thunder", (byte) 7, ParticleRegistry.ELECTRICITY_PARTICLE.get(), ChatFormatting.AQUA, SoundRegistry.LIGHTNING_WOOSH_01.get(),
+    ElementData DATA = new ElementData(ParticleRegistry.ELECTRICITY_PARTICLE.get(), ChatFormatting.AQUA, SoundRegistry.LIGHTNING_WOOSH_01.get(),
             (byte) 5, SchoolRegister.THUNDER.get(),  new ItemRenderingParams(new FixedRGB((short) 0, (short) 252, (short) 227),
             GlintRenderTypes.createDirectGlint("direct_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png")),
-            GlintRenderTypes.createDirectEntityGlint("direct_entity_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png")))) {
+            GlintRenderTypes.createDirectEntityGlint("direct_entity_thunder", new ResourceLocation("pride:textures/glints/lightning_glint.png"))),
+            AttributeRegister.THUNDER_POWER.get(), AttributeRegister.THUNDER_RESIST.get(),
+            List.of(ElementDataManager.NATURE, ElementDataManager.WIND), List.of(ElementDataManager.WATER, ElementDataManager.ICE)) {
 
 
         public float onHit(Entity ent, Entity dmgent, float amount, boolean spellSource) {
@@ -61,20 +65,20 @@ public interface ThunderElement {
                 for (Entity entko : listent) {
                     if (entko != null) {
                         if (!ElementalUtils.isNotInWater(entko, new Vec3(entko.getX(), entko.getY(), entko.getZ())) && SkillCore.canHit(dmgent, entko, hitentities)) {
-                            double x1 = ent.getX();
-                            double y1 = ent.getY() + ent.getBbHeight() / 2;
-                            double z1 = ent.getZ();
-                            double x2 = entko.getX();
-                            double y2 = entko.getY() + entko.getBbHeight() / 2;
-                            double z2 = entko.getZ();
+                            float x1 = (float) ent.getX();
+                            float y1 = (float) (ent.getY() + ent.getBbHeight() / 2);
+                            float z1 = (float) ent.getZ();
+                            float x2 = (float) entko.getX();
+                            float y2 = (float) (entko.getY() + entko.getBbHeight() / 2);
+                            float z2 = (float) entko.getZ();
                             PlaySoundUtils.playSound(ent, SoundRegistry.CHAIN_LIGHTNING_CHAIN.get(), 1, 1);
                             for (int i = 0; i < 100; i++) {
-                                double t = i / (double) 50;
-                                double finalx = x1 + (x2 - x1) * t;
-                                double finaly = y1 + (y2 - y1) * t;
-                                double finalz = z1 + (z2 - z1) * t;
+                                float t = i / 50f;
+                                float finalx = x1 + (x2 - x1) * t;
+                                float finaly = y1 + (y2 - y1) * t;
+                                float finalz = z1 + (z2 - z1) * t;
                                 ParticleUtils.spawnParticleOnServer(ParticleRegistry.ELECTRICITY_PARTICLE.get(), ent.level(), finalx, finaly, finalz, 1, 0, 0, 0, 0);
-                                double distance = MathUtils.getTotalDistance((float) (x2 - finalx), (float) (y2 - finaly), (float) (z2 - finalz));
+                                float distance = MathUtils.getTotalDistance((float) (x2 - finalx), (float) (y2 - finaly), (float) (z2 - finalz));
                                 if (distance < 0.1) {
                                     thunderPassive(entko, dmgent, power, hitentities, false);
                                     break;
@@ -84,11 +88,6 @@ public interface ThunderElement {
                     }
                 }
             }
-        }
-
-        public float calculateFinalDamage(Entity dmgent, Entity ent, float amount) {
-
-            return amount;
         }
     };
 }

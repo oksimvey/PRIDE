@@ -15,10 +15,10 @@ import java.util.SortedMap;
 @OnlyIn(Dist.CLIENT)
 public interface RenderBufferInterface {
 
-
     @Accessor("bufferSource")
     MultiBufferSource.BufferSource getBufferSource();
 
     @Accessor("fixedBuffers")
     SortedMap<RenderType, BufferBuilder> getFixedBuffers();
+
 }

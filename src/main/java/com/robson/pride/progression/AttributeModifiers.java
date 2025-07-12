@@ -1,10 +1,10 @@
 package com.robson.pride.progression;
 
+import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.data.player.ClientSavedData;
 import com.robson.pride.api.data.types.item.WeaponData;
 import com.robson.pride.api.utils.ElementalUtils;
-import com.robson.pride.registries.WeaponSkillRegister;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -38,8 +38,8 @@ public class AttributeModifiers {
             if (modifier < 0) {
                 return ChatFormatting.RED;
             } else {
-                byte element = ElementalUtils.getItemElement(item);
-                if (WeaponSkillRegister.isValid(element)) {
+                String element = ElementalUtils.getItemElement(item);
+                if (ElementDataManager.VALID_ELEMENTS.contains(element)) {
                     return ElementalUtils.getColorByElement(element);
                 } else return ChatFormatting.DARK_GREEN;
             }

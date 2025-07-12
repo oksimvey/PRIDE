@@ -19,7 +19,7 @@ public interface BiomeDataManager{
     DataManager<BiomeData> MANAGER = new DataManager<>() {
         @Override
         protected BiomeData getDefault(String value) {
-            if (DataFileManager.validItem(DataFileManager.BIOMES_DATA, value)) {
+            if (DataFileManager.validItem(DataFileManager.BIOMES, value)) {
                 return new BiomeData(DataFileManager.getBiomeData(value));
             }
             return null;

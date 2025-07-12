@@ -2,84 +2,98 @@ package com.robson.pride.api.data.utils;
 
 import com.robson.pride.api.data.types.GenericData;
 import com.robson.pride.api.utils.math.MathUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 
+import java.util.Map;
 import java.util.concurrent.*;
 
 public class DynamicMap<A, B extends GenericData> {
 
     private static final ScheduledExecutorService MAP_THREADER = Executors.newScheduledThreadPool(1);
 
-    private static final float sizeDivisor = MathUtils.EULER * 1000f;
+    private static final int SIZE_DIVISOR = (int) (MathUtils.EULER * 100f);
 
     private final ConcurrentHashMap<A, DynamicMapParameter<B>> MAP;
 
-    public float size;
+    private int MAP_SIZE;
 
-    public DynamicMap(){
+    public DynamicMap() {
         this.MAP = new ConcurrentHashMap<>();
-        this.size = 1;
+        this.MAP_SIZE = 1;
+        this.threadMap();
     }
 
     public B get(A key) {
         DynamicMapParameter<B> param = MAP.get(key);
         if (param == null) return null;
-        MAP.get(key).accesses++;
         return param.getData();
     }
 
-    public void put(A key, B value){
-        if (value == null){
+    public void put(A key, B value) {
+        if (value == null) {
             return;
         }
-       put(key, new DynamicMapParameter<>(value, value.getSize()));
+        put(key, new DynamicMapParameter<>(value));
     }
 
-    private void put(A key, DynamicMapParameter<B> data){
+    private void put(A key, DynamicMapParameter<B> data) {
         MAP.put(key, data);
-        this.size += data.expiration_time / sizeDivisor;
-        MAP_THREADER.schedule(()-> this.thread(key, data), data.expiration_time, TimeUnit.MILLISECONDS);
-        if (Minecraft.getInstance().player != null){
-            Minecraft.getInstance().player.sendSystemMessage(Component.literal("created data"));
-        }
+        this.MAP_SIZE += calculateSizeIncrement(data);
     }
 
-    private void thread(A key, DynamicMapParameter<B> data) {
-        DynamicMapParameter<B> current = MAP.get(key);
-        if (current == data) {
-            if (current.accesses == 0) {
+    private void threadMap() {
+        MAP_THREADER.schedule(this::threadMap, calculateCleanTime(), TimeUnit.MILLISECONDS);
+        for (Map.Entry<A, DynamicMapParameter<B>> entry : this.MAP.entrySet()) {
+            A key = entry.getKey();
+            DynamicMapParameter<B> data = entry.getValue();
+            if (data.accesses == 0) {
                 MAP.remove(key);
-                this.size -= current.expiration_time / sizeDivisor;
-                if (Minecraft.getInstance().player != null) {
-                    Minecraft.getInstance().player.sendSystemMessage(Component.literal("removed data"));
-                }
-                return;
+                this.MAP_SIZE -= calculateSizeIncrement(data);
+                continue;
             }
-            MAP_THREADER.schedule(() -> thread(key, current), (long) ((long) (current.expiration_time * (Math.log((current.accesses - 1) + MathUtils.EULER))) / this.size), TimeUnit.MILLISECONDS);
-            MAP.get(key).accesses = 0;
-            if (Minecraft.getInstance().player != null) {
-                Minecraft.getInstance().player.sendSystemMessage(Component.literal("updated data" + current.expiration_time));
-                Minecraft.getInstance().player.sendSystemMessage(Component.literal("rescheduled data"));
+            if (System.currentTimeMillis() - data.lastUpdate > calculateExpirationTime(data)) {
+                this.MAP.get(key).resetAccesses();
             }
-
         }
     }
 
-    public static class DynamicMapParameter<C> {
+    private int calculateCleanTime() {
+        return (int) (1000 * Math.sqrt(this.MAP_SIZE));
+    }
+
+    private int calculateSizeIncrement(DynamicMapParameter<B> data) {
+        return data.getExpireTime() / SIZE_DIVISOR;
+    }
+
+    private int calculateExpirationTime(DynamicMapParameter<B> current) {
+        return (int) ((current.getExpireTime() * Math.sqrt((current.accesses + 1))) / MAP_SIZE);
+    }
+
+    static class DynamicMapParameter<C extends GenericData> {
 
         private final C data;
-        public final long expiration_time;
-        public long accesses;
 
-        public DynamicMapParameter(C data, long expiretime) {
+        private int accesses;
+
+        private long lastUpdate;
+
+        public DynamicMapParameter(C data) {
             this.data = data;
-            this.expiration_time = expiretime;
             this.accesses = 0;
+            this.lastUpdate = System.currentTimeMillis();
+        }
+
+        public int getExpireTime() {
+            return data.getSize();
         }
 
         public C getData() {
+            accesses++;
             return data;
+        }
+
+        private void resetAccesses() {
+            this.lastUpdate = System.currentTimeMillis();
+            this.accesses = 0;
         }
     }
 }

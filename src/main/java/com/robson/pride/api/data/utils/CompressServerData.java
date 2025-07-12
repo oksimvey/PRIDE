@@ -24,7 +24,7 @@ public class CompressServerData{
     }
 
     private static void compressBiomesData() throws IOException {
-        compress(DataFileManager.BIOMES_DATA);
+        compress(DataFileManager.BIOMES);
     }
 
     private static void compressEntitiesData() throws IOException {

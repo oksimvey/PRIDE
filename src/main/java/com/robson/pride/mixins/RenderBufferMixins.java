@@ -2,7 +2,8 @@ package com.robson.pride.mixins;
 
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.robson.pride.api.data.types.item.ElementData;
+import com.robson.pride.api.data.manager.ElementDataManager;
+import com.robson.pride.api.data.types.ElementData;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.OutlineBufferSource;
 import net.minecraft.client.renderer.RenderBuffers;
@@ -22,8 +23,8 @@ import static net.minecraft.client.renderer.MultiBufferSource.immediateWithBuffe
 @OnlyIn(Dist.CLIENT)
 public class RenderBufferMixins {
 
-
     private static MultiBufferSource.BufferSource savedBufferSource = null;
+
     private static OutlineBufferSource savedOutlineBuffers = null;
 
     @Inject(at = @At(value = "TAIL"), method = "bufferSource", cancellable = true)
@@ -33,7 +34,14 @@ public class RenderBufferMixins {
             System.out.println("First Override");
             RenderBuffers renderBuffers = ((RenderBuffers) (Object) this);
             SortedMap<RenderType, BufferBuilder> fixedBuffers = ((RenderBufferInterface) renderBuffers).getFixedBuffers();
-
+            for (String elementid : ElementDataManager.VALID_ELEMENTS){
+                ElementData element = ElementDataManager.MANAGER.getByKey(elementid);
+                if (element != null) {
+                    put(fixedBuffers, element.getItemRenderingParams().getDirectGlint());
+                    put(fixedBuffers, element.getItemRenderingParams().getDirectEntityGlint());
+                }
+                else break;;
+            }
             savedBufferSource = immediateWithBuffers(fixedBuffers, new BufferBuilder(256));
             savedOutlineBuffers = new OutlineBufferSource(savedBufferSource);
         }

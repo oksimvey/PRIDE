@@ -1,7 +1,9 @@
 package com.robson.pride.api.utils;
 
+import com.robson.pride.api.data.manager.ElementDataManager;
 import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.data.player.ClientDataManager;
+import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.data.types.item.WeaponData;
 import com.robson.pride.api.data.types.skill.WeaponSkillData;
 import com.robson.pride.api.utils.math.MathUtils;
@@ -16,9 +18,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 public class ElementalUtils {
 
-    public static void setElement(Entity ent, byte element) {
+    public static void setElement(Entity ent,String element) {
         if (ent instanceof Player player) {
-            player.getPersistentData().putByte
+            player.getPersistentData().putString
                     ("Element", element);
         }
     }
@@ -28,8 +30,11 @@ public class ElementalUtils {
         return null;
     }
 
-    public static ChatFormatting getColorByElement(byte element) {
-
+    public static ChatFormatting getColorByElement(String element) {
+        ElementData data = ElementDataManager.MANAGER.getByKey(element);
+        if (data != null) {
+            return data.getChatColor();
+        }
         return ChatFormatting.GRAY;
     }
 
@@ -58,59 +63,59 @@ public class ElementalUtils {
 
     public static boolean canPutWeaponArt(ItemStack leftitem, ItemStack rightitem) {
         if (leftitem != null && rightitem != null) {
-            short rightelement = rightitem.getTag().getShort("weapon_art");
-            byte leftelement = getItemElement(leftitem);
-            return  leftelement == 0 || leftelement == rightelement;
+            String rightelement = rightitem.getTag().getString("weapon_art");
+            String leftelement = getItemElement(leftitem);
+            return  false;
         }
         return false;
     }
 
-    public static byte getItemElement(ItemStack item) {
-        byte element = 0;
+    public static String getItemElement(ItemStack item) {
         if (item != null) {
-            if (item.getTag() != null) {
-                element = item.getTag().getByte("passive_element");
-            }
+                WeaponData data = WeaponDataManager.MANAGER.getByItem(item);
+               if (data != null){
+                   return data.getElement();
+               }
         }
-        return element;
+        return "";
     }
 
     public static void rollElement(Entity ent) {
         if (ent != null) {
             short chance = (short) MathUtils.getRandomInt(1000);
             if (chance == 0) {
-                setElement(ent, (byte) 1);
+                setElement(ent, ElementDataManager.DARKNESS);
             } else if (chance >= 1 && chance <= 10) {
-                setElement(ent, (byte) 2);
+                setElement(ent, ElementDataManager.LIGHT);
             } else if (chance >= 11 && chance <= 40) {
-                setElement(ent, (byte) 3);
+                setElement(ent, ElementDataManager.THUNDER);
             } else if (chance >= 41 && chance <= 90) {
-                setElement(ent, (byte) 4);
+                setElement(ent, ElementDataManager.SUN);
             } else if (chance >= 91 && chance <= 140) {
-                setElement(ent, (byte) 5);
+                setElement(ent, ElementDataManager.MOON);
             } else if (chance >= 141 && chance <= 240) {
-                setElement(ent, (byte) 6);
+                setElement(ent, ElementDataManager.BLOOD);
             } else if (chance >= 241 && chance <= 340) {
-                setElement(ent, (byte) 7);
+                setElement(ent, ElementDataManager.WIND);
             } else if (chance >= 341 && chance <= 560) {
-                setElement(ent, (byte) 8);
+                setElement(ent, ElementDataManager.NATURE);
             } else if (chance >= 561 && chance <= 780) {
-                setElement(ent, (byte) 9);
-            } else setElement(ent, (byte) 10);
+                setElement(ent, ElementDataManager.ICE);
+            } else setElement(ent, ElementDataManager.WATER);
         }
     }
 
-    public static byte getElement(Entity ent) {
+    public static String getElement(Entity ent) {
         if (ent != null) {
             if (ent instanceof Player player) {
                 return ClientDataManager.CLIENT_DATA_MANAGER.get(player).getProgressionData().getElement() ;
             }
         }
-        return 0;
+        return "";
     }
 
     public static boolean isNotInWater(Entity ent, Vec3 vec3) {
-        if (ent instanceof LivingEntity living && vec3 != null) {
+        if (ent != null && vec3 != null) {
             BlockPos pos = new BlockPos((int) vec3.x, (int) vec3.y, (int) vec3.z);
             return !ent.level().getBlockState(pos).is(Blocks.WATER) && !ent.level().isRainingAt(pos);
         }

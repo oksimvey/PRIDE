@@ -24,6 +24,16 @@ public class AttributeUtils {
         return 1f;
     }
 
+    public static float getAttributeValue(Entity ent, Attribute attribute) {
+        if (ent instanceof LivingEntity && attribute != null){
+            AttributeInstance attributeInstance = ((LivingEntity) ent).getAttribute(attribute);
+            if (attributeInstance != null) {
+                return (float) attributeInstance.getValue();
+            }
+        }
+        return 0;
+    }
+
     public static float getAttributeBaseValue(LivingEntity ent, String attribute) {
         return (float) ent.getAttributeBaseValue(requireNonNull(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute))));
     }

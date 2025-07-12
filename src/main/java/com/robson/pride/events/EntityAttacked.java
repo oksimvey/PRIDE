@@ -3,8 +3,7 @@ package com.robson.pride.events;
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.data.player.ClientSavedData;
 import com.robson.pride.api.data.types.skill.DurationSkillData;
-import com.robson.pride.api.data.types.item.ElementData;
-import com.robson.pride.api.data.types.skill.WeaponSkillData;
+import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.mechanics.*;
 import com.robson.pride.api.utils.*;
 import com.robson.pride.epicfight.styles.PrideStyles;
@@ -66,14 +65,14 @@ public class EntityAttacked {
                     }
                         if (hand == InteractionHand.MAIN_HAND) {
                             if (ItemStackUtils.getStyle(living) != PrideStyles.GUN_OFFHAND) {
-                                ElementData elementBase = ParticleTracking.getItemElementForImbuement(living.getMainHandItem(), living);
+                                ElementData elementBase = ParticleTracking.getItemElementForImbuement(living.getMainHandItem());
                                 if (elementBase != null && elementBase.createDamageSource(living) != event.getSource()) {
                                     damage = elementBase.onHit(event.getEntity(), living, damage, false);
                                 }
                             }
                         }
                         if (hand == InteractionHand.OFF_HAND) {
-                            ElementData elementBase = ParticleTracking.getItemElementForImbuement(living.getOffhandItem(), living);
+                            ElementData elementBase = ParticleTracking.getItemElementForImbuement(living.getOffhandItem());
                             if (elementBase != null && elementBase.createDamageSource(living) != event.getSource()) {
                                 damage = elementBase.onHit(event.getEntity(), living, damage, false);
                             }

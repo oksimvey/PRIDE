@@ -1,7 +1,9 @@
 package com.robson.pride.api.data.manager;
 
-import com.robson.pride.api.data.types.item.ElementData;
+import com.robson.pride.api.data.types.ElementData;
 import com.robson.pride.api.elements.*;
+
+import java.util.List;
 
 public interface ElementDataManager {
 
@@ -25,10 +27,13 @@ public interface ElementDataManager {
 
     String WATER = "Water";
 
+    List<String> VALID_ELEMENTS = List.of(DARKNESS, LIGHT, THUNDER, SUN, MOON, BLOOD, WIND, NATURE, ICE, WATER);
+
     DataManager<ElementData> MANAGER = new DataManager<>() {
 
         @Override
         protected ElementData getDefault(String value) {
+
             return switch (value) {
 
                 case DARKNESS -> DarknessElement.DATA;
@@ -52,6 +57,7 @@ public interface ElementDataManager {
                 case WATER -> WaterElement.DATA;
 
                 default -> null;
+
             };
         }
     };

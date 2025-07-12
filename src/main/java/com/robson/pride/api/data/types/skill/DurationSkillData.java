@@ -14,7 +14,7 @@ public abstract class DurationSkillData extends GenericData {
 
     private ConcurrentHashMap<LivingEntity, Integer> tickwhenStarted = new ConcurrentHashMap<>();
 
-    protected DurationSkillData(long size) {
+    protected DurationSkillData(int size) {
         super(size);
     }
 
