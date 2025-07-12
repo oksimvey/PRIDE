@@ -1,11 +1,11 @@
 package com.robson.pride.api.data.manager;
 
 import com.robson.pride.api.data.types.GenericData;
-import com.robson.pride.api.data.utils.DynamicMap;
+import com.robson.pride.api.data.utils.DynamicStaticMap;
 
 public abstract class DataManager<B extends GenericData> {
 
-    private final DynamicMap<String, B> DATA = new DynamicMap<>();
+    private final DynamicStaticMap<String, B> DATA = new DynamicStaticMap<>();
 
     public final B getByKey(String value){
         if (DATA.get(value) == null){

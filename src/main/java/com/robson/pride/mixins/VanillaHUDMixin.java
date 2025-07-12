@@ -16,6 +16,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Gui.class)
 @OnlyIn(Dist.CLIENT)
@@ -31,12 +34,9 @@ public abstract class VanillaHUDMixin {
 
     @Shadow protected int screenWidth;
 
-    /**
-     * @author
-     * @reason
-     */
-    @Overwrite
-    public void renderHotbar(float p_283031_, GuiGraphics graphics) {
+
+    @Inject(method = "renderHotbar", at = @At("HEAD"), cancellable = true)
+    public void renderHotbar(float p_283031_, GuiGraphics graphics, CallbackInfo ci) {
         Player player = getCameraPlayer();
         if (minecraft == null || graphics == null || player == null){
             return;
@@ -80,29 +80,4 @@ public abstract class VanillaHUDMixin {
         }
     }
 
-
-    /**
-     * @author
-     * @reason
-     */
-    @Overwrite
-    public void renderExperienceBar(GuiGraphics p_281906_, int p_282731_) {
-    }
-
-    /**
-     * @author
-     * @reason
-     */
-    @Overwrite
-    private void renderPlayerHealth(GuiGraphics p_283143_) {
-
-    }
-
-    /**
-     * @author
-     * @reason
-     */
-    @Overwrite
-    protected void renderHearts(GuiGraphics p_282497_, Player p_168690_, int p_168691_, int p_168692_, int p_168693_, int p_168694_, float p_168695_, int p_168696_, int p_168697_, int p_168698_, boolean p_168699_) {
-    }
 }
