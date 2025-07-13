@@ -12,6 +12,7 @@
     "AnimatedMeshMixin",
     "ItemRenderBaseMixin",
     "ItemRendererMixin",
+    "PatchedLivingRenderer",
     "RenderBufferInterface",
     "RenderBufferMixins",
     "TargetIndicatorMixin",
@@ -21,6 +22,7 @@
   "mixins": [
     "AttackAnimationMixin",
     "EpicFightCapabilitiesMixin",
+    "ItemStackMixin",
     "ManaBarOverlayMixin",
     "WeaponTypeReloadListenerMixin"
   ]

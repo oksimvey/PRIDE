@@ -66,7 +66,7 @@ public record PrideVec3f(float x, float y, float z) {
      public PrideVec3f toGlobalPosMatrix(LivingEntity entity) {
         return this.correctRot(entity).add(
                 (float) entity.getX(),
-                (float) (entity.getY() * (entity.getBbHeight() / 1.8f)),
+                (float) (entity.getY() + (entity.getBbHeight() - 1.8f)),
                 (float) entity.getZ()
         );
     }

@@ -3,8 +3,12 @@ package com.robson.pride.events;
 import com.robson.pride.api.customtick.PlayerCustomTick;
 import com.robson.pride.api.data.player.ClientDataManager;
 import com.robson.pride.api.data.player.ClientSavedData;
+import com.robson.pride.api.data.utils.DynamicDataBase;
 import com.robson.pride.progression.PlayerAttributeSetup;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -37,6 +41,10 @@ public class PlayerSetup {
         if (player instanceof ServerPlayer player1) {
             CompoundTag data = ClientSavedData.toNBT(ClientDataManager.CLIENT_DATA_MANAGER.get(player).getProgressionData());
             ClientDataManager.savePlayerDat(player1, data);
+            MinecraftServer level = player1.getServer();
+            if (level != null && level.getPlayerCount() <= 1) {
+                DynamicDataBase.clearAll();
+            }
         }
         if (player != null) {
             PlayerCustomTick.stopTick(player);

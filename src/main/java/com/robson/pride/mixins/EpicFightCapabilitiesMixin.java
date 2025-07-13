@@ -2,42 +2,35 @@ package com.robson.pride.mixins;
 
 
 import com.robson.pride.api.data.manager.WeaponDataManager;
+import com.robson.pride.api.data.types.item.WeaponData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 @Mixin(value = EpicFightCapabilities.class, remap = false)
 public class EpicFightCapabilitiesMixin {
-    @Shadow
-    @Final
-    public static Capability<CapabilityItem> CAPABILITY_ITEM;
 
-    @Redirect(
-            method = {"getItemStackCapability"},
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/item/ItemStack;getCapability(Lnet/minecraftforge/common/capabilities/Capability;)Lnet/minecraftforge/common/util/LazyOptional;"
-            )
-    )
-    private static LazyOptional<CapabilityItem> getFromConfig(ItemStack itemStack, Capability<CapabilityItem> capability) {
-        return WeaponDataManager.MANAGER.getByItem(itemStack) != null ? LazyOptional.of(() -> WeaponDataManager.MANAGER.getByItem(itemStack).getItemcap(itemStack)) : itemStack.getCapability(CAPABILITY_ITEM);
+    @Inject(method = "getItemStackCapability", at = @At(value = "TAIL"), cancellable = true)
+    private static void getFromConfig(ItemStack stack, CallbackInfoReturnable<CapabilityItem> cir) {
+        WeaponData data = WeaponDataManager.MANAGER.getByItem(stack);
+        if (data != null){
+            cir.setReturnValue(data.getItemcap(stack));
+            return;
+        }
+        cir.setReturnValue(CapabilityItem.EMPTY);
     }
 
-    @Redirect(
-            method = {"getItemStackCapabilityOr"},
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/item/ItemStack;getCapability(Lnet/minecraftforge/common/capabilities/Capability;)Lnet/minecraftforge/common/util/LazyOptional;"
-            )
-    )
-    private static LazyOptional<CapabilityItem> getFromConfigOr(ItemStack itemStack, Capability<CapabilityItem> capability) {
-        return WeaponDataManager.MANAGER.getByItem(itemStack) != null ? LazyOptional.of(() -> WeaponDataManager.MANAGER.getByItem(itemStack).getItemcap(itemStack)) : itemStack.getCapability(CAPABILITY_ITEM);
-    }
+    @Inject(method = "getItemStackCapabilityOr", at = @At(value = "TAIL"), cancellable = true)
+    private static void getFromConfigOr(ItemStack stack, CapabilityItem defaultCap, CallbackInfoReturnable<CapabilityItem> cir) {
+        WeaponData data = WeaponDataManager.MANAGER.getByItem(stack);
+        if (data != null){
+           cir.setReturnValue(data.getItemcap(stack));
+           return;
+        }
+       cir.setReturnValue(defaultCap);
+      }
 }

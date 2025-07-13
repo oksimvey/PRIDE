@@ -1,12 +1,14 @@
 package com.robson.pride.api.data.utils;
 
 import com.robson.pride.api.data.types.GenericData;
+import net.minecraft.world.entity.Entity;
 
 public class DynamicDataParameter<A> {
 
     private static final byte BYTE_MODIFIER = 5;
 
     public enum DataType {
+        BOOLEAN,
         STRING,
         INTEGER,
         FLOAT,
@@ -23,7 +25,7 @@ public class DynamicDataParameter<A> {
 
     public long lastUpdate;
 
-    private final int size;
+    public final int size;
 
     public DynamicDataParameter(A data, DataType type) {
         this.data = data;
@@ -31,9 +33,7 @@ public class DynamicDataParameter<A> {
         this.lastUpdate = System.currentTimeMillis();
         this.size = switch (type){
 
-            case STRING -> ((String) data).length() << BYTE_MODIFIER;
-
-            case GENERIC_DATA -> ((GenericData) data).getSize();
+            case BOOLEAN -> 1 << BYTE_MODIFIER;
 
             case SHORT -> 16 << BYTE_MODIFIER;
 
@@ -41,14 +41,15 @@ public class DynamicDataParameter<A> {
 
             case ITEM_STACK -> 64 << BYTE_MODIFIER;
 
-            case ENTITY -> 128 << BYTE_MODIFIER;
+            case ENTITY -> 5000;
+
+            case STRING -> ((String) data).length() << BYTE_MODIFIER;
+
+            case GENERIC_DATA -> ((GenericData) data).getSize();
 
         };
     }
 
-    public int getExpireTime() {
-        return size;
-    }
 
     public A getData() {
         accesses++;

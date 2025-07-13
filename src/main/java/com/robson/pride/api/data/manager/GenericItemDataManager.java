@@ -8,5 +8,4 @@ public abstract class GenericItemDataManager<B extends GenericData> extends Data
     public final B getByItem(ItemStack stack){
         return stack != null ? this.getByKey(stack.getOrCreateTag().getString("data_id")) : null;
     }
-
 }

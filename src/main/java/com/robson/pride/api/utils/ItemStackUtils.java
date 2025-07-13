@@ -2,6 +2,7 @@ package com.robson.pride.api.utils;
 
 import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.data.types.item.WeaponData;
+import com.robson.pride.api.data.utils.ItemStackNewParams;
 import com.robson.pride.api.utils.math.MathUtils;
 import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.epicfight.styles.PrideStyles;
@@ -51,6 +52,13 @@ public class ItemStackUtils {
         if (ent instanceof Player player) {
             addModifierToStyle(player);
         }
+    }
+
+    public static ItemStackNewParams getNewParams(ItemStack item) {
+        if (item != null){
+                return (ItemStackNewParams) (Object) item;
+        }
+        return null;
     }
 
 

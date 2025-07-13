@@ -11,6 +11,7 @@ import net.minecraft.world.phys.Vec3;
 import yesman.epicfight.api.animation.AnimationPlayer;
 import yesman.epicfight.api.animation.AnimationVariables;
 import yesman.epicfight.api.animation.Joint;
+import yesman.epicfight.api.animation.Pose;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.DynamicAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
@@ -19,6 +20,7 @@ import yesman.epicfight.api.utils.math.Vec3f;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -64,12 +66,10 @@ public class ArmatureUtils {
 
     public static PrideVec3f getJointWithTranslation(LocalPlayer renderer, LivingEntityPatch<?> ent, PrideVec3f translation, Joint joint) {
         if (renderer != null && translation != null && renderer.level().isClientSide && ent != null && joint != null) {
-            AnimationPlayer player;
-            if (ent.getClientAnimator().currentCompositeMotion() != null){
-                player = ent.getClientAnimator().getPlayerFor(ent.getClientAnimator().getCompositeLivingMotion(ent.currentCompositeMotion));
-            }
-            else player = ent.getClientAnimator().getPlayerFor(null);
-            if (player != null && player.getAnimation().get() instanceof StaticAnimation animation && ent.getAnimator().getVariables().get(Animations.ReusableSources.TOOLS_IN_BACK, animation.getAccessor()).isEmpty()) {
+            AnimationPlayer player = ent.getClientAnimator().currentCompositeMotion() != null ?
+                    ent.getClientAnimator().getPlayerFor(ent.getClientAnimator().getCompositeLivingMotion(ent.currentCompositeMotion)) :
+                    ent.getClientAnimator().getPlayerFor(null);
+                if (player != null && player.getAnimation().get() instanceof StaticAnimation animation && (!(ent instanceof PlayerPatch<?>) || ent.getAnimator().getVariables().get(Animations.ReusableSources.TOOLS_IN_BACK, animation.getAccessor()).isEmpty())) {
                 return PrideVec3f.fromTranslatedMatrix(ent.getArmature().getBindedTransformFor(animation.getPoseByTime(ent, player.getElapsedTime(), INTERPOLATION), joint),
                         translation.x(), translation.y(), translation.z()).toGlobalPosMatrix(ent.getOriginal());
             }

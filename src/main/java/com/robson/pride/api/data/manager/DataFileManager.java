@@ -14,6 +14,7 @@ import net.minecraftforge.client.event.ModelEvent;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -36,7 +37,9 @@ public class DataFileManager {
 
     public static final List<String> ALL_DATA = List.of(WEAPONS);
 
-    public static final Path output = Minecraft.getInstance().gameDirectory.toPath().resolve("pride_data");
+    public static final Path OUTPUT = Minecraft.getInstance().gameDirectory.toPath().resolve("pride_data");
+
+    public static final Path DYNAMIC_MAP_OUTPUT = OUTPUT.resolve("dynamic");
 
     public static boolean validItem(String datatype, String id) {
         return id != null && !id.isEmpty();
@@ -63,7 +66,7 @@ public class DataFileManager {
     }
 
     private static CompoundTag getGenericData(String id, String dataType){
-        Path file = output.resolve(dataType + "/" + id + ".dat");
+        Path file = OUTPUT.resolve(dataType + "/" + id + ".dat");
         try {
             InputStream data = Files.newInputStream(file);
             try {
@@ -115,17 +118,30 @@ public class DataFileManager {
 
     public static void writeToInstance() {
         try {
-            Files.createDirectories(output);
+            Files.createDirectories(OUTPUT);
         }
         catch (IOException e) {
             throw new RuntimeException(e);
+        }
+        try {
+            Files.createDirectories(DYNAMIC_MAP_OUTPUT);
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(DYNAMIC_MAP_OUTPUT, "*.dat")) {
+            for (Path file : stream) {
+                Files.deleteIfExists(file);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         for (String dataType : ALL_DATA) {
             for (String path : getRegistries(dataType)) {
                 InputStream data = readJarFile("pride_data/" + dataType + "/" + path);
                 try {
                     CompoundTag datanbt = NbtIo.readCompressed(data);
-                    Path outputPath = output.resolve(dataType + "/" + path);
+                    Path outputPath = OUTPUT.resolve(dataType + "/" + path);
                     try {
                         Files.createDirectories(outputPath.getParent());
                         try {

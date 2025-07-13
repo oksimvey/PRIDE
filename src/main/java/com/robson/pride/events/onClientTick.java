@@ -19,14 +19,6 @@ public class onClientTick {
 
     public static MultiBufferSource playerBuffer = null;
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void renderEntity(RenderLivingEvent.Pre event) {
-        if (!Minecraft.getInstance().isPaused()) {
-            if (event.getEntity() instanceof Player || event.getEntity() instanceof PrideMob) {
-                RenderingCore.entityRenderer(event.getEntity());
-            }
-        }
-    }
     @SubscribeEvent
     public static void onRenderPlayer(RenderPlayerEvent.Pre event) {
         if (playerStack != event.getPoseStack() && playerBuffer != event.getMultiBufferSource()) {

@@ -3,6 +3,10 @@ package com.robson.pride.api.data.types.item;
 
 import com.robson.pride.api.data.types.GenericNBTData;
 import com.robson.pride.api.utils.math.Matrix2f;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -11,7 +15,7 @@ public class GenericItemData extends GenericNBTData {
 
     private final Component name;
 
-    private final ResourceLocation model;
+    private final BakedModel model;
 
     private final Matrix2f collider;
 
@@ -22,8 +26,7 @@ public class GenericItemData extends GenericNBTData {
     public GenericItemData(CompoundTag tag){
         super(tag);
         this.name = tag.contains("name") ? Component.literal(tag.getString("name")) : Component.literal("");
-        this.model = tag.contains("model") ? new ResourceLocation(tag.getString("model")) : ResourceLocation.fromNamespaceAndPath("pride", "item/item");
-        if(tag.contains("collider")) {
+          if(tag.contains("collider")) {
             CompoundTag colliderTag = tag.getCompound("collider");
             float minX = colliderTag.getFloat("minX");
             float minY = colliderTag.getFloat("minY");
@@ -36,13 +39,16 @@ public class GenericItemData extends GenericNBTData {
         else this.collider = new Matrix2f(-0.1f, -0.1f, -0.1f, 0.1f, 0.1f, 0.1f);
         this.element = tag.contains("element") ? tag.getString("element") : "";
         this.stacks = tag.contains("stacks") ? tag.getByte("stacks") : (byte) 1;
+        ResourceLocation modelrl = tag.contains("model") ? new ResourceLocation(tag.getString("model")) : ResourceLocation.fromNamespaceAndPath("pride", "item/item");
+        this.model = Minecraft.getInstance().getModelManager().getModel(modelrl);
+
     }
 
     public Component getName() {
         return name;
     }
 
-    public ResourceLocation getModel() {
+    public BakedModel getModel() {
         return model;
     }
 

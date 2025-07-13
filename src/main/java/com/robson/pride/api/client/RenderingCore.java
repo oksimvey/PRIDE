@@ -3,23 +3,34 @@ package com.robson.pride.api.client;
 import com.robson.pride.api.data.manager.SkillDataManager;
 import com.robson.pride.api.data.types.skill.DurationSkillData;
 import com.robson.pride.api.data.types.ElementData;
+import com.robson.pride.api.data.utils.DynamicDataParameter;
+import com.robson.pride.api.data.utils.DynamicList;
 import com.robson.pride.api.mechanics.ParticleTracking;
+import com.robson.pride.api.utils.ArmatureUtils;
 import com.robson.pride.api.utils.LodTick;
 import com.robson.pride.api.utils.ParticleUtils;
+import com.robson.pride.api.utils.math.PrideVec3f;
 import com.robson.pride.epicfight.styles.PrideStyles;
+import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import yesman.epicfight.gameasset.Armatures;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 public class RenderingCore {
 
-    public static void entityRenderer(LivingEntity ent) {
-        if (ent != null && LodTick.canTick(ent, 1)) {
-            LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-            if (entityPatch != null) {
+    public static DynamicList<LivingEntity> TEST = new DynamicList<>(DynamicDataParameter.DataType.ENTITY);
+
+    public static void entityRenderer(LivingEntityPatch<?> entityPatch, LivingEntity ent) {
+        if (ent != null && entityPatch != null && LodTick.canTick(ent, 1)) {
+            if (TEST.contains(ent)){
+                PrideVec3f vec3f = ArmatureUtils.getJointWithTranslation(Minecraft.getInstance().player, entityPatch, new PrideVec3f(0, 1,0), Armatures.BIPED.get().head);
+                if (vec3f != null){
+                   ParticleUtils.spawnParticle(ParticleRegistry.WISP_PARTICLE.get(), vec3f.x(), vec3f.y(), vec3f.z(), 0, 0,0);
+                }
+            }
                 if (ent.tickCount % 10 == 0) {
                     ParticleTracking.tickParticleMapping(ent.getMainHandItem(), ent);
                     ParticleTracking.tickParticleMapping(ent.getOffhandItem(), ent);
@@ -42,7 +53,6 @@ public class RenderingCore {
                 }
                 if (SkillDataManager.ACTIVE_WEAPON_SKILL.get(ent) != null) {
 
-                }
             }
         }
     }

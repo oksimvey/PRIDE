@@ -3,6 +3,7 @@ package com.robson.pride.api.data.types.item;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import com.robson.pride.api.data.types.skill.WeaponSkillData;
+import com.robson.pride.api.data.utils.ItemStackNewParams;
 import com.robson.pride.api.utils.math.FixedRGB;
 import com.robson.pride.api.utils.math.Matrix2f;
 import com.robson.pride.mixins.WeaponTypeReloadListenerMixin;

@@ -52,10 +52,7 @@ public class CustomItemModelBase implements BakedModel {
             public BakedModel resolve(@NotNull BakedModel original, @NotNull ItemStack itemStack, @Nullable ClientLevel level, @Nullable LivingEntity livingEntity, int seed) {
                     WeaponData data = WeaponDataManager.MANAGER.getByItem(itemStack);
                     if (data != null) {
-                            ModelManager manager = Minecraft.getInstance().getModelManager();
-                            BakedModel missing = manager.getModel(ModelBakery.MISSING_MODEL_LOCATION);
-                            BakedModel model = manager.getModel(data.getModel());
-                            return model == missing ? original : model;
+                            return data.getModel();
                     }
 
                 return original;
