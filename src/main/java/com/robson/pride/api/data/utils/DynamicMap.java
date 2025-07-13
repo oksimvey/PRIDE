@@ -56,7 +56,7 @@ public class DynamicMap<A, B> extends DynamicDataBase<A, B> {
                 if (tag.contains(keyString)) {
                     Minecraft.getInstance().player.sendSystemMessage(Component.literal("restored"));
                     value = getValueFromTag(tag, keyString);
-                    DATA.put(key, new DynamicDataParameter<>(value, VALUE_TYPE));
+                    put(key, value);
                     tag.remove(keyString);
                     try {
                         NbtIo.writeCompressed(tag, OUT_PUT);
