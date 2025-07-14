@@ -1,8 +1,6 @@
 package com.robson.pride.api.data.utils;
 
 import com.robson.pride.api.utils.math.MathUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +54,7 @@ public class DynamicDataBase<A, B> {
     }
 
     protected DynamicDataParameter<B> getParameter(A key){
+        if (key == null) return null;
         return DATA.get(key);
     }
 
@@ -87,9 +86,6 @@ public class DynamicDataBase<A, B> {
 
     protected void threadMap() {
         THREADER.schedule(this::threadMap, calculateCleanTime(), TimeUnit.MILLISECONDS);
-        if (Minecraft.getInstance().player != null) {
-            Minecraft.getInstance().player.sendSystemMessage(Component.literal("threadMap"));
-        }
         for (Map.Entry<A, DynamicDataParameter<B>> entry : DATA.entrySet()) {
             A key = entry.getKey();
             DynamicDataParameter<B> data = entry.getValue();

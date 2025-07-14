@@ -3,6 +3,7 @@ package com.robson.pride.api.item;
 import com.robson.pride.api.data.manager.WeaponDataManager;
 import com.robson.pride.api.data.types.item.GenericItemData;
 import com.robson.pride.api.data.types.item.WeaponData;
+import com.robson.pride.api.data.utils.ItemStackNewParams;
 import com.robson.pride.api.entity.PrideMob;
 import com.robson.pride.registries.EntityRegister;
 import com.robson.pride.registries.ItemsRegister;

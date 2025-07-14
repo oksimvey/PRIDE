@@ -25,6 +25,7 @@ import java.util.function.Function;
 
 @OnlyIn(Dist.CLIENT)
 public class CustomItemModelBase implements BakedModel {
+
     private final BakedModel original;
     private final ItemOverrides itemOverrides;
 

@@ -41,7 +41,7 @@ public class DynamicDataParameter<A> {
 
             case ITEM_STACK -> 64 << BYTE_MODIFIER;
 
-            case ENTITY -> 5000;
+            case ENTITY -> 3000;
 
             case STRING -> ((String) data).length() << BYTE_MODIFIER;
 

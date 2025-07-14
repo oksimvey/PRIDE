@@ -4,11 +4,14 @@ import com.robson.pride.api.data.utils.ItemStackNewParams;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.UUID;
 
 @Mixin(value = ItemStack.class, remap = false)
-public class ItemStackMixin implements ItemStackNewParams {
+public abstract class ItemStackMixin implements ItemStackNewParams {
 
     @Unique
     private String randomIdentifier;
@@ -26,6 +29,7 @@ public class ItemStackMixin implements ItemStackNewParams {
         }
         return randomIdentifier;
     }
+
 
     @Override
     public String getDataID() {

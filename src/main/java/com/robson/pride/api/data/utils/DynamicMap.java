@@ -39,7 +39,8 @@ public class DynamicMap<A, B> extends DynamicDataBase<A, B> {
         };
         try {
             NbtIo.write(new CompoundTag(), OUT_PUT);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -54,10 +55,9 @@ public class DynamicMap<A, B> extends DynamicDataBase<A, B> {
         if (value == null) {
             Long lastUpdate = TRIEDTOREAD.get(key);
             if (lastUpdate != null){
-                if (System.currentTimeMillis() - lastUpdate < CLEAN_TIME){
-                    return value;
+                if (System.currentTimeMillis() - lastUpdate >= CLEAN_TIME){
+                    TRIEDTOREAD.remove(key);
                 }
-                TRIEDTOREAD.remove(key);
                 return value;
             }
             TRIEDTOREAD.put(key, System.currentTimeMillis());
