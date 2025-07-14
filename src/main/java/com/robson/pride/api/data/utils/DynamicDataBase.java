@@ -1,6 +1,8 @@
 package com.robson.pride.api.data.utils;
 
 import com.robson.pride.api.utils.math.MathUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public abstract class DynamicDataBase<A, B> {
+public class DynamicDataBase<A, B> {
 
     /// A is the key/input
     /// B is the value/output
@@ -29,6 +31,7 @@ public abstract class DynamicDataBase<A, B> {
 
     protected final DynamicDataParameter.DataType VALUE_TYPE;
 
+
     public static void clearAll() {
         for (DynamicDataBase<?, ?> data : ALL) {
             data.clearMap();
@@ -40,8 +43,8 @@ public abstract class DynamicDataBase<A, B> {
         this.SIZE = 1;
         this.KEY_SIZE = 1;
         this.DATA = new ConcurrentHashMap<>();
-        this.threadMap();
         ALL.add(this);
+        this.threadMap();
     }
 
     public B get(A key){
@@ -55,7 +58,6 @@ public abstract class DynamicDataBase<A, B> {
     protected DynamicDataParameter<B> getParameter(A key){
         return DATA.get(key);
     }
-
 
     public final void put(A key, B value) {
         if (value == null) {
@@ -83,8 +85,11 @@ public abstract class DynamicDataBase<A, B> {
         DATA.put(key, data);
     }
 
-    private void threadMap() {
+    protected void threadMap() {
         THREADER.schedule(this::threadMap, calculateCleanTime(), TimeUnit.MILLISECONDS);
+        if (Minecraft.getInstance().player != null) {
+            Minecraft.getInstance().player.sendSystemMessage(Component.literal("threadMap"));
+        }
         for (Map.Entry<A, DynamicDataParameter<B>> entry : DATA.entrySet()) {
             A key = entry.getKey();
             DynamicDataParameter<B> data = entry.getValue();

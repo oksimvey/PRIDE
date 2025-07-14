@@ -23,6 +23,8 @@ public class DynamicMap<A, B> extends DynamicDataBase<A, B> {
 
     private final File OUT_PUT;
 
+    private DynamicDataBase<A, Long> TRIEDTOREAD = new DynamicDataBase<>(DynamicDataParameter.DataType.INTEGER);
+
     public DynamicMap(DynamicDataParameter.DataType keytype, DynamicDataParameter.DataType valuetype) {
         super(valuetype);
         this.KEY_TYPE = keytype;
@@ -36,30 +38,39 @@ public class DynamicMap<A, B> extends DynamicDataBase<A, B> {
             case VECTORS -> 1500;
         };
         try {
-            NbtIo.writeCompressed(new CompoundTag(), OUT_PUT);
+            NbtIo.write(new CompoundTag(), OUT_PUT);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     protected int calculateCleanTime(){
-        Minecraft.getInstance().player.sendSystemMessage(Component.literal("clean time: " + CLEAN_TIME));
         return (int) (CLEAN_TIME * Math.sqrt(KEY_SIZE << 5));
     }
+
 
     public B get(A key) {
         B value = super.get(key);
         if (value == null) {
+            Long lastUpdate = TRIEDTOREAD.get(key);
+            if (lastUpdate != null){
+                if (System.currentTimeMillis() - lastUpdate < CLEAN_TIME){
+                    return value;
+                }
+                TRIEDTOREAD.remove(key);
+                return value;
+            }
+            TRIEDTOREAD.put(key, System.currentTimeMillis());
             try {
-                CompoundTag tag = NbtIo.readCompressed(OUT_PUT);
+                CompoundTag tag = NbtIo.read(OUT_PUT);
                 String keyString = writeKeyToString(key);
-                if (tag.contains(keyString)) {
+                if (tag != null && tag.contains(keyString)) {
                     Minecraft.getInstance().player.sendSystemMessage(Component.literal("restored"));
                     value = getValueFromTag(tag, keyString);
                     put(key, value);
                     tag.remove(keyString);
                     try {
-                        NbtIo.writeCompressed(tag, OUT_PUT);
+                        NbtIo.write(tag, OUT_PUT);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -78,9 +89,9 @@ public class DynamicMap<A, B> extends DynamicDataBase<A, B> {
         super.removeForAllocation(key, value);
         Minecraft.getInstance().player.sendSystemMessage(Component.literal("removed"));
         try {
-            CompoundTag tag = NbtIo.readCompressed(OUT_PUT);
+            CompoundTag tag = NbtIo.read(OUT_PUT);
             try {
-                NbtIo.writeCompressed(writeToCompound(tag, key, value), OUT_PUT);
+                NbtIo.write(writeToCompound(tag, key, value), OUT_PUT);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -95,13 +106,13 @@ public class DynamicMap<A, B> extends DynamicDataBase<A, B> {
             return;
         }
         try {
-            CompoundTag tag = NbtIo.readCompressed(OUT_PUT);
+            CompoundTag tag = NbtIo.read(OUT_PUT);
             String string = writeKeyToString(key);
-            if (tag.contains(string)) {
+            if (tag != null && tag.contains(string)) {
                 tag.remove(string);
             }
             try {
-                NbtIo.writeCompressed(tag, OUT_PUT);
+                NbtIo.write(tag, OUT_PUT);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -113,7 +124,7 @@ public class DynamicMap<A, B> extends DynamicDataBase<A, B> {
     public void clearMap() {
         super.clearMap();
         try {
-            NbtIo.writeCompressed(new CompoundTag(), OUT_PUT);
+            NbtIo.write(new CompoundTag(), OUT_PUT);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -197,5 +208,4 @@ public class DynamicMap<A, B> extends DynamicDataBase<A, B> {
             case VECTORS -> (B) (Object) new PrideVec3f(0 ,0, 0);
         };
     }
-
 }
